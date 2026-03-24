@@ -1,0 +1,40 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(taskkill /F /IM antigravity-tunnel.exe /T)",
+      "Bash(taskkill /F /IM Antigravity.exe /T)",
+      "Bash(start /B code serve-web --host 127.0.0.1 --port 8080 --without-connection-token --accept-server-license-terms)",
+      "Bash(\"C:/Users/Lourdes D Alarcon/Desktop/Pagina web nexa/vscode_web.log\")",
+      "Bash(netstat -ano)",
+      "Bash(findstr :8080)",
+      "Bash(tasklist)",
+      "Bash(findstr /i \"code\\\\|antigravity\\\\|node\\\\|tunnel\")",
+      "Bash(findstr /i \"tunnel\")",
+      "Bash(tasklist /FI \"PID eq 33708\")",
+      "Bash(cmd /c \"tasklist /FI \"\"PID eq 33708\"\"\")",
+      "Bash(cmd /c \"tasklist\")",
+      "Bash(type \"$USERPROFILE/Desktop/Pagina web nexa/vscode_web.log\")",
+      "Bash(echo 'No existe' ls $USERPROFILE/AppData/Local/Programs/Antigravity/)",
+      "Bash(echo 'no logs dir' find $USERPROFILE/AppData/Roaming/Antigravity/ -name *.log)",
+      "Bash(powershell -Command \"Get-Process -Id 33708 | Select-Object Id, ProcessName, Path\")",
+      "Bash(powershell -Command \"Get-Process -Id 33708 | Select-Object Id, ProcessName, Path, CommandLine\")",
+      "Bash(powershell -Command \"\\(Get-WmiObject Win32_Process -Filter ''ProcessId=33708''\\).CommandLine\")",
+      "Bash(taskkill /F /IM code-tunnel.exe /T)",
+      "Bash(timeout /t 2 /nobreak)",
+      "Bash(dir /b)",
+      "Bash(npm run:*)",
+      "Bash(antigravity --version)",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(antigravity chat:*)",
+      "Bash(antigravity --help)",
+      "Bash(findstr \"3000\")",
+      "Bash(findstr \"LISTENING\")",
+      "Bash(findstr \"127.0.0.1\")",
+      "Bash(findstr \"node\")",
+      "Bash(findstr \":3001 \")",
+      "Bash(tasklist /FI \"PID eq 12308\" /FO LIST)",
+      "Bash(wmic process:*)",
+      "Bash(grep -E \"\\\\.\\(json|js|jsx|ts|tsx|css|html|php|md\\)$\")"
+    ]
+  }
+}
