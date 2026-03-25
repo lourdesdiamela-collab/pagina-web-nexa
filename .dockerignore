@@ -6,5 +6,6 @@ dist
 *.zip
 *.md
 .vscode
+.claude
 .env
 .env.*

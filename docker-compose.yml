@@ -11,4 +11,5 @@ services:
       test: ["CMD", "wget", "-qO-", "http://localhost/health"]
       interval: 30s
       timeout: 5s
+      start_period: 10s
       retries: 3
