@@ -21,23 +21,34 @@ export default function Cases() {
           <p className="section-subtitle" style={{ margin: '0 auto' }}>Nuestro mayor caso de éxito es dejar de hablar de nosotros para mostrar el crecimiento de los negocios de nuestros clientes.</p>
         </div>
 
-        <section className="results-section">
+        <section className="results-section" style={{ padding: '80px 0', background: 'rgba(184, 155, 255, 0.02)' }}>
           <div className="container">
-            <div className="results-grid">
+            <div className="results-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '40px' }}>
               {results.map((r, i) => (
-                <div className="result-card" key={i}>
-                  <div className="result-img-wrap">
-                    <img src={r.img} alt={r.client} loading="lazy" />
-                    <div className="result-overlay">
-                      <div className="result-stat">{r.stat}</div>
-                      <div className="result-stat-label">{r.label}</div>
+                <motion.div 
+                  className="result-card" 
+                  key={i} 
+                  initial={{ opacity: 0, y: 20 }} 
+                  whileInView={{ opacity: 1, y: 0 }} 
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  style={{ background: '#12141D', borderRadius: '32px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.05)', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}
+                >
+                  <div className="result-img-wrap" style={{ height: '240px', overflow: 'hidden', position: 'relative' }}>
+                    <img src={r.img} alt={r.client} loading="lazy" style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s' }} className="hover-zoom" />
+                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #12141D, transparent)' }} />
+                    <div style={{ position: 'absolute', bottom: '20px', left: '20px', background: 'rgba(210, 242, 58, 0.9)', color: '#0D0E15', padding: '6px 16px', borderRadius: '100px', fontWeight: 800, fontSize: '0.8rem', textTransform: 'uppercase' }}>
+                      {r.client}
                     </div>
                   </div>
-                  <div className="result-body">
-                    <p className="result-desc">{r.desc}</p>
-                    <span className="result-client">— {r.client}</span>
+                  <div className="result-body" style={{ padding: '30px' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '10px', marginBottom: '15px' }}>
+                      <span style={{ fontSize: '2.5rem', fontWeight: 900, color: '#B89BFF', letterSpacing: '-2px' }}>{r.stat}</span>
+                      <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.5)', fontWeight: 700, textTransform: 'uppercase' }}>{r.label}</span>
+                    </div>
+                    <p className="result-desc" style={{ color: 'white', fontSize: '1.1rem', lineHeight: 1.5, fontWeight: 500 }}>{r.desc}</p>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

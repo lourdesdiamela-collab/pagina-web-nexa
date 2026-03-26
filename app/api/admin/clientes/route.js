@@ -76,3 +76,50 @@ export async function GET(request) {
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });
   }
 }
+
+export async function DELETE(request) {
+  try {
+    const session = await getSession();
+    if (!session || !['admin', 'team'].includes(session.role)) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const id = searchParams.get('id');
+
+    if (!id) return NextResponse.json({ error: 'ID requerido' }, { status: 400 });
+
+    const { error } = await supabase.from('clients').delete().eq('id', id);
+    if (error) throw error;
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: 'Error al eliminar' }, { status: 500 });
+  }
+}
+
+export async function PUT(request) {
+  try {
+    const session = await getSession();
+    if (!session || !['admin', 'team'].includes(session.role)) {
+      return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+    }
+
+    const { id, company, contact_name, plan, status } = await request.json();
+
+    if (!id) return NextResponse.json({ error: 'ID requerido' }, { status: 400 });
+
+    const { error } = await supabase.from('clients').update({
+      company,
+      contact_name,
+      plan,
+      status
+    }).eq('id', id);
+
+    if (error) throw error;
+
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    return NextResponse.json({ error: 'Error al actualizar' }, { status: 500 });
+  }
+}

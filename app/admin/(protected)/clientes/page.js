@@ -6,17 +6,13 @@ export default function AdminClientsPage() {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
-
-  // New Client Form
-  const [form, setForm] = useState({ company: '', contact_name: '', email: '', password: '', plan: 'Growth', service: 'Marketing Integral' });
+  const [form, setForm] = useState({ company: '', contact_name: '', email: '', password: '', plan: 'Growth', service: 'Marketing Integral', category: 'Inmobiliaria' });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+  const [editingClient, setEditingClient] = useState(null);
 
   const fetchClients = async () => {
     try {
-      // In a real app we would call a GET /api/admin/clientes
-      // For this demo, let's just show a static list or fetch from an endpoint.
-      // I'll create a quick GET endpoint below.
       const res = await fetch('/api/admin/clientes');
       const data = await res.json();
       setClients(data.clients || []);
@@ -35,10 +31,15 @@ export default function AdminClientsPage() {
     setError('');
 
     try {
-      const res = await fetch('/api/admin/clientes', {
-        method: 'POST',
+      const isEditing = !!editingClient;
+      const url = '/api/admin/clientes';
+      const method = isEditing ? 'PUT' : 'POST';
+      const body = isEditing ? { ...form, id: editingClient.id } : form;
+
+      const res = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form)
+        body: JSON.stringify(body)
       });
       const data = await res.json();
       
@@ -49,13 +50,38 @@ export default function AdminClientsPage() {
       }
 
       setShowModal(false);
-      setForm({ company: '', contact_name: '', email: '', password: '', plan: 'Growth', service: 'Marketing Integral' });
+      setEditingClient(null);
+      setForm({ company: '', contact_name: '', email: '', password: '', plan: 'Growth', service: 'Marketing Integral', category: 'Inmobiliaria' });
       fetchClients();
     } catch {
-      setError('Error al crear el cliente');
+      setError('Error al procesar el cliente');
     } finally {
       setSaving(false);
     }
+  };
+
+  const handleDelete = async (id) => {
+    if (!confirm('¿Estás seguro de eliminar este cliente? Se perderá el acceso a la plataforma.')) return;
+    try {
+      const res = await fetch(`/api/admin/clientes?id=${id}`, { method: 'DELETE' });
+      if (res.ok) fetchClients();
+    } catch {
+      alert('Error al eliminar');
+    }
+  };
+
+  const openEdit = (client) => {
+    setEditingClient(client);
+    setForm({
+      company: client.company,
+      contact_name: client.contact_name,
+      email: client.email || '',
+      password: '', 
+      plan: client.plan || 'Growth',
+      service: client.service || 'Marketing Integral',
+      category: client.category || 'Varios'
+    });
+    setShowModal(true);
   };
 
   return (
@@ -66,10 +92,10 @@ export default function AdminClientsPage() {
             <Users color="#B89BFF" /> Gestión de Clientes
           </h1>
           <p style={{ color: '#666', fontSize: '1rem', marginTop: '8px' }}>
-            Base de datos de clientes y accesos al Área Clientes.
+            Base de datos y control de accesos. Definí planes y categorías.
           </p>
         </div>
-        <button onClick={() => setShowModal(true)} style={{
+        <button onClick={() => { setEditingClient(null); setShowModal(true); }} style={{
           background: '#12141D', color: 'white', padding: '12px 24px', borderRadius: '12px',
           fontWeight: 700, fontSize: '0.95rem', border: 'none', cursor: 'pointer',
           display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 10px 30px rgba(18,20,29,0.1)'
@@ -86,9 +112,9 @@ export default function AdminClientsPage() {
             <thead>
               <tr style={{ background: '#F9F9F9', borderBottom: '1px solid #EEE', textAlign: 'left' }}>
                 <th style={{ padding: '20px', color: '#999', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>Empresa / Cliente</th>
-                <th style={{ padding: '20px', color: '#999', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>Email (Login)</th>
-                <th style={{ padding: '20px', color: '#999', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>Plan</th>
+                <th style={{ padding: '20px', color: '#999', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>Plan & Categoría</th>
                 <th style={{ padding: '20px', color: '#999', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase' }}>Estado</th>
+                <th style={{ padding: '20px', color: '#999', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', textAlign: 'right' }}>Acciones</th>
               </tr>
             </thead>
             <tbody>
@@ -96,26 +122,27 @@ export default function AdminClientsPage() {
                 <tr key={c.id} style={{ borderBottom: '1px solid #EEE' }}>
                   <td style={{ padding: '20px' }}>
                     <div style={{ fontWeight: 800, color: '#12141D' }}>{c.company}</div>
-                    <div style={{ fontSize: '0.85rem', color: '#666' }}>{c.contact_name}</div>
-                  </td>
-                  <td style={{ padding: '20px', color: '#444', fontWeight: 500 }}>{c.email}</td>
-                  <td style={{ padding: '20px' }}>
-                    <span style={{ background: 'rgba(184, 155, 255, 0.1)', color: '#6A35FF', padding: '6px 12px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 700 }}>
-                      {c.plan}
-                    </span>
+                    <div style={{ fontSize: '0.85rem', color: '#666' }}>{c.email}</div>
                   </td>
                   <td style={{ padding: '20px' }}>
-                    <span style={{ color: c.status === 'active' ? '#28C76F' : '#FF9F43', fontWeight: 700, fontSize: '0.9rem' }}>
-                      {c.status === 'active' ? 'Activo' : c.status}
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <span style={{ background: 'rgba(184, 155, 255, 0.1)', color: '#6A35FF', padding: '4px 10px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 800 }}>{c.plan}</span>
+                      <span style={{ background: '#F0F0F0', color: '#666', padding: '4px 10px', borderRadius: '8px', fontSize: '0.75rem', fontWeight: 700 }}>{c.category || 'General'}</span>
+                    </div>
+                  </td>
+                  <td style={{ padding: '20px' }}>
+                    <span style={{ color: c.status === 'active' ? '#28C76F' : '#FF9F43', fontWeight: 800, fontSize: '0.85rem' }}>
+                      {c.status === 'active' ? '● ACTIVO' : '● ' + c.status.toUpperCase()}
                     </span>
+                  </td>
+                  <td style={{ padding: '20px', textAlign: 'right' }}>
+                    <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                      <button onClick={() => openEdit(c)} style={{ background: '#F5F5F7', border: 'none', padding: '8px 14px', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}>Editar</button>
+                      <button onClick={() => handleDelete(c.id)} style={{ background: 'rgba(255,80,80,0.1)', color: '#ff5050', border: 'none', padding: '8px 14px', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem', cursor: 'pointer' }}>Eliminar</button>
+                    </div>
                   </td>
                 </tr>
               ))}
-              {clients.length === 0 && (
-                <tr>
-                  <td colSpan="4" style={{ padding: '40px', textAlign: 'center', color: '#999' }}>No hay clientes registrados.</td>
-                </tr>
-              )}
             </tbody>
           </table>
         )}
@@ -123,38 +150,46 @@ export default function AdminClientsPage() {
 
       {showModal && (
         <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.6)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' }}>
-          <div style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '500px', padding: '40px', position: 'relative' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#12141D', marginBottom: '24px' }}>Registrar Nuevo Cliente</h2>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+          <div style={{ background: 'white', borderRadius: '24px', width: '100%', maxWidth: '550px', padding: '40px', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: '#12141D', marginBottom: '24px' }}>{editingClient ? 'Editar Cliente' : 'Registrar Nuevo Cliente'}</h2>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {error && <div style={{ background: 'rgba(211,47,47,0.1)', color: '#d32f2f', padding: '12px', borderRadius: '12px', fontSize: '0.9rem', fontWeight: 600 }}>{error}</div>}
               
-              <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#12141D', marginBottom: '8px' }}>Empresa / Marca *</label>
-                <input required type="text" value={form.company} onChange={e => setForm({...form, company: e.target.value})} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E5E5E5', background: '#F9F9F9' }} />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#999', textTransform: 'uppercase', marginBottom: '8px' }}>Marca *</label>
+                  <input required type="text" value={form.company} onChange={e => setForm({...form, company: e.target.value})} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #EEE', background: '#F9F9F9' }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#999', textTransform: 'uppercase', marginBottom: '8px' }}>Categoría</label>
+                  <select value={form.category} onChange={e => setForm({...form, category: e.target.value})} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #EEE', background: '#F9F9F9' }}>
+                    {['Inmobiliaria', 'Motos', 'Salud/Estética', 'SaaS', 'E-commerce', 'Varios'].map(c => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                </div>
               </div>
 
               <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#12141D', marginBottom: '8px' }}>Nombre del Contacto</label>
-                <input type="text" value={form.contact_name} onChange={e => setForm({...form, contact_name: e.target.value})} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E5E5E5', background: '#F9F9F9' }} />
+                <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#999', textTransform: 'uppercase', marginBottom: '8px' }}>Email de Acceso *</label>
+                <input required type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} disabled={!!editingClient} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #EEE', background: editingClient ? '#EEE' : '#F9F9F9', opacity: editingClient ? 0.6 : 1 }} />
               </div>
 
-              <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#12141D', marginBottom: '8px' }}>Email (Usuario para acceder) *</label>
-                <input required type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E5E5E5', background: '#F9F9F9' }} />
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#999', textTransform: 'uppercase', marginBottom: '8px' }}>Plan Contratado</label>
+                  <select value={form.plan} onChange={e => setForm({...form, plan: e.target.value})} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #EEE', background: '#F9F9F9' }}>
+                    {['Growth', 'Performance', 'Elite', 'Starter'].map(p => <option key={p} value={p}>{p}</option>)}
+                  </select>
+                </div>
+                <div>
+                   <label style={{ display: 'block', fontSize: '0.8rem', fontWeight: 800, color: '#999', textTransform: 'uppercase', marginBottom: '8px' }}>Password</label>
+                   <input type="text" value={form.password} onChange={e => setForm({...form, password: e.target.value})} placeholder={editingClient ? 'Nueva para cambiar' : 'Password inicial'} style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #EEE', background: '#F9F9F9' }} />
+                </div>
               </div>
 
-              <div>
-                <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, color: '#12141D', marginBottom: '8px' }}>Contraseña de acceso *</label>
-                <input required type="text" value={form.password} onChange={e => setForm({...form, password: e.target.value})} placeholder="Ej: NexaBrand2026!" style={{ width: '100%', padding: '14px', borderRadius: '12px', border: '1px solid #E5E5E5', background: '#F9F9F9' }} />
-                <span style={{ fontSize: '0.75rem', color: '#999', marginTop: '6px', display: 'block' }}>Pasale esta contraseña al cliente para que pueda ingresar.</span>
-              </div>
-
-              <div style={{ display: 'flex', gap: '16px', marginTop: '10px' }}>
-                <button type="button" onClick={() => setShowModal(false)} style={{ flex: 1, padding: '16px', background: '#F5F5F5', color: '#666', border: 'none', borderRadius: '12px', fontWeight: 700, cursor: 'pointer' }}>
-                  Cancelar
-                </button>
-                <button type="submit" disabled={saving} style={{ flex: 1, padding: '16px', background: '#12141D', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer' }}>
-                  {saving ? 'Guardando...' : 'Crear Cliente'}
+              <div style={{ display: 'flex', gap: '16px', marginTop: '20px' }}>
+                <button type="button" onClick={() => setShowModal(false)} style={{ flex: 1, padding: '18px', background: '#F5F5F7', color: '#12141D', border: 'none', borderRadius: '16px', fontWeight: 800, cursor: 'pointer' }}>Cancelar</button>
+                <button type="submit" disabled={saving} style={{ flex: 1, padding: '18px', background: '#12141D', color: 'white', border: 'none', borderRadius: '16px', fontWeight: 800, cursor: saving ? 'not-allowed' : 'pointer', boxShadow: '0 10px 30px rgba(0,0,0,0.1)' }}>
+                  {saving ? 'Guardando...' : (editingClient ? 'Actualizar' : 'Crear Acceso')}
                 </button>
               </div>
             </form>

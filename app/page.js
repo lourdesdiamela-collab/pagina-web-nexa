@@ -37,50 +37,58 @@ export default function Home() {
               </div>
             </div>
             <div className="hero-visual">
-              <div className="video-wrapper" style={{ overflow: 'hidden', position: 'relative', borderRadius: '32px', height: '100%', minHeight: '400px' }}>
-                <img src="/nexa-hero.png" alt="NEXA Hero Art" style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} />
-                <div className="video-overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top right, rgba(184, 155, 255, 0.3), rgba(13,14,21,0.5))', pointerEvents: 'none' }}></div>
+              <div className="video-wrapper" style={{ overflow: 'hidden', position: 'relative', borderRadius: '32px', height: '100%', minHeight: '400px', border: '1px solid rgba(184, 155, 255, 0.2)', boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
+                <img src="/nexa-hero-new.png" alt="NEXA Strategy Visual" style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} />
+                <div className="video-overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top right, rgba(13,14,21,0.2), rgba(13,14,21,0.5))', pointerEvents: 'none' }}></div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* NEXA Recover - SaaS Launch Promo */}
-      <section style={{ background: '#0D0E15', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '100vw', height: '100vw', background: 'radial-gradient(circle, rgba(210, 242, 58, 0.05) 0%, rgba(13,14,21,0) 70%)', zIndex: 0, pointerEvents: 'none' }} />
+      {/* Marketing Hub: NEXA Recover */}
+      <section style={{ background: 'linear-gradient(to bottom, #0D0E15, #08090C)', padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '120vw', height: '120vw', background: 'radial-gradient(circle, rgba(210, 242, 58, 0.03) 0%, rgba(13,14,21,0) 70%)', zIndex: 0, pointerEvents: 'none' }} />
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '60px', alignItems: 'center' }} className="recover-grid">
-            
-            <div style={{ order: 1 }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'rgba(210, 242, 58, 0.1)', color: '#D2F23A', padding: '6px 14px', borderRadius: '100px', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '24px' }}>
-                <span style={{ width: 8, height: 8, background: '#D2F23A', borderRadius: '50%', boxShadow: '0 0 10px #D2F23A' }} /> Lanzamiento Oficial
+          <div className="section-header" style={{ textAlign: 'center', marginBottom: '80px' }}>
+            <span className="section-tag" style={{ background: 'rgba(210, 242, 58, 0.1)', color: '#D2F23A', borderColor: 'rgba(210, 242, 58, 0.2)' }}>Tu Hub de Inteligencia</span>
+            <h2 className="section-title text-white">Centralizá y escalá con <span style={{ color: '#D2F23A' }}>NEXA Recover.</span></h2>
+            <p className="section-subtitle" style={{ margin: '20px auto', maxWidth: '800px' }}>
+              No solo atraemos nuevos clientes; reactivamos tu base inactiva y automatizamos tu crecimiento para que nunca pierdas una oportunidad de venta.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="recover-grid">
+            <div style={{ position: 'relative' }}>
+              <div style={{ position: 'absolute', inset: '-30px', background: 'radial-gradient(circle, rgba(184, 155, 255, 0.15) 0%, transparent 70%)', filter: 'blur(40px)', zIndex: 0 }} />
+              <div style={{ position: 'relative', borderRadius: '40px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 40px 100px rgba(0,0,0,0.8)' }}>
+                <img src="/nexa-recover.png" alt="NEXA Recover Hub Interface" style={{ width: '100%', display: 'block' }} />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,14,21,0.8), transparent)' }} />
               </div>
-              <h2 style={{ fontSize: '3rem', fontWeight: 900, color: 'white', lineHeight: 1.1, marginBottom: '20px', letterSpacing: '-0.03em' }}>
-                Descubrí <span style={{ color: '#D2F23A' }}>NEXA Recover.</span>
-              </h2>
-              <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '1.15rem', lineHeight: 1.6, marginBottom: '30px', fontWeight: 400 }}>
-                No solo nos enfocamos en conseguirte nuevos clientes; <strong style={{ color: 'white' }}>transformamos tu base inactiva en una máquina de facturación continua.</strong> Con nuestro nuevo software propietario, reactivamos automáticamente a los clientes que te compraron y nunca volvieron.
-              </p>
-              
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 40px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {['Reactivación de bases de datos dormidas.', 'Campañas hiper-segmentadas de fidelización.', 'Aumento directo del Ticket Promedio y LTV.', 'Métricas de retención en tiempo real.'].map((item, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'rgba(255,255,255,0.9)', fontSize: '1rem', fontWeight: 600 }}>
-                    <div style={{ width: 24, height: 24, borderRadius: '50%', background: 'rgba(210, 242, 58, 0.1)', color: '#D2F23A', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <ArrowRight size={14} />
+            </div>
+            
+            <div className="recover-content">
+              <div style={{ display: 'grid', gap: '30px' }}>
+                {[
+                  { title: 'Reactivación Inteligente', desc: 'Convertimos clientes inactivos en compradores recurrentes mediante flujos automatizados.', icon: RefreshCw },
+                  { title: 'Métricas que Importan', desc: 'Visualizá el ROAS real, LTV y tasa de retención en un solo tablero intuitivo.', icon: BarChart3 },
+                  { title: 'Fidelización Proactiva', desc: 'Sistemas que detectan cuándo un cliente está por irse y actúan de inmediato.', icon: Target }
+                ].map((f, i) => (
+                  <div key={i} style={{ display: 'flex', gap: '20px' }}>
+                    <div style={{ flexShrink: 0, width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(210, 242, 58, 0.1)', border: '1px solid rgba(210, 242, 58, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D2F23A' }}>
+                      <f.icon size={24} />
                     </div>
-                    {item}
-                  </li>
+                    <div>
+                      <h4 style={{ color: 'white', fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>{f.title}</h4>
+                      <p style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{f.desc}</p>
+                    </div>
+                  </div>
                 ))}
-              </ul>
-              <Link href="/contacto" className="btn" style={{ background: '#D2F23A', color: '#12141D', fontWeight: 800 }}>Implementar NEXA Recover</Link>
+              </div>
+              <div style={{ marginTop: '50px' }}>
+                <Link href="/contacto" className="btn btn-primary" style={{ background: '#D2F23A', color: '#0D0E15' }}>Explorar el Hub de Marketing</Link>
+              </div>
             </div>
-
-            <div style={{ order: 2, position: 'relative' }}>
-              <div style={{ position: 'absolute', inset: '-20px', background: 'linear-gradient(135deg, rgba(210, 242, 58, 0.2), rgba(184, 155, 255, 0.1))', filter: 'blur(40px)', zIndex: 0, borderRadius: '50%' }} />
-              <img src="/nexa-recover.png" alt="NEXA Recover SaaS Dashboard" style={{ width: '100%', borderRadius: '24px', position: 'relative', zIndex: 1, border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 30px 80px rgba(0,0,0,0.6)' }} />
-            </div>
-
           </div>
         </div>
       </section>
@@ -147,17 +155,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Área Clientes Promo */}
-      <section style={{ background: '#0D0E15', padding: '100px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="container" style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto' }}>
-          <span className="section-tag" style={{ background: 'rgba(184, 155, 255, 0.1)', color: '#B89BFF', borderColor: 'rgba(184, 155, 255, 0.3)' }}>Área Clientes</span>
-          <h2 className="section-title text-white" style={{ marginTop: '20px' }}>Tu espacio exclusivo dentro de <span className="text-gradient">NEXA.</span></h2>
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '1.1rem', lineHeight: 1.8, margin: '20px 0 40px' }}>
-            Accedé a tu panel personalizado para ver el seguimiento de tu servicio, entregas, archivos, estado de cuenta y próximos pasos. Todo en un solo lugar, claro y profesional.
-          </p>
-          <Link href="/clientes" className="btn btn-primary" style={{ display: 'inline-flex' }}>
-            Ingresar al Área Clientes <ArrowRight size={18} />
-          </Link>
+      {/* Contact Section */}
+      <section id="contacto" style={{ background: '#0D0E15', padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+        <div className="container">
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '48px', padding: '80px', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(184, 155, 255, 0.1) 0%, transparent 70%)', zIndex: 0 }} />
+            <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '80px', alignItems: 'center' }} className="contact-grid">
+              <div>
+                <span className="section-tag">Hablemos hoy</span>
+                <h2 className="section-title text-white" style={{ fontSize: '3.5rem', lineHeight: 1 }}>¿Listos para <span className="text-gradient">escalar?</span></h2>
+                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.2rem', margin: '30px 0 50px' }}>
+                  Completá el formulario y nos pondremos en contacto para coordinar una reunión diagnóstica de tu marca.
+                </p>
+                <div style={{ display: 'grid', gap: '20px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px', color: 'white', fontWeight: 600 }}>
+                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(184, 155, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#B89BFF' }}>
+                      <Target size={20} />
+                    </div>
+                    hola@nexaarg.com
+                  </div>
+                </div>
+              </div>
+              
+              <form action="mailto:hola@nexaarg.com" method="post" encType="text/plain" style={{ display: 'grid', gap: '20px', background: 'rgba(255,255,255,0.03)', padding: '40px', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.05)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                  <input type="text" name="name" placeholder="Tu nombre" required style={{ width: '100%', padding: '18px 24px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none' }} />
+                  <input type="email" name="email" placeholder="Tu email" required style={{ width: '100%', padding: '18px 24px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none' }} />
+                </div>
+                <input type="text" name="subject" placeholder="Asunto / Marca" required style={{ width: '100%', padding: '18px 24px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none' }} />
+                <textarea name="message" placeholder="¿En qué podemos ayudarte?" required style={{ width: '100%', padding: '18px 24px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none', minHeight: '150px', resize: 'vertical' }} />
+                <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '20px', fontSize: '1.1rem' }}>Enviar Mensaje</button>
+              </form>
+            </div>
+          </div>
         </div>
       </section>
 

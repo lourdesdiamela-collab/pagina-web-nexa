@@ -1,5 +1,5 @@
-import { getSession } from '@/lib/auth';
-import { supabase } from '@/lib/db';
+'use client';
+import { useState, useEffect } from 'react';
 import { Users, CheckSquare, Clock, CreditCard, TrendingUp, BarChart3, Mail, RefreshCw, Calendar, MessageSquare, Briefcase } from 'lucide-react';
 import Link from 'next/link';
 
@@ -16,18 +16,23 @@ const ProgressBar = ({ value, label, color }) => (
   </div>
 );
 
-export default async function AdminDashboardPage() {
-  const session = await getSession();
+export default function AdminDashboardPage() {
+  const [financials, setFinancials] = useState({ income: 0, expenses: 0, campaignSpend: 0 });
+  const [loading, setLoading] = useState(true);
 
-  // Simulated financials for visual impact (MVP)
-  // In a real scenario, this would sum up rows from the `payments` and `expenses` tables.
-  const financials = {
-    income: 2450000,
-    expenses: 850000,
-    campaignSpend: 320000,
-  };
+  useEffect(() => {
+    fetch('/api/admin/finanzas')
+      .then(res => res.json())
+      .then(data => {
+        setFinancials(data);
+        setLoading(false);
+      });
+  }, []);
+
   const profit = financials.income - financials.expenses - financials.campaignSpend;
   const profitMargin = Math.round((profit / financials.income) * 100) || 0;
+
+  if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Cargando inteligencia...</div>;
 
   return (
     <div>
@@ -41,18 +46,21 @@ export default async function AdminDashboardPage() {
           </p>
         </div>
         <div style={{ display: 'flex', gap: '12px' }}>
-          <button style={{ padding: '12px 24px', borderRadius: '12px', background: 'white', border: '1px solid #EEE', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)' }}>
-            <Calendar size={18} /> Sincronizar Calendario
+          <button 
+            onClick={() => alert('Función de registro de gastos: Esta acción abrirá un modal para imputar egresos operativos o de campañas.')}
+            style={{ padding: '12px 24px', borderRadius: '12px', background: '#ff6b6b', color: 'white', border: 'none', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(255, 107, 107, 0.3)', cursor: 'pointer' }}
+          >
+            <Plus size={18} /> Registrar Gasto
           </button>
-          <button style={{ padding: '12px 24px', borderRadius: '12px', background: '#FF9F43', color: 'white', border: 'none', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(255, 159, 67, 0.3)' }}>
-            <Briefcase size={18} /> Conectar Trello
+          <button style={{ padding: '12px 24px', borderRadius: '12px', background: 'white', border: '1px solid #EEE', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(0,0,0,0.03)', cursor: 'pointer' }}>
+            <Calendar size={18} /> Sincronizar Calendario
           </button>
         </div>
       </header>
 
       {/* Financials & Growth Row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '20px', marginBottom: '30px' }}>
-        <div style={{ background: '#12141D', color: 'white', borderRadius: '24px', padding: '30px', boxShadow: '0 10px 30px rgba(18,20,29,0.1)' }}>
+        <div className="stat-card" style={{ background: '#12141D', color: 'white', borderRadius: '24px', padding: '30px', boxShadow: '0 10px 30px rgba(18,20,29,0.1)', transition: 'transform 0.3s' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
             <div style={{ fontSize: '0.85rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '1px', color: 'rgba(255,255,255,0.6)' }}>Ingreso Bruto</div>
             <TrendingUp size={20} color="#28C76F" />

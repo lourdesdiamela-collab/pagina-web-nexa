@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, User } from 'lucide-react';
+import { Menu, X, User, Sparkles } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
 export default function Navbar() {

@@ -60,23 +60,23 @@ export default function Academy() {
 
         <section className="academy-content" style={{ paddingBottom: '100px' }}>
           <div className="container">
-            <div className="academy-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '30px' }}>
+            <div className="academy-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '40px' }}>
               {filteredArticles.map((article, i) => (
                 <motion.div key={i} className="academy-card" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.1 }}
-                  style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '24px', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                  <div style={{ height: '200px', background: 'linear-gradient(135deg, rgba(184, 155, 255, 0.1), rgba(13,14,21,1))', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                    <article.icon size={48} color="rgba(255,255,255,0.2)" />
-                    <div style={{ position: 'absolute', top: 16, right: 16, background: 'rgba(0,0,0,0.5)', padding: '4px 12px', borderRadius: '100px', fontSize: '0.75rem', color: 'white', fontWeight: 600 }}>
+                  style={{ background: '#12141D', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '32px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
+                  <div style={{ height: '220px', background: 'linear-gradient(135deg, rgba(184, 155, 255, 0.15), rgba(13,14,21,1))', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                    <article.icon size={56} color="rgba(184, 155, 255, 0.3)" />
+                    <div style={{ position: 'absolute', top: 20, right: 20, background: 'rgba(210, 242, 58, 0.9)', color: '#0D0E15', padding: '6px 14px', borderRadius: '100px', fontSize: '0.75rem', fontWeight: 800 }}>
                       {article.type} · {article.readTime}
                     </div>
                   </div>
-                  <div style={{ padding: '30px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                    <span style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '10px', display: 'block' }}>
+                  <div style={{ padding: '35px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <span style={{ color: '#B89BFF', fontSize: '0.8rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '2px', marginBottom: '12px', display: 'block' }}>
                       {article.category}
                     </span>
-                    <h3 style={{ color: 'white', fontSize: '1.4rem', lineHeight: 1.3, marginBottom: '20px', flexGrow: 1 }}>{article.title}</h3>
-                    <Link href={`/aprende/${article.slug}`} style={{ color: 'var(--lima)', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
-                      Leer contenido <ArrowRight size={16} />
+                    <h3 style={{ color: 'white', fontSize: '1.6rem', fontWeight: 800, lineHeight: 1.25, marginBottom: '25px', flexGrow: 1, letterSpacing: '-0.02em' }}>{article.title}</h3>
+                    <Link href={`/aprende/${article.slug}`} style={{ color: '#D2F23A', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', transition: 'gap 0.3s' }} className="hover-gap">
+                      Leer artículo completo <ArrowRight size={18} />
                     </Link>
                   </div>
                 </motion.div>

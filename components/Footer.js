@@ -29,11 +29,17 @@ export default function Footer() {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© 2026 NEXA STRATEGY. LAB DIGITAL ESTRATÉGICO.</span>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <span style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>© 2026 NEXA STRATEGY. LAB DIGITAL ESTRATÉGICO.</span>
+            <div style={{ display: 'flex', gap: '20px', marginTop: '10px', fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)' }}>
+              <span>Hola@nexaarg.com</span>
+              <span>+54 9 11 XXXX-XXXX</span>
+            </div>
+          </div>
           <div className="social-links-pro">
-            <a href="https://instagram.com/nexagrowth.ar" target="_blank" rel="noreferrer" className="social-badge"><InstaIcon /> @nexagrowth.ar</a>
-            <a href="https://instagram.com/somosnexa.ar" target="_blank" rel="noreferrer" className="social-badge"><InstaIcon /> @somosnexa.ar</a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="social-badge icon-only"><LinkedinIcon /></a>
+            <a href="https://instagram.com/nexagrowth.ar" target="_blank" rel="noreferrer" className="social-badge" style={{ background: 'rgba(184, 155, 255, 0.1)', color: '#B89BFF', border: '1px solid rgba(184, 155, 255, 0.2)' }}><InstaIcon /> @nexagrowth.ar</a>
+            <a href="https://instagram.com/somosnexa.ar" target="_blank" rel="noreferrer" className="social-badge" style={{ background: 'rgba(210, 242, 58, 0.1)', color: '#D2F23A', border: '1px solid rgba(210, 242, 58, 0.2)' }}><InstaIcon /> @somosnexa.ar</a>
+            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="social-badge icon-only" style={{ background: 'rgba(255,255,255,0.05)', color: 'white' }}><LinkedinIcon /></a>
           </div>
         </div>
       </div>
