@@ -3,6 +3,9 @@ import './globals.css';
 export const metadata = {
   title: 'NEXA — Estudio de Marketing y Crecimiento',
   description: 'Estrategia, contenido, campañas y crecimiento para marcas y negocios que quieren construir una presencia más sólida.',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({ children }) {
