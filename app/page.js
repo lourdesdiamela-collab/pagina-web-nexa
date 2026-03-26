@@ -58,7 +58,7 @@ export default function Home() {
             </p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }} className="recover-grid">
+          <div className="recover-grid">
             <div style={{ position: 'relative' }}>
               <div style={{ position: 'absolute', inset: '-30px', background: 'radial-gradient(circle, rgba(184, 155, 255, 0.15) 0%, transparent 70%)', filter: 'blur(40px)', zIndex: 0 }} />
               <div style={{ position: 'relative', borderRadius: '40px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 40px 100px rgba(0,0,0,0.8)' }}>
@@ -123,7 +123,7 @@ export default function Home() {
               </div>
             </div>
             <div>
-              <img src="/assets/about_mockup.png" alt="NEXA Studio" style={{ width: '100%', borderRadius: '32px' }} />
+              <img src="/nexa-hero-new.png" alt="NEXA Studio" style={{ width: '100%', borderRadius: '32px' }} />
             </div>
           </div>
         </div>
@@ -139,7 +139,7 @@ export default function Home() {
             </div>
             <Link href="/servicios" className="btn btn-outline" style={{ marginBottom: '20px' }}>Ver todos los servicios <ArrowRight size={16}/></Link>
           </div>
-          <div className="services-grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
+          <div className="services-grid">
             {[
               { icon: BarChart3, title: 'Marketing & Estrategia', desc: 'Planes accionables para posicionar tu marca.' },
               { icon: InstaIcon, title: 'Redes Sociales', desc: 'Contenido y gestión para construir comunidad.' },
@@ -158,9 +158,9 @@ export default function Home() {
       {/* Contact Section */}
       <section id="contacto" style={{ background: '#0D0E15', padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="container">
-          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '48px', padding: '80px', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '48px', padding: 'clamp(24px, 5vw, 80px)', position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(184, 155, 255, 0.1) 0%, transparent 70%)', zIndex: 0 }} />
-            <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '80px', alignItems: 'center' }} className="contact-grid">
+            <div style={{ position: 'relative', zIndex: 1, display: 'grid', gap: '80px', alignItems: 'center' }} className="contact-grid">
               <div>
                 <span className="section-tag">Hablemos hoy</span>
                 <h2 className="section-title text-white" style={{ fontSize: '3.5rem', lineHeight: 1 }}>¿Listos para <span className="text-gradient">escalar?</span></h2>
