@@ -21,7 +21,7 @@ async function checkAndSeed() {
     const admin = {
       id: '00000000-0000-0000-0000-000000000001',
       email: 'admin@nexagrowth.com.ar',
-      password_hash: '$2a$10$wT0X80WJ1sQ7R/43WbBy2eeo4W7p0iHEx6A9WvXzH.9tK.tL7b4Xy',
+      password_hash: '$2b$10$LmS3WELjj4.zibXhoKp1meLG3exBR5WlUdNrjTG3dhzRiV2rlJq8q',
       role: 'admin',
       name: 'Lourdes Alarcón'
     };
@@ -29,7 +29,7 @@ async function checkAndSeed() {
     const demo = {
       id: '00000000-0000-0000-0000-000000000002',
       email: 'cliente@demo.com',
-      password_hash: '$2a$10$wT0X80WJ1sQ7R/43WbBy2eeo4W7p0iHEx6A9WvXzH.9tK.tL7b4Xy',
+      password_hash: '$2b$10$9f/UHX3owwmA4n/Lus1XSOtMjuJfGiRJjM0zpU4XWriBbyVkcYGdq',
       role: 'client',
       name: 'Empresa Demo'
     };
