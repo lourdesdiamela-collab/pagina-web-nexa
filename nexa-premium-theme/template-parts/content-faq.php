@@ -1,16 +1,16 @@
 <?php
 $faqs = [
     [
-        'q' => '¿Cómo sé si NEXA es para mi negocio?',
-        'a' => 'Trabajamos con negocios que ya facturan pero necesitan orden, profesionalismo y estrategia. Si tu marca puede más pero estás trabado operativamente, somos tu partner.'
+        'q' => '¿Cómo sé si NEXA es para mi marca?',
+        'a' => 'Trabajamos con negocios que quieren crecer, posicionarse y vender más pero necesitan dirección estratégica. Si tu marca tiene potencial pero sentís que comunicás sin rumbo, somos tu equipo.'
     ],
     [
         'q' => '¿Cuánto tiempo lleva ver resultados tangibles?',
-        'a' => 'Automatización y orden operativo impactan casi instantáneamente (1-2 semanas). En captación de leads y ventas recurrentes proyectamos KPIs a los 30-45 días.'
+        'a' => 'Depende de tu punto de partida. Estrategias de visibilidad y campañas pueden traer tráfico rápido, mientras que construir autoridad de marca y transformar el perfil lleva entre 30 y 60 días para ver un impacto sólido.'
     ],
     [
-        'q' => '¿Tengo que contratar la gestión completa?',
-        'a' => 'No. Nuestra metodología es modular. Comenzamos con una auditoría y proponemos el stack prioritario. Podés empezar con CRM o Automatización exclusivamente.'
+        'q' => '¿Tengo que contratar el ecosistema completo?',
+        'a' => 'No. Entendemos qué necesita tu negocio hoy y proponemos soluciones a medida. Podés arrancar solo con Campañas, Gestión de Redes, o una Consultoría Estratégica puntual.'
     ]
 ];
 ?>

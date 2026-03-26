@@ -5,7 +5,7 @@ $items = [
     ['title' => 'Mejorás tu imagen', 'desc' => 'Tu marca transmite lo que realmente valés a tus clientes.'],
     ['title' => 'Seguís tus oportunidades', 'desc' => 'Ningún cliente potencial se pierde en el camino.'],
     ['title' => 'Reducís tareas manuales', 'desc' => 'Lo que se puede automatizar, se automatiza para siempre.'],
-    ['title' => 'Convertís mejor', 'desc' => 'Multiplicás tus ventas optimuyendo tus embudos vitales.']
+    ['title' => 'Convertís mejor', 'desc' => 'Multiplicás tus ventas optimando tus embudos vitales.']
 ];
 ?>
 <section class="transformation">
@@ -14,7 +14,7 @@ $items = [
         <div class="section-header gsap-fade-in-up">
             <span class="section-tag">El cambio real</span>
             <h2 class="section-title">Qué cambia cuando trabajás con NEXA</h2>
-            <p class="section-subtitle">No es magia, es método corporativo aplicado a tu escala.</p>
+            <p class="section-subtitle">Una marca más clara, un negocio más ordenado y un marketing que sí empuja resultados.</p>
         </div>
         <div class="transform-grid">
             <?php foreach ($items as $index => $item): ?>

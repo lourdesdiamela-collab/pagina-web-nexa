@@ -1,11 +1,11 @@
 <?php
 $services = [
-    ['icon' => 'bar-chart-3', 'title' => 'Marketing & Estratégia', 'desc' => 'Estrategia de contenido, gestión de redes y posicionamiento de marca con una visión comercial clara.'],
-    ['icon' => 'zap', 'title' => 'Automatización de Procesos', 'desc' => 'Flujos automáticos que eliminan tareas repetitivas y mantienen tu negocio funcionando 24/7.'],
-    ['icon' => 'users', 'title' => 'CRM y Seguimiento de Leads', 'desc' => 'Organizá tu base de contactos, hacé seguimiento inteligente y convertí más oportunidades.'],
-    ['icon' => 'target', 'title' => 'Campañas y Captación', 'desc' => 'Publicidad en Meta y Google Ads diseñada para traer leads calificados con ROI real.'],
-    ['icon' => 'layers', 'title' => 'Order y Estructura Digital', 'desc' => 'Profesionalizamos tu operación: procesos, herramientas y estructura para escalar sin caos.'],
-    ['icon' => 'refresh-cw', 'title' => 'NEXA Recover', 'desc' => 'Sistema de recuperación de clientes inactivos y oportunidades perdidas. Reactivá lo que ya tenés.']
+    ['icon' => 'bar-chart-3', 'title' => 'Marketing & Estrategia', 'desc' => 'Planes accionables para posicionar tu marca, conectar con tu audiencia y dominar tu nicho.'],
+    ['icon' => 'instagram', 'title' => 'Redes Sociales', 'desc' => 'Gestión profesional, diseño premium y contenido estratégico que construye comunidad y autoridad.'],
+    ['icon' => 'target', 'title' => 'Campañas y Captación', 'desc' => 'Publicidad en Meta y Google Ads diseñada para maximizar visibilidad y traer leads calificados.'],
+    ['icon' => 'users', 'title' => 'CRM y Seguimiento', 'desc' => 'Sistemas inteligentes (con automatización) para organizar oportunidades y no perder ventas.'],
+    ['icon' => 'layers', 'title' => 'Orden Digital', 'desc' => 'Auditoría y estructura para que tu presencia online se vea impecable en cada punto de contacto.'],
+    ['icon' => 'refresh-cw', 'title' => 'NEXA Recover', 'desc' => 'Estrategias de fidelización y recuperación reactivando clientes inactivos de tu base de datos.']
 ];
 ?>
 <section id="servicios" class="services">

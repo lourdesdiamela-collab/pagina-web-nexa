@@ -1,13 +1,26 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pagina-web-nexa</title>
+    <title>NEXA | Tu Equipo Estratégico de Marketing y Crecimiento</title>
+    <meta name="description" content="Diseñamos sistemas automatizados, campañas, contenido y CX para que tu negocio crezca, facture más y se posicione como autoridad." />
+    <meta property="og:title" content="NEXA | Tu Equipo Estratégico de Marketing y Crecimiento" />
+    <meta property="og:description" content="Diseñamos sistemas automatizados, campañas, contenido y CX para que tu negocio crezca, facture más y se posicione como autoridad." />
+    <meta property="og:type" content="website" />
   </head>
   <body>
     <div id="root"></div>
+    <!-- Hidden form for Netlify bots to discover -->
+    <form name="nexa-contact" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <input type="text" name="company" />
+      <select name="service"></select>
+      <textarea name="message"></textarea>
+    </form>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

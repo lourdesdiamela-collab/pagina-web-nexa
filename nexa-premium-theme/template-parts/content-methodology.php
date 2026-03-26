@@ -3,7 +3,7 @@ $steps = [
     ['num' => '01', 'title' => 'Diagnóstico', 'desc' => 'Auditoría profunda: qué funciona, qué falla, y oportunidades.'],
     ['num' => '02', 'title' => 'Diseño estratégico', 'desc' => 'Blueprint de acción con sistemas, herramientas y objetivos.'],
     ['num' => '03', 'title' => 'Implementación', 'desc' => 'Set up de CRM, automatizaciones y campañas alineadas.'],
-    ['num' => '04', 'title' => 'Optimización', 'desc' => 'Monitoreo, ajustes y escabilidad del sistema en vivo.']
+    ['num' => '04', 'title' => 'Optimización', 'desc' => 'Monitoreo, ajustes y escalabilidad del sistema en vivo.']
 ];
 ?>
 <section id="metodologia" class="methodology">
@@ -11,7 +11,7 @@ $steps = [
         <div class="section-header gsap-fade-in-up">
             <span class="section-tag">Nuestro proceso</span>
             <h2 class="section-title">El método NEXA</h2>
-            <p class="section-subtitle">Acompañamiento end-to-end de alta precisión técnica.</p>
+            <p class="section-subtitle">Un proceso claro para pensar, ejecutar y hacer crecer tu marca.</p>
         </div>
         <div class="method-grid">
             <?php foreach ($steps as $index => $step): ?>

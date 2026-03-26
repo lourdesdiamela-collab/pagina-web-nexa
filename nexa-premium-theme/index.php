@@ -13,6 +13,7 @@ get_header(); ?>
     get_template_part('template-parts/content', 'clients');
     get_template_part('template-parts/content', 'about');
     get_template_part('template-parts/content', 'services');
+    get_template_part('template-parts/content', 'recover');
     get_template_part('template-parts/content', 'transformation');
     get_template_part('template-parts/content', 'methodology');
     get_template_part('template-parts/content', 'faq');

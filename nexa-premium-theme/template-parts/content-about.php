@@ -3,13 +3,13 @@
         <div class="about-grid">
             <div class="gsap-fade-in-up">
                 <span class="about-tag">¿Quiénes somos?</span>
-                <h2 class="about-title">No somos una agencia más. Somos tu equipo de crecimiento.</h2>
+                <h2 class="about-title">Tu equipo estratégico de marketing y crecimiento.</h2>
                 <p class="about-text">
-                    NEXA combina marketing estratégico, automatización de procesos, gestión de redes y CRM para que tu negocio funcione con más orden, más profesionalismo y mejores resultados. No te vendemos likes, te ayudamos a <strong>facturar más y trabajar mejor</strong>.
+                    En NEXA combinamos estrategia, contenido, campañas y seguimiento para ayudar a marcas y negocios a crecer con más claridad, mejor imagen y mejores resultados. No trabajamos para sumar publicaciones vacías: trabajamos para que tu marca tenga dirección y tu negocio funcione mejor.
                 </p>
                 <div class="about-pills">
                     <?php 
-                        $pills = ['Marketing', 'Redes sociales', 'Automatización', 'CRM', 'Orden comercial', 'Crecimiento'];
+                        $pills = ['Estrategia', 'Campañas', 'Contenido', 'Redes Sociales', 'CRM', 'Crecimiento'];
                         foreach ($pills as $index => $pill):
                     ?>
                         <span class="pill gsap-stagger-scale" data-delay="<?php echo 0.3 + ($index * 0.1); ?>">

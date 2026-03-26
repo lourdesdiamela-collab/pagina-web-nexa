@@ -942,3 +942,94 @@ p { color: var(--text-body); line-height: 1.7; }
 
 /* GSAP utility classes for animations */
 .gsap-reveal { opacity: 0; visibility: hidden; }
+
+/* ——— NEXA Recover Overhaul ——— */
+.recover-section {
+  padding: 140px 0;
+  background: var(--bg-main);
+  position: relative;
+  overflow: hidden;
+}
+.recover-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.recover-content {
+  display: flex;
+  flex-direction: column;
+}
+.recover-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 8px 24px;
+  background: rgba(184, 155, 255, 0.15);
+  border: 1px solid rgba(184, 155, 255, 0.3);
+  border-radius: 100px;
+  color: var(--lilac);
+  font-weight: 800;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.recover-title {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  margin-bottom: 24px;
+  line-height: 1.1;
+  color: var(--text-dark);
+}
+.recover-desc {
+  font-size: 1.25rem;
+  color: var(--text-body);
+  margin-bottom: 48px;
+  line-height: 1.6;
+}
+.recover-features {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-bottom: 48px;
+}
+.recover-feature {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.recover-icon {
+  width: 48px; height: 48px;
+  min-width: 48px;
+  background: white;
+  border-radius: 50%;
+  border: 1px solid rgba(184, 155, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--lilac);
+  box-shadow: 0 10px 20px rgba(184, 155, 255, 0.1);
+}
+.recover-visual {
+  position: relative;
+  border-radius: 40px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(13, 14, 21, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+.recover-visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transform: scale(1.02);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.recover-visual:hover img {
+  transform: scale(1.05);
+}
+@media (max-width: 1024px) {
+  .recover-grid { grid-template-columns: 1fr; gap: 60px; }
+  .recover-visual { order: -1; max-width: 600px; margin: 0 auto; }
+}

@@ -17,7 +17,7 @@
                     <a href="#servicios">Servicios</a>
                     <a href="#metodologia">Metodología</a>
                     <a href="#faq">FAQ</a>
-                    <a href="#contacto" style="color: #B89BFF;">Auditoría</a>
+                    <a href="#contacto" style="color: #B89BFF;">Hablemos</a>
                 </div>
             </div>
             <div class="footer-bottom">
