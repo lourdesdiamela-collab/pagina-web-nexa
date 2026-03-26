@@ -35,10 +35,22 @@ export default function Navbar() {
           {links.map(l => (
             <Link key={l.name} href={l.path} className={`nav-link ${pathname === l.path ? 'active' : ''}`}>{l.name}</Link>
           ))}
-          <div className="hidden lg:flex items-center ml-4">
+          <div className="hidden lg:flex items-center ml-4 gap-3">
             <Link href="/portal" className="nav-portal-btn flex items-center gap-2">
               <User className="nav-portal-icon" size={18} />
-              <span>Área Clientes</span>
+              <span>Clientes</span>
+            </Link>
+            <Link href="/admin/login" className="nav-admin-btn flex items-center gap-2" style={{
+              background: 'rgba(210, 242, 58, 0.1)',
+              color: '#D2F23A',
+              padding: '10px 16px',
+              borderRadius: '12px',
+              fontSize: '0.9rem',
+              fontWeight: 800,
+              border: '1px solid rgba(210, 242, 58, 0.2)',
+              transition: 'all 0.3s'
+            }}>
+              <span>Dueños</span>
             </Link>
           </div>
         </div>
@@ -56,9 +68,14 @@ export default function Navbar() {
             <Link key={l.name} href={l.path} className="text-xl font-bold hover:text-nexa-primary transition-colors py-4 border-b border-nexa-border" onClick={() => setIsMobileMenuOpen(false)}>{l.name}</Link>
           ))}
           <Link href="/contacto" className="text-xl font-bold hover:text-nexa-primary transition-colors py-4 border-b border-nexa-border" onClick={() => setIsMobileMenuOpen(false)}>Contacto</Link>
-          <Link href="/portal" onClick={() => setIsMobileMenuOpen(false)} className="mt-6 flex items-center justify-center gap-2 bg-white text-nexa-dark py-4 rounded-xl font-bold text-lg mx-auto w-full max-w-[300px]">
-            <User size={20} /> Entrar al Portal
-          </Link>
+          <div className="mt-8 flex flex-col gap-4">
+            <Link href="/portal" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-center gap-2 bg-white text-nexa-dark py-4 rounded-xl font-bold text-lg mx-auto w-full max-w-[300px]">
+              <User size={20} /> Acceso Clientes
+            </Link>
+            <Link href="/admin/login" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#D2F23A] to-[#B89BFF] text-black py-4 rounded-xl font-bold text-lg mx-auto w-full max-w-[300px]">
+              <Sparkles size={20} /> Acceso Dueños
+            </Link>
+          </div>
         </div>
       </div>
     </nav>
