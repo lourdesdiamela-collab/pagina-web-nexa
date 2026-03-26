@@ -333,6 +333,3 @@ export default function PortalAcceso() {
     </div>
   );
 }
-
-  );
-}
