@@ -1,6 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Users, CheckSquare, Clock, CreditCard, TrendingUp, BarChart3, Mail, RefreshCw, Calendar, MessageSquare, Briefcase } from 'lucide-react';
+import { Users, CheckSquare, Clock, CreditCard, TrendingUp, BarChart3, Mail, RefreshCw, Calendar, MessageSquare, Briefcase, Plus } from 'lucide-react';
 import Link from 'next/link';
 
 // Simple visual progress bar component
