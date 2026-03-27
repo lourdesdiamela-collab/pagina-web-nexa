@@ -54,25 +54,47 @@ export default function Navbar() {
             </Link>
           </div>
         </div>
-        <button className="mobile-toggle lg:hidden" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        <button className="mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Menu">
           {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      <div 
-        className="mobile-menu lg:hidden fixed top-[80px] left-0 w-full bg-nexa-dark border-b border-nexa-border overflow-hidden transition-all duration-300 ease-in-out"
-        style={{ height: isMobileMenuOpen ? 'calc(100vh - 80px)' : '0', opacity: isMobileMenuOpen ? 1 : 0 }}
+      <div
+        className="mobile-menu"
+        style={{ height: isMobileMenuOpen ? 'calc(100vh - 72px)' : '0', opacity: isMobileMenuOpen ? 1 : 0 }}
       >
-        <div className="flex flex-col p-6 gap-6 h-full text-center">
+        <div style={{ display: 'flex', flexDirection: 'column', padding: '16px 24px', gap: '4px', height: '100%', overflowY: 'auto' }}>
           {links.map(l => (
-            <Link key={l.name} href={l.path} className="text-xl font-bold hover:text-nexa-primary transition-colors py-4 border-b border-nexa-border" onClick={() => setIsMobileMenuOpen(false)}>{l.name}</Link>
+            <Link
+              key={l.name}
+              href={l.path}
+              style={{
+                fontSize: '1.2rem', fontWeight: 700, padding: '16px 0',
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                color: pathname === l.path ? '#B89BFF' : 'rgba(255,255,255,0.85)',
+                textAlign: 'center', transition: 'color 0.2s', display: 'block'
+              }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            >{l.name}</Link>
           ))}
-          <Link href="/contacto" className="text-xl font-bold hover:text-nexa-primary transition-colors py-4 border-b border-nexa-border" onClick={() => setIsMobileMenuOpen(false)}>Contacto</Link>
-          <div className="mt-8 flex flex-col gap-4">
-            <Link href="/portal" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-center gap-2 bg-white text-nexa-dark py-4 rounded-xl font-bold text-lg mx-auto w-full max-w-[300px]">
+          <Link
+            href="/contacto"
+            style={{ fontSize: '1.2rem', fontWeight: 700, padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.85)', textAlign: 'center', display: 'block' }}
+            onClick={() => setIsMobileMenuOpen(false)}
+          >Contacto</Link>
+          <div style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '32px' }}>
+            <Link
+              href="/portal"
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'white', color: '#0D0E15', padding: '16px', borderRadius: '16px', fontWeight: 800, fontSize: '1.05rem', maxWidth: '320px', margin: '0 auto', width: '100%' }}
+            >
               <User size={20} /> Acceso Clientes
             </Link>
-            <Link href="/admin/login" onClick={() => setIsMobileMenuOpen(false)} className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#D2F23A] to-[#B89BFF] text-black py-4 rounded-xl font-bold text-lg mx-auto w-full max-w-[300px]">
+            <Link
+              href="/admin/login"
+              onClick={() => setIsMobileMenuOpen(false)}
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(to right, #D2F23A, #B89BFF)', color: '#0D0E15', padding: '16px', borderRadius: '16px', fontWeight: 800, fontSize: '1.05rem', maxWidth: '320px', margin: '0 auto', width: '100%' }}
+            >
               <Sparkles size={20} /> Acceso Dueños
             </Link>
           </div>

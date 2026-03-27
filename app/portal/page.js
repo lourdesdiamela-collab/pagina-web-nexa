@@ -74,24 +74,15 @@ export default function PortalAcceso() {
   };
 
   return (
-    <div style={{ 
-      minHeight: '100vh', 
-      display: 'flex', 
+    <div className="portal-layout" style={{
       background: role === 'client' ? '#0D0E15' : '#F8F4FA',
       transition: 'background 0.5s ease',
       fontFamily: 'Inter, sans-serif'
     }}>
       <title>{view === 'login' ? 'Iniciar Sesión — NEXA' : 'Crear Cuenta — NEXA'}</title>
-      
+
       {/* Left Area - High Impact Branding */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '80px',
-        position: 'relative',
-        overflow: 'hidden',
+      <div className="portal-left" style={{
         borderRight: role === 'client' ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.05)'
       }}>
         {/* Background Visual */}
@@ -144,16 +135,9 @@ export default function PortalAcceso() {
       </div>
 
       {/* Right Area - Glassmorphism Forms */}
-      <div style={{
-        width: '550px',
+      <div className="portal-right" style={{
         background: role === 'client' ? '#12141D' : 'white',
         boxShadow: role === 'client' ? '-20px 0 80px rgba(0,0,0,0.8)' : '-20px 0 80px rgba(184, 155, 255, 0.1)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        padding: '80px 60px',
-        position: 'relative',
-        zIndex: 50
       }}>
         
         {/* Toggle Mode Register / Login */}
@@ -203,12 +187,12 @@ export default function PortalAcceso() {
               flex: 1, padding: '14px', borderRadius: '14px', border: 'none', fontSize: '0.95rem', fontWeight: 800,
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', cursor: 'pointer',
               background: role === 'admin' ? '#12141D' : 'transparent',
-              color: role === 'admin' ? 'white' : 'rgba(255,255,255,0.3)',
+              color: role === 'admin' ? 'white' : (role === 'client' ? 'rgba(255,255,255,0.5)' : '#999'),
               boxShadow: role === 'admin' ? '0 10px 20px rgba(0,0,0,0.2)' : 'none',
               transition: 'all 0.3s'
             }}
           >
-            <NexaLogo size={18} color={role === 'admin' ? 'white' : 'rgba(255,255,255,0.3)'} /> Admin
+            <NexaLogo size={18} color={role === 'admin' ? 'white' : (role === 'client' ? 'rgba(255,255,255,0.5)' : '#999')} /> Admin
           </button>
         </div>
 
