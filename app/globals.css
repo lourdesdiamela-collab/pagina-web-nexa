@@ -420,6 +420,20 @@ p { color: var(--text-body); line-height: 1.7; }
   .hero-visual { order: -1; max-width: 500px; margin: 0 auto; }
 }
 
+/* ——— Recover / Hub Section Grid ——— */
+.recover-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .recover-grid { grid-template-columns: 1fr; gap: 48px; }
+}
+@media (max-width: 600px) {
+  .recover-grid { gap: 32px; }
+}
+
 /* ——— Buttons ——— */
 .btn {
   display: inline-flex;
