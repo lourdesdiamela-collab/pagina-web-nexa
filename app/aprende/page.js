@@ -28,7 +28,7 @@ export default function Academy() {
       <div className="page-wrapper" style={{ paddingTop: '120px' }}>
         <section className="academy-hero" style={{ textAlign: 'center', marginBottom: '60px' }}>
           <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <span className="section-tag" style={{ background: 'rgba(184, 155, 255, 0.1)', color: 'var(--primary)' }}>Aprende con NEXA</span>
+            <span className="section-tag" style={{ background: 'rgba(184, 155, 255, 0.1)', color: '#B89BFF' }}>Aprende con NEXA</span>
             <h1 className="section-title">Elevá tu estándar <span className="text-gradient">digital.</span></h1>
             <p className="section-subtitle">Ideas, guías y contenidos reales para entender mejor el marketing y hacer crecer tu negocio.</p>
             
@@ -60,7 +60,7 @@ export default function Academy() {
 
         <section className="academy-content" style={{ paddingBottom: '100px' }}>
           <div className="container">
-            <div className="academy-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))', gap: '40px' }}>
+            <div className="academy-grid" style={{ display: 'grid', gap: '40px' }}>
               {filteredArticles.map((article, i) => (
                 <motion.div key={i} className="academy-card" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: i * 0.1 }}
                   style={{ background: '#12141D', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '32px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
