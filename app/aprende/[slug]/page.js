@@ -86,11 +86,11 @@ export default function ArticlePage({ params }) {
   const article = getArticleData(params.slug);
 
   return (
-    <div style={{ background: '#0D0E15', minHeight: '100vh', color: 'white' }}>
+    <div style={{ background: 'var(--bg-main)', minHeight: '100vh', color: 'var(--text-dark)' }}>
       <Navbar />
       
       <div className="container" style={{ paddingTop: '140px', paddingBottom: '100px', maxWidth: '800px' }}>
-        <Link href="/aprende" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textDecoration: 'none', marginBottom: '40px', transition: 'color 0.3s' }}>
+        <Link href="/aprende" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'var(--text-muted)', fontWeight: 600, textDecoration: 'none', marginBottom: '40px', transition: 'color 0.3s' }}>
           <ArrowLeft size={16} /> Volver a los artículos
         </Link>
         
@@ -98,24 +98,24 @@ export default function ArticlePage({ params }) {
           <span style={{ color: '#D2F23A', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px' }}>
             {article.category}
           </span>
-          <h1 style={{ fontSize: '3rem', fontWeight: 900, lineHeight: 1.2, marginTop: '16px', marginBottom: '24px', letterSpacing: '-0.02em', color: 'white' }}>
+          <h1 style={{ fontSize: 'clamp(1.8rem, 5vw, 3rem)', fontWeight: 900, lineHeight: 1.2, marginTop: '16px', marginBottom: '24px', letterSpacing: '-0.02em', color: 'var(--text-dark)' }}>
             {article.title}
           </h1>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', fontWeight: 600 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '24px', color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: 600, flexWrap: 'wrap' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Clock size={16} /> Lectura de {article.readTime}</span>
             <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Calendar size={16} /> Publicado el {article.date}</span>
           </div>
         </div>
 
-        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '40px', fontSize: '1.15rem', lineHeight: 1.8, color: 'rgba(255,255,255,0.8)' }} className="article-content">
+        <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '40px', fontSize: '1.15rem', lineHeight: 1.8, color: 'var(--text-body)' }} className="article-content">
           <div dangerouslySetInnerHTML={{ __html: article.content }} />
         </div>
 
         {/* CTA Bótom */}
         <div style={{ marginTop: '80px', padding: '40px', background: 'rgba(184, 155, 255, 0.05)', borderRadius: '24px', border: '1px solid rgba(184, 155, 255, 0.2)', textAlign: 'center' }}>
-          <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '16px', color: 'white' }}>¿Qué sigue?</h3>
-          <p style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '30px', fontSize: '1.1rem' }}>Si querés implementar estas estrategias de forma profesional en tu empresa, nuestro equipo estratégico está listo para auditar tu caso.</p>
+          <h3 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '16px', color: 'var(--text-dark)' }}>¿Qué sigue?</h3>
+          <p style={{ color: 'var(--text-body)', marginBottom: '30px', fontSize: '1.1rem' }}>Si querés implementar estas estrategias de forma profesional en tu empresa, nuestro equipo estratégico está listo para auditar tu caso.</p>
           <Link href="/contacto" className="btn btn-primary" style={{ display: 'inline-flex', justifyContent: 'center' }}>
             Auditar mi marca
           </Link>
