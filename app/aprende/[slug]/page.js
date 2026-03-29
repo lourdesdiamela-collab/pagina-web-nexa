@@ -7,7 +7,7 @@ import Footer from '@/components/Footer';
 // Rich content for articles based on the slugs
 const getArticleData = (slug) => {
   const data = {
-    'contenido-sin-ventas': {
+    'contenido-sin-ventas': { 
       title: 'Por qué tu contenido no está generando ventas (y cómo solucionarlo)',
       category: 'Redes sociales',
       readTime: '5 min',
