@@ -1904,3 +1904,55 @@ p { color: var(--text-body); line-height: 1.7; }
     justify-content: center;
   }
 }
+/* ==========================================
+   Article Content Light Theme Overrides
+   ========================================== */
+.article-content h2,
+.article-content h3,
+.article-content h4 {
+  color: var(--text-dark);
+}
+
+.article-content p {
+  color: var(--text-body);
+}
+
+.article-content li {
+  color: var(--text-body);
+}
+
+.article-content blockquote {
+  color: var(--text-body) !important;
+  border-left-color: var(--accent-main) !important;
+  background: rgba(184, 155, 255, 0.08) !important;
+}
+
+.article-content blockquote p {
+  color: var(--text-body) !important;
+}
+
+.article-content strong {
+  color: var(--text-dark);
+}
+
+.article-content a {
+  color: var(--accent-main);
+}
+
+.article-content a:hover {
+  color: var(--accent-light);
+}
+
+@media (max-width: 768px) {
+  .article-content h2 {
+    font-size: 1.5rem;
+  }
+  .article-content h3 {
+    font-size: 1.25rem;
+  }
+  .article-content blockquote {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 12px 16px;
+  }
+}
