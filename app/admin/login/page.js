@@ -34,16 +34,16 @@ export default function AdminLogin() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F8F4FA', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
+    <div style={{ minHeight: '100vh', background: '#0D0E15', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '40px 20px' }}>
       <div style={{ width: '100%', maxWidth: '420px' }}>
         <div style={{ textAlign: 'center', marginBottom: '40px' }}>
           <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}><NexaLogo size={48} /></div>
-          <h1 style={{ color: '#12141D', fontSize: '1.8rem', fontWeight: 800 }}>Panel Interno</h1>
-          <p style={{ color: '#666', fontSize: '0.9rem' }}>Acceso exclusivo para equipo NEXA.</p>
+          <h1 style={{ color: 'white', fontSize: '1.8rem', fontWeight: 800 }}>Panel Interno</h1>
+          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>Acceso exclusivo para equipo NEXA.</p>
         </div>
 
         <form onSubmit={handleLogin} style={{
-          background: 'white',
+      background: 'rgba(18,20,29,0.85)',
           border: '1px solid rgba(184, 155, 255, 0.3)',
           borderRadius: '24px',
           padding: '40px',
@@ -59,7 +59,7 @@ export default function AdminLogin() {
             <label style={{ color: '#12141D', fontSize: '0.85rem', fontWeight: 700, marginBottom: '8px', display: 'block' }}>Email corporativo</label>
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} required
               placeholder="tu@nexagrowth.com.ar"
-              style={{ width: '100%', padding: '16px 20px', borderRadius: '14px', border: '1px solid #E5E5E5', background: '#F9F9F9', color: '#12141D', fontSize: '1rem', outline: 'none' }}
+              style={{ width: '100%', padding: '16px 20px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', color: '#12141D', fontSize: '1rem', outline: 'none' }}
             />
           </div>
 
@@ -67,7 +67,7 @@ export default function AdminLogin() {
             <label style={{ color: '#12141D', fontSize: '0.85rem', fontWeight: 700, marginBottom: '8px', display: 'block' }}>Contraseña</label>
             <input type={showPass ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} required
               placeholder="••••••••"
-              style={{ width: '100%', padding: '16px 50px 16px 20px', borderRadius: '14px', border: '1px solid #E5E5E5', background: '#F9F9F9', color: '#12141D', fontSize: '1rem', outline: 'none' }}
+              style={{ width: '100%', padding: '16px 50px 16px 20px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.06)', color: '#12141D', fontSize: '1rem', outline: 'none' }}
             />
             <button type="button" onClick={() => setShowPass(!showPass)} style={{ position: 'absolute', right: '16px', top: '42px', color: '#999' }}>
               {showPass ? <EyeOff size={18} /> : <Eye size={18} />}
