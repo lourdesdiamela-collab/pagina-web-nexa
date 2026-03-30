@@ -50,7 +50,7 @@ export default function Navbar() {
               border: '1px solid rgba(210, 242, 58, 0.2)',
               transition: 'all 0.3s'
             }}>
-              <span>Dueños</span>
+            <span>Equipo NEXA</span>
             </Link>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default function Navbar() {
               onClick={() => setIsMobileMenuOpen(false)}
               style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(to right, #D2F23A, #B89BFF)', color: '#0D0E15', padding: '16px', borderRadius: '16px', fontWeight: 800, fontSize: '1.05rem', maxWidth: '320px', margin: '0 auto', width: '100%' }}
             >
-              <Sparkles size={20} /> Acceso Dueños
+              <Sparkles size={20} /> Acceso Equipo NEXA
             </Link>
           </div>
         </div>
