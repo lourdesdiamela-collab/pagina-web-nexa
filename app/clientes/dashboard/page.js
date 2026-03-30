@@ -1,5 +1,5 @@
 import { getSession } from '@/lib/auth';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { listFollowups, listPayments } from '@/lib/crm';
 import { CalendarClock, CheckCircle2, CircleDollarSign, Workflow } from 'lucide-react';
 
@@ -11,9 +11,9 @@ export default async function ClientDashboardPage() {
   const session = await getSession();
 
   const [clientResult, tasksResult, deliveriesResult, followups, payments] = await Promise.all([
-    supabase.from('clients').select('id,company,plan,service,status').eq('id', session.clientId).single(),
-    supabase.from('tasks').select('id,title,status,priority,due_date,created_at').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(10),
-    supabase.from('deliveries').select('id,title,status,description,created_at').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(10),
+    supabaseAdmin.from('clients').select('id,company,plan,service,status').eq('id', session.clientId).single(),
+    supabaseAdmin.from('tasks').select('id,title,status,priority,due_date,created_at').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(10),
+    supabaseAdmin.from('deliveries').select('id,title,status,description,created_at').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(10),
     listFollowups({ clientId: session.clientId }),
     listPayments({ clientId: session.clientId }),
   ]);

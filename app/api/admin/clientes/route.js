@@ -1,10 +1,19 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { requireSession } from '@/lib/api-auth';
-import { getClientMetaMap, saveClientMeta } from '@/lib/crm';
+import {
+  getClientMetaMap,
+  listFollowups,
+  listMovements,
+  listPayments,
+  removeFollowup,
+  removeMovement,
+  removePayment,
+  saveClientMeta,
+  deleteClientMeta,
+} from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
-import { readStore, updateStore } from '@/lib/store';
 
 const ADMIN_ROLES = ['admin', 'team'];
 
@@ -28,9 +37,9 @@ function mapClientWithMeta(client, meta, extra = {}) {
 
 async function aggregateClientStats(clientIds) {
   const [tasksResult, followups, payments] = await Promise.all([
-    supabase.from('tasks').select('client_id,status').in('client_id', clientIds),
-    readStore('client_followups', []),
-    readStore('client_payments', []),
+    supabaseAdmin.from('tasks').select('client_id,status').in('client_id', clientIds),
+    listFollowups(),
+    listPayments(),
   ]);
 
   const pendingTasksByClient = {};
@@ -59,7 +68,7 @@ export async function GET() {
   if (auth.response) return auth.response;
 
   try {
-    const { data: clients, error } = await supabase
+    const { data: clients, error } = await supabaseAdmin
       .from('clients')
       .select('id,user_id,company,contact_name,email,plan,service,status,created_at')
       .order('created_at', { ascending: false });
@@ -105,13 +114,13 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Empresa, email y password son obligatorios.' }, { status: 400 });
     }
 
-    const { data: existingUser } = await supabase.from('users').select('id').eq('email', email).maybeSingle();
+    const { data: existingUser } = await supabaseAdmin.from('users').select('id').eq('email', email).maybeSingle();
     if (existingUser) {
       return NextResponse.json({ error: 'Ya existe un usuario con ese email.' }, { status: 400 });
     }
 
     const passwordHash = bcrypt.hashSync(password, 10);
-    const { data: newUser, error: userError } = await supabase
+    const { data: newUser, error: userError } = await supabaseAdmin
       .from('users')
       .insert({
         email,
@@ -125,7 +134,7 @@ export async function POST(request) {
 
     if (userError || !newUser) throw userError || new Error('No se pudo crear usuario.');
 
-    const { data: newClient, error: clientError } = await supabase
+    const { data: newClient, error: clientError } = await supabaseAdmin
       .from('clients')
       .insert({
         user_id: newUser.id,
@@ -177,7 +186,7 @@ export async function PUT(request) {
       return NextResponse.json({ error: 'ID de cliente requerido.' }, { status: 400 });
     }
 
-    const { data: existingClient, error: existingClientError } = await supabase
+    const { data: existingClient, error: existingClientError } = await supabaseAdmin
       .from('clients')
       .select('id,user_id,company,email')
       .eq('id', id)
@@ -196,12 +205,12 @@ export async function PUT(request) {
       status: body.status || 'active',
     };
 
-    const { error: updateClientError } = await supabase.from('clients').update(payload).eq('id', id);
+    const { error: updateClientError } = await supabaseAdmin.from('clients').update(payload).eq('id', id);
     if (updateClientError) throw updateClientError;
 
     if (existingClient.user_id && body.password) {
       const hash = bcrypt.hashSync(String(body.password), 10);
-      const { error: passwordError } = await supabase
+      const { error: passwordError } = await supabaseAdmin
         .from('users')
         .update({
           password_hash: hash,
@@ -212,7 +221,7 @@ export async function PUT(request) {
 
       if (passwordError) throw passwordError;
     } else if (existingClient.user_id) {
-      const { error: userUpdateError } = await supabase
+      const { error: userUpdateError } = await supabaseAdmin
         .from('users')
         .update({ name: payload.contact_name, email: payload.email })
         .eq('id', existingClient.user_id);
@@ -259,7 +268,7 @@ export async function DELETE(request) {
       return NextResponse.json({ error: 'ID requerido.' }, { status: 400 });
     }
 
-    const { data: existingClient, error: existingClientError } = await supabase
+    const { data: existingClient, error: existingClientError } = await supabaseAdmin
       .from('clients')
       .select('id,user_id,company')
       .eq('id', id)
@@ -269,23 +278,29 @@ export async function DELETE(request) {
       return NextResponse.json({ error: 'Cliente no encontrado.' }, { status: 404 });
     }
 
-    await supabase.from('tasks').delete().eq('client_id', id);
-    await supabase.from('deliveries').delete().eq('client_id', id);
+    const [followups, payments, movements] = await Promise.all([
+      listFollowups({ clientId: id }),
+      listPayments({ clientId: id }),
+      listMovements({ clientId: id }),
+    ]);
 
-    const { error: deleteClientError } = await supabase.from('clients').delete().eq('id', id);
+    await Promise.all([
+      ...followups.map((item) => removeFollowup(item.id)),
+      ...payments.map((item) => removePayment(item.id)),
+      ...movements.map((item) => removeMovement(item.id)),
+    ]);
+
+    await supabaseAdmin.from('tasks').delete().eq('client_id', id);
+    await supabaseAdmin.from('deliveries').delete().eq('client_id', id);
+
+    const { error: deleteClientError } = await supabaseAdmin.from('clients').delete().eq('id', id);
     if (deleteClientError) throw deleteClientError;
 
     if (existingClient.user_id) {
-      await supabase.from('users').update({ is_active: false }).eq('id', existingClient.user_id);
+      await supabaseAdmin.from('users').update({ is_active: false }).eq('id', existingClient.user_id);
     }
 
-    await updateStore('client_meta', {}, (map) => {
-      delete map[id];
-      return map;
-    });
-    await updateStore('client_followups', [], (items) => items.filter((item) => item.clientId !== id));
-    await updateStore('client_payments', [], (items) => items.filter((item) => item.clientId !== id));
-    await updateStore('financial_movements', [], (items) => items.filter((item) => item.clientId !== id));
+    await deleteClientMeta(id);
 
     await notifyEvent({
       type: 'cliente_eliminado',

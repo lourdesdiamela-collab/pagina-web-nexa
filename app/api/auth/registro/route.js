@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { notifyEvent } from '@/lib/notifications';
 
 export async function POST(request) {
@@ -25,7 +25,7 @@ export async function POST(request) {
     }
 
     // Check if user already exists
-    const { data: existingUser } = await supabase
+    const { data: existingUser } = await supabaseAdmin
       .from('users')
       .select('id')
       .eq('email', email.toLowerCase())
@@ -38,7 +38,7 @@ export async function POST(request) {
     const hash = bcrypt.hashSync(password, 10);
 
     // Create User record
-    const { data: newUser, error: userError } = await supabase
+    const { data: newUser, error: userError } = await supabaseAdmin
       .from('users')
       .insert({
         email: email.toLowerCase(),
@@ -61,7 +61,7 @@ export async function POST(request) {
         return NextResponse.json({ error: 'El nombre de la empresa es obligatorio para clientes.' }, { status: 400 });
       }
 
-      await supabase.from('clients').insert({
+      await supabaseAdmin.from('clients').insert({
         user_id: newUser.id,
         company: company,
         contact_name: name,

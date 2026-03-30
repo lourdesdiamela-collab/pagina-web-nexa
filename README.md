@@ -1,16 +1,39 @@
-# React + Vite
+# NEXA Web + CRM
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plataforma web pública y CRM operativo de NEXA construida con Next.js 14.
 
-Currently, two official plugins are available:
+## Requisitos
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Node.js 18+
+- Variables de entorno en `.env.local` (base sugerida en `.env.example`)
+- Supabase (tablas base + migraciones en `supabase/migrations`)
 
-## React Compiler
+## Variables clave
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `SUPABASE_SERVICE_ROLE_KEY` para operaciones backend con RLS.
+- `RESEND_API_KEY` + `NEXA_NOTIFICATION_EMAIL` para notificaciones por email.
+- `TRELLO_*` para sincronización de tareas con Trello.
 
-## Expanding the ESLint configuration
+## Desarrollo
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+## Build de producción
+
+```bash
+npm run build
+npm start
+```
+
+## Migración de datos locales a Supabase
+
+Si existen archivos legacy en `data/*.json`, podés migrarlos a tablas `crm.*`:
+
+```bash
+npm run sync:data
+```
+
+Requiere `SUPABASE_SERVICE_ROLE_KEY` configurada.

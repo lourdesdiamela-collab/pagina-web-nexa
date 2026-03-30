@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { requireSession } from '@/lib/api-auth';
 import { listPayments, listMovements, computeFinancialSummary, buildMonthlyHistory, saveMovement } from '@/lib/crm';
 
@@ -11,7 +11,7 @@ async function resolveClientNames(clientTotals) {
     return Object.entries(clientTotals).map(([clientId, total]) => ({ clientId, clientName: 'Sin cliente', total }));
   }
 
-  const { data: clients } = await supabase.from('clients').select('id,company').in('id', ids);
+  const { data: clients } = await supabaseAdmin.from('clients').select('id,company').in('id', ids);
   const map = Object.fromEntries((clients || []).map((client) => [client.id, client.company]));
 
   return Object.entries(clientTotals)

@@ -1,13 +1,13 @@
 import { getSession } from '@/lib/auth';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { listFollowups } from '@/lib/crm';
 import { CalendarClock, CheckCircle2, Workflow } from 'lucide-react';
 
 export default async function ClientTrackingPage() {
   const session = await getSession();
   const [tasksResult, deliveriesResult, followups] = await Promise.all([
-    supabase.from('tasks').select('id,title,status,priority,due_date,description').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(12),
-    supabase.from('deliveries').select('id,title,status,description,created_at').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(12),
+    supabaseAdmin.from('tasks').select('id,title,status,priority,due_date,description').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(12),
+    supabaseAdmin.from('deliveries').select('id,title,status,description,created_at').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(12),
     listFollowups({ clientId: session.clientId }),
   ]);
 

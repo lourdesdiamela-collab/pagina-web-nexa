@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { requireSession } from '@/lib/api-auth';
 import { listPayments, listMovements, listFollowups, computeFinancialSummary } from '@/lib/crm';
 import { listNotificationEvents } from '@/lib/notifications';
@@ -12,8 +12,8 @@ export async function GET() {
 
   try {
     const [clientsResult, tasksResult, followups, payments, movements, events] = await Promise.all([
-      supabase.from('clients').select('id,status,company,plan,created_at'),
-      supabase.from('tasks').select('id,status,priority,due_date,client_id'),
+      supabaseAdmin.from('clients').select('id,status,company,plan,created_at'),
+      supabaseAdmin.from('tasks').select('id,status,priority,due_date,client_id'),
       listFollowups(),
       listPayments(),
       listMovements(),

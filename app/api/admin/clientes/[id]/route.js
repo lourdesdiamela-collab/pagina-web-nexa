@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { requireSession } from '@/lib/api-auth';
 import { getClientMeta, listFollowups, listPayments } from '@/lib/crm';
 
@@ -16,9 +16,9 @@ export async function GET(_request, { params }) {
 
   try {
     const [clientResult, tasksResult, deliveriesResult, followups, payments] = await Promise.all([
-      supabase.from('clients').select('id,user_id,company,contact_name,email,plan,service,status,created_at').eq('id', clientId).single(),
-      supabase.from('tasks').select('id,client_id,title,description,status,priority,due_date,created_at').eq('client_id', clientId).order('created_at', { ascending: false }),
-      supabase.from('deliveries').select('id,client_id,title,description,status,created_at').eq('client_id', clientId).order('created_at', { ascending: false }),
+      supabaseAdmin.from('clients').select('id,user_id,company,contact_name,email,plan,service,status,created_at').eq('id', clientId).single(),
+      supabaseAdmin.from('tasks').select('id,client_id,title,description,status,priority,due_date,created_at').eq('client_id', clientId).order('created_at', { ascending: false }),
+      supabaseAdmin.from('deliveries').select('id,client_id,title,description,status,created_at').eq('client_id', clientId).order('created_at', { ascending: false }),
       listFollowups({ clientId }),
       listPayments({ clientId }),
     ]);

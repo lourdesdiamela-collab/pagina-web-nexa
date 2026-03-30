@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { requireSession } from '@/lib/api-auth';
 import { notifyEvent } from '@/lib/notifications';
 import { syncTaskWithTrello } from '@/lib/trello';
@@ -35,7 +35,7 @@ export async function GET(request) {
     const clientIdParam = searchParams.get('clientId');
     const clientId = auth.session.role === 'client' ? auth.session.clientId : clientIdParam;
 
-    let query = supabase
+    let query = supabaseAdmin
       .from('tasks')
       .select('id,client_id,title,description,status,priority,due_date,created_at,clients(company)')
       .order('created_at', { ascending: false });
@@ -79,7 +79,7 @@ export async function POST(request) {
     const priority = normalizePriority(body.priority);
     const dueDate = normalizeDueDate(body.dueDate);
 
-    const { data: inserted, error } = await supabase
+    const { data: inserted, error } = await supabaseAdmin
       .from('tasks')
       .insert({
         client_id: clientId,
@@ -135,7 +135,15 @@ export async function PUT(request) {
     if (body.dueDate !== undefined) payload.due_date = normalizeDueDate(body.dueDate);
     if (body.clientId !== undefined) payload.client_id = String(body.clientId || '').trim() || null;
 
-    const { data: updated, error } = await supabase
+    const { data: currentTask } = await supabaseAdmin
+      .from('tasks')
+      .select('status')
+      .eq('id', id)
+      .maybeSingle();
+
+    const previousStatus = currentTask?.status || null;
+
+    const { data: updated, error } = await supabaseAdmin
       .from('tasks')
       .update(payload)
       .eq('id', id)
@@ -154,7 +162,7 @@ export async function PUT(request) {
 
     const trello = await syncTaskWithTrello(task, 'upsert');
 
-    if (body.status && body.status !== updated.status) {
+    if (body.status && previousStatus && previousStatus !== task.status) {
       await notifyEvent({
         type: 'cambio_estado_tarea',
         title: 'Tarea actualizada',
@@ -181,9 +189,9 @@ export async function DELETE(request) {
       return NextResponse.json({ error: 'ID de tarea requerido.' }, { status: 400 });
     }
 
-    const { data: existing } = await supabase.from('tasks').select('id,title,client_id,clients(company)').eq('id', id).single();
+    const { data: existing } = await supabaseAdmin.from('tasks').select('id,title,client_id,clients(company)').eq('id', id).single();
 
-    const { error } = await supabase.from('tasks').delete().eq('id', id);
+    const { error } = await supabaseAdmin.from('tasks').delete().eq('id', id);
     if (error) throw error;
 
     if (existing) {

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { requireSession } from '@/lib/api-auth';
 import { listPayments, savePayment, removePayment } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
@@ -17,7 +17,7 @@ async function attachClientName(payments) {
   const ids = [...new Set(payments.map((payment) => payment.clientId).filter(Boolean))];
   if (ids.length === 0) return payments;
 
-  const { data } = await supabase.from('clients').select('id,company').in('id', ids);
+  const { data } = await supabaseAdmin.from('clients').select('id,company').in('id', ids);
   const map = Object.fromEntries((data || []).map((item) => [item.id, item.company]));
 
   return payments.map((payment) => ({
