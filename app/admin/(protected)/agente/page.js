@@ -1,130 +1,154 @@
 'use client';
-import { useState, useRef, useEffect } from 'react';
-import { Bot, User, Send, Sparkles, TrendingUp, BarChart3, Target } from 'lucide-react';
-import Link from 'next/link';
 
-export default function CampaignAgent() {
-  const [messages, setMessages] = useState([
-    {
-      role: 'agent',
-      content: '¡Hola! Soy tu Agente de Campañas NEXA. Estoy sincronizado con tu cuenta de Meta Ads y Google Ads. Puedo darte el CPA de hoy, tu gasto actual, o recomendarte ajustes para bajar el costo por lead. ¿Qué revisamos?'
+import { useEffect, useState } from 'react';
+import { Mail, RefreshCw, Send, Trello } from 'lucide-react';
+
+export default function IntegrationsPage() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [running, setRunning] = useState(false);
+
+  const load = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const response = await fetch('/api/admin/integraciones', { cache: 'no-store' });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'No se pudo cargar integraciones');
+      setData(payload);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
     }
-  ]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const endRef = useRef(null);
+  };
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
+    load();
+  }, []);
 
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-
-    const userMessage = input;
-    setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
-    setIsTyping(true);
-
-    // Simulate AI thinking and calling the "Meta Ads" API logically
-    setTimeout(() => {
-      let botResponse = 'Revisé los datos generales. Las campañas se están manteniendo estables con un ROAS de 3.2X.';
-      
-      const lower = userMessage.toLowerCase();
-      if (lower.includes('gasto') || lower.includes('inversion') || lower.includes('presupuesto')) {
-        botResponse = '📉 Tu inversión actual este mes es de $320,000 ARS. Llevamos consumido el 64% del presupuesto mensual de Meta. El costo por lead (CPL) bajó un 12% desde la última optimización.';
-      } else if (lower.includes('mejorar') || lower.includes('recomendacion') || lower.includes('bajar')) {
-        botResponse = '✨ Te recomiendo apagar el conjunto de anuncios "Broad - Historias" que está trayendo el CPL a $1,200 ARS (muy alto), y redistribuir ese 20% de presupuesto a la campaña "Retargeting Video 1", que tiene un CPL excelente de $450 ARS.';
-      } else if (lower.includes('leads') || lower.includes('clientes') || lower.includes('resultados')) {
-        botResponse = '🎯 Ingresaron 142 leads en los últimos 7 días. El anuncio ganador indiscutible es "Video Testimonios 3".';
-      }
-
-      setMessages(prev => [...prev, { role: 'agent', content: botResponse }]);
-      setIsTyping(false);
-    }, 1800);
+  const runAction = async (action) => {
+    setRunning(true);
+    setError('');
+    try {
+      const response = await fetch('/api/admin/integraciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'No se pudo ejecutar prueba');
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setRunning(false);
+    }
   };
 
   return (
-    <div style={{ height: 'calc(100vh - 100px)', display: 'flex', flexDirection: 'column' }}>
-      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+    <div>
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 14 }}>
         <div>
-          <h1 style={{ color: '#12141D', fontSize: '2rem', fontWeight: 900, display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Bot color="#FF9F43" size={32} /> Agente de Campañas AI
-          </h1>
-          <p style={{ color: '#666', fontSize: '1rem', marginTop: '4px' }}>
-            Conectado a Meta Ads API y Google Optimization.
-          </p>
+          <h2 style={{ margin: 0, fontSize: '1.8rem' }}>Integraciones</h2>
+          <p style={{ margin: '8px 0 0', color: 'rgba(255,255,255,0.66)' }}>Estado real de Trello y correo centralizado del CRM.</p>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
-          <div style={{ padding: '8px 16px', borderRadius: '10px', background: 'rgba(40, 199, 111, 0.1)', color: '#28C76F', fontSize: '0.85rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <div style={{ width: 8, height: 8, background: '#28C76F', borderRadius: '50%' }} /> Meta Sincronizado
-          </div>
-          <div style={{ padding: '8px 16px', borderRadius: '10px', background: 'rgba(0, 207, 232, 0.1)', color: '#00CFE8', fontSize: '0.85rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <div style={{ width: 8, height: 8, background: '#00CFE8', borderRadius: '50%' }} /> Google Ads Activo
-          </div>
-        </div>
+        <button type="button" onClick={load} style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.05)', color: 'white', padding: '10px 12px', display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+          <RefreshCw size={16} /> Actualizar
+        </button>
       </header>
 
-      {/* Suggested Prompts */}
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '20px' }}>
-        <button onClick={() => setInput('¿Cuál es el gasto de campañas actual?')} style={{ background: 'white', border: '1px solid #EEE', borderRadius: '100px', padding: '8px 16px', fontSize: '0.85rem', fontWeight: 600, color: '#12141D', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s' }}>
-          <BarChart3 size={14} color="#FF9F43" /> Revisar Gasto
-        </button>
-        <button onClick={() => setInput('¿Qué recomendación tenés para mejorar mis campañas?')} style={{ background: 'white', border: '1px solid #EEE', borderRadius: '100px', padding: '8px 16px', fontSize: '0.85rem', fontWeight: 600, color: '#12141D', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s' }}>
-          <Sparkles size={14} color="#B89BFF" /> Optimizar CPL
-        </button>
-        <button onClick={() => setInput('¿Cuántos leads entraron esta semana?')} style={{ background: 'white', border: '1px solid #EEE', borderRadius: '100px', padding: '8px 16px', fontSize: '0.85rem', fontWeight: 600, color: '#12141D', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px', transition: 'all 0.2s' }}>
-          <Target size={14} color="#00CFE8" /> Ver Resultados
-        </button>
-      </div>
+      {error && (
+        <div style={{ marginBottom: 12, borderRadius: 12, padding: '10px 12px', border: '1px solid rgba(255,107,107,0.45)', background: 'rgba(255,107,107,0.12)', color: '#ffd8d8' }}>
+          {error}
+        </div>
+      )}
 
-      {/* Chat Area */}
-      <div style={{ flexGrow: 1, background: 'white', border: '1px solid #EEE', borderRadius: '24px', display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 10px 30px rgba(0,0,0,0.03)' }}>
-        
-        <div style={{ flexGrow: 1, padding: '30px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          {messages.map((m, i) => (
-            <div key={i} style={{ display: 'flex', justifyContent: m.role === 'user' ? 'flex-end' : 'flex-start' }}>
-              <div style={{ 
-                maxWidth: '70%', padding: '16px 20px', borderRadius: '18px',
-                borderBottomRightRadius: m.role === 'user' ? 4 : 18,
-                borderBottomLeftRadius: m.role === 'agent' ? 4 : 18,
-                background: m.role === 'user' ? '#12141D' : '#F9F9F9',
-                color: m.role === 'user' ? 'white' : '#12141D',
-                border: m.role === 'agent' ? '1px solid #EEE' : 'none',
-                lineHeight: 1.5, fontSize: '0.95rem'
-              }}>
-                {m.content}
-              </div>
-            </div>
-          ))}
-          {isTyping && (
-            <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
-              <div style={{ padding: '16px 20px', borderRadius: '18px', borderBottomLeftRadius: 4, background: '#F9F9F9', border: '1px solid #EEE', color: '#999', fontSize: '0.9rem', display: 'flex', gap: '6px', alignItems: 'center' }}>
-                <Bot size={16} /> Analizando métricas...
-              </div>
-            </div>
+      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+        <article style={panelStyle}>
+          <h3 style={panelTitleStyle}><Mail size={18} color="#D2F23A" /> Correo de notificaciones</h3>
+          {loading && <p style={{ color: 'rgba(255,255,255,0.6)' }}>Cargando...</p>}
+          {!loading && (
+            <>
+              <p style={{ color: 'rgba(255,255,255,0.7)' }}>
+                Estado: <strong>{data?.notifications?.configured ? 'Configurado' : 'Incompleto'}</strong>
+              </p>
+              <p style={{ color: 'rgba(255,255,255,0.7)' }}>
+                Destino: <strong>{data?.notifications?.destination || 'NEXA_NOTIFICATION_EMAIL no definido'}</strong>
+              </p>
+              <button type="button" disabled={running} onClick={() => runAction('test_email')} style={actionButtonStyle}>
+                <Send size={14} /> Probar envio
+              </button>
+            </>
           )}
-          <div ref={endRef} />
-        </div>
+        </article>
 
-        <div style={{ padding: '20px', borderTop: '1px solid #EEE', background: '#FAFAFA' }}>
-          <form onSubmit={handleSend} style={{ display: 'flex', gap: '12px' }}>
-            <input 
-              type="text" 
-              value={input} 
-              onChange={e => setInput(e.target.value)} 
-              placeholder="Preguntale al agente sobe tus campañas..." 
-              style={{ flexGrow: 1, padding: '16px 20px', borderRadius: '16px', border: '1px solid #E5E5E5', outline: 'none', fontSize: '1rem' }}
-              disabled={isTyping}
-            />
-            <button type="submit" disabled={isTyping || !input.trim()} style={{ background: '#FF9F43', color: 'white', border: 'none', borderRadius: '16px', width: '56px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: (isTyping || !input.trim()) ? 'not-allowed' : 'pointer', opacity: (isTyping || !input.trim()) ? 0.6 : 1, transition: 'all 0.2s' }}>
-              <Send size={20} />
-            </button>
-          </form>
-        </div>
+        <article style={panelStyle}>
+          <h3 style={panelTitleStyle}><Trello size={18} color="#B89BFF" /> Trello</h3>
+          {loading && <p style={{ color: 'rgba(255,255,255,0.6)' }}>Cargando...</p>}
+          {!loading && (
+            <>
+              <p style={{ color: 'rgba(255,255,255,0.7)' }}>
+                Estado: <strong>{data?.trello?.configured ? (data?.trello?.reachable ? 'Conectado' : 'Configurado con error') : 'Incompleto'}</strong>
+              </p>
+              <p style={{ color: 'rgba(255,255,255,0.7)' }}>
+                Board: <strong>{data?.trello?.board?.name || 'Definir TRELLO_BOARD_ID'}</strong>
+              </p>
+              <button type="button" disabled={running} onClick={() => runAction('test_trello')} style={actionButtonStyle}>
+                <RefreshCw size={14} /> Probar conexion
+              </button>
+            </>
+          )}
+        </article>
+      </section>
 
-      </div>
+      <article style={panelStyle}>
+        <h3 style={panelTitleStyle}>Ultimos eventos de sincronizacion Trello</h3>
+        {!loading && data?.syncLog?.length === 0 && <p style={{ color: 'rgba(255,255,255,0.6)' }}>Aun no hay sincronizaciones.</p>}
+        {!loading && data?.syncLog?.length > 0 && (
+          <div style={{ display: 'grid', gap: 8 }}>
+            {data.syncLog.map((event, index) => (
+              <div key={`${event.taskId || 'n/a'}-${index}`} style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(13,14,21,0.6)', padding: 10 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                  <strong>{event.ok ? 'OK' : 'Error'} · {event.action}</strong>
+                  <small style={{ color: 'rgba(255,255,255,0.55)' }}>{new Date(event.createdAt).toLocaleString('es-AR')}</small>
+                </div>
+                <p style={{ margin: '5px 0 0', color: 'rgba(255,255,255,0.68)' }}>
+                  {event.reason || `Task: ${event.taskId || '-'} · Card: ${event.cardId || '-'}`}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+      </article>
     </div>
   );
 }
+
+const panelStyle = {
+  borderRadius: 16,
+  border: '1px solid rgba(255,255,255,0.12)',
+  background: 'rgba(255,255,255,0.04)',
+  padding: 14,
+};
+
+const panelTitleStyle = {
+  marginTop: 0,
+  marginBottom: 10,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+};
+
+const actionButtonStyle = {
+  borderRadius: 10,
+  border: '1px solid rgba(210,242,58,0.35)',
+  background: 'rgba(210,242,58,0.15)',
+  color: '#f3ffb5',
+  padding: '8px 12px',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 6,
+  fontWeight: 700,
+};

@@ -1,98 +1,173 @@
 import { getSession } from '@/lib/auth';
 import { supabase } from '@/lib/db';
-import { CheckCircle2, Clock, FileText, AlertCircle } from 'lucide-react';
+import { listFollowups, listPayments } from '@/lib/crm';
+import { CalendarClock, CheckCircle2, CircleDollarSign, Workflow } from 'lucide-react';
+
+function money(value) {
+  return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(value || 0);
+}
 
 export default async function ClientDashboardPage() {
   const session = await getSession();
 
-  // Fetch client data
-  const { data: client } = await supabase.from('clients').select('*').eq('id', session.clientId).single();
-  
-  // Tasks mapping sort manually or using basic order
-  const { data: allTasks } = await supabase.from('tasks').select('*').eq('client_id', session.clientId).order('created_at', { ascending: true });
-  const tasks = (allTasks || [])
-    .sort((a, b) => {
-      const order = { 'pending': 1, 'in_progress': 2, 'review': 3, 'completed': 4 };
-      return (order[a.status] || 9) - (order[b.status] || 9);
-    })
-    .slice(0, 3);
+  const [clientResult, tasksResult, deliveriesResult, followups, payments] = await Promise.all([
+    supabase.from('clients').select('id,company,plan,service,status').eq('id', session.clientId).single(),
+    supabase.from('tasks').select('id,title,status,priority,due_date,created_at').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(10),
+    supabase.from('deliveries').select('id,title,status,description,created_at').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(10),
+    listFollowups({ clientId: session.clientId }),
+    listPayments({ clientId: session.clientId }),
+  ]);
 
-  const { data: deliveries } = await supabase.from('deliveries').select('*').eq('client_id', session.clientId).order('created_at', { ascending: false }).limit(3);
-  
+  const client = clientResult.data;
+  const tasks = tasksResult.data || [];
+  const deliveries = deliveriesResult.data || [];
+  const openTasks = tasks.filter((task) => task.status !== 'completed');
+  const openFollowups = followups.filter((item) => item.status !== 'cerrado');
+  const pendingPayments = payments.filter((payment) => ['pending', 'overdue'].includes(payment.status));
+  const pendingAmount = pendingPayments.reduce((sum, payment) => sum + Number(payment.amount || 0), 0);
+
   return (
     <div>
-      <header style={{ marginBottom: '40px' }}>
-        <h1 style={{ color: 'white', fontSize: '2.5rem', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '8px' }}>
-          Hola, {session.name.split(' ')[0]} 👋
-        </h1>
-        <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.1rem' }}>
-          Bienvenido a tu espacio en <strong style={{ color: 'white' }}>NEXA</strong>. Así viene el crecimiento de {client?.company || 'tu marca'}.
+      <header style={{ marginBottom: 14 }}>
+        <h2 style={{ margin: 0, fontSize: '1.85rem' }}>Hola, {session.name?.split(' ')[0]}</h2>
+        <p style={{ margin: '8px 0 0', color: 'rgba(255,255,255,0.66)' }}>
+          Este es el estado actual de tu cuenta en NEXA.
         </p>
       </header>
 
-      {/* Overview Cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px', marginBottom: '40px' }}>
-        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(184, 155, 255, 0.2)', borderRadius: '24px', padding: '24px' }}>
-          <div style={{ color: '#B89BFF', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Servicio Activo</div>
-          <div style={{ color: 'white', fontSize: '1.4rem', fontWeight: 700, marginBottom: '4px' }}>{client?.service || 'Marketing Integral'}</div>
-          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>Plan: {client?.plan || 'Growth'}</div>
-        </div>
+      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginBottom: 14 }}>
+        <article style={cardStyle}>
+          <div style={cardLabelStyle}>Servicio activo</div>
+          <strong style={cardValueStyle}>{client?.service || 'Marketing Integral'}</strong>
+          <small style={{ color: 'rgba(255,255,255,0.6)' }}>{client?.plan || 'Plan vigente'}</small>
+        </article>
+        <article style={cardStyle}>
+          <div style={cardLabelStyle}>Tareas abiertas</div>
+          <strong style={cardValueStyle}>{openTasks.length}</strong>
+          <small style={{ color: 'rgba(255,255,255,0.6)' }}>{tasks.length} tareas registradas</small>
+        </article>
+        <article style={cardStyle}>
+          <div style={cardLabelStyle}>Seguimientos</div>
+          <strong style={cardValueStyle}>{openFollowups.length}</strong>
+          <small style={{ color: 'rgba(255,255,255,0.6)' }}>Entradas activas</small>
+        </article>
+        <article style={cardStyle}>
+          <div style={cardLabelStyle}>Saldo pendiente</div>
+          <strong style={{ ...cardValueStyle, color: pendingAmount > 0 ? '#ffb97a' : '#7ef0b3' }}>{money(pendingAmount)}</strong>
+          <small style={{ color: 'rgba(255,255,255,0.6)' }}>{pendingPayments.length} comprobantes</small>
+        </article>
+      </section>
 
-        <div style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(210, 242, 58, 0.2)', borderRadius: '24px', padding: '24px' }}>
-          <div style={{ color: '#D2F23A', fontSize: '0.85rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Estado actual</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'white', fontSize: '1.4rem', fontWeight: 700 }}>
-            <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#D2F23A', boxShadow: '0 0 10px #D2F23A' }} />
-            En ejecución
-          </div>
-          <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', marginTop: '4px' }}>El equipo está trabajando.</div>
-        </div>
-      </div>
-
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-        {/* Next Tasks */}
-        <section style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '30px' }}>
-          <h2 style={{ color: 'white', fontSize: '1.2rem', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <Clock size={20} color="#B89BFF" /> Próximos pasos
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {tasks.length > 0 ? tasks.map(t => (
-              <div key={t.id} style={{ display: 'flex', alignItems: 'flex-start', gap: '16px', background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                {t.status === 'completed' ? <CheckCircle2 color="#D2F23A" size={20} /> : <AlertCircle color="rgba(255,255,255,0.3)" size={20} />}
-                <div>
-                  <div style={{ color: 'white', fontWeight: 600, fontSize: '0.95rem', marginBottom: '4px' }}>{t.title}</div>
-                  <div style={{ fontSize: '0.8rem', color: 'rgba(255,255,255,0.5)' }}>Estado: {t.status.replace('_', ' ')}</div>
-                </div>
-              </div>
-            )) : (
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>No hay tareas pendientes registradas.</p>
-            )}
-          </div>
-        </section>
-
-        {/* Deliverables */}
-        <section style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '30px' }}>
-          <h2 style={{ color: 'white', fontSize: '1.2rem', fontWeight: 700, marginBottom: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <FileText size={20} color="#D2F23A" /> Últimas Entregas
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {(deliveries || []).length > 0 ? deliveries.map(d => (
-              <div key={d.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div>
-                  <div style={{ color: 'white', fontWeight: 600, fontSize: '0.95rem', marginBottom: '4px' }}>{d.title}</div>
-                  <div style={{ fontSize: '0.8rem', color: d.status === 'delivered' ? '#D2F23A' : '#B89BFF' }}>
-                    {d.status === 'delivered' ? 'Entregado' : 'En revisión'}
+      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+        <article style={panelStyle}>
+          <h3 style={panelTitleStyle}><Workflow size={18} color="#D2F23A" /> Proximas tareas</h3>
+          {tasks.length === 0 && <p style={{ color: 'rgba(255,255,255,0.6)' }}>Todavia no hay tareas cargadas.</p>}
+          {tasks.length > 0 && (
+            <div style={{ display: 'grid', gap: 8 }}>
+              {tasks.slice(0, 6).map((task) => (
+                <div key={task.id} style={itemStyle}>
+                  <div>
+                    <strong>{task.title}</strong>
+                    <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.86rem' }}>{task.priority}</div>
                   </div>
+                  <span style={{ fontSize: '0.82rem', color: task.status === 'completed' ? '#7ef0b3' : '#ffb97a' }}>{task.status}</span>
                 </div>
-                {d.file_url && (
-                  <a href={d.file_url} target="_blank" rel="noreferrer" style={{ background: 'rgba(255,255,255,0.1)', color: 'white', padding: '8px 16px', borderRadius: '100px', fontSize: '0.8rem', fontWeight: 600 }}>Descargar</a>
-                )}
+              ))}
+            </div>
+          )}
+        </article>
+
+        <article style={panelStyle}>
+          <h3 style={panelTitleStyle}><CalendarClock size={18} color="#B89BFF" /> Seguimiento y entregas</h3>
+          {followups.length === 0 && deliveries.length === 0 && <p style={{ color: 'rgba(255,255,255,0.6)' }}>No hay novedades recientes.</p>}
+          {followups.slice(0, 3).map((item) => (
+            <div key={item.id} style={itemStyle}>
+              <div>
+                <strong>{item.comment}</strong>
+                <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.86rem' }}>{item.nextStep || 'Sin proximo paso'}</div>
               </div>
-            )) : (
-              <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem' }}>No hay entregas disponibles aún.</p>
-            )}
+              <span style={{ fontSize: '0.82rem', color: '#D2F23A' }}>{item.status}</span>
+            </div>
+          ))}
+          {deliveries.slice(0, 3).map((delivery) => (
+            <div key={delivery.id} style={itemStyle}>
+              <div>
+                <strong>{delivery.title}</strong>
+                <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.86rem' }}>{delivery.description || 'Sin detalle adicional'}</div>
+              </div>
+              <span style={{ fontSize: '0.82rem', color: delivery.status === 'delivered' ? '#7ef0b3' : '#ffb97a', display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                {delivery.status === 'delivered' ? <CheckCircle2 size={13} /> : null}
+                {delivery.status}
+              </span>
+            </div>
+          ))}
+        </article>
+      </section>
+
+      <section style={{ ...panelStyle, marginTop: 14 }}>
+        <h3 style={panelTitleStyle}><CircleDollarSign size={18} color="#D2F23A" /> Resumen de pagos</h3>
+        {payments.length === 0 && <p style={{ color: 'rgba(255,255,255,0.6)' }}>No hay pagos registrados.</p>}
+        {payments.length > 0 && (
+          <div style={{ display: 'grid', gap: 8 }}>
+            {payments.slice(0, 6).map((payment) => (
+              <div key={payment.id} style={itemStyle}>
+                <div>
+                  <strong>{payment.concept}</strong>
+                  <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.86rem' }}>{payment.method || 'Metodo no definido'}</div>
+                </div>
+                <div style={{ textAlign: 'right' }}>
+                  <strong>{money(payment.amount)}</strong>
+                  <div style={{ color: payment.status === 'paid' ? '#7ef0b3' : '#ffb97a', fontSize: '0.82rem' }}>{payment.status}</div>
+                </div>
+              </div>
+            ))}
           </div>
-        </section>
-      </div>
+        )}
+      </section>
     </div>
   );
 }
+
+const cardStyle = {
+  borderRadius: 14,
+  border: '1px solid rgba(255,255,255,0.1)',
+  background: 'rgba(255,255,255,0.04)',
+  padding: 12,
+};
+
+const cardLabelStyle = {
+  color: 'rgba(255,255,255,0.65)',
+  fontSize: '0.84rem',
+};
+
+const cardValueStyle = {
+  fontSize: '1.4rem',
+  display: 'block',
+  marginTop: 4,
+};
+
+const panelStyle = {
+  borderRadius: 16,
+  border: '1px solid rgba(255,255,255,0.12)',
+  background: 'rgba(255,255,255,0.04)',
+  padding: 14,
+};
+
+const panelTitleStyle = {
+  marginTop: 0,
+  marginBottom: 10,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+};
+
+const itemStyle = {
+  borderRadius: 12,
+  border: '1px solid rgba(255,255,255,0.1)',
+  background: 'rgba(13,14,21,0.6)',
+  padding: 10,
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: 10,
+};

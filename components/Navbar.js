@@ -1,106 +1,95 @@
 'use client';
-import { useState, useEffect } from 'react';
+
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, User, Sparkles } from 'lucide-react';
+import { Menu, UserRound, X } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
+const LINKS = [
+  { href: '/', label: 'Inicio' },
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/casos', label: 'Casos' },
+  { href: '/aprende', label: 'Aprende' },
+  { href: '/contacto', label: 'Contacto' },
+];
+
 export default function Navbar() {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener('scroll', onScroll);
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => { setIsMobileMenuOpen(false); }, [pathname]);
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
-  if (pathname?.startsWith('/admin') || pathname?.startsWith('/clientes/dashboard')) return null;
-
-  const links = [
-    { name: 'Inicio', path: '/' },
-    { name: 'Servicios', path: '/servicios' },
-    { name: 'Casos', path: '/casos' },
-    { name: 'Aprende con NEXA', path: '/aprende' },
-  ];
+  if (pathname?.startsWith('/admin') || pathname?.startsWith('/clientes/dashboard')) {
+    return null;
+  }
 
   return (
-    <nav className={`nav ${scrolled ? 'scrolled' : ''}`}>
-      <div className="container nav-inner">
-        <Link href="/" className="nav-logo"><NexaLogo /></Link>
-        <div className="nav-links hidden lg:flex">
-          {links.map(l => (
-            <Link key={l.name} href={l.path} className={`nav-link ${pathname === l.path ? 'active' : ''}`}>{l.name}</Link>
-          ))}
-          <div className="hidden lg:flex items-center ml-4 gap-3">
-            <Link href="/portal" className="nav-portal-btn flex items-center gap-2">
-              <User className="nav-portal-icon" size={18} />
-              <span>Clientes</span>
-            </Link>
-            <Link href="/admin/login" className="nav-admin-btn flex items-center gap-2" style={{
-              background: 'rgba(210, 242, 58, 0.1)',
-              color: '#D2F23A',
-              padding: '10px 16px',
-              borderRadius: '12px',
-              fontSize: '0.9rem',
-              fontWeight: 800,
-              border: '1px solid rgba(210, 242, 58, 0.2)',
-              transition: 'all 0.3s'
-            }}>
-            <span>Equipo NEXA</span>
-            </Link>
+    <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 120, padding: scrolled ? '12px 0' : '18px 0', transition: 'all 0.25s ease', background: scrolled ? 'rgba(246,242,251,0.88)' : 'transparent', borderBottom: scrolled ? '1px solid rgba(16,18,34,0.1)' : 'none', backdropFilter: scrolled ? 'blur(10px)' : 'none' }}>
+      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
+        <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+          <NexaLogo size={34} />
+        </Link>
+
+        <nav className="nexa-top-nav" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="nexa-top-links" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            {LINKS.map((link) => (
+              <Link key={link.href} href={link.href} style={{ textDecoration: 'none', color: '#1d2134', fontWeight: 600, padding: '8px 10px', borderRadius: 10 }}>
+                {link.label}
+              </Link>
+            ))}
           </div>
-        </div>
-        <button className="mobile-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} aria-label="Menu">
-          {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          <Link href="/portal" style={{ textDecoration: 'none', borderRadius: 999, border: '1px solid rgba(184,155,255,0.5)', background: 'rgba(184,155,255,0.15)', color: '#4f2cb4', padding: '8px 12px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <UserRound size={14} /> Equipo NEXA y clientes
+          </Link>
+        </nav>
+
+        <button
+          type="button"
+          className="nexa-mobile-toggle"
+          onClick={() => setIsOpen((value) => !value)}
+          style={{ borderRadius: 10, border: '1px solid rgba(16,18,34,0.2)', background: 'white', color: '#111426', padding: 8 }}
+        >
+          {isOpen ? <X size={18} /> : <Menu size={18} />}
         </button>
       </div>
 
-      <div
-        className="mobile-menu"
-        style={{ height: isMobileMenuOpen ? 'calc(100vh - 72px)' : '0', opacity: isMobileMenuOpen ? 1 : 0 }}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', padding: '16px 24px', gap: '4px', height: '100%', overflowY: 'auto' }}>
-          {links.map(l => (
-            <Link
-              key={l.name}
-              href={l.path}
-              style={{
-                fontSize: '1.2rem', fontWeight: 700, padding: '16px 0',
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
-                color: pathname === l.path ? '#B89BFF' : 'rgba(255,255,255,0.85)',
-                textAlign: 'center', transition: 'color 0.2s', display: 'block'
-              }}
-              onClick={() => setIsMobileMenuOpen(false)}
-            >{l.name}</Link>
-          ))}
-          <Link
-            href="/contacto"
-            style={{ fontSize: '1.2rem', fontWeight: 700, padding: '16px 0', borderBottom: '1px solid rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.85)', textAlign: 'center', display: 'block' }}
-            onClick={() => setIsMobileMenuOpen(false)}
-          >Contacto</Link>
-          <div style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', gap: '16px', paddingBottom: '32px' }}>
-            <Link
-              href="/portal"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'white', color: '#0D0E15', padding: '16px', borderRadius: '16px', fontWeight: 800, fontSize: '1.05rem', maxWidth: '320px', margin: '0 auto', width: '100%' }}
-            >
-              <User size={20} /> Acceso Clientes
-            </Link>
-            <Link
-              href="/admin/login"
-              onClick={() => setIsMobileMenuOpen(false)}
-              style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', background: 'linear-gradient(to right, #D2F23A, #B89BFF)', color: '#0D0E15', padding: '16px', borderRadius: '16px', fontWeight: 800, fontSize: '1.05rem', maxWidth: '320px', margin: '0 auto', width: '100%' }}
-            >
-              <Sparkles size={20} /> Acceso Equipo NEXA
+      {isOpen && (
+        <div style={{ borderTop: '1px solid rgba(16,18,34,0.1)', background: 'white' }}>
+          <div className="container" style={{ padding: '10px 0', display: 'grid', gap: 6 }}>
+            {LINKS.map((link) => (
+              <Link key={link.href} href={link.href} style={{ textDecoration: 'none', color: '#1d2134', fontWeight: 600, padding: '10px 4px' }}>
+                {link.label}
+              </Link>
+            ))}
+            <Link href="/portal" style={{ textDecoration: 'none', color: '#4f2cb4', fontWeight: 700, padding: '10px 4px' }}>
+              Equipo NEXA y clientes
             </Link>
           </div>
         </div>
-      </div>
-    </nav>
+      )}
+
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+            .nexa-mobile-toggle { display: none; }
+            @media (max-width: 980px) {
+              .nexa-top-nav { display: none !important; }
+              .nexa-mobile-toggle { display: inline-flex !important; }
+            }
+          `,
+        }}
+      />
+    </header>
   );
 }
 

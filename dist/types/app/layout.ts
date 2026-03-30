@@ -1,4 +1,4 @@
-// File: C:\Users\Lourdes D Alarcon\Desktop\Pagina web nexa\app\layout.js
+// File: C:\Users\Lourdes D Alarcon\Documents\Playground\pagina-web-nexa\app\layout.js
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

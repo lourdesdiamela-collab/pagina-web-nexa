@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { supabase } from '@/lib/db';
+import { notifyEvent } from '@/lib/notifications';
 
 export async function POST(request) {
   try {
@@ -14,9 +15,11 @@ export async function POST(request) {
       return NextResponse.json({ error: 'La contraseña debe tener al menos 6 caracteres.' }, { status: 400 });
     }
 
+    const adminInviteCode = process.env.NEXA_ADMIN_INVITE_CODE || 'NEXA2026';
+
     // Security check for Admin registration
     if (role === 'admin') {
-      if (inviteCode !== 'NEXA2026') {
+      if (inviteCode !== adminInviteCode) {
         return NextResponse.json({ error: 'Código de invitación de agencia inválido.' }, { status: 403 });
       }
     }
@@ -63,10 +66,17 @@ export async function POST(request) {
         company: company,
         contact_name: name,
         email: email.toLowerCase(),
-        plan: 'Growth (Pendiente)', // Demo plan by default, admin can change
+        plan: 'Growth',
         status: 'active'
       });
     }
+
+    await notifyEvent({
+      type: role === 'admin' ? 'nuevo_usuario_admin' : 'nuevo_usuario_cliente',
+      title: role === 'admin' ? 'Nuevo usuario de equipo' : 'Nuevo registro de cliente',
+      message: `${name} creó una cuenta en NEXA.`,
+      details: { email: email.toLowerCase(), rol: role },
+    });
 
     return NextResponse.json({ success: true, message: 'Cuenta creada con éxito.' });
   } catch (error) {

@@ -1,197 +1,184 @@
 'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
-import { ArrowRight, Sparkles, BarChart3, Target, RefreshCw } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 
-const InstaIcon = ({ size }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-);
+const SERVICES = [
+  { title: 'Estrategia y marketing', desc: 'Plan comercial y contenido orientado a resultados.' },
+  { title: 'Campanas de captacion', desc: 'Meta y Google Ads con foco en ventas y rentabilidad.' },
+  { title: 'CRM y seguimiento', desc: 'Procesos claros para no perder leads ni oportunidades.' },
+];
 
-export default function Home() {
+export default function HomePage() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    company: '',
+    phone: '',
+    service: 'marketing_integral',
+    challenge: '',
+  });
+  const [sending, setSending] = useState(false);
+  const [status, setStatus] = useState('');
+
+  const updateField = (key, value) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const submit = async (event) => {
+    event.preventDefault();
+    setSending(true);
+    setStatus('');
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'No se pudo enviar');
+      setStatus('ok');
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        phone: '',
+        service: 'marketing_integral',
+        challenge: '',
+      });
+    } catch {
+      setStatus('error');
+    } finally {
+      setSending(false);
+    }
+  };
+
   return (
     <>
       <Navbar />
       <WhatsAppFloat />
-      {/* Hero */}
-      <section className="hero">
-        <div className="hero-deco-circle hero-deco-1" />
-        <div className="hero-deco-circle hero-deco-2" />
-        <div className="container">
-          <div className="hero-grid">
+
+      <main style={{ background: 'linear-gradient(180deg, #f2ecf8 0%, #f6f2fb 40%, #0d0e15 40%, #0d0e15 100%)' }}>
+        <section style={{ paddingTop: 140, paddingBottom: 80 }}>
+          <div className="container" style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', gap: 30, alignItems: 'center' }}>
             <div>
-              <div className="hero-badge">
-                <Sparkles size={16} color="#B89BFF" />
-                <span className="text-gradient">Estrategia · Marketing · Crecimiento</span>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, borderRadius: 999, padding: '8px 14px', border: '1px solid rgba(184,155,255,0.38)', background: 'rgba(255,255,255,0.65)', marginBottom: 16 }}>
+                <Sparkles size={14} color="#835CE6" />
+                <span style={{ fontWeight: 700, color: '#5f3bbd', fontSize: '0.82rem' }}>Equipo NEXA</span>
               </div>
-              <h1 className="hero-title">
-                Hacemos que tu marca se vea mejor, comunique mejor y crezca con <span className="text-gradient">dirección.</span>
+              <h1 style={{ margin: 0, fontSize: 'clamp(2.1rem, 4.2vw, 4rem)', lineHeight: 1.04, color: '#101222' }}>
+                Marketing, ventas y procesos en una misma plataforma.
               </h1>
-              <p className="hero-desc">
-                En NEXA trabajamos estrategia, contenido, campañas y crecimiento para marcas y negocios que quieren construir una presencia más sólida y generar mejores resultados.
+              <p style={{ marginTop: 14, color: '#4b5168', fontSize: '1.08rem', maxWidth: 620 }}>
+                Te ayudamos a crecer con estrategia clara, ejecucion consistente y seguimiento real de cada cliente.
               </p>
-              <div className="hero-actions">
-                <Link href="/contacto" className="btn btn-primary">Hablemos de tu marca <ArrowRight size={18} /></Link>
+              <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginTop: 20 }}>
+                <Link href="/contacto" className="btn btn-primary">Quiero una auditoria <ArrowRight size={16} /></Link>
                 <Link href="/servicios" className="btn btn-outline">Ver servicios</Link>
               </div>
             </div>
-            <div className="hero-visual">
-              <div className="video-wrapper" style={{ overflow: 'hidden', position: 'relative', borderRadius: '32px', height: '100%', minHeight: '400px', border: '1px solid rgba(184, 155, 255, 0.2)', boxShadow: '0 20px 60px rgba(0,0,0,0.4)' }}>
-                <img src="/nexa-hero-new.png" alt="NEXA Strategy Visual" style={{ width: '100%', height: '100%', objectFit: 'cover', position: 'absolute', top: 0, left: 0 }} />
-                <div className="video-overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top right, rgba(13,14,21,0.2), rgba(13,14,21,0.5))', pointerEvents: 'none' }}></div>
-              </div>
+            <div style={{ borderRadius: 24, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.5)', boxShadow: '0 30px 60px rgba(13,14,21,0.2)' }}>
+              <img src="/nexa-hero-new.png" alt="Equipo NEXA" style={{ width: '100%', display: 'block' }} />
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Marketing Hub: NEXA Recover */}
-      <section style={{ background: 'linear-gradient(to bottom, #0D0E15, #08090C)', padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '120vw', height: '120vw', background: 'radial-gradient(circle, rgba(210, 242, 58, 0.03) 0%, rgba(13,14,21,0) 70%)', zIndex: 0, pointerEvents: 'none' }} />
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div className="section-header" style={{ textAlign: 'center', marginBottom: '80px' }}>
-            <span className="section-tag" style={{ background: 'rgba(210, 242, 58, 0.1)', color: '#D2F23A', borderColor: 'rgba(210, 242, 58, 0.2)' }}>Tu Hub de Inteligencia</span>
-            <h2 className="section-title text-white">Centralizá y escalá con <span style={{ color: '#D2F23A' }}>NEXA Recover.</span></h2>
-            <p className="section-subtitle" style={{ margin: '20px auto', maxWidth: '800px' }}>
-              No solo atraemos nuevos clientes; reactivamos tu base inactiva y automatizamos tu crecimiento para que nunca pierdas una oportunidad de venta.
+        <section style={{ background: '#0d0e15', color: 'white', paddingBottom: 80 }}>
+          <div className="container">
+            <p style={{ margin: 0, textAlign: 'center', color: 'rgba(255,255,255,0.6)', fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase' }}>
+              Marcas y Equipo NEXA trabajando en una sola direccion
             </p>
-          </div>
-
-          <div className="recover-grid">
-            <div style={{ position: 'relative' }}>
-              <div style={{ position: 'absolute', inset: '-30px', background: 'radial-gradient(circle, rgba(184, 155, 255, 0.15) 0%, transparent 70%)', filter: 'blur(40px)', zIndex: 0 }} />
-              <div style={{ position: 'relative', borderRadius: '40px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)', boxShadow: '0 40px 100px rgba(0,0,0,0.8)' }}>
-                <img src="/nexa-recover.png" alt="NEXA Recover Hub Interface" style={{ width: '100%', display: 'block' }} />
-                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(13,14,21,0.8), transparent)' }} />
-              </div>
-            </div>
-            
-            <div className="recover-content">
-              <div style={{ display: 'grid', gap: '30px' }}>
-                {[
-                  { title: 'Reactivación Inteligente', desc: 'Convertimos clientes inactivos en compradores recurrentes mediante flujos automatizados.', icon: RefreshCw },
-                  { title: 'Métricas que Importan', desc: 'Visualizá el ROAS real, LTV y tasa de retención en un solo tablero intuitivo.', icon: BarChart3 },
-                  { title: 'Fidelización Proactiva', desc: 'Sistemas que detectan cuándo un cliente está por irse y actúan de inmediato.', icon: Target }
-                ].map((f, i) => (
-                  <div key={i} style={{ display: 'flex', gap: '20px' }}>
-                    <div style={{ flexShrink: 0, width: '56px', height: '56px', borderRadius: '16px', background: 'rgba(210, 242, 58, 0.1)', border: '1px solid rgba(210, 242, 58, 0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#D2F23A' }}>
-                      <f.icon size={24} />
-                    </div>
-                    <div>
-                      <h4 style={{ color: 'white', fontSize: '1.25rem', fontWeight: 800, marginBottom: '8px' }}>{f.title}</h4>
-                      <p style={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.6 }}>{f.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div style={{ marginTop: '50px' }}>
-                <Link href="/contacto" className="btn btn-primary" style={{ background: '#D2F23A', color: '#0D0E15' }}>Explorar el Hub de Marketing</Link>
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 12, marginTop: 18 }}>
+              {['Ciudad Moto', 'Corven Motos', 'Roca Viviendas', 'Casa Diez', 'Estetica Funcional', 'Aqualaf'].map((name) => (
+                <div key={name} style={{ borderRadius: 12, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', padding: '10px 12px', textAlign: 'center' }}>
+                  {name}
+                </div>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* Clients */}
-      <section className="clients">
-        <div className="container">
-          <p className="clients-label">Marcas que confiaron en NEXA</p>
-          <div className="clients-row">
-            {['Ciudad Moto', 'Corven Motos', 'Roca Viviendas', 'Casa Diez', 'Estética Funcional', 'Aqualaf'].map(name => (
-              <span key={name} className="client-logo">{name}</span>
+        <section style={{ background: '#0d0e15', paddingBottom: 80 }}>
+          <div className="container" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+            {SERVICES.map((service) => (
+              <article key={service.title} style={{ borderRadius: 16, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', padding: 16 }}>
+                <h2 style={{ margin: 0, color: 'white', fontSize: '1.2rem' }}>{service.title}</h2>
+                <p style={{ margin: '8px 0 0', color: 'rgba(255,255,255,0.66)' }}>{service.desc}</p>
+              </article>
             ))}
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* About */}
-      <section className="about">
-        <div className="container">
-          <div className="about-grid">
-            <div>
-              <span className="about-tag">¿Quiénes somos?</span>
-              <h2 className="about-title">Tu estudio estratégico de marketing y crecimiento.</h2>
-              <p className="about-text">
-                En NEXA combinamos estrategia, contenido, campañas y seguimiento para ayudar a marcas y negocios a crecer con más claridad, mejor imagen y mejores resultados.<br /><br />
-                No hacemos marketing por hacer: construimos marcas con dirección.
-              </p>
-              <div className="about-pills">
-                {['Estrategia', 'Campañas', 'Contenido', 'Redes Sociales', 'Ventas', 'Crecimiento'].map(p => (
-                  <span key={p} className="pill">{p}</span>
-                ))}
-              </div>
-            </div>
-            <div>
-              <img src="/nexa-recover.png" alt="NEXA Studio — Plataforma de Crecimiento" style={{ width: '100%', borderRadius: '32px', boxShadow: '0 32px 80px rgba(184,155,255,0.2)' }} />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Summary */}
-      <section className="services" style={{ paddingBottom: '60px' }}>
-        <div className="container">
-          <div className="section-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '20px' }}>
-            <div>
-              <span className="section-tag">Nuestras áreas</span>
-              <h2 className="section-title">Soluciones para crecer</h2>
-            </div>
-            <Link href="/servicios" className="btn btn-outline" style={{ marginBottom: '20px' }}>Ver todos los servicios <ArrowRight size={16}/></Link>
-          </div>
-          <div className="services-grid">
-            {[
-              { icon: BarChart3, title: 'Marketing & Estrategia', desc: 'Planes accionables para posicionar tu marca.' },
-              { icon: InstaIcon, title: 'Redes Sociales', desc: 'Contenido y gestión para construir comunidad.' },
-              { icon: Target, title: 'Campañas y Captación', desc: 'Publicidad en Meta/Google para captar clientes.' },
-            ].map((s, i) => (
-              <div key={i} className="service-card">
-                <div className="service-icon"><s.icon size={28} /></div>
-                <h3>{s.title}</h3>
-                <p>{s.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section id="contacto" style={{ background: '#0D0E15', padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-        <div className="container">
-          <div className="contact-card" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', padding: 'clamp(24px, 5vw, 80px)', position: 'relative', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(184, 155, 255, 0.1) 0%, transparent 70%)', zIndex: 0 }} />
-            <div className="contact-grid">
-              <div>
-                <span className="section-tag">Hablemos hoy</span>
-                <h2 className="section-title text-white" style={{ fontSize: '3.5rem', lineHeight: 1 }}>¿Listos para <span className="text-gradient">escalar?</span></h2>
-                <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.2rem', margin: '30px 0 50px' }}>
-                  Completá el formulario y nos pondremos en contacto para coordinar una reunión diagnóstica de tu marca.
-                </p>
-                <div style={{ display: 'grid', gap: '20px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '15px', color: 'white', fontWeight: 600 }}>
-                    <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(184, 155, 255, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#B89BFF' }}>
-                      <Target size={20} />
-                    </div>
-                    hola@nexaarg.com
+        <section style={{ background: '#0d0e15', paddingBottom: 110 }}>
+          <div className="container">
+            <div style={{ borderRadius: 22, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.03)', padding: 24 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: 20 }}>
+                <div>
+                  <h2 style={{ margin: 0, color: 'white', fontSize: '2rem' }}>Contanos tu desafio</h2>
+                  <p style={{ color: 'rgba(255,255,255,0.64)', marginTop: 10 }}>
+                    Te respondemos por mail con una propuesta clara de siguiente paso.
+                  </p>
+                  <div style={{ marginTop: 14, display: 'grid', gap: 8 }}>
+                    {['Respuesta personalizada', 'Seguimiento comercial claro', 'Sin formularios de adorno'].map((item) => (
+                      <div key={item} style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: 'rgba(255,255,255,0.75)' }}>
+                        <CheckCircle2 size={16} color="#D2F23A" />
+                        {item}
+                      </div>
+                    ))}
                   </div>
                 </div>
+
+                <form onSubmit={submit} style={{ display: 'grid', gap: 10 }}>
+                  {status === 'ok' && (
+                    <div style={{ borderRadius: 10, border: '1px solid rgba(210,242,58,0.45)', background: 'rgba(210,242,58,0.12)', color: '#f3ffb5', padding: '10px 12px', fontWeight: 600 }}>
+                      Mensaje enviado. Te contactaremos pronto.
+                    </div>
+                  )}
+                  {status === 'error' && (
+                    <div style={{ borderRadius: 10, border: '1px solid rgba(255,107,107,0.45)', background: 'rgba(255,107,107,0.12)', color: '#ffd8d8', padding: '10px 12px', fontWeight: 600 }}>
+                      Ocurrio un error al enviar. Intentalo de nuevo.
+                    </div>
+                  )}
+                  <div className="form-row">
+                    <input required value={formData.name} onChange={(event) => updateField('name', event.target.value)} placeholder="Nombre y apellido" style={fieldStyle} />
+                    <input required type="email" value={formData.email} onChange={(event) => updateField('email', event.target.value)} placeholder="Email" style={fieldStyle} />
+                  </div>
+                  <div className="form-row">
+                    <input required value={formData.company} onChange={(event) => updateField('company', event.target.value)} placeholder="Empresa" style={fieldStyle} />
+                    <input value={formData.phone} onChange={(event) => updateField('phone', event.target.value)} placeholder="Telefono / WhatsApp" style={fieldStyle} />
+                  </div>
+                  <select value={formData.service} onChange={(event) => updateField('service', event.target.value)} style={fieldStyle}>
+                    <option value="marketing_integral">Marketing integral</option>
+                    <option value="redes_sociales">Redes sociales</option>
+                    <option value="meta_ads">Campanas Meta/Google</option>
+                    <option value="crm_estructuras">CRM y orden digital</option>
+                    <option value="nexa_recover">NEXA Recover</option>
+                  </select>
+                  <textarea required value={formData.challenge} onChange={(event) => updateField('challenge', event.target.value)} placeholder="Que queres mejorar hoy" style={{ ...fieldStyle, minHeight: 120, resize: 'vertical' }} />
+                  <button type="submit" disabled={sending} className="btn btn-primary" style={{ width: '100%', opacity: sending ? 0.75 : 1 }}>
+                    {sending ? 'Enviando...' : 'Enviar consulta'}
+                  </button>
+                </form>
               </div>
-              
-              <form action="mailto:hola@nexaarg.com" method="post" encType="text/plain" style={{ display: 'grid', gap: '20px', background: 'rgba(255,255,255,0.03)', padding: '40px', borderRadius: '32px', border: '1px solid rgba(255,255,255,0.05)' }}>
-                <div className="form-row">
-                  <input type="text" name="name" placeholder="Tu nombre" required style={{ width: '100%', padding: '18px 24px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none' }} />
-                  <input type="email" name="email" placeholder="Tu email" required style={{ width: '100%', padding: '18px 24px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none' }} />
-                </div>
-                <input type="text" name="subject" placeholder="Asunto / Marca" required style={{ width: '100%', padding: '18px 24px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none' }} />
-                <textarea name="message" placeholder="¿En qué podemos ayudarte?" required style={{ width: '100%', padding: '18px 24px', borderRadius: '14px', border: '1px solid rgba(255,255,255,0.1)', background: 'rgba(255,255,255,0.05)', color: 'white', outline: 'none', minHeight: '150px', resize: 'vertical' }} />
-                <button type="submit" className="btn btn-primary" style={{ width: '100%', padding: '20px', fontSize: '1.1rem' }}>Enviar Mensaje</button>
-              </form>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <Footer />
     </>
   );
 }
+
+const fieldStyle = {
+  width: '100%',
+  borderRadius: 12,
+  border: '1px solid rgba(255,255,255,0.16)',
+  background: 'rgba(255,255,255,0.06)',
+  color: 'white',
+  padding: '10px 12px',
+};
