@@ -89,7 +89,7 @@ export default function ArticlePage({ params }) {
     <div style={{ background: '#0D0E15', minHeight: '100vh', color: 'white' }}>
       <Navbar />
       
-      <div className="container" style={{ paddingTop: '140px', paddingBottom: '100px', maxWidth: '800px' }}>
+      <div className="container" style={{ paddingTop: 'clamp(100px, 12vw, 140px)', paddingBottom: 'clamp(60px, 8vw, 100px)', maxWidth: '800px' }}>
         <Link href="/aprende" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', color: 'rgba(255,255,255,0.5)', fontWeight: 600, textDecoration: 'none', marginBottom: '40px', transition: 'color 0.3s' }}>
           <ArrowLeft size={16} /> Volver a los artículos
         </Link>

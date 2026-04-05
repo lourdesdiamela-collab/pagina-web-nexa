@@ -22,7 +22,7 @@ export default function Services() {
   return (
     <>
       <Navbar />
-      <div className="page-wrapper" style={{ paddingTop: '120px' }}>
+      <div className="page-wrapper" style={{ paddingTop: 'clamp(100px, 12vw, 140px)' }}>
         <div className="container" style={{ textAlign: 'center', marginBottom: '40px' }}>
           <span className="section-tag">Áreas de expertise</span>
           <h1 className="section-title">Qué hacemos por tu <span className="text-gradient">negocio.</span></h1>

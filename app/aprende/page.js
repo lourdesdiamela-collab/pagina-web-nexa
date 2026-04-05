@@ -25,7 +25,7 @@ export default function Academy() {
   return (
     <>
       <Navbar />
-      <div className="page-wrapper" style={{ paddingTop: '120px' }}>
+      <div className="page-wrapper" style={{ paddingTop: 'clamp(100px, 12vw, 140px)' }}>
         <section className="academy-hero" style={{ textAlign: 'center', marginBottom: '60px' }}>
           <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <span className="section-tag" style={{ background: 'rgba(184, 155, 255, 0.1)', color: '#B89BFF' }}>Aprende con NEXA</span>

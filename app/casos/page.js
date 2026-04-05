@@ -14,7 +14,7 @@ export default function Cases() {
   return (
     <>
       <Navbar />
-      <div className="page-wrapper" style={{ paddingTop: '120px' }}>
+      <div className="page-wrapper" style={{ paddingTop: 'clamp(100px, 12vw, 140px)' }}>
         <div className="container" style={{ textAlign: 'center', marginBottom: '40px' }}>
           <span className="section-tag">Impacto Demostrable</span>
           <h1 className="section-title">Casos de <span className="text-gradient">Éxito.</span></h1>
