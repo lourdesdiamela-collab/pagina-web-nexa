@@ -47,7 +47,7 @@ export default function Home() {
       </section>
 
       {/* Marketing Hub: NEXA Recover */}
-      <section style={{ background: 'linear-gradient(to bottom, #0D0E15, #08090C)', padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
+      <section style={{ background: 'linear-gradient(to bottom, #0D0E15, #08090C)', padding: 'clamp(60px, 10vw, 120px) 0', borderTop: '1px solid rgba(255,255,255,0.05)', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '120vw', height: '120vw', background: 'radial-gradient(circle, rgba(210, 242, 58, 0.03) 0%, rgba(13,14,21,0) 70%)', zIndex: 0, pointerEvents: 'none' }} />
         <div className="container" style={{ position: 'relative', zIndex: 1 }}>
           <div className="section-header" style={{ textAlign: 'center', marginBottom: '80px' }}>
@@ -156,14 +156,14 @@ export default function Home() {
       </section>
 
       {/* Contact Section */}
-      <section id="contacto" style={{ background: '#0D0E15', padding: '120px 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+      <section id="contacto" style={{ background: '#0D0E15', padding: 'clamp(60px, 10vw, 120px) 0', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
         <div className="container">
           <div className="contact-card" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', padding: 'clamp(24px, 5vw, 80px)', position: 'relative', overflow: 'hidden' }}>
             <div style={{ position: 'absolute', top: '-100px', right: '-100px', width: '400px', height: '400px', background: 'radial-gradient(circle, rgba(184, 155, 255, 0.1) 0%, transparent 70%)', zIndex: 0 }} />
             <div className="contact-grid">
               <div>
                 <span className="section-tag">Hablemos hoy</span>
-                <h2 className="section-title text-white" style={{ fontSize: '3.5rem', lineHeight: 1 }}>¿Listos para <span className="text-gradient">escalar?</span></h2>
+                <h2 className="section-title text-white" style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', lineHeight: 1 }}>¿Listos para <span className="text-gradient">escalar?</span></h2>
                 <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '1.2rem', margin: '30px 0 50px' }}>
                   Completá el formulario y nos pondremos en contacto para coordinar una reunión diagnóstica de tu marca.
                 </p>
