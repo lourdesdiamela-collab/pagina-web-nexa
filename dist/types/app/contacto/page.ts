@@ -1,4 +1,4 @@
-// File: C:\Users\Lourdes D Alarcon\Desktop\Pagina web nexa\app\contacto\page.js
+// File: C:\Users\Lourdes D Alarcon\Documents\Playground\pagina-web-nexa\app\contacto\page.js
 import * as entry from '../../../../app/contacto/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
