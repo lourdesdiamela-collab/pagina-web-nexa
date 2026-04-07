@@ -48,7 +48,7 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
-          <Link href="/portal" style={{ textDecoration: 'none', borderRadius: 999, border: '1px solid rgba(184,155,255,0.5)', background: 'rgba(184,155,255,0.15)', color: '#4f2cb4', padding: '8px 12px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+          <Link href="https://nexa-roan-theta.vercel.app" style={{ textDecoration: 'none', borderRadius: 999, border: '1px solid rgba(184,155,255,0.5)', background: 'rgba(184,155,255,0.15)', color: '#4f2cb4', padding: '8px 12px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
             <UserRound size={14} /> Equipo NEXA y clientes
           </Link>
         </nav>
@@ -71,7 +71,7 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link href="/portal" style={{ textDecoration: 'none', color: '#4f2cb4', fontWeight: 700, padding: '10px 4px' }}>
+            <Link href="https://nexa-roan-theta.vercel.app" style={{ textDecoration: 'none', color: '#4f2cb4', fontWeight: 700, padding: '10px 4px' }}>
               Equipo NEXA y clientes
             </Link>
           </div>
@@ -82,15 +82,3 @@ export default function Navbar() {
         dangerouslySetInnerHTML={{
           __html: `
             .nexa-mobile-toggle { display: none; }
-            @media (max-width: 980px) {
-              .nexa-top-nav { display: none !important; }
-              .nexa-mobile-toggle { display: inline-flex !important; }
-            }
-          `,
-        }}
-      />
-    </header>
-  );
-}
-
-export { NexaLogo };
