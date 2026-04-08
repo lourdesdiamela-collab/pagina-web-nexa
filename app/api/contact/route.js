@@ -45,7 +45,7 @@ export async function POST(request) {
     // Internal notification email to NEXA
     await transporter.sendMail({
       from: `"NEXA Web" <${process.env.GMAIL_USER}>`,
-      to: 'hola@nexaarg.com',
+      to: process.env.CONTACT_EMAIL || 'hola@nexaarg.com',
       subject: `Nueva consulta de ${body.name} - ${body.company}`,
       html: `
         <h2>Nueva consulta desde la web</h2>
