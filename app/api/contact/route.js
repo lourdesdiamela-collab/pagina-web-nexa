@@ -1,6 +1,15 @@
 import { NextResponse } from 'next/server';
+import nodemailer from 'nodemailer';
 import { saveLead } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,
+    pass: process.env.GMAIL_APP_PASSWORD,
+  },
+});
 
 export async function POST(request) {
   try {
@@ -31,6 +40,40 @@ export async function POST(request) {
         email: lead.email,
         servicio: lead.service,
       },
+    });
+
+    // Internal notification email to NEXA
+    await transporter.sendMail({
+      from: `"NEXA Web" <${process.env.GMAIL_USER}>`,
+      to: 'hola@nexaarg.com',
+      subject: `Nueva consulta de ${body.name} - ${body.company}`,
+      html: `
+        <h2>Nueva consulta desde la web</h2>
+        <table cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
+          <tr><td><strong>Nombre</strong></td><td>${body.name}</td></tr>
+          <tr><td><strong>Empresa</strong></td><td>${body.company}</td></tr>
+          <tr><td><strong>Email</strong></td><td>${body.email}</td></tr>
+          <tr><td><strong>Teléfono</strong></td><td>${body.phone || '—'}</td></tr>
+          <tr><td><strong>Servicio</strong></td><td>${body.service}</td></tr>
+          <tr><td><strong>Desafío / Mensaje</strong></td><td>${body.challenge || '—'}</td></tr>
+        </table>
+      `,
+    });
+
+    // Confirmation email to the user
+    await transporter.sendMail({
+      from: `"NEXA" <${process.env.GMAIL_USER}>`,
+      to: body.email,
+      subject: '¡Recibimos tu consulta! — NEXA',
+      html: `
+        <p>Hola ${body.name},</p>
+        <p>Gracias por contactarte con NEXA. Recibimos tu consulta y nos pondremos en contacto a la brevedad.</p>
+        <p>
+          <strong>Servicio consultado:</strong> ${body.service}<br/>
+          ${body.challenge ? `<strong>Tu mensaje:</strong> ${body.challenge}` : ''}
+        </p>
+        <p>— El equipo de NEXA</p>
+      `,
     });
 
     return NextResponse.json({
