@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
 import { signToken } from '@/lib/auth';
 
 export async function POST(request) {
@@ -11,7 +11,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Email y contraseña son obligatorios.' }, { status: 400 });
     }
 
-    const { data: user, error } = await supabase
+    const { data: user, error } = await supabaseAdmin
       .from('users')
       .select('*')
       .eq('email', email.toLowerCase())
@@ -30,7 +30,7 @@ export async function POST(request) {
     // Get client info if role is client
     let clientId = null;
     if (user.role === 'client') {
-      const { data: client } = await supabase.from('clients').select('id').eq('user_id', user.id).single();
+      const { data: client } = await supabaseAdmin.from('clients').select('id').eq('user_id', user.id).single();
       clientId = client?.id;
     }
 

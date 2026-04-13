@@ -35,7 +35,7 @@ export default function Contact() {
     <>
       <Navbar />
       <WhatsAppFloat />
-      <div className="page-wrapper" style={{ paddingTop: '120px' }}>
+      <div className="page-wrapper" style={{ paddingTop: 'clamp(100px, 12vw, 140px)' }}>
         <section className="contact-hero" style={{ textAlign: 'center', marginBottom: '60px' }}>
           <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
             <span className="section-tag">Contacto</span>
@@ -47,7 +47,7 @@ export default function Contact() {
         <section className="contact-form-section" style={{ paddingBottom: '120px' }}>
           <div className="container" style={{ maxWidth: '700px', margin: '0 auto' }}>
             <form onSubmit={handleSubmit} className="contact-form-pro" style={{
-              background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '50px'
+              background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: 'clamp(24px, 5vw, 50px)'
             }}>
               
               {status === 'success' && (

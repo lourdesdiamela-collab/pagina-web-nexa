@@ -1,44 +1,95 @@
 import { NextResponse } from 'next/server';
-import { getSession } from '@/lib/auth';
-import { supabase } from '@/lib/db';
+import { supabaseAdmin } from '@/lib/db';
+import { requireSession } from '@/lib/api-auth';
+import { listPayments, listMovements, computeFinancialSummary, buildMonthlyHistory, saveMovement } from '@/lib/crm';
 
-export async function GET() {
+const ADMIN_ROLES = ['admin', 'team'];
+
+async function resolveClientNames(clientTotals) {
+  const ids = Object.keys(clientTotals).filter((key) => key !== 'sin_cliente');
+  if (ids.length === 0) {
+    return Object.entries(clientTotals).map(([clientId, total]) => ({ clientId, clientName: 'Sin cliente', total }));
+  }
+
+  const { data: clients } = await supabaseAdmin.from('clients').select('id,company').in('id', ids);
+  const map = Object.fromEntries((clients || []).map((client) => [client.id, client.company]));
+
+  return Object.entries(clientTotals)
+    .map(([clientId, total]) => ({
+      clientId,
+      clientName: clientId === 'sin_cliente' ? 'Sin cliente' : map[clientId] || 'Cliente',
+      total,
+    }))
+    .sort((a, b) => b.total - a.total);
+}
+
+export async function GET(request) {
+  const auth = await requireSession(ADMIN_ROLES);
+  if (auth.response) return auth.response;
+
   try {
-    const session = await getSession();
-    if (!session || !['admin', 'team'].includes(session.role)) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
-    }
+    const { searchParams } = new URL(request.url);
+    const from = searchParams.get('from');
+    const to = searchParams.get('to');
+    const clientId = searchParams.get('clientId');
 
-    // This is a mockup of financial data since we don't have a full billing system yet
-    // In production, we would sum up from 'payments' and 'expenses' tables
-    const financials = {
-      income: 2450000,
-      expenses: 850000,
-      campaignSpend: 320000,
-      history: [
-        { month: 'Ene', income: 1800000, expenses: 700000 },
-        { month: 'Feb', income: 2100000, expenses: 750000 },
-        { month: 'Mar', income: 2450000, expenses: 850000 },
-      ]
-    };
+    const [payments, movements] = await Promise.all([
+      listPayments({ from, to, clientId }),
+      listMovements({ from, to, clientId }),
+    ]);
 
-    return NextResponse.json(financials);
+    const summary = computeFinancialSummary(payments, movements);
+    const history = buildMonthlyHistory(payments, movements);
+    const incomeByClient = await resolveClientNames(summary.incomeByClient);
+    const expensesByCategory = Object.entries(summary.expensesByCategory)
+      .map(([category, total]) => ({ category, total }))
+      .sort((a, b) => b.total - a.total);
+
+    return NextResponse.json({
+      ...summary,
+      history,
+      incomeByClient,
+      expensesByCategory,
+      paymentCount: payments.length,
+      movementCount: movements.length,
+    });
   } catch (error) {
-    return NextResponse.json({ error: 'Error al obtener finanzas' }, { status: 500 });
+    console.error('GET /api/admin/finanzas error:', error);
+    return NextResponse.json({ error: 'No pudimos calcular el reporte financiero.' }, { status: 500 });
   }
 }
 
 export async function POST(request) {
+  const auth = await requireSession(ADMIN_ROLES);
+  if (auth.response) return auth.response;
+
   try {
-    const session = await getSession();
-    if (!session || !['admin', 'team'].includes(session.role)) {
-      return NextResponse.json({ error: 'No autorizado' }, { status: 403 });
+    const body = await request.json();
+    const action = body.action || 'create_movement';
+
+    if (action !== 'create_movement') {
+      return NextResponse.json({ error: 'Accion no soportada.' }, { status: 400 });
     }
 
-    const data = await request.json();
-    // Logic to save manual adjustment or expense
-    return NextResponse.json({ success: true, data });
+    if (!body.concept || !body.amount) {
+      return NextResponse.json({ error: 'Concepto y monto son obligatorios.' }, { status: 400 });
+    }
+
+    const movement = await saveMovement({
+      type: body.type || 'expense',
+      category: body.category || 'general',
+      concept: body.concept,
+      amount: body.amount,
+      date: body.date,
+      clientId: body.clientId || null,
+      status: body.status || 'registrado',
+      notes: body.notes || '',
+      attachmentUrl: body.attachmentUrl || '',
+    });
+
+    return NextResponse.json({ success: true, movement });
   } catch (error) {
-    return NextResponse.json({ error: 'Error al guardar dato' }, { status: 500 });
+    console.error('POST /api/admin/finanzas error:', error);
+    return NextResponse.json({ error: 'No se pudo registrar el movimiento.' }, { status: 500 });
   }
 }

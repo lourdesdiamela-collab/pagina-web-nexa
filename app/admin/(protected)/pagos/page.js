@@ -1,170 +1,365 @@
-import { getSession } from '@/lib/auth';
-import { supabase } from '@/lib/db';
-import { DollarSign, ArrowUpRight, ArrowDownRight, Activity, Wallet, PieChart, TrendingUp, CreditCard } from 'lucide-react';
+'use client';
 
-export default async function FinancialDashboard() {
-  const session = await getSession();
+import { useEffect, useState } from 'react';
+import { CircleDollarSign, Plus, ReceiptText, Trash2 } from 'lucide-react';
 
-  // Simulated financials for a highly visual ERP (MVP)
-  // These represent real data structures that would be pulled from Supabase in a mature app
-  const currentMonth = {
-    income: 2450000,
-    expenses: 850000,
-    campaigns: 320000, 
+function money(value) {
+  return new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(value || 0);
+}
+
+const PAYMENT_FORM = {
+  clientId: '',
+  concept: '',
+  amount: '',
+  dueDate: '',
+  status: 'pending',
+  method: 'transferencia',
+  notes: '',
+};
+
+const MOVEMENT_FORM = {
+  type: 'expense',
+  category: 'general',
+  concept: '',
+  amount: '',
+  date: '',
+  clientId: '',
+  notes: '',
+};
+
+export default function AdminPaymentsPage() {
+  const [clients, setClients] = useState([]);
+  const [payments, setPayments] = useState([]);
+  const [movements, setMovements] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [paymentForm, setPaymentForm] = useState(PAYMENT_FORM);
+  const [movementForm, setMovementForm] = useState(MOVEMENT_FORM);
+  const [saving, setSaving] = useState(false);
+
+  const load = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const [clientsRes, paymentsRes, movementsRes, summaryRes] = await Promise.all([
+        fetch('/api/admin/clientes', { cache: 'no-store' }),
+        fetch('/api/admin/pagos', { cache: 'no-store' }),
+        fetch('/api/admin/movimientos', { cache: 'no-store' }),
+        fetch('/api/admin/finanzas', { cache: 'no-store' }),
+      ]);
+
+      const [clientsData, paymentsData, movementsData, summaryData] = await Promise.all([
+        clientsRes.json(),
+        paymentsRes.json(),
+        movementsRes.json(),
+        summaryRes.json(),
+      ]);
+
+      if (!clientsRes.ok) throw new Error(clientsData.error || 'No se pudo cargar clientes');
+      if (!paymentsRes.ok) throw new Error(paymentsData.error || 'No se pudo cargar pagos');
+      if (!movementsRes.ok) throw new Error(movementsData.error || 'No se pudo cargar movimientos');
+      if (!summaryRes.ok) throw new Error(summaryData.error || 'No se pudo cargar reporte');
+
+      setClients(clientsData.clients || []);
+      setPayments(paymentsData.payments || []);
+      setMovements(movementsData.movements || []);
+      setSummary(summaryData);
+      if (!paymentForm.clientId && clientsData.clients?.[0]?.id) {
+        setPaymentForm((prev) => ({ ...prev, clientId: clientsData.clients[0].id }));
+        setMovementForm((prev) => ({ ...prev, clientId: clientsData.clients[0].id }));
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
-  
-  const previousMonth = {
-    income: 2100000,
-    expenses: 800000,
-    campaigns: 280000,
+
+  useEffect(() => {
+    load();
+    // load intentionally runs once on mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const createPayment = async (event) => {
+    event.preventDefault();
+    setSaving(true);
+    setError('');
+    try {
+      const response = await fetch('/api/admin/pagos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...paymentForm, amount: Number(paymentForm.amount) }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'No se pudo registrar pago');
+      setPaymentForm((prev) => ({ ...PAYMENT_FORM, clientId: prev.clientId }));
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const totalOut = currentMonth.expenses + currentMonth.campaigns;
-  const netProfit = currentMonth.income - totalOut;
-  const profitMargin = Math.round((netProfit / currentMonth.income) * 100);
-
-  const prevTotalOut = previousMonth.expenses + previousMonth.campaigns;
-  const prevNetProfit = previousMonth.income - prevTotalOut;
-  
-  const growth = {
-    income: Math.round(((currentMonth.income - previousMonth.income) / previousMonth.income) * 100),
-    profit: Math.round(((netProfit - prevNetProfit) / prevNetProfit) * 100)
+  const createMovement = async (event) => {
+    event.preventDefault();
+    setSaving(true);
+    setError('');
+    try {
+      const response = await fetch('/api/admin/movimientos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...movementForm, amount: Number(movementForm.amount) }),
+      });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'No se pudo registrar movimiento');
+      setMovementForm((prev) => ({ ...MOVEMENT_FORM, clientId: prev.clientId }));
+      await load();
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   };
 
-  // Fetch pending client invoices from DB
-  const { data: pendingPayments } = await supabase.from('payments').select('*, clients(company)').eq('status', 'pending');
+  const removePayment = async (id) => {
+    const ok = window.confirm('¿Eliminar este pago?');
+    if (!ok) return;
+    try {
+      const response = await fetch(`/api/admin/pagos?id=${id}`, { method: 'DELETE' });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'No se pudo eliminar pago');
+      await load();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const removeMovement = async (id) => {
+    const ok = window.confirm('¿Eliminar este movimiento?');
+    if (!ok) return;
+    try {
+      const response = await fetch(`/api/admin/movimientos?id=${id}`, { method: 'DELETE' });
+      const payload = await response.json();
+      if (!response.ok) throw new Error(payload.error || 'No se pudo eliminar movimiento');
+      await load();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div>
-      <header style={{ marginBottom: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h1 style={{ color: '#12141D', fontSize: '2.5rem', fontWeight: 900, letterSpacing: '-0.04em', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Wallet color="#B89BFF" size={32} /> Finanzas y Rentabilidad
-          </h1>
-          <p style={{ color: '#666', fontSize: '1.1rem' }}>
-            Análisis visual del flujo de caja, gastos operativos y ROI de campañas.
-          </p>
-        </div>
-        <button style={{ padding: '14px 28px', borderRadius: '14px', background: '#12141D', color: 'white', border: 'none', fontWeight: 800, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 10px 30px rgba(18,20,29,0.2)' }}>
-          <DollarSign size={18} /> Registrar Nuevo Ingreso
-        </button>
+      <header style={{ marginBottom: 14 }}>
+        <h2 style={{ margin: 0, fontSize: '1.8rem', display: 'flex', alignItems: 'center', gap: 8 }}>
+          <CircleDollarSign size={22} color="#D2F23A" /> Pagos y reporte financiero
+        </h2>
+        <p style={{ margin: '8px 0 0', color: 'rgba(255,255,255,0.66)' }}>Registro real de cobros, ingresos y egresos con resumen automatico.</p>
       </header>
 
-      {/* Hero Financial Visualizer */}
-      <section style={{ background: '#12141D', borderRadius: '32px', padding: '40px', marginBottom: '40px', display: 'grid', gridTemplateColumns: '1fr 1.5fr', gap: '40px', boxShadow: '0 20px 60px rgba(184, 155, 255, 0.15)' }}>
-        
-        {/* Main KPI */}
-        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ color: 'rgba(255,255,255,0.6)', textTransform: 'uppercase', letterSpacing: '2px', fontWeight: 800, fontSize: '0.85rem', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Activity color="#D2F23A" size={16} /> Rentabilidad Neta
-          </div>
-          <div style={{ fontSize: '4.5rem', fontWeight: 900, color: 'white', lineHeight: 1, marginBottom: '16px' }}>
-            {profitMargin}%
-          </div>
-          <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1.1rem', lineHeight: 1.5 }}>
-            Excelente salud financiera. Estás reteniendo más de un cuarto de tus ingresos como ganancia líquida.
-          </div>
+      {error && (
+        <div style={{ marginBottom: 12, borderRadius: 12, padding: '10px 12px', border: '1px solid rgba(255,107,107,0.45)', background: 'rgba(255,107,107,0.12)', color: '#ffd8d8' }}>
+          {error}
         </div>
+      )}
 
-        {/* Breakdown Visuals (No plain tables) */}
-        <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '24px', padding: '30px', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', color: 'white', fontWeight: 800, marginBottom: '12px', fontSize: '1.1rem' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><ArrowUpRight color="#28C76F" size={18} /> Ingresos</span>
-              <span>100%</span>
-            </div>
-            <div style={{ width: '100%', height: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '100px', overflow: 'hidden' }}>
-              <div style={{ width: '100%', height: '100%', background: '#28C76F' }} />
-            </div>
-            <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)', marginTop: '8px', fontWeight: 600 }}>Facturación total facturada a clientes.</div>
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', color: 'white', fontWeight: 800, marginBottom: '12px', fontSize: '1.1rem' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><PieChart color="#B89BFF" size={18} /> Inversión Campañas</span>
-              <span>{Math.round((currentMonth.campaigns / currentMonth.income) * 100)}%</span>
-            </div>
-            <div style={{ width: '100%', height: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '100px', overflow: 'hidden' }}>
-              <div style={{ width: `${Math.round((currentMonth.campaigns / currentMonth.income) * 100)}%`, height: '100%', background: '#B89BFF' }} />
-            </div>
-            <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)', marginTop: '8px', fontWeight: 600 }}>Pauta de Ads en Meta/Google (Nexa + Clientes).</div>
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', color: 'white', fontWeight: 800, marginBottom: '12px', fontSize: '1.1rem' }}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><CreditCard color="#ff6b6b" size={18} /> Operaciones NEXA</span>
-              <span>{Math.round((currentMonth.expenses / currentMonth.income) * 100)}%</span>
-            </div>
-            <div style={{ width: '100%', height: '12px', background: 'rgba(255,255,255,0.1)', borderRadius: '100px', overflow: 'hidden' }}>
-              <div style={{ width: `${Math.round((currentMonth.expenses / currentMonth.income) * 100)}%`, height: '100%', background: '#ff6b6b' }} />
-            </div>
-            <div style={{ fontSize: '0.85rem', color: 'rgba(255,255,255,0.4)', marginTop: '8px', fontWeight: 600 }}>Sueldos, herramientas, y costos fijos de la agencia.</div>
-          </div>
-          
-        </div>
+      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginBottom: 14 }}>
+        <article style={cardStyle}>
+          <div style={cardLabelStyle}>Ingresos totales</div>
+          <strong style={cardValueStyle}>{money(summary?.totalIncome)}</strong>
+        </article>
+        <article style={cardStyle}>
+          <div style={cardLabelStyle}>Egresos totales</div>
+          <strong style={cardValueStyle}>{money(summary?.totalExpenses)}</strong>
+        </article>
+        <article style={cardStyle}>
+          <div style={cardLabelStyle}>Balance</div>
+          <strong style={{ ...cardValueStyle, color: (summary?.balance || 0) >= 0 ? '#7ef0b3' : '#ffb97a' }}>{money(summary?.balance)}</strong>
+        </article>
+        <article style={cardStyle}>
+          <div style={cardLabelStyle}>Pagos pendientes</div>
+          <strong style={cardValueStyle}>{money(summary?.pendingPayments)}</strong>
+        </article>
       </section>
 
-      {/* Invoices and Receivables */}
-      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '30px' }}>
-        
-        {/* Pending Invoices Visuals */}
-        <div style={{ background: 'white', borderRadius: '24px', padding: '30px', border: '1px solid #EEE', boxShadow: '0 10px 30px rgba(0,0,0,0.02)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#12141D' }}>Dinero por Cobrar</h2>
-            <div style={{ background: '#FFF0F0', color: '#ff6b6b', padding: '6px 12px', borderRadius: '8px', fontWeight: 800, fontSize: '0.85rem' }}>FACTURACIÓN PENDIENTE</div>
-          </div>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {(pendingPayments || []).length > 0 ? (pendingPayments || []).map(p => (
-              <div key={p.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px', background: '#F9F9F9', border: '1px solid #EEE', borderRadius: '16px', borderLeft: '4px solid #ff6b6b' }}>
-                <div>
-                  <div style={{ fontWeight: 800, color: '#12141D', fontSize: '1.1rem', marginBottom: '4px' }}>{p.clients?.company || 'Cliente'}</div>
-                  <div style={{ color: '#666', fontSize: '0.9rem', fontWeight: 600 }}>{p.description || 'Cuota mensual'}</div>
-                </div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 900, color: '#12141D' }}>
-                  ${p.amount.toLocaleString('es-AR')}
-                </div>
-              </div>
-            )) : (
-              <div style={{ padding: '30px', textAlign: 'center', background: '#F9F9F9', borderRadius: '16px', border: '2px dashed #EEE', color: '#999', fontWeight: 600 }}>
-                Todos los clientes están al día. ¡Excelente trabajo!
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Visual Trends Card */}
-        <div style={{ background: 'white', borderRadius: '24px', padding: '30px', border: '1px solid #EEE', boxShadow: '0 10px 30px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-          <div>
-            <h2 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#12141D', marginBottom: '8px' }}>Crecimiento Compuesto</h2>
-            <p style={{ color: '#666', fontSize: '1rem', marginBottom: '30px' }}>Comparativa de salud financiera respecto al mes pasado.</p>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px', background: '#F9F9F9', borderRadius: '16px' }}>
-                <div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#666', textTransform: 'uppercase', marginBottom: '4px' }}>Crecimiento Facturación</div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#12141D' }}>+{growth.income}%</div>
-                </div>
-                <TrendingUp color="#28C76F" size={32} />
-              </div>
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px', background: '#F9F9F9', borderRadius: '16px' }}>
-                <div>
-                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#666', textTransform: 'uppercase', marginBottom: '4px' }}>Crecimiento de Rentabilidad</div>
-                  <div style={{ fontSize: '1.8rem', fontWeight: 900, color: '#12141D' }}>+{growth.profit}%</div>
-                </div>
-                <Activity color="#B89BFF" size={32} />
-              </div>
+      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+        <article style={panelStyle}>
+          <h3 style={panelTitleStyle}><Plus size={16} color="#D2F23A" /> Registrar pago</h3>
+          <form onSubmit={createPayment} style={{ display: 'grid', gap: 8 }}>
+            <select required value={paymentForm.clientId} onChange={(event) => setPaymentForm((prev) => ({ ...prev, clientId: event.target.value }))} style={inputStyle}>
+              <option value="">Seleccionar cliente</option>
+              {clients.map((client) => (
+                <option key={client.id} value={client.id}>{client.company}</option>
+              ))}
+            </select>
+            <input required value={paymentForm.concept} onChange={(event) => setPaymentForm((prev) => ({ ...prev, concept: event.target.value }))} placeholder="Concepto" style={inputStyle} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <input required type="number" min="1" value={paymentForm.amount} onChange={(event) => setPaymentForm((prev) => ({ ...prev, amount: event.target.value }))} placeholder="Monto" style={inputStyle} />
+              <input type="date" value={paymentForm.dueDate} onChange={(event) => setPaymentForm((prev) => ({ ...prev, dueDate: event.target.value }))} style={inputStyle} />
             </div>
-          </div>
-          
-          <button style={{ width: '100%', marginTop: '30px', padding: '16px', background: 'rgba(184, 155, 255, 0.1)', color: '#9665FF', borderRadius: '14px', border: 'none', fontWeight: 800, fontSize: '1rem', cursor: 'pointer' }}>
-            Descargar Reporte Financiero (PDF)
-          </button>
-        </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <select value={paymentForm.status} onChange={(event) => setPaymentForm((prev) => ({ ...prev, status: event.target.value }))} style={inputStyle}>
+                <option value="pending">Pendiente</option>
+                <option value="paid">Pagado</option>
+                <option value="partial">Parcial</option>
+                <option value="overdue">Vencido</option>
+              </select>
+              <input value={paymentForm.method} onChange={(event) => setPaymentForm((prev) => ({ ...prev, method: event.target.value }))} placeholder="Metodo" style={inputStyle} />
+            </div>
+            <textarea value={paymentForm.notes} onChange={(event) => setPaymentForm((prev) => ({ ...prev, notes: event.target.value }))} placeholder="Notas" style={{ ...inputStyle, minHeight: 70, resize: 'vertical' }} />
+            <button type="submit" disabled={saving} style={actionButtonStyle}><Plus size={14} /> Guardar pago</button>
+          </form>
+        </article>
 
+        <article style={panelStyle}>
+          <h3 style={panelTitleStyle}><ReceiptText size={16} color="#B89BFF" /> Registrar ingreso / egreso</h3>
+          <form onSubmit={createMovement} style={{ display: 'grid', gap: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <select value={movementForm.type} onChange={(event) => setMovementForm((prev) => ({ ...prev, type: event.target.value }))} style={inputStyle}>
+                <option value="expense">Egreso</option>
+                <option value="income">Ingreso</option>
+              </select>
+              <input value={movementForm.category} onChange={(event) => setMovementForm((prev) => ({ ...prev, category: event.target.value }))} placeholder="Categoria" style={inputStyle} />
+            </div>
+            <input required value={movementForm.concept} onChange={(event) => setMovementForm((prev) => ({ ...prev, concept: event.target.value }))} placeholder="Concepto" style={inputStyle} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <input required type="number" min="1" value={movementForm.amount} onChange={(event) => setMovementForm((prev) => ({ ...prev, amount: event.target.value }))} placeholder="Monto" style={inputStyle} />
+              <input type="date" value={movementForm.date} onChange={(event) => setMovementForm((prev) => ({ ...prev, date: event.target.value }))} style={inputStyle} />
+            </div>
+            <select value={movementForm.clientId} onChange={(event) => setMovementForm((prev) => ({ ...prev, clientId: event.target.value }))} style={inputStyle}>
+              <option value="">Sin cliente asociado</option>
+              {clients.map((client) => (
+                <option key={client.id} value={client.id}>{client.company}</option>
+              ))}
+            </select>
+            <textarea value={movementForm.notes} onChange={(event) => setMovementForm((prev) => ({ ...prev, notes: event.target.value }))} placeholder="Notas" style={{ ...inputStyle, minHeight: 70, resize: 'vertical' }} />
+            <button type="submit" disabled={saving} style={actionButtonStyle}><Plus size={14} /> Guardar movimiento</button>
+          </form>
+        </article>
+      </section>
+
+      <section style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+        <article style={panelStyle}>
+          <h3 style={panelTitleStyle}>Pagos registrados</h3>
+          {loading && <p style={{ color: 'rgba(255,255,255,0.6)' }}>Cargando...</p>}
+          {!loading && payments.length === 0 && <p style={{ color: 'rgba(255,255,255,0.6)' }}>No hay pagos cargados.</p>}
+          {!loading && payments.length > 0 && (
+            <div style={{ display: 'grid', gap: 8 }}>
+              {payments.map((payment) => (
+                <div key={payment.id} style={itemStyle}>
+                  <div>
+                    <strong>{payment.concept}</strong>
+                    <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.86rem' }}>{payment.clientName || 'Sin cliente'} · {payment.status}</div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <strong>{money(payment.amount)}</strong>
+                    <button type="button" onClick={() => removePayment(payment.id)} style={dangerButtonStyle}><Trash2 size={14} /></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </article>
+
+        <article style={panelStyle}>
+          <h3 style={panelTitleStyle}>Ingresos y egresos</h3>
+          {loading && <p style={{ color: 'rgba(255,255,255,0.6)' }}>Cargando...</p>}
+          {!loading && movements.length === 0 && <p style={{ color: 'rgba(255,255,255,0.6)' }}>No hay movimientos cargados.</p>}
+          {!loading && movements.length > 0 && (
+            <div style={{ display: 'grid', gap: 8 }}>
+              {movements.map((movement) => (
+                <div key={movement.id} style={itemStyle}>
+                  <div>
+                    <strong>{movement.concept}</strong>
+                    <div style={{ color: 'rgba(255,255,255,0.62)', fontSize: '0.86rem' }}>
+                      {movement.type === 'income' ? 'Ingreso' : 'Egreso'} · {movement.category}
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <strong style={{ color: movement.type === 'income' ? '#7ef0b3' : '#ffb97a' }}>{money(movement.amount)}</strong>
+                    <button type="button" onClick={() => removeMovement(movement.id)} style={dangerButtonStyle}><Trash2 size={14} /></button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </article>
       </section>
     </div>
   );
 }
+
+const cardStyle = {
+  borderRadius: 14,
+  border: '1px solid rgba(255,255,255,0.1)',
+  background: 'rgba(255,255,255,0.04)',
+  padding: 12,
+};
+
+const cardLabelStyle = {
+  color: 'rgba(255,255,255,0.65)',
+  fontSize: '0.84rem',
+};
+
+const cardValueStyle = {
+  fontSize: '1.5rem',
+  display: 'block',
+  marginTop: 4,
+};
+
+const panelStyle = {
+  borderRadius: 16,
+  border: '1px solid rgba(255,255,255,0.12)',
+  background: 'rgba(255,255,255,0.04)',
+  padding: 14,
+};
+
+const panelTitleStyle = {
+  marginTop: 0,
+  marginBottom: 10,
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+};
+
+const inputStyle = {
+  width: '100%',
+  borderRadius: 10,
+  border: '1px solid rgba(255,255,255,0.15)',
+  background: 'rgba(255,255,255,0.03)',
+  color: 'white',
+  padding: '8px 10px',
+};
+
+const actionButtonStyle = {
+  borderRadius: 10,
+  border: '1px solid rgba(210,242,58,0.35)',
+  background: 'rgba(210,242,58,0.15)',
+  color: '#f3ffb5',
+  padding: '8px 12px',
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 6,
+  fontWeight: 700,
+};
+
+const itemStyle = {
+  borderRadius: 12,
+  border: '1px solid rgba(255,255,255,0.1)',
+  background: 'rgba(13,14,21,0.6)',
+  padding: 10,
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: 10,
+};
+
+const dangerButtonStyle = {
+  borderRadius: 10,
+  border: '1px solid rgba(255,107,107,0.45)',
+  background: 'rgba(255,107,107,0.15)',
+  color: '#ffd8d8',
+  padding: 7,
+};
