@@ -8,7 +8,7 @@ import { NexaLogo } from './NexaLogo';
 
 const LINKS = [
   { href: '/', label: 'Inicio' },
-  { href: '/servicios', label: 'Servicios' },
+  { href: '/servicios', label: 'Servicios' },h
   { href: '/casos', label: 'Casos' },
   { href: '/aprende', label: 'Aprende' },
   { href: '/contacto', label: 'Contacto' },
@@ -48,8 +48,8 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
-          <Link href="https://nexa-roan-theta.vercel.app" style={{ textDecoration: 'none', borderRadius: 999, border: '1px solid rgba(184,155,255,0.5)', background: 'rgba(184,155,255,0.15)', color: '#4f2cb4', padding: '8px 12px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <UserRound size={14} /> Equipo NEXA y clientes
+          <Link href="https://crm.nexagrowth.com.ar" style={{ textDecoration: 'none', borderRadius: 999, border: '1px solid rgba(184,155,255,0.5)', background: 'rgba(184,155,255,0.15)', color: '#4f2cb4', padding: '8px 12px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+            <UserRound size={14} /> Ingresar al CRM
           </Link>
         </nav>
 
@@ -71,8 +71,8 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link href="https://nexa-roan-theta.vercel.app" style={{ textDecoration: 'none', color: '#4f2cb4', fontWeight: 700, padding: '10px 4px' }}>
-              Equipo NEXA y clientes
+            <Link href="https://crm.nexagrowth.com.ar" style={{ textDecoration: 'none', color: '#4f2cb4', fontWeight: 700, padding: '10px 4px' }}>
+              Ingresar al CRM
             </Link>
           </div>
         </div>
