@@ -1902,6 +1902,16 @@ p { color: var(--text-body); line-height: 1.7; }
     justify-content: center;
   }
 }
+
+/* ==========================================
+   SECTION PADDINGS — TABLET (≤1024px)
+   ========================================== */
+@media (max-width: 1024px) {
+  .transformation { padding: 100px 0; }
+  .methodology    { padding: 100px 0; }
+  .faq            { padding: 100px 0; }
+  .resultados     { padding: 100px 0; }
+  .contact        { padding: 100px 0; }
 /* ==========================================
    Article Content Light Theme Overrides
    ========================================== */
@@ -2000,6 +2010,19 @@ p { color: var(--text-body); line-height: 1.7; }
   .transform-grid { grid-template-columns: repeat(2, 1fr); }
 }
 
+/* ==========================================
+   SECTION PADDINGS — MOBILE (≤768px)
+   ========================================== */
+@media (max-width: 768px) {
+  .transformation  { padding: 64px 0; }
+  .methodology     { padding: 64px 0; }
+  .faq             { padding: 64px 0; }
+  .resultados      { padding: 64px 0; }
+  .contact         { padding: 64px 0; }
+  .academy-section { padding: 56px 0; }
+  .tips-section    { padding: 56px 0; }
+  .results-section { padding: 56px 0; }
+  .section-sm      { padding: 48px 0; }
 /* ==============================
    SECTION PADDINGS — MOBILE
    ============================== */
@@ -2024,12 +2047,111 @@ p { color: var(--text-body); line-height: 1.7; }
   /* Transform: 1 column on mobile */
   .transform-grid { grid-template-columns: 1fr; }
 
+  /* Compact cards */
+  .transform-card { padding: 28px; }
+  .method-step    { padding: 32px 20px; }
   .transform-card { padding: 28px; }
   .method-step { padding: 32px 20px; }
 
   /* FAQ touch improvements */
   .faq-question { padding: 20px 0; font-size: 1.05rem; }
 
+<<<<<<< claude/eloquent-meitner
+  /* Hero actions stack */
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .hero-actions .btn {
+    width: 100%;
+    max-width: 360px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* Buttons: 48px minimum touch target */
+  .btn { min-height: 48px; }
+
+  /* Section header spacing */
+  .section-header { margin-bottom: 48px; }
+  .section-subtitle { font-size: 1rem; }
+
+  /* Overflow guard */
+  main, section { max-width: 100%; overflow-x: hidden; }
+
+  /* Misc component fixes */
+  .cta-headline    { font-size: clamp(1.6rem, 5vw, 2.5rem); }
+  .academy-card-body { padding: 20px; }
+}
+
+/* ==========================================
+   EXTRA SMALL (≤480px)
+   ========================================== */
+@media (max-width: 480px) {
+  .hero-badge   { font-size: 0.75rem; padding: 8px 16px; }
+  .btn          { font-size: 0.9rem; padding: 14px 24px; gap: 8px; }
+  .section-tag  { font-size: 0.75rem; padding: 6px 16px; }
+  .service-card { padding: 28px; }
+  .transform-card { padding: 24px; }
+  .method-step  { padding: 28px 16px; }
+  .clients-row  { gap: 20px; }
+  .client-logo  { font-size: 1rem; }
+  .about-pills  { gap: 8px; }
+  .pill         { padding: 10px 18px; font-size: 0.85rem; }
+  .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+}
+
+/* ==========================================
+   ARTICLE CONTENT — LIGHT THEME OVERRIDES
+   ========================================== */
+.article-content h2,
+.article-content h3,
+.article-content h4 { color: var(--text-dark); }
+.article-content p  { color: var(--text-body); }
+.article-content li { color: var(--text-body); }
+.article-content blockquote {
+  color: var(--text-body) !important;
+  border-left-color: var(--lilac) !important;
+  background: rgba(184, 155, 255, 0.08) !important;
+}
+.article-content blockquote p { color: var(--text-body) !important; }
+.article-content strong { color: var(--text-dark); }
+.article-content a       { color: var(--lilac); }
+.article-content a:hover { color: #835CE6; }
+
+@media (max-width: 768px) {
+  .article-content h2 { font-size: 1.5rem; }
+  .article-content h3 { font-size: 1.25rem; }
+  .article-content blockquote {
+    margin-left: 0;
+    margin-right: 0;
+    padding: 12px 16px;
+  }
+}
+
+/* Article page wrapper padding fix on mobile */
+@media (max-width: 768px) {
+  div[style*="padding-top:140px"] {
+    padding-top: 90px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-bottom: 60px !important;
+  }
+}
+@media (max-width: 480px) {
+  div[style*="padding-top:140px"] {
+    padding-top: 80px !important;
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* ==========================================
+   DASHBOARD SHELL — RESPONSIVE
+   ========================================== */
+.ds-root { display: flex; min-height: 100vh; }
+=======
   /* Contact form on contact page */
   .contact-form-section .contact-form-pro {
     padding: 28px 20px !important;
@@ -2065,6 +2187,7 @@ p { color: var(--text-body); line-height: 1.7; }
   display: flex;
   min-height: 100vh;
 }
+>>>>>>> master
 
 .ds-dark { background: #0D0E15; }
 .ds-dark .ds-sidebar {
@@ -2189,6 +2312,7 @@ p { color: var(--text-body); line-height: 1.7; }
     box-shadow: 8px 0 40px rgba(0, 0, 0, 0.4);
   }
 
+  .ds-backdrop  { display: block; }
   .ds-backdrop { display: block; }
   .ds-hamburger { display: flex; }
   .ds-close-btn { display: flex; }
