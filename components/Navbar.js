@@ -3,12 +3,12 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, UserRound, X } from 'lucide-react';
+import { Menu, X, ExternalLink } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
 const LINKS = [
   { href: '/', label: 'Inicio' },
-  { href: '/servicios', label: 'Servicios' },h
+  { href: '/servicios', label: 'Servicios' },
   { href: '/casos', label: 'Casos' },
   { href: '/aprende', label: 'Aprende' },
   { href: '/contacto', label: 'Contacto' },
@@ -25,60 +25,162 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
+  useEffect(() => { setIsOpen(false); }, [pathname]);
 
-  if (pathname?.startsWith('/admin') || pathname?.startsWith('/clientes/dashboard')) {
-    return null;
-  }
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [isOpen]);
 
   return (
-    <header style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 120, padding: scrolled ? '12px 0' : '18px 0', transition: 'all 0.25s ease', background: scrolled ? 'rgba(246,242,251,0.88)' : 'transparent', borderBottom: scrolled ? '1px solid rgba(16,18,34,0.1)' : 'none', backdropFilter: scrolled ? 'blur(10px)' : 'none' }}>
-      <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 }}>
-        <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <NexaLogo size={34} />
+    <header className="nexa-nav" data-scrolled={scrolled}>
+      <div className="container nexa-nav-inner">
+        <Link href="/" aria-label="NEXA Inicio">
+          <NexaLogo size={32} />
         </Link>
 
-        <nav className="nexa-top-nav" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div className="nexa-top-links" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            {LINKS.map((link) => (
-              <Link key={link.href} href={link.href} style={{ textDecoration: 'none', color: '#1d2134', fontWeight: 600, padding: '8px 10px', borderRadius: 10 }}>
-                {link.label}
-              </Link>
-            ))}
-          </div>
-          <Link href="https://crm.nexagrowth.com.ar" style={{ textDecoration: 'none', borderRadius: 999, border: '1px solid rgba(184,155,255,0.5)', background: 'rgba(184,155,255,0.15)', color: '#4f2cb4', padding: '8px 12px', fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <UserRound size={14} /> Ingresar al CRM
-          </Link>
+        {/* Desktop Links */}
+        <nav className="nexa-nav-links" aria-label="Navegación principal">
+          {LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={`nexa-nav-link ${pathname === link.href ? 'active' : ''}`}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <a
+            href="https://www.nexagrowth.com.ar"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="nexa-nav-cta"
+          >
+            <ExternalLink size={14} /> CRM
+          </a>
         </nav>
 
+        {/* Mobile Toggle */}
         <button
           type="button"
-          className="nexa-mobile-toggle"
-          onClick={() => setIsOpen((value) => !value)}
-          style={{ borderRadius: 10, border: '1px solid rgba(16,18,34,0.2)', background: 'white', color: '#111426', padding: 8 }}
+          className="nexa-nav-toggle"
+          onClick={() => setIsOpen((v) => !v)}
+          aria-label={isOpen ? 'Cerrar menú' : 'Abrir menú'}
+          aria-expanded={isOpen}
         >
-          {isOpen ? <X size={18} /> : <Menu size={18} />}
+          {isOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
+      {/* Mobile Menu */}
       {isOpen && (
-        <div style={{ borderTop: '1px solid rgba(16,18,34,0.1)', background: 'white' }}>
-          <div className="container" style={{ padding: '10px 0', display: 'grid', gap: 6 }}>
+        <div className="nexa-mobile-menu" role="navigation" aria-label="Menú móvil">
+          <div className="container">
             {LINKS.map((link) => (
-              <Link key={link.href} href={link.href} style={{ textDecoration: 'none', color: '#1d2134', fontWeight: 600, padding: '10px 4px' }}>
+              <Link key={link.href} href={link.href} className="nexa-mobile-link">
                 {link.label}
               </Link>
             ))}
-            <Link href="https://crm.nexagrowth.com.ar" style={{ textDecoration: 'none', color: '#4f2cb4', fontWeight: 700, padding: '10px 4px' }}>
-              Ingresar al CRM
-            </Link>
+            <a
+              href="https://www.nexagrowth.com.ar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nexa-mobile-link nexa-mobile-cta"
+            >
+              <ExternalLink size={14} /> Ingresar al CRM
+            </a>
           </div>
         </div>
       )}
 
-      <style
-        dangerouslySetInnerHTML={{
-          __html: `
-            .nexa-mobile-toggle { display: none; }
+      <style dangerouslySetInnerHTML={{ __html: `
+        .nexa-nav {
+          position: fixed; top: 0; left: 0; right: 0; z-index: 120;
+          padding: 20px 0;
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .nexa-nav[data-scrolled="true"] {
+          padding: 12px 0;
+          background: rgba(250, 248, 252, 0.85);
+          backdrop-filter: blur(16px);
+          -webkit-backdrop-filter: blur(16px);
+          border-bottom: 1px solid rgba(184, 155, 255, 0.15);
+          box-shadow: 0 4px 24px rgba(184, 155, 255, 0.06);
+        }
+        .nexa-nav-inner {
+          display: flex; align-items: center; justify-content: space-between;
+        }
+        .nexa-nav-links {
+          display: flex; align-items: center; gap: 8px;
+          background: rgba(255,255,255,0.55);
+          padding: 6px 8px 6px 24px;
+          border-radius: 100px;
+          border: 1px solid rgba(184, 155, 255, 0.18);
+          backdrop-filter: blur(8px);
+        }
+        .nexa-nav-link {
+          font-size: 0.88rem; font-weight: 600; color: #505466;
+          padding: 8px 12px; border-radius: 100px;
+          transition: color 0.3s, background 0.3s;
+        }
+        .nexa-nav-link:hover, .nexa-nav-link.active {
+          color: #835CE6;
+        }
+        .nexa-nav-cta {
+          display: inline-flex; align-items: center; gap: 6px;
+          background: #0D0E15; color: white;
+          padding: 10px 20px; border-radius: 100px;
+          font-weight: 700; font-size: 0.82rem;
+          letter-spacing: 0.04em; text-transform: uppercase;
+          transition: all 0.3s;
+        }
+        .nexa-nav-cta:hover {
+          transform: translateY(-1px);
+          box-shadow: 0 8px 20px rgba(13,14,21,0.2);
+        }
+        .nexa-nav-toggle {
+          display: none; padding: 8px;
+          border-radius: 10px; border: 1px solid rgba(18,20,29,0.15);
+          background: white; color: #12141D;
+          transition: transform 0.2s;
+        }
+        .nexa-nav-toggle:hover { transform: scale(1.05); }
+
+        /* Mobile */
+        @media (max-width: 900px) {
+          .nexa-nav-links { display: none; }
+          .nexa-nav-toggle { display: flex; align-items: center; justify-content: center; }
+        }
+        .nexa-mobile-menu {
+          border-top: 1px solid rgba(18,20,29,0.08);
+          background: white;
+          padding: 16px 0 24px;
+          animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+          from { opacity: 0; transform: translateY(-8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .nexa-mobile-menu .container {
+          display: flex; flex-direction: column; gap: 4px;
+        }
+        .nexa-mobile-link {
+          display: flex; align-items: center; gap: 8px;
+          padding: 14px 12px; border-radius: 12px;
+          font-weight: 600; color: #12141D; font-size: 1rem;
+          transition: background 0.2s;
+        }
+        .nexa-mobile-link:hover { background: rgba(184,155,255,0.08); }
+        .nexa-mobile-cta {
+          color: #835CE6; font-weight: 700;
+          margin-top: 8px; padding-top: 16px;
+          border-top: 1px solid rgba(18,20,29,0.08);
+        }
+        @media (min-width: 901px) {
+          .nexa-mobile-menu { display: none; }
+        }
+      `}} />
+    </header>
+  );
+}

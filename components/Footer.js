@@ -4,6 +4,13 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NexaLogo } from './NexaLogo';
 
+const NAV_LINKS = [
+  { href: '/servicios', label: 'Servicios' },
+  { href: '/casos', label: 'Casos' },
+  { href: '/aprende', label: 'Aprende' },
+  { href: '/contacto', label: 'Contacto' },
+];
+
 const SOCIALS = [
   { label: '@nexagrowth.ar', href: 'https://instagram.com/nexagrowth.ar' },
   { label: '@somosnexa.ar', href: 'https://instagram.com/somosnexa.ar' },
@@ -11,56 +18,50 @@ const SOCIALS = [
 
 export default function Footer() {
   const pathname = usePathname();
-  if (pathname?.startsWith('/admin') || pathname?.startsWith('/clientes/dashboard')) return null;
 
   return (
-    <footer style={{ background: '#0d0e15', borderTop: '1px solid rgba(255,255,255,0.08)', color: 'white' }}>
-      <div className="container" style={{ paddingTop: 34, paddingBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 16, flexWrap: 'wrap', alignItems: 'flex-start' }}>
-          <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <NexaLogo size={34} color="white" />
-          </Link>
+    <footer style={{ background: '#0D0E15', borderTop: '1px solid rgba(255,255,255,0.06)', color: 'white' }}>
+      <div className="container" style={{ paddingTop: 48, paddingBottom: 32 }}>
+        {/* Top row */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 24, flexWrap: 'wrap' }}>
+          <div>
+            <Link href="/" aria-label="NEXA Inicio">
+              <NexaLogo size={32} color="white" />
+            </Link>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.88rem', marginTop: 12, maxWidth: 280, lineHeight: 1.6 }}>
+              Marketing, CRM y crecimiento operacional para marcas que quieren escalar.
+            </p>
+          </div>
 
-          <nav style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
-            <Link href="/servicios" style={linkStyle}>Servicios</Link>
-            <Link href="/casos" style={linkStyle}>Casos</Link>
-            <Link href="/aprende" style={linkStyle}>Aprende con NEXA</Link>
-            <Link href="/contacto" style={linkStyle}>Contacto</Link>
-            <Link href="/portal" style={{ ...linkStyle, color: '#D2F23A' }}>Portal</Link>
+          <nav style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }} aria-label="Enlaces del footer">
+            {NAV_LINKS.map((link) => (
+              <Link key={link.href} href={link.href} style={{ color: 'rgba(255,255,255,0.7)', fontWeight: 600, fontSize: '0.9rem', transition: 'color 0.3s' }}>
+                {link.label}
+              </Link>
+            ))}
+            <a href="https://www.nexagrowth.com.ar" target="_blank" rel="noopener noreferrer" style={{ color: '#D2F23A', fontWeight: 700, fontSize: '0.9rem' }}>
+              Portal CRM
+            </a>
           </nav>
         </div>
 
-        <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid rgba(255,255,255,0.08)', display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.88rem' }}>
-            © 2026 NEXA. Marketing, CRM y crecimiento operacional.
-          </div>
+        {/* Divider + Bottom */}
+        <div style={{ marginTop: 32, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem' }}>
+            © {new Date().getFullYear()} NEXA. Todos los derechos reservados.
+          </span>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {SOCIALS.map((social) => (
-              <a key={social.href} href={social.href} target="_blank" rel="noreferrer" style={socialBadgeStyle}>
-                {social.label}
+            {SOCIALS.map((s) => (
+              <a key={s.href} href={s.href} target="_blank" rel="noreferrer" style={{ borderRadius: 999, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.7)', padding: '6px 14px', fontSize: '0.82rem', transition: 'all 0.3s' }}>
+                {s.label}
               </a>
             ))}
-            <a href="mailto:hola@nexaarg.com" style={socialBadgeStyle}>hola@nexaarg.com</a>
+            <a href="mailto:hola@nexaarg.com" style={{ borderRadius: 999, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.7)', padding: '6px 14px', fontSize: '0.82rem' }}>
+              hola@nexaarg.com
+            </a>
           </div>
         </div>
       </div>
     </footer>
   );
 }
-
-const linkStyle = {
-  textDecoration: 'none',
-  color: 'rgba(255,255,255,0.8)',
-  fontWeight: 600,
-  fontSize: '0.92rem',
-};
-
-const socialBadgeStyle = {
-  borderRadius: 999,
-  border: '1px solid rgba(255,255,255,0.2)',
-  background: 'rgba(255,255,255,0.05)',
-  color: 'white',
-  padding: '6px 10px',
-  fontSize: '0.82rem',
-  textDecoration: 'none',
-};
