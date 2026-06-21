@@ -47,7 +47,7 @@ export default function Contact() {
           </div>
         </section>
 
-        {/* Form */}
+        <section style={{ paddingBottom: 32 }}><div className="container" style={{ maxWidth: 680, margin: '0 auto' }}><div style={{ position: 'relative', borderRadius: 24, overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.35)' }}><img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&q=80" alt="Equipo de NEXA conversando sobre estrategia con un cliente" loading="lazy" style={{ width: '100%', height: 'clamp(180px, 26vw, 280px)', objectFit: 'cover', display: 'block' }} /><div style={{ position: 'absolute', left: 20, bottom: 20, background: '#fff', padding: '11px 20px', borderRadius: 100, fontSize: '0.82rem', fontWeight: 700, color: '#12141D', boxShadow: '0 14px 32px rgba(13,14,21,0.18)' }}>Te respondemos en menos de 24 horas</div></div></div></section>{/* Form */}
         <section style={{ paddingBottom: 'clamp(60px, 10vw, 120px)' }}>
           <div className="container" style={{ maxWidth: 680, margin: '0 auto' }}>
             <form onSubmit={handleSubmit} className="contact-form-pro" style={{
