@@ -54,8 +54,9 @@ const SERVICES = [
   Testimonios/casos — copys e imágenes de ejemplo aprobados en el mockup
   (nexa-rediseno-propuesta.html v3). Las fotos son placeholders de Unsplash;
   reemplazar por material real de cada cliente cuando esté disponible.
-  El rótulo "Cliente — ejemplo" se mantiene visible a propósito hasta que
-  Lu confirme/reemplace estos testimonios por contenido real.
+  El rótulo "— ejemplo" ya NO se muestra en pantalla (a pedido de Lu), pero
+  los textos/cifras siguen siendo de ejemplo hasta confirmar contenido real
+  de cada cliente.
 */
 const TESTIMONIALS = [
   {
@@ -66,7 +67,7 @@ const TESTIMONIALS = [
     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=70',
     avatarAlt: 'Dueño de Ciudad Moto',
     name: 'Ciudad Moto',
-    role: 'Cliente — ejemplo',
+    role: 'Cliente NEXA',
   },
   {
     img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=70',
@@ -76,7 +77,7 @@ const TESTIMONIALS = [
     avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=70',
     avatarAlt: 'Responsable de Roca Viviendas',
     name: 'Roca Viviendas',
-    role: 'Cliente — ejemplo',
+    role: 'Cliente NEXA',
   },
   {
     img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=70',
@@ -86,7 +87,7 @@ const TESTIMONIALS = [
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=70',
     avatarAlt: 'Dueña de Estética Funcional',
     name: 'Estética Funcional',
-    role: 'Cliente — ejemplo',
+    role: 'Cliente NEXA',
   },
 ];
 
@@ -527,6 +528,4 @@ export default function HomePage() {
           .home-closing-chip { left: 14px; bottom: 14px; padding: 10px 16px; font-size: 0.78rem; }
         }
       `}} />
-    </>
-  );
-}
+  
