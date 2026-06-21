@@ -528,4 +528,6 @@ export default function HomePage() {
           .home-closing-chip { left: 14px; bottom: 14px; padding: 10px 16px; font-size: 0.78rem; }
         }
       `}} />
-  
+    </>
+  );
+}
