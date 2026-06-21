@@ -39,7 +39,7 @@ export default function Services() {
           <p className="section-subtitle" style={{ margin: '0 auto' }}>Soluciones de marketing pensadas para posicionar marcas, simplificar el seguimiento y facturar más.</p>
         </div>
 
-        {/* Services Grid */}
+        <section style={{ padding: '0 0 56px' }}><div className="container"><motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ position: 'relative', maxWidth: 980, margin: '0 auto', borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 70px rgba(13,14,21,0.14)' }}><img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1400&q=80" alt="Equipo de NEXA planificando estrategia con datos" loading="lazy" style={{ width: '100%', height: 'clamp(220px, 32vw, 360px)', objectFit: 'cover', display: 'block' }} /><div style={{ position: 'absolute', left: 24, bottom: 24, background: '#fff', padding: '13px 22px', borderRadius: 100, fontSize: '0.86rem', fontWeight: 700, color: '#12141D', boxShadow: '0 14px 32px rgba(13,14,21,0.18)' }}>Estrategia + datos en un mismo equipo</div></motion.div></div></section>{/* Services Grid */}
         <section className="services" style={{ padding: '40px 0 80px' }}>
           <div className="container">
             <div className="services-grid">
