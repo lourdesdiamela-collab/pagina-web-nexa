@@ -32,7 +32,7 @@ export default function Cases() {
           <p className="section-subtitle" style={{ margin: '0 auto' }}>Nuestro mayor caso de éxito es mostrar el crecimiento real de los negocios de nuestros clientes.</p>
         </div>
 
-        {/* Results Cards */}
+        <section style={{ padding: '0 0 56px' }}><div className="container"><motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ position: 'relative', maxWidth: 980, margin: '0 auto', borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 70px rgba(13,14,21,0.14)' }}><img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1400&q=80" alt="Resultados de campañas y estrategias de marketing basadas en datos" loading="lazy" style={{ width: '100%', height: 'clamp(220px, 32vw, 360px)', objectFit: 'cover', display: 'block' }} /><div style={{ position: 'absolute', left: 24, bottom: 24, background: '#fff', padding: '13px 22px', borderRadius: 100, fontSize: '0.86rem', fontWeight: 700, color: '#12141D', boxShadow: '0 14px 32px rgba(13,14,21,0.18)' }}>Resultados medibles, con datos reales</div></motion.div></div></section>{/* Results Cards */}
         <section style={{ padding: '40px 0 80px', background: 'rgba(184,155,255,0.02)' }}>
           <div className="container">
             <div className="results-grid">
