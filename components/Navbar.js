@@ -52,7 +52,7 @@ export default function Navbar() {
             </Link>
           ))}
           <a
-            href="https://www.nexagrowth.com.ar"
+            href="https://crm.nexagrowth.com.ar"
             target="_blank"
             rel="noopener noreferrer"
             className="nexa-nav-cta"
@@ -83,7 +83,7 @@ export default function Navbar() {
               </Link>
             ))}
             <a
-              href="https://www.nexagrowth.com.ar"
+              href="https://crm.nexagrowth.com.ar"
               target="_blank"
               rel="noopener noreferrer"
               className="nexa-mobile-link nexa-mobile-cta"
