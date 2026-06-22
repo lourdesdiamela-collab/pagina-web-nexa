@@ -26,7 +26,7 @@ const SERVICES = [
   {
     title: 'Campañas de captación',
     desc: 'Meta y Google Ads optimizadas con métricas de conversión — sabés qué canal vende, no solo qué canal gasta.',
-    img: 'https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?auto=format&fit=crop&w=600&q=70',
+    img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=600&q=70',
     alt: 'Planificación de campañas de captación en redes',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -192,7 +192,7 @@ export default function HomePage() {
               <FadeUp>
                 <div className="home-hero-visual">
                   <div className="home-hero-img-wrap">
-                    <img src="/nexa-hero-new.png" alt="Equipo NEXA trabajando en estrategia digital" style={{ width: '100%', display: 'block' }} />
+                    <img src="https://images.unsplash.com/photo-1568992688065-536aad8a12f6?auto=format&fit=crop&w=1200&q=75" alt="Equipo conversando sobre estrategia y resultados" style={{ width: '100%', display: 'block' }} />
                   </div>
                   <div className="home-float-chip home-chip-stat">
                     <div className="home-chip-dot"><span></span><span></span><span></span></div>
