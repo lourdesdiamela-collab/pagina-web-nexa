@@ -57,7 +57,7 @@ export default function Navbar() {
             rel="noopener noreferrer"
             className="nexa-nav-cta"
           >
-            <ExternalLink size={14} /> CRM
+            <ExternalLink size={14} /> NEXA OS
           </a>
         </nav>
 
@@ -88,7 +88,7 @@ export default function Navbar() {
               rel="noopener noreferrer"
               className="nexa-mobile-link nexa-mobile-cta"
             >
-              <ExternalLink size={14} /> Ingresar al CRM
+              <ExternalLink size={14} /> Ingresar a NEXA OS
             </a>
           </div>
         </div>
