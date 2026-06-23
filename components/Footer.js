@@ -40,7 +40,7 @@ export default function Footer() {
               </Link>
             ))}
             <a href="https://crm.nexagrowth.com.ar" target="_blank" rel="noopener noreferrer" style={{ color: '#D2F23A', fontWeight: 700, fontSize: '0.9rem' }}>
-              Portal CRM
+              Portal NEXA OS
             </a>
           </nav>
         </div>
