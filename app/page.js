@@ -192,7 +192,17 @@ export default function HomePage() {
               <FadeUp>
                 <div className="home-hero-visual">
                   <div className="home-hero-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1568992688065-536aad8a12f6?auto=format&fit=crop&w=1200&q=75" alt="Equipo conversando sobre estrategia y resultados" style={{ width: '100%', display: 'block' }} />
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      poster="/hero-loop-poster.jpg"
+                      aria-hidden="true"
+                      style={{ width: '100%', display: 'block' }}
+                    >
+                      <source src="/hero-loop.mp4" type="video/mp4" />
+                    </video>
                   </div>
                   <div className="home-float-chip home-chip-stat">
                     <div className="home-chip-dot"><span></span><span></span><span></span></div>
