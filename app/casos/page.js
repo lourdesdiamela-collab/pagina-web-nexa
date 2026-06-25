@@ -7,9 +7,9 @@ import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 
 const RESULTS = [
-  { img: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80', stat: '+340%', label: 'aumento en ventas', desc: 'E-commerce de motos en 3 meses.', client: 'Ciudad Moto' },
-  { img: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=600&q=80', stat: '3x ROI', label: 'retorno sobre inversión', desc: 'Captación de propiedades desde red de búsqueda.', client: 'Roca Viviendas' },
-  { img: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=600&q=80', stat: '+180%', label: 'leads calificados', desc: 'Rediseño de posicionamiento y contenido.', client: 'Estética Funcional' },
+  { img: 'https://images.unsplash.com/photo-1573879034406-75858991ba97?auto=format&fit=crop&w=600&q=70', stat: '+210%', label: 'reservas de salas', desc: 'Sistema de reservas online y campañas locales en 60 días.', client: 'Bambú Cowork' },
+  { img: 'https://images.unsplash.com/photo-1760611656148-063d3b9a8dbc?auto=format&fit=crop&w=600&q=70', stat: '+275%', label: 'ventas online', desc: 'Catálogo digital y funnel de Meta Ads para decoración.', client: 'Vetrina Hogar' },
+  { img: 'https://images.unsplash.com/photo-1645005512968-0c1fe99f0093?auto=format&fit=crop&w=600&q=70', stat: '+150%', label: 'turnos agendados', desc: 'Posicionamiento local y agenda digital para kinesiología.', client: 'Clínica Avanza' },
 ];
 
 const IMPACTS = [
@@ -32,7 +32,17 @@ export default function Cases() {
           <p className="section-subtitle" style={{ margin: '0 auto' }}>Nuestro mayor caso de éxito es mostrar el crecimiento real de los negocios de nuestros clientes.</p>
         </div>
 
-        <section style={{ padding: '0 0 56px' }}><div className="container"><motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ position: 'relative', maxWidth: 980, margin: '0 auto', borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 70px rgba(13,14,21,0.14)' }}><img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1400&q=80" alt="Resultados de campañas y estrategias de marketing basadas en datos" loading="lazy" style={{ width: '100%', height: 'clamp(220px, 32vw, 360px)', objectFit: 'cover', display: 'block' }} /><div style={{ position: 'absolute', left: 24, bottom: 24, background: '#fff', padding: '13px 22px', borderRadius: 100, fontSize: '0.86rem', fontWeight: 700, color: '#12141D', boxShadow: '0 14px 32px rgba(13,14,21,0.18)' }}>Resultados medibles, con datos reales</div></motion.div></div></section>{/* Results Cards */}
+        {/* Banner */}
+        <section style={{ padding: '0 0 56px' }}>
+          <div className="container">
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ position: 'relative', maxWidth: 980, margin: '0 auto', borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 70px rgba(13,14,21,0.14)' }}>
+              <img src="https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=1400&q=80" alt="Resultados de campañas y estrategias de marketing basadas en datos" loading="lazy" style={{ width: '100%', height: 'clamp(220px, 32vw, 360px)', objectFit: 'cover', display: 'block' }} />
+              <div style={{ position: 'absolute', left: 24, bottom: 24, background: '#fff', padding: '13px 22px', borderRadius: 100, fontSize: '0.86rem', fontWeight: 700, color: '#12141D', boxShadow: '0 14px 32px rgba(13,14,21,0.18)' }}>Resultados medibles, con datos reales</div>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Results Cards */}
         <section style={{ padding: '40px 0 80px', background: 'rgba(184,155,255,0.02)' }}>
           <div className="container">
             <div className="results-grid">
