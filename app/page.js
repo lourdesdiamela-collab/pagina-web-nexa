@@ -51,47 +51,47 @@ const SERVICES = [
 ];
 
 /*
-  Testimonios/casos — copys e imágenes de ejemplo aprobados en el mockup
-  (nexa-rediseno-propuesta.html v3). Las fotos son placeholders de Unsplash;
-  reemplazar por material real de cada cliente cuando esté disponible.
-  El rótulo "— ejemplo" ya NO se muestra en pantalla (a pedido de Lu), pero
-  los textos/cifras siguen siendo de ejemplo hasta confirmar contenido real
-  de cada cliente.
+Testimonios/casos — copys e imágenes de ejemplo aprobados en el mockup
+(nexa-rediseno-propuesta.html v3). Las fotos son placeholders de Unsplash;
+reemplazar por material real de cada cliente cuando esté disponible.
+El rótulo "— ejemplo" ya NO se muestra en pantalla (a pedido de Lu), pero
+los textos/cifras siguen siendo de ejemplo hasta confirmar contenido real
+de cada cliente.
 */
 const TESTIMONIALS = [
   {
-    img: 'https://images.unsplash.com/photo-1558981806-ec527fa84c39?auto=format&fit=crop&w=600&q=70',
-    imgAlt: 'Caso Ciudad Moto',
-    quote: 'Pasamos de improvisar a tener un proceso comercial claro. El equipo de NEXA entendió el negocio rápido.',
-    metric: '▲ +340% ventas en 90 días',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=70',
-    avatarAlt: 'Dueño de Ciudad Moto',
-    name: 'Ciudad Moto',
+    img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=600&q=70',
+    imgAlt: 'Caso Sabores del Sur',
+    quote: 'Antes perdíamos pedidos por WhatsApp porque nadie hacía el seguimiento. Con NEXA ordenamos todo el proceso y hoy recuperamos clientes que antes se nos escapaban.',
+    metric: '▲ +65% pedidos recurrentes',
+    avatar: 'https://images.unsplash.com/photo-1758526213978-bfa055554ce8?auto=format&fit=crop&w=120&q=70',
+    avatarAlt: 'Socia fundadora de Sabores del Sur',
+    name: 'Sabores del Sur',
     role: 'Cliente NEXA',
   },
   {
-    img: 'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=600&q=70',
-    imgAlt: 'Caso Roca Viviendas',
-    quote: 'El CRM nos ordenó la captación de propiedades. Ahora sabemos exactamente en qué etapa está cada lead.',
-    metric: '▲ +58% leads calificados',
-    avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=70',
-    avatarAlt: 'Responsable de Roca Viviendas',
-    name: 'Roca Viviendas',
+    img: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=600&q=70',
+    imgAlt: 'Caso Norte Fit',
+    quote: 'El seguimiento de vencimientos de cuotas nos cambió la cabeza: hoy sabemos quién está por irse antes de que se vaya, y actuamos a tiempo.',
+    metric: '▲ +90% retención de socios',
+    avatar: 'https://images.unsplash.com/photo-1568602471122-7832951cc4c5?auto=format&fit=crop&w=120&q=70',
+    avatarAlt: 'Gerente comercial de Norte Fit',
+    name: 'Norte Fit',
     role: 'Cliente NEXA',
   },
   {
-    img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=70',
-    imgAlt: 'Caso Estética Funcional',
-    quote: 'Mejoró nuestra imagen de marca y empezamos a convertir mejor con el mismo presupuesto.',
-    metric: '▲ +2.4x conversión, mismo budget',
-    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=70',
-    avatarAlt: 'Dueña de Estética Funcional',
-    name: 'Estética Funcional',
+    img: 'https://images.unsplash.com/photo-1606811841689-23dfddce3e95?auto=format&fit=crop&w=600&q=70',
+    imgAlt: 'Caso Lumen Dental',
+    quote: 'Organizamos turnos y recordatorios de control, y la agenda dejó de tener huecos. El equipo trabaja más tranquilo y los pacientes vuelven.',
+    metric: '▲ +3,1x consultas confirmadas',
+    avatar: 'https://images.unsplash.com/photo-1705645930353-0e335311ef20?auto=format&fit=crop&w=120&q=70',
+    avatarAlt: 'Director de Lumen Dental',
+    name: 'Lumen Dental',
     role: 'Cliente NEXA',
   },
 ];
 
-const CLIENTS = ['Ciudad Moto', 'Corven Motos', 'Roca Viviendas', 'Casa Diez', 'Estética Funcional', 'Aqualaf'];
+const CLIENTS = ['Bambú Cowork', 'Vetrina Hogar', 'Clínica Avanza', 'Sabores del Sur', 'Norte Fit', 'Lumen Dental'];
 
 /* Scroll fade-in hook */
 function useFadeUp() {
@@ -184,7 +184,7 @@ export default function HomePage() {
                 <FadeUp>
                   <div className="home-proof-row">
                     <div className="home-proof-item"><div className="home-proof-num">+20</div><div className="home-proof-label">marcas asesoradas</div></div>
-                    <div className="home-proof-item"><div className="home-proof-num">+340%</div><div className="home-proof-label">venta en caso destacado</div></div>
+                    <div className="home-proof-item"><div className="home-proof-num">+275%</div><div className="home-proof-label">venta en caso destacado</div></div>
                     <div className="home-proof-item"><div className="home-proof-num">3x</div><div className="home-proof-label">ROI promedio</div></div>
                   </div>
                 </FadeUp>
@@ -196,7 +196,7 @@ export default function HomePage() {
                   </div>
                   <div className="home-float-chip home-chip-stat">
                     <div className="home-chip-dot"><span></span><span></span><span></span></div>
-                    <div><div className="home-chip-num">+340%</div><div className="home-chip-lbl">ventas — Ciudad Moto</div></div>
+                    <div><div className="home-chip-num">+275%</div><div className="home-chip-lbl">ventas — Vetrina Hogar</div></div>
                   </div>
                   <div className="home-float-chip home-chip-quote">
                     <div className="home-chip-stars">★★★★★</div>
