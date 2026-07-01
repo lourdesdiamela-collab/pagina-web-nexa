@@ -532,7 +532,6 @@
     safe(initHeroGradient,   "initHeroGradient");
     safe(initTilt,           "initTilt");
     safe(initScramble,       "initScramble");
-    safe(initHeroCanvas,     "initHeroCanvas");
 
     if (window.gsap && window.ScrollTrigger) {
       try { gsap.registerPlugin(ScrollTrigger); } catch (_) {}
