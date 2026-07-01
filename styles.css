@@ -953,3 +953,284 @@ body[data-page="contacto"]  a[href="contacto.html"]::after { transform: scaleX(1
 ::view-transition-new(root) { animation-name: vtFadeIn; }
 @keyframes vtFadeOut { to { opacity: 0; transform: translateY(-5px); } }
 @keyframes vtFadeIn  { from { opacity: 0; transform: translateY(5px); } }
+
+/* =============================================================
+   19b. Formulario premium — floating labels, validación, tick
+   ============================================================= */
+
+/* Card override — más premium */
+.contact-form-wrap {
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 2.5rem 2.25rem;
+  position: relative;
+  box-shadow:
+    0 4px 40px rgba(107,63,160,.10),
+    0 1px 8px rgba(107,63,160,.06);
+  overflow: visible;
+}
+.contact-form-wrap::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 15%; right: 15%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border-radius: 0 0 8px 8px;
+}
+
+.form-subtitle {
+  font-size: .875rem;
+  color: var(--ink-mute);
+  margin-bottom: 1.75rem;
+  margin-top: -.25rem;
+}
+
+/* ── Floating label field ── */
+.fl-field {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.form-row .fl-field { margin-bottom: 0; }
+
+@media (max-width: 580px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.fl-field input,
+.fl-field textarea,
+.fl-field select {
+  width: 100%;
+  padding: 1.25rem 1rem 0.45rem;
+  border: 1.5px solid var(--line);
+  border-radius: 12px;
+  font-family: var(--sans);
+  font-size: .9375rem;
+  color: var(--ink);
+  background: rgba(255,255,255,.85);
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  line-height: 1.4;
+}
+
+.fl-field textarea {
+  min-height: 120px;
+  resize: vertical;
+  padding-top: 1.5rem;
+}
+
+.fl-field select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><path d='M4 6l4 4 4-4' stroke='%239590B8' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px;
+  padding-right: 2.5rem;
+}
+
+/* Floating label */
+.fl-field label {
+  position: absolute;
+  top: 0.95rem;
+  left: 1rem;
+  font-family: var(--sans);
+  font-size: .9375rem;
+  font-weight: 400;
+  color: var(--ink-mute);
+  pointer-events: none;
+  transition:
+    top .18s cubic-bezier(.4,0,.2,1),
+    font-size .18s cubic-bezier(.4,0,.2,1),
+    color .18s cubic-bezier(.4,0,.2,1),
+    font-weight .18s cubic-bezier(.4,0,.2,1),
+    letter-spacing .18s cubic-bezier(.4,0,.2,1);
+  background: transparent;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+/* Floated state: input focused OR has content */
+.fl-field input:focus + label,
+.fl-field input:not(:placeholder-shown) + label,
+.fl-field textarea:focus + label,
+.fl-field textarea:not(:placeholder-shown) + label,
+.fl-field select:focus + label,
+.fl-field select.has-value + label {
+  top: 0.3rem;
+  font-size: .68rem;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: .04em;
+}
+
+/* Focus ring premium */
+.fl-field input:focus,
+.fl-field textarea:focus,
+.fl-field select:focus {
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 3.5px rgba(107,63,160,.12),
+    0 2px 12px rgba(107,63,160,.08);
+  background: #fff;
+}
+
+/* ── Valid state (green) ── */
+.fl-field.is-valid input,
+.fl-field.is-valid textarea,
+.fl-field.is-valid select {
+  border-color: #22c55e;
+  background: #fff;
+}
+.fl-field.is-valid input:focus,
+.fl-field.is-valid textarea:focus,
+.fl-field.is-valid select:focus {
+  box-shadow: 0 0 0 3px rgba(34,197,94,.14);
+}
+.fl-field.is-valid label { color: #16a34a; }
+.fl-field.is-valid input:not(:placeholder-shown) + label,
+.fl-field.is-valid textarea:not(:placeholder-shown) + label,
+.fl-field.is-valid select.has-value + label {
+  color: #16a34a;
+}
+
+/* ── Error state (rose) ── */
+.fl-field.is-error input,
+.fl-field.is-error textarea,
+.fl-field.is-error select {
+  border-color: #f43f5e;
+  background: #fff;
+}
+.fl-field.is-error input:focus,
+.fl-field.is-error textarea:focus,
+.fl-field.is-error select:focus {
+  box-shadow: 0 0 0 3px rgba(244,63,94,.14);
+}
+.fl-field.is-error label { color: #e11d48; }
+
+/* Error message */
+.field-error {
+  display: block;
+  font-size: .72rem;
+  color: #e11d48;
+  margin-top: .35rem;
+  padding-left: .25rem;
+  min-height: 1rem;
+  font-weight: 500;
+}
+
+/* ── Submit button ── */
+.btn-nexa-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  color: #fff;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-2) 100%);
+  box-shadow: 0 4px 24px rgba(107,63,160,.28);
+  transition: transform .22s ease, box-shadow .22s ease, opacity .22s ease;
+  margin-top: .25rem;
+}
+.btn-nexa-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(107,63,160,.38);
+}
+.btn-nexa-submit:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 12px rgba(107,63,160,.22);
+}
+.btn-nexa-submit:disabled {
+  opacity: .6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Success state ── */
+.form-success {
+  display: none;
+  text-align: center;
+  padding: 3.5rem 1.5rem 2.5rem;
+}
+.form-success.is-visible { display: block; }
+
+.form-success-tick {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.75rem;
+}
+
+.form-success-tick svg { overflow: visible; }
+
+.tick-circle {
+  fill: none;
+  stroke: var(--accent-2);
+  stroke-width: 2.5;
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-linecap: round;
+  transform-origin: center;
+}
+.tick-check {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+}
+
+.form-success.is-visible .tick-circle {
+  animation: nexaTickCircle .65s cubic-bezier(.65,0,.45,1) .05s forwards;
+}
+.form-success.is-visible .tick-check {
+  animation: nexaTickCheck .35s cubic-bezier(.65,0,.45,1) .75s forwards;
+}
+
+@keyframes nexaTickCircle {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes nexaTickCheck {
+  to { stroke-dashoffset: 0; }
+}
+
+.form-success-title {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 .6rem;
+  letter-spacing: -.025em;
+}
+.form-success-title span {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.form-success-msg {
+  color: var(--ink-mute);
+  font-size: .9375rem;
+  line-height: 1.65;
+  max-width: 32ch;
+  margin: 0 auto;
+}
+
