@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Send, MessageCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
@@ -9,7 +9,7 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 export default function Contact() {
   const [formData, setFormData] = useState({ name: '', company: '', email: '', phone: '', service: '', challenge: '' });
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState(null); // 'success' | 'error' | null
+  const [status, setStatus] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -19,12 +19,12 @@ export default function Contact() {
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
       });
       if (!res.ok) throw new Error('Error al enviar');
       setStatus('success');
       setFormData({ name: '', company: '', email: '', phone: '', service: '', challenge: '' });
-    } catch (err) {
+    } catch {
       setStatus('error');
     } finally {
       setLoading(false);
@@ -35,30 +35,35 @@ export default function Contact() {
     <>
       <Navbar />
       <WhatsAppFloat />
-      <div className="page-wrapper" style={{ paddingTop: 'clamp(100px, 12vw, 140px)' }}>
-        <section className="contact-hero" style={{ textAlign: 'center', marginBottom: '60px' }}>
-          <div className="container" style={{ maxWidth: '800px', margin: '0 auto' }}>
-            <span className="section-tag">Contacto</span>
-            <h1 className="section-title">Hablemos de tu <span className="text-gradient">marca.</span></h1>
-            <p className="section-subtitle">Si estás listo para profesionalizar tu marketing, ordenar tu captura de leads y escalar tu negocio, dejá tus datos y nuestro equipo se comunicará con vos.</p>
+      <main style={{ paddingTop: 'clamp(100px, 12vw, 140px)', background: '#0D0E15', minHeight: '100vh' }}>
+        {/* Header */}
+        <section style={{ textAlign: 'center', marginBottom: 48 }}>
+          <div className="container" style={{ maxWidth: 700 }}>
+            <span className="section-tag" style={{ background: 'rgba(210,242,58,0.1)', color: '#D2F23A', border: '1px solid rgba(210,242,58,0.2)' }}>Contacto</span>
+            <h1 className="section-title text-white">Hablemos de tu <span className="text-gradient">marca.</span></h1>
+            <p className="section-subtitle text-white-50">
+              Si estás listo para profesionalizar tu marketing, ordenar tu captura de leads y escalar tu negocio, dejá tus datos y nuestro equipo se comunicará con vos.
+            </p>
           </div>
         </section>
 
-        <section className="contact-form-section" style={{ paddingBottom: '120px' }}>
-          <div className="container" style={{ maxWidth: '700px', margin: '0 auto' }}>
+        <section style={{ paddingBottom: 32 }}><div className="container" style={{ maxWidth: 680, margin: '0 auto' }}><div style={{ position: 'relative', borderRadius: 24, overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.35)' }}><img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&q=80" alt="Equipo de NEXA conversando sobre estrategia con un cliente" loading="lazy" style={{ width: '100%', height: 'clamp(180px, 26vw, 280px)', objectFit: 'cover', display: 'block' }} /><div style={{ position: 'absolute', left: 20, bottom: 20, background: '#fff', padding: '11px 20px', borderRadius: 100, fontSize: '0.82rem', fontWeight: 700, color: '#12141D', boxShadow: '0 14px 32px rgba(13,14,21,0.18)' }}>Te respondemos en menos de 24 horas</div></div></div></section>{/* Form */}
+        <section style={{ paddingBottom: 'clamp(60px, 10vw, 120px)' }}>
+          <div className="container" style={{ maxWidth: 680, margin: '0 auto' }}>
             <form onSubmit={handleSubmit} className="contact-form-pro" style={{
-              background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: 'clamp(24px, 5vw, 50px)'
+              background: 'rgba(255,255,255,0.03)',
+              border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 24,
+              padding: 'clamp(24px, 5vw, 48px)',
             }}>
-              
               {status === 'success' && (
-                <div style={{ background: 'rgba(40, 199, 111, 0.1)', color: '#28C76F', padding: '20px', borderRadius: '16px', marginBottom: '30px', fontWeight: 700, border: '1px solid rgba(40, 199, 111, 0.2)' }}>
-                  ¡Mensaje enviado con éxito! Nos comunicaremos con vos a la brevedad.
+                <div style={{ background: 'rgba(210,242,58,0.08)', color: '#E2F57D', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(210,242,58,0.2)', textAlign: 'center' }}>
+                  ✓ ¡Mensaje enviado! Nos comunicaremos con vos a la brevedad.
                 </div>
               )}
-
               {status === 'error' && (
-                <div style={{ background: 'rgba(255, 107, 107, 0.1)', color: '#ff6b6b', padding: '20px', borderRadius: '16px', marginBottom: '30px', fontWeight: 700, border: '1px solid rgba(255, 107, 107, 0.2)' }}>
-                  Ocurrió un error al enviar el mensaje. Podés contactarnos directo por WhatsApp.
+                <div style={{ background: 'rgba(255,107,107,0.08)', color: '#ff9b9b', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(255,107,107,0.2)', textAlign: 'center' }}>
+                  Ocurrió un error. Podés contactarnos por <a href="https://wa.me/5492215774681" target="_blank" rel="noreferrer" style={{ color: '#25D366', textDecoration: 'underline' }}>WhatsApp</a>.
                 </div>
               )}
 
@@ -90,20 +95,29 @@ export default function Contact() {
                   <option value="redes_sociales">Redes Sociales y Contenido</option>
                   <option value="meta_ads">Campañas Meta/Google Ads</option>
                   <option value="crm_estructuras">CRM y Orden Digital</option>
-                  <option value="nexa_recover">NEXA Recover (Reactivación de bases)</option>
+                  <option value="nexa_recover">NEXA Recover</option>
                 </select>
               </div>
               <div className="form-field">
-                <label>Desafío Principal</label>
-                <textarea placeholder="Contanos brevemente qué te gustaría mejorar o qué objetivos tenés..." value={formData.challenge} onChange={e => setFormData({...formData, challenge: e.target.value})} disabled={loading}></textarea>
+                <label>Desafío principal</label>
+                <textarea placeholder="Contanos brevemente qué te gustaría mejorar..." value={formData.challenge} onChange={e => setFormData({...formData, challenge: e.target.value})} disabled={loading} />
               </div>
-              <button type="submit" className="btn-submit" disabled={loading} style={{ opacity: loading ? 0.7 : 1, transition: 'opacity 0.3s' }}>
-                {loading ? 'Enviando solicitud...' : 'Quiero potenciar mi negocio'}
+              <button type="submit" className="btn-submit" disabled={loading} style={{ opacity: loading ? 0.65 : 1 }}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                  <Send size={16} /> {loading ? 'Enviando solicitud...' : 'Quiero potenciar mi negocio'}
+                </span>
               </button>
             </form>
+
+            {/* WhatsApp fallback */}
+            <div style={{ textAlign: 'center', marginTop: 32 }}>
+              <a href="https://wa.me/5492215774681" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#25D366', fontWeight: 700, fontSize: '0.9rem' }}>
+                <MessageCircle size={16} /> ¿Preferís escribirnos por WhatsApp?
+              </a>
+            </div>
           </div>
         </section>
-      </div>
+      </main>
       <Footer />
     </>
   );

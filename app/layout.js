@@ -7,14 +7,26 @@ const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta',
 });
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = {
-  title: 'NEXA - Plataforma de marketing y CRM operativo',
-  description: 'Web publica y CRM de NEXA con gestion real de clientes, tareas, pagos y seguimiento.',
-  icons: {
-    icon: '/favicon.svg',
+  title: 'NEXA — Marketing, ventas y procesos para tu negocio',
+  description: 'Agencia de marketing integral, CRM operativo y automatización comercial. Estrategia, contenido, captación y seguimiento real para escalar tu marca.',
+  keywords: ['marketing digital', 'agencia marketing', 'CRM', 'automatización', 'NEXA', 'Argentina'],
+  authors: [{ name: 'NEXA' }],
+  openGraph: {
+    title: 'NEXA — Marketing, ventas y procesos para tu negocio',
+    description: 'Agencia de marketing integral, CRM operativo y automatización comercial.',
+    url: 'https://nexagrowth.com.ar',
+    siteName: 'NEXA',
+    locale: 'es_AR',
+    type: 'website',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'NEXA — Marketing, ventas y procesos para tu negocio',
+    description: 'Agencia de marketing integral, CRM operativo y automatización comercial.',
+  },
+  robots: { index: true, follow: true },
+  icons: { icon: '/favicon.svg' },
 };
 
 export default function RootLayout({ children }) {
