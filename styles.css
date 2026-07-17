@@ -1234,3 +1234,13 @@ body[data-page="contacto"]  a[href="contacto.html"]::after { transform: scaleX(1
   margin: 0 auto;
 }
 
+.form-send-error {
+  display: none;
+  margin-top: .75rem;
+  font-size: .875rem;
+  color: #c0392b;
+  text-align: center;
+}
+.form-send-error.is-visible { display: block; }
+.form-send-error a { color: inherit; text-decoration: underline; }
+

@@ -246,19 +246,34 @@
     const successEl = $(".form-success");
     const submitBtn = form.querySelector("[type=submit]");
 
+    const errorEl = form.querySelector(".form-send-error");
+
     form.addEventListener("submit", async e => {
       e.preventDefault();
       if (form.classList.contains("is-sending")) return;
       if (!form.reportValidity()) return;
       form.classList.add("is-sending");
       if (submitBtn) submitBtn.disabled = true;
-      await new Promise(r => setTimeout(r, 800 + Math.random() * 400));
-      form.classList.add("is-sent");
-      if (successEl) {
-        successEl.classList.add("is-visible");
-        const nameField = form.querySelector("[name=nombre]");
-        const msgEl     = successEl.querySelector("[data-success-name]");
-        if (nameField && msgEl) msgEl.textContent = nameField.value.trim().split(/\s+/)[0];
+      if (errorEl) errorEl.classList.remove("is-visible");
+
+      try {
+        const res = await fetch("https://formspree.io/lourdesdiamelaa@gmail.com", {
+          method:  "POST",
+          body:    new FormData(form),
+          headers: { "Accept": "application/json" }
+        });
+        if (!res.ok) throw new Error("status " + res.status);
+        form.classList.add("is-sent");
+        if (successEl) {
+          successEl.classList.add("is-visible");
+          const nameField = form.querySelector("[name=nombre]");
+          const msgEl     = successEl.querySelector("[data-success-name]");
+          if (nameField && msgEl) msgEl.textContent = nameField.value.trim().split(/\s+/)[0];
+        }
+      } catch (_) {
+        form.classList.remove("is-sending");
+        if (submitBtn) submitBtn.disabled = false;
+        if (errorEl) errorEl.classList.add("is-visible");
       }
     });
   }
