@@ -1,7 +1,10 @@
 {
   "version": 2,
   "framework": null,
-  "installCommand": "",
+  "installCommand": "npm install",
   "buildCommand": "",
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "functions": {
+    "api/mp-preference.js": { "memory": 128, "maxDuration": 10 }
+  }
 }
