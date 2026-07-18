@@ -4,809 +4,1052 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Servicios y Precios — NEXA Growth</title>
-  <meta name="description" content="Diseño web, campañas de ads, CRM, NEXA Recover e IA. Precios claros, resultados medibles. Contactanos directo por WhatsApp.">
+  <meta name="description" content="Planes claros para diseño web, redes sociales, publicidad y recuperación de clientes. Pagá online con Mercado Pago.">
   <link rel="canonical" href="https://nexagrowth.com.ar/servicios.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css?v=20260702">
-
   <style>
-    /* ─── PRICING CARDS ───────────────────────────────────────── */
-    .pricing-section {
-      padding: 5rem 0 3rem;
+    /* ── Servicios page extras ── */
+    .srv-hero {
+      padding: calc(var(--nav-h) + 3.5rem) 0 3rem;
+      background: linear-gradient(145deg,#EDE8F5 0%,#F0EBFA 50%,#F9F4FF 100%);
+      position: relative; overflow: hidden; text-align: center;
     }
-    .pricing-header {
-      max-width: 44rem;
-      margin-bottom: 3rem;
+    .srv-hero-bg {
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 55% 60% at 15% 50%,rgba(107,63,160,.13),transparent 65%),
+        radial-gradient(ellipse 40% 45% at 85% 30%,rgba(233,30,140,.09),transparent 60%);
+      pointer-events:none;
     }
-    .pricing-header .kicker {
-      margin-bottom: .75rem;
+    .srv-hero-grid {
+      position:absolute;inset:0;
+      background-image:radial-gradient(rgba(107,63,160,.16) 1px,transparent 1px);
+      background-size:28px 28px;
+      mask-image:radial-gradient(ellipse 80% 70% at 50% 50%,black 10%,transparent 75%);
+      pointer-events:none;
     }
-    .pricing-header .page-title {
-      font-size: clamp(1.75rem, 4vw, 2.5rem);
-      margin-bottom: 1rem;
+    .srv-hero-inner { position:relative;z-index:1; }
+    .srv-hero-title {
+      font-family:var(--display);
+      font-size:clamp(2.4rem,6vw,4.5rem);
+      font-weight:800;letter-spacing:-0.04em;line-height:.95;
+      margin:.75rem 0 1.25rem;color:var(--ink);
     }
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      align-items: start;
+    .srv-hero-title em {
+      font-style:normal;
+      background:linear-gradient(130deg,var(--accent) 20%,var(--accent-2) 100%);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
-    .pricing-card {
-      background: #fff;
-      border: 1.5px solid #ede8f5;
-      border-radius: 1.25rem;
-      padding: 2rem;
-      position: relative;
-      transition: transform .3s ease, box-shadow .3s ease;
+    .srv-hero-sub {
+      font-size:clamp(1rem,1.8vw,1.15rem);color:var(--ink-soft);
+      max-width:44ch;margin:0 auto 2rem;line-height:1.65;
     }
-    .pricing-card:hover {
-      transform: translateY(-6px);
-      box-shadow: 0 24px 48px rgba(13, 13, 58, .1);
+    .srv-stats {
+      display:flex;align-items:center;justify-content:center;
+      gap:clamp(1.5rem,4vw,3rem);flex-wrap:wrap;
+      margin-top:2.5rem;padding-top:2.5rem;
+      border-top:1px solid var(--line);
     }
-    .pricing-card.is-featured {
-      border-color: #E91E8C;
-      box-shadow: 0 8px 32px rgba(233, 30, 140, .18);
+    .srv-stat { text-align:center; }
+    .srv-stat-val {
+      font-family:var(--display);font-size:clamp(1.6rem,3vw,2.2rem);
+      font-weight:800;letter-spacing:-0.04em;
+      background:linear-gradient(130deg,var(--accent),var(--accent-2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
     }
-    .pricing-badge-pill {
-      position: absolute;
-      top: -1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: linear-gradient(90deg, #E91E8C, #6B3FA0);
-      color: #fff;
-      font-size: .7rem;
-      font-weight: 800;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      padding: .3rem 1.1rem;
-      border-radius: 2rem;
-      white-space: nowrap;
+    .srv-stat-label { font-size:.8rem;color:var(--ink-mute);margin-top:.15rem; }
+
+    /* ── Service tabs ── */
+    .srv-tabs-wrap { background:var(--bg-2);padding:4.5rem 0 6rem; }
+    .srv-tab-nav {
+      display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;
+      margin-bottom:3rem;
+      background:var(--bg-card);border:1px solid var(--line);
+      border-radius:100px;padding:.375rem;
+      width:fit-content;margin-inline:auto;
+      box-shadow:0 2px 12px rgba(107,63,160,.08);
     }
-    .pricing-plan-name {
-      font-size: .8rem;
-      font-weight: 700;
-      color: #6B3FA0;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      margin-bottom: .75rem;
+    .srv-tab-btn {
+      font-family:var(--display);font-size:.875rem;font-weight:700;
+      padding:.65rem 1.5rem;border-radius:100px;
+      border:none;background:transparent;color:var(--ink-soft);
+      cursor:pointer;transition:background .2s,color .2s,box-shadow .2s;
+      white-space:nowrap;
     }
-    .pricing-price {
-      font-size: 2.25rem;
-      font-weight: 900;
-      color: #0D0D3A;
-      line-height: 1;
-      margin-bottom: .25rem;
+    .srv-tab-btn.is-active {
+      background:var(--accent);color:#fff;
+      box-shadow:0 4px 16px rgba(107,63,160,.28);
     }
-    .pricing-price small {
-      font-size: 1.1rem;
-      vertical-align: super;
-      font-weight: 700;
-    }
-    .pricing-period {
-      font-size: .85rem;
-      color: #888;
-      margin-bottom: 1rem;
-    }
-    .pricing-delivery {
-      display: inline-block;
-      font-size: .78rem;
-      font-weight: 600;
-      color: #6B3FA0;
-      background: #EDE8F5;
-      padding: .35rem .8rem;
-      border-radius: .5rem;
-      margin-bottom: 1.25rem;
-    }
-    .pricing-divider {
-      border: none;
-      border-top: 1px solid #ede8f5;
-      margin: 1.25rem 0;
-    }
-    .pricing-features {
-      list-style: none;
-      padding: 0;
-      margin: 0 0 2rem;
-    }
-    .pricing-features li {
-      display: flex;
-      gap: .6rem;
-      align-items: flex-start;
-      padding: .5rem 0;
-      font-size: .9rem;
-      color: #3a3a5c;
-      border-bottom: 1px solid #f5f1fc;
-    }
-    .pricing-features li:last-child {
-      border-bottom: none;
-    }
-    .pricing-features li::before {
-      content: '→';
-      color: #E91E8C;
-      font-weight: 800;
-      flex-shrink: 0;
+    .srv-tab-btn:hover:not(.is-active) { background:var(--bg-2);color:var(--ink); }
+    @media(max-width:640px){
+      .srv-tab-nav{border-radius:16px;padding:.5rem;gap:.375rem;}
+      .srv-tab-btn{padding:.55rem 1rem;font-size:.8rem;}
     }
 
-    /* ─── SERVICE BANNER (servicios precio único) ─────────────── */
-    .service-banner {
-      padding: 5rem 0;
-      border-top: 1px solid rgba(107, 63, 160, .12);
+    /* ── Tab panels ── */
+    .srv-panel { display:none; }
+    .srv-panel.is-active { display:block; }
+
+    .srv-service-header { text-align:center;margin-bottom:2.5rem; }
+    .srv-service-badge {
+      display:inline-flex;align-items:center;gap:.5rem;
+      font-family:var(--display);font-size:.72rem;font-weight:700;
+      letter-spacing:.12em;text-transform:uppercase;
+      color:var(--accent-2);margin-bottom:.75rem;
     }
-    .service-banner-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
+    .srv-service-badge::before {
+      content:"";width:20px;height:2px;
+      background:var(--accent-2);border-radius:2px;
     }
-    .service-banner.is-reversed .service-banner-inner {
-      direction: rtl;
+    .srv-service-title {
+      font-family:var(--display);font-size:clamp(1.6rem,3.5vw,2.4rem);
+      font-weight:800;letter-spacing:-0.03em;color:var(--ink);margin-bottom:.6rem;
     }
-    .service-banner.is-reversed .service-banner-body,
-    .service-banner.is-reversed .service-banner-visual {
-      direction: ltr;
+    .srv-service-desc { font-size:1rem;color:var(--ink-soft);max-width:50ch;margin:0 auto; }
+
+    /* ── Plan cards grid ── */
+    .srv-plans-grid {
+      display:grid;grid-template-columns:1fr;gap:1.5rem;
     }
-    .service-banner-num {
-      font-size: 4.5rem;
-      font-weight: 900;
-      color: #EDE8F5;
-      line-height: 1;
-      margin-bottom: .25rem;
+    @media(min-width:720px){.srv-plans-grid{grid-template-columns:repeat(3,1fr);}}
+
+    /* ── Plan card ── */
+    .plan-card {
+      background:var(--bg-card);
+      border:2px solid var(--line);
+      border-radius:20px;padding:2.25rem 2rem;
+      position:relative;overflow:hidden;
+      display:flex;flex-direction:column;
+      box-shadow:0 2px 16px rgba(107,63,160,.07);
+      transition:border-color .25s,box-shadow .3s,transform .3s var(--ease-soft);
     }
-    .service-banner-kicker {
-      font-size: .8rem;
-      font-weight: 700;
-      color: #E91E8C;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      margin-bottom: .75rem;
+    .plan-card:hover {
+      border-color:rgba(107,63,160,.35);
+      box-shadow:0 16px 48px rgba(107,63,160,.14);
+      transform:translateY(-4px);
     }
-    .service-banner-title {
-      font-size: clamp(1.5rem, 3vw, 2rem);
-      font-weight: 800;
-      color: #0D0D3A;
-      margin-bottom: .75rem;
-      line-height: 1.2;
+    .plan-card.is-featured {
+      border-color:var(--accent-2);
+      box-shadow:0 4px 32px rgba(233,30,140,.18),0 0 0 1px rgba(233,30,140,.12);
     }
-    .service-banner-desc {
-      color: #4a4a6a;
-      line-height: 1.75;
-      margin-bottom: 1.5rem;
+    .plan-card.is-featured:hover {
+      box-shadow:0 20px 56px rgba(233,30,140,.25),0 0 0 1px rgba(233,30,140,.2);
     }
-    .service-banner-price {
-      font-size: 1.75rem;
-      font-weight: 900;
-      color: #E91E8C;
-      margin-bottom: 1.5rem;
+    .plan-card::before {
+      content:"";position:absolute;top:0;left:1.5rem;right:1.5rem;height:3px;
+      background:linear-gradient(90deg,transparent,var(--accent),transparent);
+      opacity:0;transition:opacity .3s;border-radius:0 0 4px 4px;
     }
-    .service-banner-price span {
-      font-size: 1rem;
-      font-weight: 500;
-      color: #888;
-    }
-    .service-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: .5rem;
-      margin-bottom: 2rem;
-    }
-    .service-tag {
-      background: #EDE8F5;
-      color: #6B3FA0;
-      font-size: .78rem;
-      font-weight: 600;
-      padding: .3rem .85rem;
-      border-radius: 2rem;
+    .plan-card:hover::before { opacity:1; }
+    .plan-card.is-featured::before {
+      background:linear-gradient(90deg,transparent,var(--accent-2),transparent);
+      opacity:1;
     }
 
-    /* ─── VISUAL CARDS (panel derecho) ───────────────────────── */
-    .visual-card {
-      background: linear-gradient(135deg, #0D0D3A 0%, #6B3FA0 100%);
-      border-radius: 1.5rem;
-      padding: 2.5rem;
-      color: #fff;
-    }
-    .visual-card-title {
-      font-size: .75rem;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      opacity: .55;
-      margin-bottom: 1.5rem;
-    }
-    .visual-stat-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: .9rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, .08);
-    }
-    .visual-stat-row:last-child {
-      border-bottom: none;
-    }
-    .visual-stat-label {
-      font-size: .9rem;
-      opacity: .8;
-    }
-    .visual-stat-value {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #E91E8C;
-    }
-    .visual-stat-badge {
-      display: inline-block;
-      background: rgba(233, 30, 140, .2);
-      color: #ff6fc8;
-      font-size: .7rem;
-      font-weight: 700;
-      padding: .2rem .65rem;
-      border-radius: 2rem;
+    /* Badge "más elegido" */
+    .plan-badge {
+      position:absolute;top:1.25rem;right:1.25rem;
+      font-family:var(--display);font-size:.65rem;font-weight:800;
+      letter-spacing:.1em;text-transform:uppercase;
+      background:var(--accent-2);color:#fff;
+      padding:.3rem .75rem;border-radius:100px;
+      box-shadow:0 2px 10px rgba(233,30,140,.3);
     }
 
-    /* ─── SOCIAL PROOF STRIP ──────────────────────────────────── */
-    .social-proof-strip {
-      background: #EDE8F5;
-      padding: 2.5rem 0;
+    .plan-name {
+      font-family:var(--display);font-size:.8rem;font-weight:700;
+      letter-spacing:.1em;text-transform:uppercase;
+      color:var(--accent);margin-bottom:.75rem;
     }
-    .social-proof-inner {
-      display: flex;
-      align-items: center;
-      gap: 2.5rem;
-      flex-wrap: wrap;
+    .plan-price-wrap { margin-bottom:1.5rem; }
+    .plan-price {
+      font-family:var(--display);font-size:clamp(2.2rem,4vw,3rem);
+      font-weight:800;letter-spacing:-0.04em;color:var(--ink);line-height:1;
     }
-    .social-proof-label {
-      font-size: .75rem;
-      font-weight: 800;
-      color: #6B3FA0;
-      text-transform: uppercase;
-      letter-spacing: .12em;
-      white-space: nowrap;
-    }
-    .social-proof-clients {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    .social-proof-client {
-      font-size: .9rem;
-      font-weight: 700;
-      color: #0D0D3A;
-      padding: .4rem 1rem;
-      border: 1.5px solid rgba(13, 13, 58, .18);
-      border-radius: .5rem;
-      background: #fff;
+    .plan-price-period {
+      font-size:.8rem;color:var(--ink-mute);margin-top:.25rem;
+      font-family:var(--display);font-weight:600;
     }
 
-    /* ─── WA FLOAT BUTTON ─────────────────────────────────────── */
-    .wa-float {
-      position: fixed;
-      bottom: 2rem;
-      right: 2rem;
-      z-index: 9999;
-      width: 3.5rem;
-      height: 3.5rem;
-      background: #25D366;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 24px rgba(37, 211, 102, .45);
-      text-decoration: none;
-      transition: transform .25s ease, box-shadow .25s ease;
+    /* Features list */
+    .plan-features {
+      flex:1;display:flex;flex-direction:column;gap:.6rem;
+      margin-bottom:2rem;padding-top:1.25rem;
+      border-top:1px solid var(--line);
     }
-    .wa-float:hover {
-      transform: scale(1.1) translateY(-3px);
-      box-shadow: 0 8px 36px rgba(37, 211, 102, .55);
+    .plan-feature {
+      display:flex;align-items:flex-start;gap:.625rem;
+      font-size:.9rem;color:var(--ink-soft);line-height:1.45;
     }
-    .wa-float svg {
-      width: 1.75rem;
-      height: 1.75rem;
-      fill: #fff;
+    .plan-feature-icon {
+      width:16px;height:16px;flex-shrink:0;margin-top:.1rem;
+      border-radius:50%;display:flex;align-items:center;justify-content:center;
+    }
+    .plan-feature-icon.check {
+      background:rgba(34,197,94,.12);color:#16a34a;font-size:.65rem;font-weight:800;
+    }
+    .plan-feature-icon.cross {
+      background:rgba(244,63,94,.1);color:#e11d48;font-size:.7rem;font-weight:800;
     }
 
-    /* ─── BTN WA (botones por servicio) ───────────────────────── */
+    /* Plan CTAs */
+    .plan-actions { display:flex;flex-direction:column;gap:.75rem;margin-top:auto; }
+
     .btn-wa {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: .5rem;
-      background: #25D366;
-      color: #fff;
-      font-weight: 700;
-      font-size: .95rem;
-      padding: .875rem 1.75rem;
-      border-radius: .6rem;
-      text-decoration: none;
-      transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
-      width: 100%;
+      display:flex;align-items:center;justify-content:center;gap:.5rem;
+      padding:.85rem 1.25rem;border-radius:12px;
+      font-family:var(--display);font-size:.9rem;font-weight:700;
+      background:var(--accent);color:#fff;border:none;cursor:pointer;
+      text-decoration:none;
+      transition:background .2s,transform .2s,box-shadow .2s;
+      box-shadow:0 4px 16px rgba(107,63,160,.22);
     }
     .btn-wa:hover {
-      background: #1dbd59;
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(37, 211, 102, .35);
+      background:var(--accent-2);
+      box-shadow:0 8px 28px rgba(233,30,140,.3);
+      transform:translateY(-1px);
     }
-    .btn-wa.is-inline {
-      width: auto;
+    .plan-card.is-featured .btn-wa {
+      background:var(--accent-2);
+      box-shadow:0 4px 16px rgba(233,30,140,.3);
     }
-    .btn-wa svg {
-      width: 1.1rem;
-      height: 1.1rem;
-      fill: #fff;
-      flex-shrink: 0;
+    .plan-card.is-featured .btn-wa:hover {
+      background:#c91777;
     }
 
-    /* ─── RESPONSIVE ──────────────────────────────────────────── */
-    @media (max-width: 900px) {
-      .pricing-grid {
-        grid-template-columns: 1fr;
-        max-width: 420px;
-        margin: 0 auto;
-      }
-      .pricing-card.is-featured {
-        order: -1;
-      }
+    .btn-mp {
+      display:flex;align-items:center;justify-content:center;gap:.6rem;
+      padding:.8rem 1.25rem;border-radius:12px;
+      font-family:var(--display);font-size:.875rem;font-weight:700;
+      background:#009ee3;color:#fff;border:none;cursor:pointer;
+      text-decoration:none;
+      transition:background .2s,transform .2s,box-shadow .2s;
+      box-shadow:0 3px 12px rgba(0,158,227,.25);
+      position:relative;overflow:hidden;
     }
-    @media (max-width: 768px) {
-      .service-banner-inner {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-        direction: ltr !important;
-      }
-      .service-banner-num {
-        font-size: 3rem;
-      }
-      .service-banner {
-        padding: 3.5rem 0;
-      }
-      .pricing-section {
-        padding: 3.5rem 0 2rem;
-      }
-      .social-proof-inner {
-        gap: 1.25rem;
-      }
-      .social-proof-clients {
-        gap: .6rem;
-      }
+    .btn-mp:hover {
+      background:#0080c0;transform:translateY(-1px);
+      box-shadow:0 6px 20px rgba(0,158,227,.35);
     }
+    .btn-mp:disabled { opacity:.6;cursor:not-allowed;transform:none; }
+    .btn-mp-logo { height:18px;width:auto;filter:brightness(0) invert(1); }
+    .btn-mp-spinner {
+      display:none;width:16px;height:16px;
+      border:2px solid rgba(255,255,255,.35);border-top-color:#fff;
+      border-radius:50%;animation:spin .7s linear infinite;
+    }
+    .btn-mp.is-loading .btn-mp-text { display:none; }
+    .btn-mp.is-loading .btn-mp-spinner { display:block; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    .btn-mp-note {
+      font-size:.72rem;color:var(--ink-mute);text-align:center;
+      margin-top:.5rem;line-height:1.4;
+    }
+    .btn-mp-note a { color:var(--accent-2);text-decoration:underline; }
+
+    /* ── Payment alert ── */
+    .mp-alert {
+      display:none;position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);
+      background:var(--ink);color:#fff;
+      font-family:var(--display);font-size:.875rem;font-weight:600;
+      padding:.9rem 1.75rem;border-radius:100px;
+      box-shadow:0 8px 32px rgba(13,13,58,.25);
+      z-index:500;white-space:nowrap;
+      animation:slideUp .3s var(--ease-out);
+    }
+    .mp-alert.is-visible { display:block; }
+    .mp-alert.is-error { background:#c0392b; }
+    @keyframes slideUp { from{opacity:0;transform:translateX(-50%) translateY(12px);} to{opacity:1;transform:translateX(-50%) translateY(0);} }
+
+    /* ── Payment methods section ── */
+    .srv-payments { background:var(--bg);padding:4rem 0; }
+    .srv-payments-inner {
+      display:grid;grid-template-columns:1fr;gap:2rem;align-items:center;
+    }
+    @media(min-width:768px){.srv-payments-inner{grid-template-columns:1fr 1fr;}}
+    .srv-payments-title {
+      font-family:var(--display);font-size:clamp(1.3rem,2.5vw,1.8rem);
+      font-weight:800;letter-spacing:-0.025em;margin-bottom:.75rem;color:var(--ink);
+    }
+    .srv-payments-desc { font-size:.95rem;color:var(--ink-soft);line-height:1.7;margin-bottom:1.25rem; }
+    .transfer-badge {
+      display:inline-flex;align-items:center;gap:.5rem;
+      background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);
+      color:#15803d;font-family:var(--display);font-size:.85rem;font-weight:700;
+      padding:.5rem 1rem;border-radius:100px;
+    }
+    .payment-logos {
+      display:flex;flex-wrap:wrap;gap:1rem;align-items:center;
+    }
+    .payment-pill {
+      font-family:var(--display);font-size:.8rem;font-weight:800;
+      letter-spacing:.03em;padding:.5rem 1.1rem;border-radius:8px;
+      border:2px solid var(--line);color:var(--ink-soft);
+      background:var(--bg-card);
+    }
+
+    /* ── FAQ section ── */
+    .srv-faq { background:var(--bg-2);padding:4.5rem 0; }
+    .srv-faq-grid { display:grid;grid-template-columns:1fr;gap:1rem;margin-top:2.5rem; }
+    @media(min-width:768px){.srv-faq-grid{grid-template-columns:repeat(3,1fr);}}
+    .faq-card {
+      background:var(--bg-card);border:1px solid var(--line);border-radius:16px;padding:1.75rem;
+      box-shadow:0 2px 10px rgba(107,63,160,.06);
+    }
+    .faq-q {
+      font-family:var(--display);font-size:1rem;font-weight:700;
+      color:var(--ink);margin-bottom:.6rem;letter-spacing:-.015em;
+    }
+    .faq-a { font-size:.9rem;color:var(--ink-soft);line-height:1.65; }
+
+    /* ── Footer CTA ── */
+    .srv-cta {
+      background:linear-gradient(135deg,var(--ink) 0%,#1a1a5a 100%);
+      padding:5rem 0;text-align:center;position:relative;overflow:hidden;
+    }
+    .srv-cta-bg {
+      position:absolute;inset:0;
+      background:
+        radial-gradient(ellipse 50% 60% at 50% 50%,rgba(107,63,160,.25),transparent 65%),
+        radial-gradient(ellipse 30% 40% at 80% 20%,rgba(233,30,140,.15),transparent 60%);
+      pointer-events:none;
+    }
+    .srv-cta-inner { position:relative;z-index:1; }
+    .srv-cta-title {
+      font-family:var(--display);font-size:clamp(2rem,5vw,3.5rem);
+      font-weight:800;letter-spacing:-0.035em;color:#fff;margin-bottom:.75rem;
+    }
+    .srv-cta-title em { font-style:normal;color:var(--accent-2); }
+    .srv-cta-sub { font-size:1rem;color:rgba(255,255,255,.6);margin-bottom:2rem;max-width:40ch;margin-inline:auto; }
+    .btn-wa-cta {
+      display:inline-flex;align-items:center;gap:.75rem;
+      padding:1.1rem 2.5rem;border-radius:100px;
+      font-family:var(--display);font-size:1rem;font-weight:700;
+      background:#25d366;color:#fff;
+      box-shadow:0 6px 28px rgba(37,211,102,.35);
+      transition:background .2s,transform .2s,box-shadow .2s;
+    }
+    .btn-wa-cta:hover {
+      background:#1db954;transform:translateY(-2px);
+      box-shadow:0 10px 36px rgba(37,211,102,.45);
+    }
+
+    /* WhatsApp FAB */
+    .whatsapp-fab {
+      position:fixed;bottom:1.75rem;right:1.75rem;z-index:200;
+      width:56px;height:56px;border-radius:50%;
+      background:#25d366;color:#fff;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 4px 20px rgba(37,211,102,.45);
+      transition:transform .2s,box-shadow .2s;
+    }
+    .whatsapp-fab:hover {
+      transform:scale(1.08);
+      box-shadow:0 8px 30px rgba(37,211,102,.55);
+    }
+    .whatsapp-fab svg { width:28px;height:28px; }
+
+    /* ── Pago OK / Error banner ── */
+    .pago-notice {
+      display:none;position:fixed;top:calc(var(--nav-h) + 1rem);left:50%;
+      transform:translateX(-50%);z-index:400;
+      font-family:var(--display);font-size:.9rem;font-weight:700;
+      padding:.85rem 2rem;border-radius:100px;
+      box-shadow:0 8px 32px rgba(0,0,0,.15);
+      animation:slideDown .4s var(--ease-out);
+      white-space:nowrap;
+    }
+    .pago-notice.ok { background:#22c55e;color:#fff; }
+    .pago-notice.error { background:#e11d48;color:#fff; }
+    .pago-notice.pending { background:var(--accent);color:#fff; }
+    .pago-notice.is-visible { display:block; }
+    @keyframes slideDown { from{opacity:0;transform:translateX(-50%) translateY(-10px);} to{opacity:1;transform:translateX(-50%) translateY(0);} }
   </style>
 </head>
+<body data-page="servicios">
 
-<body class="has-cursor">
+<a class="skip-link" href="#main">Saltar al contenido</a>
 
-  <!-- Cursor personalizado -->
-  <div class="cursor">
-    <span class="cursor-dot"></span>
-    <span class="cursor-ring"></span>
-  </div>
+<!-- Custom cursor -->
+<div class="cursor" data-cursor-root aria-hidden="true">
+  <span class="cursor-dot"></span>
+  <span class="cursor-ring"></span>
+</div>
 
-  <!-- Skip link accesibilidad -->
-  <a class="skip-link" href="#main">Saltar al contenido</a>
-
-  <!-- ══════════════════ HEADER / NAV ══════════════════════════ -->
-  <header>
-    <nav class="nav" role="navigation" aria-label="Navegación principal">
-      <div class="container nav-inner">
-        <a class="nav-logo" href="index.html" aria-label="NEXA Growth — Inicio">
-          NEXA<span class="logo-accent">·</span>
-        </a>
-        <ul class="nav-links" role="list">
-          <li><a class="nav-link" href="index.html">Inicio</a></li>
-          <li><a class="nav-link" href="servicios.html" aria-current="page">Servicios</a></li>
-          <li><a class="nav-link" href="casos.html">Casos</a></li>
-          <li><a class="nav-link" href="aprende.html">Aprende</a></li>
-          <li><a class="nav-link" href="contacto.html">Contacto</a></li>
-          <li><a class="nav-link nav-link-os" href="https://crm.nexagrowth.com.ar" target="_blank" rel="noopener">NEXA OS ↗</a></li>
-        </ul>
-        <a class="btn btn-primary nav-cta" href="contacto.html">Hablemos</a>
-        <button class="nav-hamburger" aria-label="Abrir menú" aria-controls="mobile-menu" aria-expanded="false">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
+<!-- NAV -->
+<header>
+  <nav class="nav" aria-label="Navegación principal">
+    <div class="nav-inner">
+      <a class="nav-logo" href="index.html">
+        <span>NEXA</span><span class="logo-accent">·</span>
+      </a>
+      <ul class="nav-links" role="list">
+        <li><a class="nav-link" href="index.html">Inicio</a></li>
+        <li><a class="nav-link is-active" href="servicios.html">Servicios</a></li>
+        <li><a class="nav-link" href="casos.html">Casos</a></li>
+        <li><a class="nav-link" href="aprende.html">Aprende</a></li>
+        <li><a class="nav-link" href="contacto.html">Contacto</a></li>
+        <li><a class="nav-link nav-link-os" href="https://crm.nexagrowth.com.ar" target="_blank" rel="noopener">NEXA OS ↗</a></li>
+      </ul>
+      <a class="btn btn-primary nav-cta" href="contacto.html">Hablemos</a>
+      <button class="nav-hamburger" aria-label="Abrir menú" aria-expanded="false" aria-controls="mobile-menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="mobile-menu" role="dialog" aria-label="Menú de navegación" aria-hidden="true">
+    <nav>
+      <ul role="list">
+        <li><a class="nav-link" href="index.html">Inicio</a></li>
+        <li><a class="nav-link" href="servicios.html">Servicios</a></li>
+        <li><a class="nav-link" href="casos.html">Casos</a></li>
+        <li><a class="nav-link" href="aprende.html">Aprende</a></li>
+        <li><a class="nav-link" href="contacto.html">Contacto</a></li>
+        <li><a class="nav-link nav-link-os" href="https://crm.nexagrowth.com.ar">NEXA OS ↗</a></li>
+      </ul>
     </nav>
+    <a class="btn btn-primary" href="contacto.html">Hablemos</a>
+  </div>
+</header>
 
-    <!-- Menú mobile -->
-    <div class="nav-mobile" id="mobile-menu" role="dialog" aria-label="Menú de navegación" aria-modal="true">
-      <nav>
-        <ul role="list">
-          <li><a class="nav-link" href="index.html">Inicio</a></li>
-          <li><a class="nav-link" href="servicios.html">Servicios</a></li>
-          <li><a class="nav-link" href="casos.html">Casos</a></li>
-          <li><a class="nav-link" href="aprende.html">Aprende</a></li>
-          <li><a class="nav-link" href="contacto.html">Contacto</a></li>
-          <li><a class="nav-link nav-link-os" href="https://crm.nexagrowth.com.ar" target="_blank" rel="noopener">NEXA OS ↗</a></li>
+<main id="main">
+
+  <!-- HERO -->
+  <section class="srv-hero">
+    <div class="srv-hero-bg"></div>
+    <div class="srv-hero-grid"></div>
+    <div class="container srv-hero-inner">
+      <span class="kicker" data-reveal>Servicios Nexa Growth</span>
+      <h1 class="srv-hero-title" data-reveal data-reveal-delay="1">
+        Servicios que impulsan<br><em>tu negocio</em>
+      </h1>
+      <p class="srv-hero-sub" data-reveal data-reveal-delay="2">
+        Elegí el plan ideal y empezá hoy. Precio transparente, resultados medibles.
+      </p>
+      <div class="srv-stats" data-reveal data-reveal-delay="3">
+        <div class="srv-stat">
+          <div class="srv-stat-val">+50</div>
+          <div class="srv-stat-label">Proyectos entregados</div>
+        </div>
+        <div class="srv-stat">
+          <div class="srv-stat-val">98%</div>
+          <div class="srv-stat-label">Clientes satisfechos</div>
+        </div>
+        <div class="srv-stat">
+          <div class="srv-stat-val">100%</div>
+          <div class="srv-stat-label">Seguro y confiable</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TABS + PLANS -->
+  <section class="srv-tabs-wrap" aria-label="Planes y servicios">
+    <div class="container">
+
+      <!-- Tab nav -->
+      <nav class="srv-tab-nav" aria-label="Servicios" role="tablist">
+        <button class="srv-tab-btn is-active" role="tab" aria-selected="true"  aria-controls="panel-web"     id="tab-web"     data-tab="web">🌐 NEXA WEB</button>
+        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-social"  id="tab-social"  data-tab="social">📱 NEXA SOCIAL</button>
+        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-ads"     id="tab-ads"     data-tab="ads">🎯 NEXA ADS</button>
+        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-recover" id="tab-recover" data-tab="recover">🔄 NEXA RECOVER</button>
+      </nav>
+
+      <!-- PANEL 1 · NEXA WEB -->
+      <div class="srv-panel is-active" id="panel-web" role="tabpanel" aria-labelledby="tab-web">
+        <div class="srv-service-header">
+          <span class="srv-service-badge">Nexa Web</span>
+          <h2 class="srv-service-title">Sitios Web que convierten</h2>
+          <p class="srv-service-desc">Diseñados para vender, no solo para verse bien.</p>
+        </div>
+        <div class="srv-plans-grid">
+
+          <!-- WEB BÁSICO -->
+          <article class="plan-card" data-reveal>
+            <div class="plan-name">Plan Básico</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$99.000</div>
+              <div class="plan-price-period">ARS · pago único</div>
+            </div>
+            <ul class="plan-features" aria-label="Incluye">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Sitio hasta 5 secciones</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Diseño responsive</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Formulario de contacto</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Integración redes sociales</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>SEO básico</li>
+              <li class="plan-feature"><span class="plan-feature-icon cross">✗</span>Blog autoadministrable</li>
+              <li class="plan-feature"><span class="plan-feature-icon cross">✗</span>Tienda online</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20diseño%20web" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA WEB" data-plan="Básico" data-price="99000" data-title="NEXA WEB — Plan Básico">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+          <!-- WEB PROFESIONAL -->
+          <article class="plan-card is-featured" data-reveal data-reveal-delay="1">
+            <span class="plan-badge">⭐ Más Elegido</span>
+            <div class="plan-name">Plan Profesional</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$159.000</div>
+              <div class="plan-price-period">ARS · pago único</div>
+            </div>
+            <ul class="plan-features" aria-label="Incluye">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Hasta 10 secciones completas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Diseño premium</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Formulario + WhatsApp integrado</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>SEO avanzado</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Blog autoadministrable</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Integración redes sociales</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Analíticas básicas</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20diseño%20web" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA WEB" data-plan="Profesional" data-price="159000" data-title="NEXA WEB — Plan Profesional">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+          <!-- WEB AVANZADO -->
+          <article class="plan-card" data-reveal data-reveal-delay="2">
+            <div class="plan-name">Plan Avanzado</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$249.000</div>
+              <div class="plan-price-period">ARS · pago único</div>
+            </div>
+            <ul class="plan-features" aria-label="Incluye">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Sitio ilimitado de secciones</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Diseño 100% personalizado</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Tienda online (e-commerce)</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>SEO avanzado + blog</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Integraciones avanzadas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Soporte prioritario</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Seguridad premium</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20diseño%20web" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA WEB" data-plan="Avanzado" data-price="249000" data-title="NEXA WEB — Plan Avanzado">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- PANEL 2 · NEXA SOCIAL -->
+      <div class="srv-panel" id="panel-social" role="tabpanel" aria-labelledby="tab-social">
+        <div class="srv-service-header">
+          <span class="srv-service-badge">Nexa Social</span>
+          <h2 class="srv-service-title">Redes Sociales que conectan</h2>
+          <p class="srv-service-desc">Contenido estratégico, comunidad activa y resultados medibles.</p>
+        </div>
+        <div class="srv-plans-grid">
+
+          <!-- SOCIAL START -->
+          <article class="plan-card" data-reveal>
+            <div class="plan-name">Plan Start</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$119.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>8 publicaciones/mes</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Calendario mensual</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Diseño de piezas gráficas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Redacción de copys</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Optimización de perfil</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Historias destacadas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reporte mensual</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Portal Cliente Nexa</li>
+              <li class="plan-feature"><span class="plan-feature-icon cross">✗</span>Reels / videos</li>
+              <li class="plan-feature"><span class="plan-feature-icon cross">✗</span>Análisis de competencia</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20redes%20sociales" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA SOCIAL" data-plan="Start" data-price="119900" data-title="NEXA SOCIAL — Plan Start">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+          <!-- SOCIAL GROWTH -->
+          <article class="plan-card is-featured" data-reveal data-reveal-delay="1">
+            <span class="plan-badge">⭐ Más Elegido</span>
+            <div class="plan-name">Plan Growth</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$219.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Todo lo del Plan Start</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>12 publicaciones/mes</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Stories estratégicas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reels / videos cortos (hasta 4/mes)</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Diseño premium</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Estrategia de interacción</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Análisis de competencia</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reporte quincenal</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Campañas de interacción</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Soporte prioritario</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20redes%20sociales" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA SOCIAL" data-plan="Growth" data-price="219900" data-title="NEXA SOCIAL — Plan Growth">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+          <!-- SOCIAL SCALE -->
+          <article class="plan-card" data-reveal data-reveal-delay="2">
+            <div class="plan-name">Plan Scale</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$399.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Todo lo del Plan Growth</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>20 publicaciones/mes</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reels ilimitados</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Estrategia avanzada</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Campañas de conversión</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Segmentación y remarketing</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Community management dedicado</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Automatizaciones avanzadas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reporte semanal</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Soporte VIP</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20redes%20sociales" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA SOCIAL" data-plan="Scale" data-price="399900" data-title="NEXA SOCIAL — Plan Scale">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- PANEL 3 · NEXA ADS -->
+      <div class="srv-panel" id="panel-ads" role="tabpanel" aria-labelledby="tab-ads">
+        <div class="srv-service-header">
+          <span class="srv-service-badge">Nexa Ads</span>
+          <h2 class="srv-service-title">Publicidad Meta &amp; Google</h2>
+          <p class="srv-service-desc">Campañas que traen clientes, no solo likes.</p>
+        </div>
+        <div class="srv-plans-grid">
+
+          <!-- ADS START -->
+          <article class="plan-card" data-reveal>
+            <div class="plan-name">Plan Start</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$149.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Auditoría inicial</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>1 campaña activa</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Segmentación básica</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Diseño de anuncios y copys</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Optimización semanal</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reporte de resultados</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Seguimiento estratégico</li>
+              <li class="plan-feature"><span class="plan-feature-icon cross">✗</span>Remarketing</li>
+              <li class="plan-feature"><span class="plan-feature-icon cross">✗</span>Pruebas A/B</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20publicidad" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA ADS" data-plan="Start" data-price="149900" data-title="NEXA ADS — Plan Start">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+          <!-- ADS GROWTH -->
+          <article class="plan-card is-featured" data-reveal data-reveal-delay="1">
+            <span class="plan-badge">⭐ Más Elegido</span>
+            <div class="plan-name">Plan Growth</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$299.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Todo lo del Plan Start</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Hasta 3 campañas simultáneas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Campañas WhatsApp y formularios</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Remarketing</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Públicos similares</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Optimización diaria</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Pruebas A/B</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Dashboard de métricas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reportes avanzados</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Estrategia trimestral</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20publicidad" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA ADS" data-plan="Growth" data-price="299900" data-title="NEXA ADS — Plan Growth">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+          <!-- ADS SCALE -->
+          <article class="plan-card" data-reveal data-reveal-delay="2">
+            <div class="plan-name">Plan Scale</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$549.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Todo lo del Plan Growth</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Campañas ilimitadas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Embudos de venta completo</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Captación de leads avanzada</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Automatizaciones comerciales</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Optimización 24/7</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Análisis profundo</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Dashboard personalizado</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Planificación mensual</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20el%20plan%20de%20publicidad" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA ADS" data-plan="Scale" data-price="549900" data-title="NEXA ADS — Plan Scale">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+      <!-- PANEL 4 · NEXA RECOVER -->
+      <div class="srv-panel" id="panel-recover" role="tabpanel" aria-labelledby="tab-recover">
+        <div class="srv-service-header">
+          <span class="srv-service-badge">Nexa Recover</span>
+          <h2 class="srv-service-title">Recuperación de Clientes</h2>
+          <p class="srv-service-desc">El cliente más barato es el que ya te conoce.</p>
+        </div>
+        <div class="srv-plans-grid">
+
+          <!-- RECOVER START -->
+          <article class="plan-card" data-reveal>
+            <div class="plan-name">Plan Start</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$149.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Hasta 500 contactos</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Limpieza de base de datos</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Segmentación inicial</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Automatización básica</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Recuperación de consultas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Seguimiento WhatsApp</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reporte mensual</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Dashboard básico</li>
+              <li class="plan-feature"><span class="plan-feature-icon cross">✗</span>Seguimiento multicanal</li>
+              <li class="plan-feature"><span class="plan-feature-icon cross">✗</span>Estrategias de recompra</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20NEXA%20Recover" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA RECOVER" data-plan="Start" data-price="149900" data-title="NEXA RECOVER — Plan Start">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+          <!-- RECOVER GROWTH -->
+          <article class="plan-card is-featured" data-reveal data-reveal-delay="1">
+            <span class="plan-badge">⭐ Más Elegido</span>
+            <div class="plan-name">Plan Growth</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$349.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Todo lo del Plan Start</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Hasta 2.000 contactos</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Recuperación de presupuestos</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Automatizaciones avanzadas</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Estrategias de recompra</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Segmentación avanzada</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Seguimiento multicanal</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Dashboard avanzado</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reportes quincenales</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Soporte prioritario</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20NEXA%20Recover" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA RECOVER" data-plan="Growth" data-price="349900" data-title="NEXA RECOVER — Plan Growth">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+          <!-- RECOVER SCALE -->
+          <article class="plan-card" data-reveal data-reveal-delay="2">
+            <div class="plan-name">Plan Scale</div>
+            <div class="plan-price-wrap">
+              <div class="plan-price">$699.900</div>
+              <div class="plan-price-period">ARS / mes</div>
+            </div>
+            <ul class="plan-features">
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Todo lo del Plan Growth</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Más de 5.000 contactos</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Automatizaciones empresariales</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Flujos personalizados</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Recuperación avanzada</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Programas de fidelización</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Dashboard ejecutivo</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Integraciones CRM</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Reportes semanales</li>
+              <li class="plan-feature"><span class="plan-feature-icon check">✓</span>Soporte VIP</li>
+            </ul>
+            <div class="plan-actions">
+              <a class="btn-wa" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20contratar%20NEXA%20Recover" target="_blank" rel="noopener">💬 Elegir este plan</a>
+              <button class="btn-mp mp-pay-btn" data-service="NEXA RECOVER" data-plan="Scale" data-price="699900" data-title="NEXA RECOVER — Plan Scale">
+                <img class="btn-mp-logo" src="https://http2.mlstatic.com/frontend-assets/mp-web-navigation/ui-navigation/6.6.73/mercadopago/logo__large@2x.png" alt="Mercado Pago">
+                <span class="btn-mp-text">Pagar con Mercado Pago</span>
+                <span class="btn-mp-spinner"></span>
+              </button>
+              <p class="btn-mp-note">Para pagar por transferencia y obtener <strong>10% de descuento</strong>, <a href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20pagar%20por%20transferencia" target="_blank">escribinos al WhatsApp</a>.</p>
+            </div>
+          </article>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- MEDIOS DE PAGO -->
+  <section class="srv-payments" aria-label="Medios de pago">
+    <div class="container">
+      <div class="srv-payments-inner">
+        <div data-reveal>
+          <span class="kicker">Medios de pago</span>
+          <h2 class="srv-payments-title" style="margin-top:.75rem">Pagá como más te convenga</h2>
+          <p class="srv-payments-desc">
+            Aceptamos todas las tarjetas y Mercado Pago.<br>
+            ¿Preferís transferencia bancaria? Contactanos y obtené un <strong>10% de descuento</strong> en tu primer mes.
+          </p>
+          <span class="transfer-badge">💸 10% off pagando por transferencia</span>
+        </div>
+        <div class="payment-logos" data-reveal data-reveal-delay="1">
+          <span class="payment-pill">VISA</span>
+          <span class="payment-pill">Mastercard</span>
+          <span class="payment-pill">American Express</span>
+          <span class="payment-pill">Mercado Pago</span>
+          <span class="payment-pill">NaranjaX</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="srv-faq" aria-label="Preguntas frecuentes">
+    <div class="container">
+      <span class="kicker" data-reveal>FAQ</span>
+      <h2 class="section-title" data-reveal data-reveal-delay="1" style="margin-top:.75rem;margin-bottom:0">Preguntas frecuentes</h2>
+      <div class="srv-faq-grid">
+        <div class="faq-card" data-reveal data-reveal-delay="1">
+          <p class="faq-q">¿Tienen permanencia mínima?</p>
+          <p class="faq-a">No. Trabajamos mes a mes. Podés dar de baja en cualquier momento sin penalidades.</p>
+        </div>
+        <div class="faq-card" data-reveal data-reveal-delay="2">
+          <p class="faq-q">¿Cuándo empiezo a ver resultados?</p>
+          <p class="faq-a">Los primeros resultados se perciben entre 30 y 60 días, dependiendo del servicio y el punto de partida.</p>
+        </div>
+        <div class="faq-card" data-reveal data-reveal-delay="3">
+          <p class="faq-q">¿Qué pasa si no estoy satisfecho?</p>
+          <p class="faq-a">Te devolvemos el dinero del primer mes, sin preguntas. Tu confianza vale más que una venta.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER CTA -->
+  <section class="srv-cta" aria-label="Contacto">
+    <div class="srv-cta-bg"></div>
+    <div class="container srv-cta-inner">
+      <h2 class="srv-cta-title">¿Tenés dudas?<br><em>Hablemos.</em></h2>
+      <p class="srv-cta-sub">En menos de 24 hs te respondemos con la mejor opción para tu negocio.</p>
+      <a class="btn-wa-cta" href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20tengo%20consultas%20sobre%20sus%20servicios" target="_blank" rel="noopener">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+        Escribinos por WhatsApp
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer" aria-label="Pie de página">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="footer-logo">NEXA<span class="logo-accent">·</span></div>
+        <p class="footer-tagline">Marketing, ventas y procesos en una sola plataforma.</p>
+      </div>
+      <nav aria-label="Páginas">
+        <p class="footer-col-title">Navegación</p>
+        <ul class="footer-links" role="list">
+          <li><a class="footer-link" href="index.html">Inicio</a></li>
+          <li><a class="footer-link" href="servicios.html">Servicios</a></li>
+          <li><a class="footer-link" href="casos.html">Casos</a></li>
+          <li><a class="footer-link" href="aprende.html">Aprende</a></li>
+          <li><a class="footer-link" href="contacto.html">Contacto</a></li>
         </ul>
       </nav>
-      <a class="btn btn-primary" href="contacto.html">Hablemos</a>
-    </div>
-  </header>
-
-  <!-- ══════════════════ MAIN ══════════════════════════════════ -->
-  <main id="main">
-
-    <!-- ── HERO ──────────────────────────────────────────────── -->
-    <section class="page-hero">
-      <div class="page-hero-grid"></div>
-      <div class="page-hero-bg"></div>
-      <div class="container page-hero-content">
-        <p class="kicker">Precios claros · Sin letras chicas</p>
-        <h1 class="page-title">Servicios<br><em>que venden.</em></h1>
-        <p class="body-lg">Elegí lo que necesitás. Precio transparente, resultado medible, y un equipo que responde cuando lo necesitás.</p>
-      </div>
-    </section>
-
-    <!-- ── SOCIAL PROOF STRIP ─────────────────────────────────── -->
-    <div class="social-proof-strip">
-      <div class="container">
-        <div class="social-proof-inner">
-          <span class="social-proof-label">Ya confían en NEXA</span>
-          <div class="social-proof-clients">
-            <span class="social-proof-client">Norte Fit</span>
-            <span class="social-proof-client">Lumen Dental</span>
-            <span class="social-proof-client">Sabores del Sur</span>
-            <span class="social-proof-client">Bambú Cowork</span>
-            <span class="social-proof-client">Clínica Avanza</span>
-          </div>
-        </div>
+      <div>
+        <p class="footer-col-title">Contacto</p>
+        <ul class="footer-links" role="list">
+          <li><a class="footer-link" href="mailto:hola@nexaarg.com">hola@nexaarg.com</a></li>
+          <li><a class="footer-link" href="https://wa.me/5492215774681">WhatsApp</a></li>
+          <li><a class="footer-link" href="https://instagram.com/somosnexa.ar">@somosnexa.ar</a></li>
+          <li><a class="footer-link" href="https://crm.nexagrowth.com.ar">NEXA OS</a></li>
+        </ul>
       </div>
     </div>
-
-    <!-- ══ SERVICIO 01 · DISEÑO WEB / LANDING PAGES ═════════════ -->
-    <section class="pricing-section" id="diseno-web">
-      <div class="container">
-        <div class="pricing-header">
-          <p class="kicker">01 · Diseño Web</p>
-          <h2 class="page-title">Landing pages<br><em>que convierten.</em></h2>
-          <p class="body-lg">Sitios pensados para vender, no para verse bonitos. Velocidad, SEO y WhatsApp integrado desde el día uno.</p>
-        </div>
-
-        <div class="pricing-grid">
-
-          <!-- Plan Básico -->
-          <div class="pricing-card">
-            <p class="pricing-plan-name">Plan Básico</p>
-            <p class="pricing-price"><small>$</small>99.000</p>
-            <p class="pricing-period">ARS · pago único</p>
-            <span class="pricing-delivery">⚡ Entrega en 7 días</span>
-            <hr class="pricing-divider">
-            <ul class="pricing-features">
-              <li>Sitio de 1 página de impacto</li>
-              <li>Formulario de contacto integrado</li>
-              <li>Botón de WhatsApp</li>
-              <li>Diseño mobile-first</li>
-              <li>Acompañamiento en dominio y hosting</li>
-            </ul>
-            <a class="btn-wa"
-               href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20info%20sobre%20diseño%20web"
-               target="_blank" rel="noopener">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Quiero este plan
-            </a>
-          </div>
-
-          <!-- Plan Profesional (destacado) -->
-          <div class="pricing-card is-featured">
-            <div class="pricing-badge-pill">⭐ Más Elegido</div>
-            <p class="pricing-plan-name">Plan Profesional</p>
-            <p class="pricing-price"><small>$</small>159.000</p>
-            <p class="pricing-period">ARS · pago único</p>
-            <span class="pricing-delivery">⚡ Entrega en 10 días</span>
-            <hr class="pricing-divider">
-            <ul class="pricing-features">
-              <li>Hasta 5 secciones completas</li>
-              <li>SEO básico optimizado</li>
-              <li>100% responsive en todos los dispositivos</li>
-              <li>Integración WhatsApp Business</li>
-              <li>Google Analytics configurado</li>
-              <li>Formulario con notificaciones automáticas</li>
-            </ul>
-            <a class="btn-wa"
-               href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20info%20sobre%20diseño%20web"
-               target="_blank" rel="noopener">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Quiero este plan
-            </a>
-          </div>
-
-          <!-- Plan Avanzado -->
-          <div class="pricing-card">
-            <p class="pricing-plan-name">Plan Avanzado</p>
-            <p class="pricing-price"><small>$</small>249.000</p>
-            <p class="pricing-period">ARS · pago único</p>
-            <span class="pricing-delivery">⚡ Entrega en 15 días</span>
-            <hr class="pricing-divider">
-            <ul class="pricing-features">
-              <li>Diseño premium a medida</li>
-              <li>Blog integrado y administrable</li>
-              <li>Integración WhatsApp Business avanzada</li>
-              <li>SEO técnico completo</li>
-              <li>Chat en vivo + chatbot básico</li>
-              <li>30 días de soporte incluido</li>
-            </ul>
-            <a class="btn-wa"
-               href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20info%20sobre%20diseño%20web"
-               target="_blank" rel="noopener">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Quiero este plan
-            </a>
-          </div>
-
-        </div><!-- /.pricing-grid -->
-      </div>
-    </section>
-
-    <!-- ══ SERVICIO 02 · META & GOOGLE ADS ══════════════════════ -->
-    <section class="service-banner" id="campanas-ads">
-      <div class="container">
-        <div class="service-banner-inner">
-
-          <div class="service-banner-body">
-            <p class="service-banner-num">02</p>
-            <p class="service-banner-kicker">Meta Ads · Google Ads</p>
-            <h2 class="service-banner-title">Campañas que traen clientes,<br>no solo likes.</h2>
-            <p class="service-banner-desc">Gestionamos tus campañas con foco en conversión real. Leads calificados, ROAS positivo y reportes semanales que realmente entendés. No te vendemos alcance — te vendemos resultados.</p>
-            <p class="service-banner-price">desde $80.000 ARS<span> /mes · gestión completa</span></p>
-            <div class="service-tags">
-              <span class="service-tag">Meta Ads</span>
-              <span class="service-tag">Google Ads</span>
-              <span class="service-tag">A/B Testing</span>
-              <span class="service-tag">Reporte semanal</span>
-              <span class="service-tag">ROAS medido</span>
-            </div>
-            <a class="btn-wa is-inline"
-               href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20info%20sobre%20campañas%20de%20ads"
-               target="_blank" rel="noopener">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Me interesa · Consultar ahora
-            </a>
-          </div>
-
-          <div class="service-banner-visual">
-            <div class="visual-card">
-              <p class="visual-card-title">Métricas que manejamos</p>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Costo por lead</span>
-                <span class="visual-stat-value">Optimizado</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">ROAS promedio</span>
-                <span class="visual-stat-value">2.3x</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Plataformas</span>
-                <span class="visual-stat-value">Meta + Google</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Reportes</span>
-                <span class="visual-stat-badge">Semanales</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Gestión</span>
-                <span class="visual-stat-value">Completa</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ SERVICIO 03 · CRM Y ORDEN DIGITAL ════════════════════ -->
-    <section class="service-banner is-reversed" id="crm">
-      <div class="container">
-        <div class="service-banner-inner">
-
-          <div class="service-banner-body">
-            <p class="service-banner-num">03</p>
-            <p class="service-banner-kicker">CRM · Orden Digital</p>
-            <h2 class="service-banner-title">Tu equipo organizado.<br>Tus clientes, atendidos.</h2>
-            <p class="service-banner-desc">Un CRM que el equipo realmente usa es mejor que diez herramientas que nadie entiende. Implementamos NEXA OS y te acompañamos hasta que el equipo lo adopta de verdad, con pipeline, automatizaciones y dashboards que el dueño entiende de un vistazo.</p>
-            <p class="service-banner-price">desde $120.000 ARS<span> /mes · impl. + soporte</span></p>
-            <div class="service-tags">
-              <span class="service-tag">NEXA OS</span>
-              <span class="service-tag">Pipeline de ventas</span>
-              <span class="service-tag">WhatsApp auto</span>
-              <span class="service-tag">Dashboard en vivo</span>
-              <span class="service-tag">Capacitación</span>
-            </div>
-            <a class="btn-wa is-inline"
-               href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20info%20sobre%20el%20CRM"
-               target="_blank" rel="noopener">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Me interesa · Consultar ahora
-            </a>
-          </div>
-
-          <div class="service-banner-visual">
-            <div class="visual-card">
-              <p class="visual-card-title">Estado del pipeline</p>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Lead calificado</span>
-                <span class="visual-stat-badge">● Activo</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Propuesta enviada</span>
-                <span class="visual-stat-badge">● En curso</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Seguimiento CRM</span>
-                <span class="visual-stat-badge">● Automático</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Cierre de venta</span>
-                <span class="visual-stat-value">✓ Cerrado</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ SERVICIO 04 · NEXA RECOVER ═══════════════════════════ -->
-    <section class="service-banner" id="nexa-recover">
-      <div class="container">
-        <div class="service-banner-inner">
-
-          <div class="service-banner-body">
-            <p class="service-banner-num">04</p>
-            <p class="service-banner-kicker">NEXA Recover</p>
-            <h2 class="service-banner-title">Recuperá clientes<br>que ya te conocen.</h2>
-            <p class="service-banner-desc">El cliente más barato es el que ya te compró. NEXA Recover activa secuencias de WhatsApp personalizadas para reconectar con clientes inactivos y convertirlos en ventas, sin invertir un peso en publicidad.</p>
-            <p class="service-banner-price">desde $60.000 ARS<span> · campaña única</span></p>
-            <div class="service-tags">
-              <span class="service-tag">WhatsApp automation</span>
-              <span class="service-tag">Reactivación</span>
-              <span class="service-tag">Segmentación</span>
-              <span class="service-tag">Sin ads</span>
-            </div>
-            <a class="btn-wa is-inline"
-               href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20info%20sobre%20NEXA%20Recover"
-               target="_blank" rel="noopener">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Me interesa · Consultar ahora
-            </a>
-          </div>
-
-          <div class="service-banner-visual">
-            <div class="visual-card">
-              <p class="visual-card-title">¿Cómo funciona?</p>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">1. Identificamos inactivos</span>
-                <span class="visual-stat-badge">Automático</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">2. Secuencia WhatsApp</span>
-                <span class="visual-stat-badge">Personalizada</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">3. Oferta de retorno</span>
-                <span class="visual-stat-badge">Estratégica</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">4. Resultado</span>
-                <span class="visual-stat-value">Venta recuperada</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ SERVICIO 05 · AUTOMATIZACIÓN E IA ════════════════════ -->
-    <section class="service-banner is-reversed" id="automatizacion">
-      <div class="container">
-        <div class="service-banner-inner">
-
-          <div class="service-banner-body">
-            <p class="service-banner-num">05</p>
-            <p class="service-banner-kicker">Automatización · IA</p>
-            <h2 class="service-banner-title">Tu negocio trabaja<br>aunque vos no estés.</h2>
-            <p class="service-banner-desc">Flujos automáticos, chatbots inteligentes y procesos que se ejecutan solos. Implementamos IA en tu operación para que escales sin sumar personal ni perder calidad de atención.</p>
-            <p class="service-banner-price">desde $150.000 ARS<span> · implementación</span></p>
-            <div class="service-tags">
-              <span class="service-tag">Chatbots IA</span>
-              <span class="service-tag">Flujos automáticos</span>
-              <span class="service-tag">WhatsApp Bot</span>
-              <span class="service-tag">Integración CRM</span>
-              <span class="service-tag">24/7</span>
-            </div>
-            <a class="btn-wa is-inline"
-               href="https://wa.me/5492215774681?text=Hola%20Nexa%2C%20quiero%20info%20sobre%20automatización"
-               target="_blank" rel="noopener">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Me interesa · Consultar ahora
-            </a>
-          </div>
-
-          <div class="service-banner-visual">
-            <div class="visual-card">
-              <p class="visual-card-title">Capacidades IA</p>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Atención al cliente</span>
-                <span class="visual-stat-badge">24/7 automático</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Calificación de leads</span>
-                <span class="visual-stat-badge">IA powered</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Envío de propuestas</span>
-                <span class="visual-stat-badge">Auto</span>
-              </div>
-              <div class="visual-stat-row">
-                <span class="visual-stat-label">Seguimiento post-venta</span>
-                <span class="visual-stat-value">Activado</span>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ══ CTA FINAL ═════════════════════════════════════════════ -->
-    <section class="cta-section">
-      <div class="cta-section-bg"></div>
-      <div class="container">
-        <h2 class="cta-title">¿No sabés<br><em>por dónde empezar?</em></h2>
-        <p class="cta-sub">Contanos en qué etapa está tu negocio y en 24 horas te respondemos con el servicio que más impacto tiene para vos.</p>
-        <div class="cta-actions">
-          <a class="btn btn-primary" href="contacto.html">Hablemos</a>
-          <a class="btn btn-whatsapp" href="https://wa.me/5492215774681" target="_blank" rel="noopener">WhatsApp</a>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ══════════════════ FOOTER ════════════════════════════════ -->
-  <footer class="footer" role="contentinfo" aria-label="Pie de página">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <div class="footer-logo">NEXA<span class="logo-accent">·</span></div>
-          <p class="footer-tagline">Marketing, ventas y procesos en una sola plataforma.</p>
-        </div>
-        <nav class="footer-links" aria-label="Páginas">
-          <p class="footer-col-title">Navegación</p>
-          <ul role="list">
-            <li><a class="footer-link" href="index.html">Inicio</a></li>
-            <li><a class="footer-link" href="servicios.html">Servicios</a></li>
-            <li><a class="footer-link" href="casos.html">Casos</a></li>
-            <li><a class="footer-link" href="aprende.html">Aprende</a></li>
-            <li><a class="footer-link" href="contacto.html">Contacto</a></li>
-          </ul>
-        </nav>
-        <div>
-          <p class="footer-col-title">Contacto</p>
-          <ul role="list">
-            <li><a class="footer-link" href="mailto:hola@nexaarg.com">hola@nexaarg.com</a></li>
-            <li><a class="footer-link" href="https://wa.me/5492215774681" target="_blank" rel="noopener">WhatsApp</a></li>
-            <li><a class="footer-link" href="https://instagram.com/somosnexa.ar" target="_blank" rel="noopener">@somosnexa.ar</a></li>
-            <li><a class="footer-link" href="https://crm.nexagrowth.com.ar" target="_blank" rel="noopener">NEXA OS</a></li>
-          </ul>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p class="footer-copy">© 2026 NEXA Growth. Todos los derechos reservados.</p>
-        <div>
-          <a class="footer-link" href="https://instagram.com/somosnexa.ar" target="_blank" rel="noopener" aria-label="Instagram">Instagram</a>
-          <a class="footer-link" href="mailto:hola@nexaarg.com" aria-label="Email">Email</a>
-        </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">© 2026 NEXA Growth. Todos los derechos reservados.</p>
+      <div class="footer-socials">
+        <a class="footer-social" href="https://instagram.com/somosnexa.ar">Instagram</a>
+        <a class="footer-social" href="mailto:hola@nexaarg.com">Email</a>
       </div>
     </div>
-  </footer>
+  </div>
+</footer>
 
-  <!-- ══════════════════ FLOATING WHATSAPP ════════════════════ -->
-  <a class="wa-float"
-     href="https://wa.me/5492215774681"
-     target="_blank" rel="noopener"
-     aria-label="Contactanos por WhatsApp">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-  </a>
+<!-- WhatsApp FAB -->
+<a class="whatsapp-fab" href="https://wa.me/5492215774681" target="_blank" rel="noopener" aria-label="Contactanos por WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
 
-  <!-- ══════════════════ SCRIPTS ══════════════════════════════ -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <script src="lib/manifest.js"></script>
-  <script src="main.js?v=20260702"></script>
+<!-- Pago result notice -->
+<div class="pago-notice" id="pagoNotice" role="status" aria-live="polite"></div>
+
+<!-- Alert MP -->
+<div class="mp-alert" id="mpAlert" role="alert"></div>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
+<script src="main.js?v=20260702" defer></script>
+
+<script>
+(function () {
+  var tabBtns = document.querySelectorAll(".srv-tab-btn");
+  var panels  = document.querySelectorAll(".srv-panel");
+  tabBtns.forEach(function(btn) {
+    btn.addEventListener("click", function() {
+      var target = btn.getAttribute("data-tab");
+      tabBtns.forEach(function(b) { b.classList.remove("is-active"); b.setAttribute("aria-selected","false"); });
+      panels.forEach(function(p) { p.classList.remove("is-active"); });
+      btn.classList.add("is-active"); btn.setAttribute("aria-selected","true");
+      var panel = document.getElementById("panel-" + target);
+      if (panel) panel.classList.add("is-active");
+    });
+  });
+
+  var pagoNotice = document.getElementById("pagoNotice");
+  var params = new URLSearchParams(window.location.search);
+  var pago = params.get("pago");
+  if (pago && pagoNotice) {
+    var msgs = {
+      ok:        { cls:"ok",      text:"✅ ¡Pago exitoso! Te contactaremos pronto." },
+      error:     { cls:"error",   text:"❌ Hubo un error en el pago. Intentá de nuevo." },
+      pendiente: { cls:"pending", text:"⏳ Tu pago está pendiente. Te avisamos cuando confirme." }
+    };
+    var m = msgs[pago];
+    if (m) {
+      pagoNotice.className = "pago-notice " + m.cls + " is-visible";
+      pagoNotice.textContent = m.text;
+      setTimeout(function() { pagoNotice.classList.remove("is-visible"); }, 6000);
+    }
+    history.replaceState(null, "", "/servicios.html");
+  }
+
+  var mpAlert = document.getElementById("mpAlert");
+  function showAlert(msg, isError) {
+    mpAlert.textContent = msg;
+    mpAlert.className = "mp-alert is-visible" + (isError ? " is-error" : "");
+    clearTimeout(mpAlert._t);
+    mpAlert._t = setTimeout(function() { mpAlert.classList.remove("is-visible"); }, 5000);
+  }
+
+  document.querySelectorAll(".mp-pay-btn").forEach(function(btn) {
+    btn.addEventListener("click", async function() {
+      if (btn.disabled) return;
+      var service = btn.getAttribute("data-service");
+      var plan    = btn.getAttribute("data-plan");
+      var price   = Number(btn.getAttribute("data-price"));
+      var title   = btn.getAttribute("data-title");
+      btn.disabled = true;
+      btn.classList.add("is-loading");
+      try {
+        var res = await fetch("/api/mp-preference", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ service, plan, price, title })
+        });
+        if (!res.ok) {
+          var err = await res.json().catch(function(){ return {}; });
+          throw new Error(err.error || "Error " + res.status);
+        }
+        var data = await res.json();
+        if (data.init_point) { window.location.href = data.init_point; }
+        else { throw new Error("No se recibió el link de pago."); }
+      } catch (e) {
+        showAlert("❌ " + (e.message || "Error al iniciar el pago. Intentá de nuevo."), true);
+        btn.disabled = false;
+        btn.classList.remove("is-loading");
+      }
+    });
+  });
+})();
+</script>
 
 </body>
 </html>
