@@ -91,6 +91,7 @@
         rx = tx; ry = ty;
         if (ring) ring.style.transform = "translate3d(" + rx + "px," + ry + "px,0)";
         root.classList.add("is-ready");
+        root.style.opacity = '1';
       }
     }, { passive: true });
 
