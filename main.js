@@ -537,6 +537,113 @@
     });
   }
 
+  /* ─── 13. Asistente NEXA (chat local) ─── */
+  function initNexaAssistant() {
+    var KB = [
+      { k: ["hola","buenas","hey","holis"], a: "Hola! Soy el asistente de NEXA. Puedo contarte sobre nuestros servicios, precios, como funciona el proceso o ayudarte a dejar tus datos para que te contactemos." },
+      { k: ["servicio","servicios","que hacen","qué hacen","ofrecen","que ofrecen"], a: "Trabajamos 5 areas: Marketing integral, Campanas de Meta/Google, CRM y orden digital, NEXA Recover (recuperacion de clientes) y Automatizacion e IA. Podes ver el detalle en la seccion Servicios." },
+      { k: ["precio","precios","cuesta","cuanto sale","costo","plan","planes","tarifa","cotiza"], a: "Los planes varian segun el servicio y el tamano de tu negocio, no aplicamos un precio unico. Dejanos tus datos en el formulario de Contacto y te armamos una propuesta sin costo." },
+      { k: ["como funciona","cómo funciona","proceso","empezar","contratar","como arranco"], a: "Es simple: 1) agendamos una llamada inicial sin costo, 2) te armamos una propuesta, 3) si avanzamos, arrancamos en menos de una semana." },
+      { k: ["permanencia","cancelar","baja","contrato","penalidad"], a: "No hay permanencia minima. Trabajamos mes a mes y podes dar de baja cuando quieras, sin penalidades." },
+      { k: ["tiempo","respuesta","demoran","tardan","cuanto tardan"], a: "Respondemos en menos de 24 horas." },
+      { k: ["ubicacion","ubicación","donde estan","dónde están","buenos aires","pais","país"], a: "Estamos en Buenos Aires, Argentina, y trabajamos con negocios de todo el pais." },
+      { k: ["contacto","email","mail","whatsapp","telefono","teléfono","hablar con alguien"], a: "Podes escribirnos a hola@nexaarg.com, por WhatsApp, o dejar tus datos en el formulario de la seccion Contacto. Te respondemos en menos de 24hs." },
+      { k: ["caso","casos","resultados","clientes","exito","éxito"], a: "Tenemos casos reales de negocios que crecieron con nosotros, los podes ver en la seccion Casos del menu." },
+      { k: ["aprende","recursos","articulo","artículo","blog","contenido","guia","guía"], a: "En la seccion Aprende compartimos guias practicas sobre ventas, CRM, ads y mas, gratis." },
+      { k: ["crm"], a: "Ayudamos a implementar un CRM simple que tu equipo realmente use, sin drama, en menos de una semana." },
+      { k: ["automatizacion","automatización","ia","inteligencia artificial"], a: "Automatizamos procesos repetitivos y sumamos IA donde tiene sentido: seguimiento de leads, respuestas rapidas, reportes automaticos." },
+      { k: ["recover","recuperar clientes","clientes perdidos","clientes inactivos"], a: "NEXA Recover reactiva clientes inactivos de tu base con campanas especificas de reconquista." },
+      { k: ["ads","meta","google","publicidad","campaña","campaña","campañas"], a: "Gestionamos campanas de Meta y Google Ads enfocadas en negocios locales, con presupuestos de prueba chicos antes de escalar." },
+      { k: ["gracias","genial","perfecto","dale","joya"], a: "De nada! Si necesitas algo mas, estoy por aca. Tambien podes dejar tus datos en el formulario de Contacto." }
+    ];
+    var FALLBACK = "No tengo una respuesta exacta para eso, pero contame mas en el formulario de Contacto o escribinos por WhatsApp y te ayudamos directamente.";
+
+    function findAnswer(text) {
+      var q = text.toLowerCase();
+      for (var i = 0; i < KB.length; i++) {
+        var item = KB[i];
+        for (var j = 0; j < item.k.length; j++) {
+          if (q.indexOf(item.k[j]) !== -1) return item.a;
+        }
+      }
+      return FALLBACK;
+    }
+
+    var wrap = document.createElement("div");
+    wrap.className = "nexa-assistant";
+    wrap.innerHTML =
+      '<button type="button" class="nexa-assistant-toggle" aria-label="Abrir asistente NEXA">' +
+        '<svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>' +
+        '<svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>' +
+      '</button>' +
+      '<div class="nexa-assistant-panel" aria-hidden="true">' +
+        '<div class="nexa-assistant-header">' +
+          '<div class="nexa-assistant-avatar">N</div>' +
+          '<div><p class="nexa-assistant-name">Asistente NEXA</p><p class="nexa-assistant-status">Responde al instante</p></div>' +
+        '</div>' +
+        '<div class="nexa-assistant-messages" id="nexa-assistant-messages"></div>' +
+        '<div class="nexa-assistant-quick" id="nexa-assistant-quick">' +
+          '<button type="button" data-q="Que servicios ofrecen?">Servicios</button>' +
+          '<button type="button" data-q="Cuales son los precios?">Precios</button>' +
+          '<button type="button" data-q="Como funciona el proceso?">Como empezar</button>' +
+          '<button type="button" data-q="Como los contacto?">Contacto</button>' +
+        '</div>' +
+        '<form class="nexa-assistant-input" id="nexa-assistant-form">' +
+          '<input type="text" placeholder="Escribi tu pregunta..." aria-label="Escribi tu pregunta" autocomplete="off" />' +
+          '<button type="submit" aria-label="Enviar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>' +
+        '</form>' +
+      '</div>';
+    document.body.appendChild(wrap);
+
+    var toggle = wrap.querySelector(".nexa-assistant-toggle");
+    var panel = wrap.querySelector(".nexa-assistant-panel");
+    var messages = wrap.querySelector("#nexa-assistant-messages");
+    var quick = wrap.querySelector("#nexa-assistant-quick");
+    var form = wrap.querySelector("#nexa-assistant-form");
+    var input = form.querySelector("input");
+    var opened = false;
+    var greeted = false;
+
+    function addMessage(text, from) {
+      var bubble = document.createElement("div");
+      bubble.className = "nexa-msg nexa-msg-" + from;
+      bubble.textContent = text;
+      messages.appendChild(bubble);
+      messages.scrollTop = messages.scrollHeight;
+    }
+
+    function respond(text) {
+      addMessage(text, "user");
+      quick.style.display = "none";
+      setTimeout(function () { addMessage(findAnswer(text), "bot"); }, 400);
+    }
+
+    toggle.addEventListener("click", function () {
+      opened = !opened;
+      wrap.classList.toggle("is-open", opened);
+      panel.setAttribute("aria-hidden", opened ? "false" : "true");
+      if (opened && !greeted) {
+        greeted = true;
+        addMessage("Hola! Soy el asistente de NEXA. Pregunta sobre nuestros servicios, precios o como empezar.", "bot");
+      }
+      if (opened) input.focus();
+    });
+
+    quick.addEventListener("click", function (e) {
+      var btn = e.target.closest("[data-q]");
+      if (!btn) return;
+      respond(btn.getAttribute("data-q"));
+    });
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var val = input.value.trim();
+      if (!val) return;
+      input.value = "";
+      respond(val);
+    });
+  }
+
   /* ─── Boot ─── */
   function boot() {
     safe(initNav,            "initNav");
@@ -544,6 +651,7 @@
     safe(initReveals,        "initReveals");
     safe(initCountUp,        "initCountUp");
     safe(initContactForm,    "initContactForm");
+    safe(initNexaAssistant,  "initNexaAssistant");
     safe(initScrollProgress, "initScrollProgress");
     safe(initHeroGradient,   "initHeroGradient");
     safe(initTilt,           "initTilt");
