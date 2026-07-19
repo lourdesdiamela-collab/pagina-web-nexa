@@ -5,12 +5,12 @@ async function notifyLead(data) { const apiKey = process.env.RESEND_API_KEY; if 
   });
 
   const preference = new Preference(client);
-  const { title, price, service, plan, name, email, phone, business } = req.body || {}; if (!title || !price || !name || !email || !phone || !business) { return res.status(400).json({ error: 'Faltan datos obligatorios.' }); } await notifyLead({ title, price, service, plan, name, email, phone, business });
+  const { title, price, service, plan, name, email, phone, business } = req.body || {}; if (!title || !price) { return res.status(400).json({ error: 'Faltan datos obligatorios.' }); } await notifyLead({ title, price, service, plan, name, email, phone, business });
 
   try {
     const result = await preference.create({
       body: {
-        items: [{ title, unit_price: Number(price), quantity: 1, currency_id: 'ARS' }], payer: { name: name, email: email },
+        items: [{ title, unit_price: Number(price), quantity: 1, currency_id: 'ARS' }],
         back_urls: {
           success: 'https://nexagrowth.com.ar/servicios.html?pago=exitoso',
           failure: 'https://nexagrowth.com.ar/servicios.html?pago=fallido',
