@@ -108,7 +108,7 @@
       font-family:var(--display);font-size:clamp(1.6rem,3.5vw,2.4rem);
       font-weight:800;letter-spacing:-0.03em;color:var(--ink);margin-bottom:.6rem;
     }
-    .srv-service-desc { font-size:1rem;color:var(--ink-soft);max-width:50ch;margin:0 auto; }
+    .srv-service-desc { font-size:1rem;color:var(--ink-soft);max-width:50ch;margin:0 auto; } .srv-tab-btn{display:flex;flex-direction:column;align-items:center;gap:.1rem;line-height:1.15;} .srv-tab-sub{display:block;font-weight:500;font-size:.66rem;opacity:.65;} .srv-tab-btn.is-active .srv-tab-sub{opacity:.85;} .srv-header-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center;text-align:left;max-width:1040px;margin:0 auto;} .srv-header-grid .srv-service-desc{margin:0 0 .75rem;} .srv-header-detail{font-size:.95rem;color:var(--ink-soft);line-height:1.65;max-width:48ch;margin:0;} .srv-header-media{border-radius:22px;overflow:hidden;box-shadow:0 20px 50px rgba(13,14,21,.16);aspect-ratio:4/3;} .srv-header-media img{width:100%;height:100%;object-fit:cover;display:block;} @media(max-width:820px){.srv-header-grid{grid-template-columns:1fr;text-align:center;gap:1.5rem;} .srv-header-media{order:-1;aspect-ratio:16/9;max-width:480px;margin:0 auto;} .srv-header-detail{margin:0 auto;}}
 
     /* ── Plan cards grid ── */
     .srv-plans-grid {
@@ -453,19 +453,15 @@
 
       <!-- Tab nav -->
       <nav class="srv-tab-nav" aria-label="Servicios" role="tablist">
-        <button class="srv-tab-btn is-active" role="tab" aria-selected="true"  aria-controls="panel-web"     id="tab-web"     data-tab="web">🌐 NEXA WEB</button>
-        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-social"  id="tab-social"  data-tab="social">📱 NEXA SOCIAL</button>
-        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-ads"     id="tab-ads"     data-tab="ads">🎯 NEXA ADS</button>
-        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-recover" id="tab-recover" data-tab="recover">🔄 NEXA RECOVER</button>
+        <button class="srv-tab-btn is-active" role="tab" aria-selected="true"  aria-controls="panel-web"     id="tab-web"     data-tab="web">🌐 NEXA WEB<span class="srv-tab-sub">Diseño de sitios web</span></button>
+        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-social"  id="tab-social"  data-tab="social">📱 NEXA SOCIAL<span class="srv-tab-sub">Redes sociales y contenido</span></button>
+        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-ads"     id="tab-ads"     data-tab="ads">🎯 NEXA ADS<span class="srv-tab-sub">Publicidad en Meta y Google</span></button>
+        <button class="srv-tab-btn"            role="tab" aria-selected="false" aria-controls="panel-recover" id="tab-recover" data-tab="recover">🔄 NEXA RECOVER<span class="srv-tab-sub">Recuperación de clientes</span></button>
       </nav>
 
       <!-- PANEL 1 · NEXA WEB -->
       <div class="srv-panel is-active" id="panel-web" role="tabpanel" aria-labelledby="tab-web">
-        <div class="srv-service-header">
-          <span class="srv-service-badge">Nexa Web</span>
-          <h2 class="srv-service-title">Sitios Web que convierten</h2>
-          <p class="srv-service-desc">Diseñados para vender, no solo para verse bien.</p>
-        </div>
+        <div class="srv-service-header"><div class="srv-header-grid"><div class="srv-header-text"><span class="srv-service-badge">Nexa Web</span><h2 class="srv-service-title">Sitios Web que convierten</h2><p class="srv-service-desc">Diseñados para vender, no solo para verse bien.</p><p class="srv-header-detail">Tu sitio web propio, rápido y profesional: explica qué hacés, genera confianza a primera vista y convierte visitas en consultas. Incluye diseño a medida, formulario de contacto conectado y todo lo necesario para vender online sin depender solo de las redes.</p></div><div class="srv-header-media"><img src="/public/hero-bg.png" alt="Presencia digital y sitio web de NEXA" loading="lazy"></div></div></div>
         <div class="srv-plans-grid">
 
           <!-- WEB BÁSICO -->
@@ -555,11 +551,7 @@
 
       <!-- PANEL 2 · NEXA SOCIAL -->
       <div class="srv-panel" id="panel-social" role="tabpanel" aria-labelledby="tab-social">
-        <div class="srv-service-header">
-          <span class="srv-service-badge">Nexa Social</span>
-          <h2 class="srv-service-title">Redes Sociales que conectan</h2>
-          <p class="srv-service-desc">Contenido estratégico, comunidad activa y resultados medibles.</p>
-        </div>
+        <div class="srv-service-header"><div class="srv-header-grid"><div class="srv-header-text"><span class="srv-service-badge">Nexa Social</span><h2 class="srv-service-title">Redes Sociales que conectan</h2><p class="srv-service-desc">Contenido estratégico, comunidad activa y resultados medibles.</p><p class="srv-header-detail">Planificamos, diseñamos y publicamos el contenido de tus redes todos los meses: piezas gráficas, copys, historias y reportes de resultados. Vos mostrás la marca, nosotros nos ocupamos de que la comunidad crezca y se mantenga activa.</p></div><div class="srv-header-media"><img src="/public/nexa-hero.png" alt="Gestión de redes sociales NEXA" loading="lazy"></div></div></div>
         <div class="srv-plans-grid">
 
           <!-- SOCIAL START -->
@@ -658,11 +650,7 @@
 
       <!-- PANEL 3 · NEXA ADS -->
       <div class="srv-panel" id="panel-ads" role="tabpanel" aria-labelledby="tab-ads">
-        <div class="srv-service-header">
-          <span class="srv-service-badge">Nexa Ads</span>
-          <h2 class="srv-service-title">Publicidad Meta &amp; Google</h2>
-          <p class="srv-service-desc">Campañas que traen clientes, no solo likes.</p>
-        </div>
+        <div class="srv-service-header"><div class="srv-header-grid"><div class="srv-header-text"><span class="srv-service-badge">Nexa Ads</span><h2 class="srv-service-title">Publicidad Meta &amp; Google</h2><p class="srv-service-desc">Campañas que traen clientes, no solo likes.</p><p class="srv-header-detail">Creamos y optimizamos campañas pagas en Meta y Google enfocadas en un solo objetivo: que te lleguen consultas reales. Segmentación de públicos, diseño de anuncios y ajustes semanales incluidos en cada plan.</p></div><div class="srv-header-media"><img src="/public/nexa-hero-new.png" alt="Campañas de publicidad y crecimiento NEXA" loading="lazy"></div></div></div>
         <div class="srv-plans-grid">
 
           <!-- ADS START -->
@@ -759,11 +747,7 @@
 
       <!-- PANEL 4 · NEXA RECOVER -->
       <div class="srv-panel" id="panel-recover" role="tabpanel" aria-labelledby="tab-recover">
-        <div class="srv-service-header">
-          <span class="srv-service-badge">Nexa Recover</span>
-          <h2 class="srv-service-title">Recuperación de Clientes</h2>
-          <p class="srv-service-desc">El cliente más barato es el que ya te conoce.</p>
-        </div>
+        <div class="srv-service-header"><div class="srv-header-grid"><div class="srv-header-text"><span class="srv-service-badge">Nexa Recover</span><h2 class="srv-service-title">Recuperación de Clientes</h2><p class="srv-service-desc">El cliente más barato es el que ya te conoce.</p><p class="srv-header-detail">Trabajamos tu base de contactos para reactivar clientes que dejaron de comprar: segmentación, mensajes automáticos y seguimiento por WhatsApp para que vuelvan a elegirte sin gastar en nueva publicidad.</p></div><div class="srv-header-media"><img src="/public/nexa-recover.png" alt="Dashboard de recuperación y retención de clientes NEXA" loading="lazy"></div></div></div>
         <div class="srv-plans-grid">
 
           <!-- RECOVER START -->
