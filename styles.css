@@ -1375,3 +1375,21 @@ body[data-page="contacto"]  a[href="contacto.html"]::after { transform: scaleX(1
   justify-content: center;
   width: 100%;
 }
+
+
+/* Aprende article icon badges */
+.aprende-visual {
+  display: flex; flex-direction: column; align-items: center; gap: .6rem;
+}
+.aprende-icon-badge {
+  width: 60px; height: 60px; border-radius: 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; box-shadow: 0 8px 20px rgba(107,63,160,.25);
+  flex-shrink: 0;
+}
+.aprende-icon-badge svg { width: 28px; height: 28px; }
+.aprende-num-sm {
+  font-family: var(--mono); font-size: .7rem; letter-spacing: .1em;
+  color: var(--ink-mute); font-weight: 600;
+}
