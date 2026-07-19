@@ -982,7 +982,7 @@
       fallido:   { cls:"error",   text:"❌ Hubo un error en el pago. Intentá de nuevo." },
       pendiente: { cls:"pending", text:"⏳ Tu pago está pendiente. Te avisamos cuando confirme." }
     };
-    var m = msgs[pago]; if (pago === "exitoso") { if (window.nexaShowThanks) { window.nexaShowThanks(); } m = null; }
+    var m = msgs[pago]; if (pago === "exitoso") { m = null; setTimeout(function() { if (window.nexaShowThanks) { window.nexaShowThanks(); } }, 0); }
     if (m) {
       pagoNotice.className = "pago-notice " + m.cls + " is-visible";
       pagoNotice.textContent = m.text;
