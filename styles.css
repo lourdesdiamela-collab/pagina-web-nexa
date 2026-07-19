@@ -1393,3 +1393,146 @@ body[data-page="contacto"]  a[href="contacto.html"]::after { transform: scaleX(1
   font-family: var(--mono); font-size: .7rem; letter-spacing: .1em;
   color: var(--ink-mute); font-weight: 600;
 }
+
+
+/* NEXA Assistant chat widget */
+.nexa-assistant {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.5rem;
+  z-index: 999;
+}
+.nexa-assistant-toggle {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(107,63,160,.35);
+  transition: transform .2s ease;
+}
+.nexa-assistant-toggle:hover { transform: scale(1.06); }
+.nexa-assistant-toggle svg { width: 26px; height: 26px; }
+.nexa-assistant-toggle .icon-close { display: none; }
+.nexa-assistant.is-open .nexa-assistant-toggle .icon-chat { display: none; }
+.nexa-assistant.is-open .nexa-assistant-toggle .icon-close { display: block; }
+
+.nexa-assistant-panel {
+  position: absolute;
+  right: 0;
+  bottom: 76px;
+  width: 340px;
+  max-width: calc(100vw - 2rem);
+  height: 460px;
+  max-height: 70vh;
+  background: var(--bg-card);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(20,10,40,.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(12px) scale(.98);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.nexa-assistant.is-open .nexa-assistant-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+.nexa-assistant-header {
+  display: flex; align-items: center; gap: .75rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  flex-shrink: 0;
+}
+.nexa-assistant-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,255,255,.2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-weight: 800; font-size: 1rem;
+  flex-shrink: 0;
+}
+.nexa-assistant-name { font-weight: 700; font-size: .9rem; line-height: 1.3; }
+.nexa-assistant-status { font-size: .7rem; opacity: .85; }
+.nexa-assistant-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.1rem;
+  display: flex; flex-direction: column; gap: .6rem;
+}
+.nexa-msg {
+  max-width: 85%;
+  padding: .6rem .85rem;
+  border-radius: 14px;
+  font-size: .85rem;
+  line-height: 1.45;
+}
+.nexa-msg-bot {
+  background: var(--bg-2);
+  color: var(--ink);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+.nexa-msg-user {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+.nexa-assistant-quick {
+  display: flex; flex-wrap: wrap; gap: .4rem;
+  padding: 0 1.1rem .75rem;
+  flex-shrink: 0;
+}
+.nexa-assistant-quick button {
+  font-family: var(--mono); font-size: .7rem;
+  padding: .4rem .7rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--bg-card);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease;
+}
+.nexa-assistant-quick button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.nexa-assistant-input {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .75rem;
+  border-top: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.nexa-assistant-input input {
+  flex: 1;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .6rem 1rem;
+  font-size: .85rem;
+  font-family: var(--body);
+  background: var(--bg-2);
+  color: var(--ink);
+}
+.nexa-assistant-input input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.nexa-assistant-input button {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.nexa-assistant-input button svg { width: 16px; height: 16px; }
+
+@media (max-width: 480px) {
+  .nexa-assistant { right: 1rem; bottom: 1rem; }
+  .nexa-assistant-panel { width: calc(100vw - 2rem); bottom: 72px; }
+}
