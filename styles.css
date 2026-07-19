@@ -1358,3 +1358,20 @@ body[data-page="contacto"]  a[href="contacto.html"]::after { transform: scaleX(1
   color: var(--ink-mute);
   margin: 0;
 }
+
+
+/* CTA embedded contact form (index.html) */
+.cta-form-embed {
+  max-width: 560px;
+  margin: 0 auto;
+  text-align: left;
+}
+.cta-form-embed .contact-form-wrap {
+  text-align: left;
+}
+.cta-whatsapp-alt {
+  display: inline-flex;
+  margin: 1.5rem auto 0;
+  justify-content: center;
+  width: 100%;
+}
