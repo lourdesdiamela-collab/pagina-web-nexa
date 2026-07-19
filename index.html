@@ -312,10 +312,73 @@
         <p class="cta-sub" data-reveal data-reveal-delay="1">
           Contanos en qué etapa está tu negocio y en 24 horas te respondemos con ideas concretas.
         </p>
-        <div class="cta-actions" data-reveal data-reveal-delay="2">
-          <a href="contacto.html" class="btn btn-primary">Empecemos</a>
-          <a href="https://wa.me/5492215774681" class="btn btn-whatsapp" target="_blank" rel="noopener">
-            WhatsApp
+        <div class="cta-form-embed" data-reveal data-reveal-delay="2">
+          <div class="contact-form-wrap">
+            <form data-contact-form class="cta-form nexa-form" novalidate aria-label="Formulario de contacto">
+
+              <div class="form-row">
+                <div class="fl-field" data-validate="required">
+                  <input type="text" id="nombre" name="nombre" required placeholder=" " autocomplete="given-name" />
+                  <label for="nombre">Nombre *</label>
+                  <span class="field-error" role="alert"></span>
+                </div>
+                <div class="fl-field">
+                  <input type="text" id="empresa" name="empresa" placeholder=" " autocomplete="organization" />
+                  <label for="empresa">Negocio / empresa</label>
+                  <span class="field-error"></span>
+                </div>
+              </div>
+
+              <div class="fl-field" data-validate="email">
+                <input type="email" id="email" name="email" required placeholder=" " autocomplete="email" />
+                <label for="email">Email *</label>
+                <span class="field-error" role="alert"></span>
+              </div>
+
+              <div class="fl-field fl-select" data-validate="required">
+                <select id="servicio" name="servicio" required>
+                  <option value="" disabled selected></option>
+                  <option value="marketing">Marketing integral</option>
+                  <option value="campanas">Campañas Meta/Google</option>
+                  <option value="crm">CRM y orden digital</option>
+                  <option value="recover">NEXA Recover</option>
+                  <option value="automatizacion">Automatización e IA</option>
+                </select>
+                <label for="servicio">Servicio de interés *</label>
+                <span class="field-error" role="alert"></span>
+              </div>
+
+              <div class="fl-field">
+                <textarea id="mensaje" name="mensaje" placeholder=" " rows="4"></textarea>
+                <label for="mensaje">¿Qué querés resolver? (opcional)</label>
+                <span class="field-error"></span>
+              </div>
+
+              <button type="submit" class="btn btn-nexa-submit">
+                <span class="btn-label">Escribinos</span>
+                <span class="form-spinner" aria-hidden="true"></span>
+              </button>
+
+              <p class="form-send-error" role="alert" aria-live="polite">
+                Hubo un problema al enviar. Intentá de nuevo o escribinos a <a href="mailto:hola@nexaarg.com">hola@nexaarg.com</a>.
+              </p>
+
+            </form>
+
+            <div class="form-success" aria-live="polite" aria-label="Mensaje enviado exitosamente">
+              <div class="form-success-tick" aria-hidden="true">
+                <svg viewBox="0 0 52 52" width="72" height="72" xmlns="http://www.w3.org/2000/svg">
+                  <circle class="tick-circle" cx="26" cy="26" r="25" fill="none"/>
+                  <path class="tick-check" fill="none" d="M14 27l8 8 16-16"/>
+                </svg>
+              </div>
+              <h3 class="form-success-title">¡Gracias!</h3>
+              <p class="form-success-msg">Te contactaremos en 24/48 horas.</p>
+            </div>
+          </div>
+
+          <a href="https://wa.me/5492215774681" class="btn btn-whatsapp cta-whatsapp-alt" target="_blank" rel="noopener">
+            ¿Preferís WhatsApp? Escribinos
           </a>
         </div>
       </div>
