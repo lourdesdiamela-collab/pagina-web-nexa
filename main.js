@@ -258,10 +258,10 @@
       if (errorEl) errorEl.classList.remove("is-visible");
 
       try {
-        const res = await fetch("https://formspree.io/lourdesdiamelaa@gmail.com", {
+        const res = await fetch("/api/contact", {
           method:  "POST",
-          body:    new FormData(form),
-          headers: { "Accept": "application/json" }
+          body:    JSON.stringify(Object.fromEntries(new FormData(form))),
+          headers: { "Accept": "application/json", "Content-Type": "application/json" }
         });
         if (!res.ok) throw new Error("status " + res.status);
         form.classList.add("is-sent");
