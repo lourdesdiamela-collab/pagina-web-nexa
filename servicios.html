@@ -288,7 +288,7 @@
     .payment-pill {
       font-family:var(--display);font-size:.8rem;font-weight:800;
       letter-spacing:.03em;padding:.5rem 1.1rem;border-radius:8px;
-      border:2px solid var(--line);color:var(--ink-soft);
+      border:2px solid var(--line);color:var(--ink-soft);display:inline-flex;align-items:center;gap:.4rem;
       background:var(--bg-card);
     }
 
@@ -861,11 +861,11 @@
           <span class="transfer-badge">💸 10% off pagando por transferencia</span>
         </div>
         <div class="payment-logos" data-reveal data-reveal-delay="1">
-          <span class="payment-pill">VISA</span>
-          <span class="payment-pill">Mastercard</span>
-          <span class="payment-pill">American Express</span>
-          <span class="payment-pill">Mercado Pago</span>
-          <span class="payment-pill">NaranjaX</span>
+          <span class="payment-pill"><svg width="28" height="18" viewBox="0 0 28 18"><rect width="28" height="18" rx="3" fill="#1A1F71"/><text x="14" y="12.5" font-family="Arial,sans-serif" font-size="8" font-weight="900" font-style="italic" fill="#fff" text-anchor="middle">VISA</text></svg>VISA</span>
+          <span class="payment-pill"><svg width="28" height="18" viewBox="0 0 28 18"><rect width="28" height="18" rx="3" fill="#fff"/><circle cx="11" cy="9" r="6" fill="#EB001B"/><circle cx="17" cy="9" r="6" fill="#F79E1B" fill-opacity="0.85"/></svg>Mastercard</span>
+          <span class="payment-pill"><svg width="28" height="18" viewBox="0 0 28 18"><rect width="28" height="18" rx="3" fill="#006FCF"/><text x="14" y="12" font-family="Arial,sans-serif" font-size="6.5" font-weight="800" fill="#fff" text-anchor="middle">AMEX</text></svg>American Express</span>
+          <span class="payment-pill"><svg width="28" height="18" viewBox="0 0 28 18"><rect width="28" height="18" rx="3" fill="#009EE3"/><text x="14" y="12" font-family="Arial,sans-serif" font-size="6" font-weight="800" fill="#fff" text-anchor="middle">MP</text></svg>Mercado Pago</span>
+          <span class="payment-pill"><svg width="28" height="18" viewBox="0 0 28 18"><rect width="28" height="18" rx="3" fill="#FF7A00"/><text x="14" y="12" font-family="Arial,sans-serif" font-size="7" font-weight="800" fill="#fff" text-anchor="middle">NX</text></svg>NaranjaX</span><span class="payment-pill"><svg width="28" height="18" viewBox="0 0 28 18"><rect width="28" height="18" rx="3" fill="#fff"/><text x="14" y="13" font-family="Arial,sans-serif" font-size="7" font-weight="800" text-anchor="middle"><tspan fill="#003087">Pay</tspan><tspan fill="#009cde">Pal</tspan></text></svg>PayPal</span>
         </div>
       </div>
     </div>
