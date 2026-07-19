@@ -84,6 +84,8 @@
             <div>8 min</div>
             <div>Ventas · CRM</div>
           </div>
+        
+          <button type="button" class="aprende-read-more" data-article-index="0">Leer artículo →</button>
         </article>
 
         <article class="aprende-item" data-reveal>
@@ -98,6 +100,8 @@
             <div>6 min</div>
             <div>Ads · Captación</div>
           </div>
+        
+          <button type="button" class="aprende-read-more" data-article-index="1">Leer artículo →</button>
         </article>
 
         <article class="aprende-item" data-reveal>
@@ -112,6 +116,8 @@
             <div>10 min</div>
             <div>CRM · Procesos</div>
           </div>
+        
+          <button type="button" class="aprende-read-more" data-article-index="2">Leer artículo →</button>
         </article>
 
         <article class="aprende-item" data-reveal>
@@ -126,6 +132,8 @@
             <div>5 min</div>
             <div>Datos · Reporting</div>
           </div>
+        
+          <button type="button" class="aprende-read-more" data-article-index="3">Leer artículo →</button>
         </article>
 
         <article class="aprende-item" data-reveal>
@@ -140,6 +148,8 @@
             <div>7 min</div>
             <div>Ventas · Leads</div>
           </div>
+        
+          <button type="button" class="aprende-read-more" data-article-index="4">Leer artículo →</button>
         </article>
 
       </div>
@@ -150,7 +160,7 @@
       <div class="cta-section-bg" aria-hidden="true"></div>
       <div class="container">
         <h2 class="cta-title" id="newsletter-heading" data-reveal style="font-size:clamp(2rem,5vw,4rem);">
-          Nuevo contenido<br><em>cada dos semanas.</em>
+          Ideas que podés<br><em>aplicar esta semana.</em>
         </h2>
         <p class="cta-sub" data-reveal data-reveal-delay="1">
           Lo que aprendemos en proyectos reales lo compartimos en nuestro canal de Instagram.
@@ -161,6 +171,19 @@
         </div>
       </div>
     </section>
+    <div class="article-modal" id="article-modal" aria-hidden="true">
+      <div class="article-modal-backdrop" data-close-modal></div>
+      <div class="article-modal-panel" role="dialog" aria-modal="true" aria-labelledby="article-modal-title">
+        <button type="button" class="article-modal-close" data-close-modal aria-label="Cerrar">&times;</button>
+        <p class="article-modal-meta" id="article-modal-meta"></p>
+        <h2 class="article-modal-title" id="article-modal-title"></h2>
+        <div class="article-modal-body" id="article-modal-body"></div>
+        <div class="article-modal-cta">
+          <p>¿Querés ayuda para aplicar esto en tu negocio?</p>
+          <a href="contacto.html" class="btn btn-primary">Hablemos</a>
+        </div>
+      </div>
+    </div>
 
   </main>
 
@@ -195,6 +218,111 @@
       </div>
     </div>
   </footer>
+
+  
+  <script>
+    (function() {
+      var articles = [
+        {
+          title: "Cómo armar un pipeline de ventas sin herramientas costosas",
+          meta: "8 min · Ventas · CRM",
+          paragraphs: [
+            "El error más común al armar un proceso de ventas es empezar por la herramienta. Antes de elegir un CRM o armar una planilla, hay que definir las etapas por las que pasa un cliente potencial desde que te conoce hasta que compra.",
+            "1. Contacto inicial: registrá de dónde vino cada lead (WhatsApp, Instagram, referido, web) desde el primer día. Sin esto, después es imposible saber qué canal funciona.",
+            "2. Calificación: no todos los que preguntan están listos para comprar. Definí 2 o 3 preguntas simples que te digan si vale la pena invertir tiempo en esa persona.",
+            "3. Propuesta: estandarizá cómo presentás precios y condiciones. Que no dependa de la memoria de una sola persona del equipo.",
+            "4. Seguimiento: la mayoría de las ventas se pierden acá. Un sistema simple de recordatorios (aunque sea un calendario compartido) evita que un lead caliente se enfríe por falta de respuesta.",
+            "5. Cierre y post-venta: registrá por qué ganaste o perdiste cada oportunidad. Con el tiempo, ese historial te dice exactamente dónde mejorar.",
+            "No hace falta un CRM costoso para esto. Empezá con una planilla bien armada o un Trello, y migrá a una herramienta como NEXA OS cuando el volumen lo justifique. Lo que importa es tener el proceso claro antes que la herramienta."
+          ]
+        },
+        {
+          title: "Meta Ads para negocios locales: lo que funciona (y lo que no)",
+          meta: "6 min · Ads · Meta",
+          paragraphs: [
+            "Meta Ads (Facebook e Instagram) puede ser muy rentable para negocios locales, pero la mayoría quema presupuesto por errores evitables.",
+            "Lo que funciona: segmentación por radio geográfico ajustado a donde realmente podés atender, videos cortos grabados con el celular sin producción costosa, objetivo de mensajes o clics al WhatsApp en vez de tráfico a la web, y presupuestos de prueba chicos durante la primera semana midiendo costo por conversación antes de escalar.",
+            "Lo que no funciona: promocionar publicaciones sin optimizar para un objetivo específico, cambiar la campaña todos los días (el algoritmo necesita al menos 3-4 días de aprendizaje estable), e ignorar el remarketing a quienes ya visitaron tu perfil o web.",
+            "La métrica que más importa no es el alcance ni los likes, es el costo por conversación o por lead calificado. Todo lo demás es vanidad."
+          ]
+        },
+        {
+          title: "CRM sin drama: cómo implementar uno en tu equipo en menos de una semana",
+          meta: "7 min · CRM · Procesos",
+          paragraphs: [
+            "Implementar un CRM suele sonar a proyecto de meses, pero para un equipo chico se puede tener funcionando en una semana si seguís este orden.",
+            "Día 1-2: cargá los contactos que ya tenés. No hace falta que esté perfecto, con nombre, teléfono y estado alcanza para arrancar.",
+            "Día 3: definí las etapas del embudo con tu equipo. Máximo 5 etapas, si son más nadie las va a actualizar.",
+            "Día 4: armá una automatización simple, como un recordatorio si un lead lleva más de 3 días sin movimiento.",
+            "Día 5: capacitá al equipo con casos reales, no con el manual. Sentate 30 minutos con cada persona y cargá juntos oportunidades reales.",
+            "Día 6-7: revisá qué se está usando y qué no, y sacá lo que sobra. Un CRM con 40 campos que nadie completa es peor que una planilla simple.",
+            "La clave no es la herramienta, es que el equipo la use todos los días sin fricción."
+          ]
+        },
+        {
+          title: "5 métricas que todo dueño de negocio debería ver todas las semanas",
+          meta: "5 min · Datos · Reportes",
+          paragraphs: [
+            "No hace falta un dashboard de 40 gráficos. Estas 5 métricas alcanzan para saber si tu negocio va bien.",
+            "1. Costo de adquisición de cliente (CAC): cuánto gastás en marketing y ventas dividido por clientes nuevos del mes.",
+            "2. Tasa de conversión de leads a clientes: de cada 10 personas que te contactan, ¿cuántas compran?",
+            "3. Tiempo de primera respuesta: cuánto tardás en contestar un mensaje nuevo. Cada hora que pasa reduce la probabilidad de cierre.",
+            "4. Ticket promedio: el valor promedio de cada venta. Subirlo con mejores combos o upsells suele ser más fácil que conseguir clientes nuevos.",
+            "5. Retención o recompra: qué porcentaje de tus clientes vuelve a comprar en 90 días. Retener cuesta mucho menos que adquirir.",
+            "Medí estas cinco todas las semanas, aunque sea en una planilla simple. La mayoría de los problemas se ven venir semanas antes de volverse graves."
+          ]
+        },
+        {
+          title: "Por qué el 80% de los leads se pierden después del primer contacto",
+          meta: "6 min · Ventas · Seguimiento",
+          paragraphs: [
+            "La mayoría de los leads que contactan a un negocio nunca vuelven a tener noticias después del primer mensaje. No es un problema de falta de interés del cliente, es un problema de proceso.",
+            "1. Respuesta tardía: contestar después de 2-3 horas reduce drásticamente las chances de cierre.",
+            "2. Un solo intento de contacto: la mayoría de las ventas necesitan entre 3 y 5 puntos de contacto.",
+            "3. Falta de responsable claro: cuando todo el equipo está a cargo del seguimiento, en la práctica nadie lo está.",
+            "4. No hay registro: sin un lugar donde ver qué leads están pendientes, es imposible seguirlos a todos.",
+            "La solución: asigná un responsable por lead, definí una cadencia de seguimiento, y usá recordatorios automáticos. Con estos tres cambios, la mayoría de los negocios recuperan entre 20% y 40% más de las oportunidades que hoy están dejando pasar."
+          ]
+        }
+      ];
+
+      var modal = document.getElementById("article-modal");
+      var modalTitle = document.getElementById("article-modal-title");
+      var modalMeta = document.getElementById("article-modal-meta");
+      var modalBody = document.getElementById("article-modal-body");
+
+      function openArticle(idx) {
+        var a = articles[idx];
+        if (!a) return;
+        modalTitle.textContent = a.title;
+        modalMeta.textContent = a.meta;
+        modalBody.innerHTML = a.paragraphs.map(function(p) { return "<p>" + p + "</p>"; }).join("");
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+      }
+
+      function closeArticle() {
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+      }
+
+      document.querySelectorAll(".aprende-read-more").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+          openArticle(Number(btn.getAttribute("data-article-index")));
+        });
+      });
+
+      document.querySelectorAll("[data-close-modal]").forEach(function(el) {
+        el.addEventListener("click", closeArticle);
+      });
+
+      document.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeArticle();
+      });
+    })();
+  </script>
 
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
