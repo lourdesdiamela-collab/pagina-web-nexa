@@ -558,12 +558,17 @@
     ];
     var FALLBACK = "No tengo una respuesta exacta para eso, pero contame mas en el formulario de Contacto o escribinos por WhatsApp y te ayudamos directamente.";
 
+    function hasWord(q, kw) {
+      var esc = kw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      var re = new RegExp("(^|[^a-zA-Z0-9ñáéíóú])" + esc + "([^a-zA-Z0-9ñáéíóú]|$)");
+      return re.test(q);
+    }
     function findAnswer(text) {
-      var q = text.toLowerCase();
+      var q = " " + text.toLowerCase() + " ";
       for (var i = 0; i < KB.length; i++) {
         var item = KB[i];
         for (var j = 0; j < item.k.length; j++) {
-          if (q.indexOf(item.k[j]) !== -1) return item.a;
+          if (hasWord(q, item.k[j])) return item.a;
         }
       }
       return FALLBACK;
