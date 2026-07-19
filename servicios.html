@@ -901,11 +901,7 @@
           <p class="faq-q">¿Cuándo empiezo a ver resultados?</p>
           <p class="faq-a">Los primeros resultados se perciben entre 30 y 60 días, dependiendo del servicio y el punto de partida.</p>
         </div>
-        <div class="faq-card" data-reveal data-reveal-delay="3">
-          <p class="faq-q">¿Qué pasa si no estoy satisfecho?</p>
-          <p class="faq-a">Te devolvemos el dinero del primer mes, sin preguntas. Tu confianza vale más que una venta.</p>
-        </div>
-      </div>
+              </div>
     </div>
   </section>
 
@@ -998,8 +994,8 @@
   var pago = params.get("pago");
   if (pago && pagoNotice) {
     var msgs = {
-      ok:        { cls:"ok",      text:"✅ ¡Pago exitoso! Te contactaremos pronto." },
-      error:     { cls:"error",   text:"❌ Hubo un error en el pago. Intentá de nuevo." },
+      exitoso:   { cls:"ok",      text:"✅ ¡Pago exitoso! Te contactaremos pronto." },
+      fallido:   { cls:"error",   text:"❌ Hubo un error en el pago. Intentá de nuevo." },
       pendiente: { cls:"pending", text:"⏳ Tu pago está pendiente. Te avisamos cuando confirme." }
     };
     var m = msgs[pago];
