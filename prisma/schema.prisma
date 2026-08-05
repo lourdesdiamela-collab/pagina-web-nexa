@@ -1,0 +1,137 @@
+// Esquema de base de datos — NEXA Aprende (Fase 2)
+//
+// Dev local: SQLite (provider abajo). Producción (Vercel): Postgres administrado
+// (Vercel Postgres / Neon). Para pasar a producción: cambiar `provider` a
+// "postgresql" y setear DATABASE_URL con la connection string real, luego
+// correr `npx prisma migrate deploy`. Ver APRENDE_README.md.
+//
+// Nota: los campos de "enum" se modelan como String (no `enum` de Prisma) a
+// propósito, para que el mismo schema funcione igual en SQLite (que no
+// soporta enums nativos) y en Postgres sin tener que reescribirlo.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         String   @default("USER") // "USER" | "ADMIN"
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  orders  Order[]
+  reviews Review[]
+}
+
+model Category {
+  id        String  @id @default(cuid())
+  slug      String  @unique
+  label     String
+  fullLabel String
+  color     String  @default("#835CE6")
+  sortOrder Int     @default(0)
+
+  products Product[]
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  subtitle    String
+  description String
+  price       Int
+  level       String   @default("Todos los niveles")
+  pages       Int      @default(20)
+  readTime    String   @default("30 min")
+  includes    String   @default("[]") // JSON.stringify(string[])
+  featured    Boolean  @default(false)
+  bestSeller  Boolean  @default(false)
+  isNew       Boolean  @default(false)
+  onSale      Boolean  @default(false)
+  fileUrl     String? // ruta/URL del PDF real. null = "próximamente" (aún no subido por admin)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  categoryId String
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  reviews    Review[]
+  orderItems OrderItem[]
+
+  @@index([categoryId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String
+  name      String
+  approved  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@index([productId])
+}
+
+model Order {
+  id             String   @id @default(cuid())
+  status         String   @default("PENDING") // PENDING | APPROVED | REJECTED | CANCELLED
+  originalTotal  Int
+  total          Int
+  savings        Int      @default(0)
+  couponCode     String?
+  mpPreferenceId String?
+  mpPaymentId    String?
+  payerEmail     String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+
+  items OrderItem[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  title    String // snapshot del título al momento de la compra
+  price    Int // precio regular unitario al momento de la compra
+  qty      Int    @default(1)
+
+  orderId String
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  productId String?
+  product   Product? @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+}
+
+model Coupon {
+  id         String    @id @default(cuid())
+  code       String    @unique
+  type       String    @default("PERCENT") // PERCENT | FIXED
+  value      Int
+  active     Boolean   @default(true)
+  expiresAt  DateTime?
+  usageLimit Int?
+  usedCount  Int       @default(0)
+  createdAt  DateTime  @default(now())
+}

@@ -5,7 +5,14 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "postinstall": "prisma generate",
+    "db:seed": "node prisma/seed.mjs",
+    "db:migrate": "prisma migrate deploy",
+    "db:studio": "prisma studio"
+  },
+  "prisma": {
+    "seed": "node prisma/seed.mjs"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.17",
@@ -15,10 +22,16 @@
     "tailwindcss": "^3.4.1"
   },
   "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^3.0.3",
     "framer-motion": "^11.0.8",
     "lucide-react": "^0.344.0",
+    "mercadopago": "^3.3.0",
     "motion": "^11.0.0",
     "next": "14.1.0",
+    "next-auth": "^4.24.15",
+    "nodemailer": "^9.0.4",
+    "prisma": "^5.22.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

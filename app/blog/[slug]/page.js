@@ -49,8 +49,8 @@ export default function ArticleDetailPage({ params }) {
       <Navbar />
       <main style={{ paddingTop: 'clamp(88px, 10vw, 110px)', background: '#f5f0fa', minHeight: '100vh' }}>
         <article className="container" style={{ maxWidth: 860, paddingBottom: 80 }}>
-          <Link href="/aprende" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#5530c6', textDecoration: 'none', fontWeight: 700, marginBottom: 12 }}>
-            <ArrowLeft size={14} /> Volver a Aprende
+          <Link href="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#5530c6', textDecoration: 'none', fontWeight: 700, marginBottom: 12 }}>
+            <ArrowLeft size={14} /> Volver al Blog
           </Link>
 
           <div style={{ borderRadius: 18, border: '1px solid rgba(16,18,34,0.12)', background: 'white', overflow: 'hidden' }}>

@@ -1,4 +1,5 @@
 import { Plus_Jakarta_Sans } from 'next/font/google';
+import AuthProvider from '@/components/aprende/AuthProvider';
 import './globals.css';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
@@ -63,13 +64,15 @@ export default function RootLayout({ children }) {
               "description": "Empresa tecnológica orientada a crecimiento empresarial mediante automatización, CRM e IA.",
               "sameAs": [
                 "https://www.linkedin.com/company/nexagrowth",
-                "https://www.instagram.com/nexagrowth"
+                "https://www.instagram.com/nexagrowth.ar"
               ]
             }),
           }}
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }

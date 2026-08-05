@@ -4,7 +4,7 @@ import React from 'react';
 export default function WhatsAppFloat() {
   return (
     <a
-      href="https://wa.me/5492215774681"
+      href="https://wa.me/5491124527402"
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float shadow-lg hover:scale-110 transition-transform duration-300"

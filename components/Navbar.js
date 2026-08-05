@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Menu, UserRound, X } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
@@ -16,8 +17,15 @@ const LINKS = [
 
 export default function Navbar() {
   const pathname = usePathname();
+  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const accountHref = session?.user
+    ? (session.user.role === 'ADMIN' ? '/aprende/admin' : '/aprende/mis-recursos')
+    : '/aprende/cuenta/login';
+  const accountLabel = session?.user
+    ? (session.user.role === 'ADMIN' ? 'Panel admin' : 'Mis recursos')
+    : 'Ingresar';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -60,6 +68,9 @@ export default function Navbar() {
               </Link>
             ))}
           </div>
+          <Link href={accountHref} className="nav-portal">
+            <UserRound size={14} /> {accountLabel}
+          </Link>
           <Link href="https://crm.nexagrowth.com.ar" className="nav-portal">
             <UserRound size={14} /> Ingresar al CRM
           </Link>
@@ -110,13 +121,27 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            href="https://crm.nexagrowth.com.ar"
+            href={accountHref}
             style={{
               color: '#835CE6',
               fontWeight: 800,
               fontSize: '1.1rem',
               padding: '12px 0',
               borderTop: '1px solid rgba(16,18,34,0.08)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <UserRound size={16} /> {accountLabel}
+          </Link>
+          <Link
+            href="https://crm.nexagrowth.com.ar"
+            style={{
+              color: '#835CE6',
+              fontWeight: 800,
+              fontSize: '1.1rem',
+              padding: '4px 0 12px',
               display: 'flex',
               alignItems: 'center',
               gap: '8px',

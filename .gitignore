@@ -37,9 +37,18 @@ yarn-error.log*
 # vercel
 .vercel
 
+# base de datos local (dev) y archivos subidos por el admin
+/prisma/dev.db
+/prisma/dev.db-journal
+/storage/uploads/*
+!/storage/uploads/.gitkeep
+!/storage/uploads/**/.gitkeep
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
 
 .vercel
 .env*.local
+
+/lib/generated/prisma

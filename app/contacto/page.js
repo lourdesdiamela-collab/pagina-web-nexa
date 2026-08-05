@@ -1,15 +1,31 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Send, MessageCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 
-export default function Contact() {
+function ContactFormSection() {
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({ name: '', company: '', email: '', phone: '', service: '', challenge: '' });
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null);
+
+  // Prefill del servicio y el plan elegido cuando llega desde un CTA de /servicios
+  // (?servicio=slug&plan=Growth%20—%20NEXA%20Social%20($219.900/mes))
+  useEffect(() => {
+    const servicio = searchParams.get('servicio');
+    const plan = searchParams.get('plan');
+    if (servicio || plan) {
+      setFormData((prev) => ({
+        ...prev,
+        service: servicio || prev.service,
+        challenge: plan ? `Plan de interés: ${plan}` : prev.challenge,
+      }));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -33,8 +49,6 @@ export default function Contact() {
 
   return (
     <>
-      <Navbar />
-      <WhatsAppFloat />
       <main style={{ paddingTop: 'clamp(100px, 12vw, 140px)', background: '#0D0E15', minHeight: '100vh' }}>
         {/* Header */}
         <section style={{ textAlign: 'center', marginBottom: 48 }}>
@@ -63,7 +77,7 @@ export default function Contact() {
               )}
               {status === 'error' && (
                 <div style={{ background: 'rgba(255,107,107,0.08)', color: '#ff9b9b', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(255,107,107,0.2)', textAlign: 'center' }}>
-                  Ocurrió un error. Podés contactarnos por <a href="https://wa.me/5492215774681" target="_blank" rel="noreferrer" style={{ color: '#25D366', textDecoration: 'underline' }}>WhatsApp</a>.
+                  Ocurrió un error. Podés contactarnos por <a href="https://wa.me/5491124527402" target="_blank" rel="noreferrer" style={{ color: '#25D366', textDecoration: 'underline' }}>WhatsApp</a>.
                 </div>
               )}
 
@@ -91,10 +105,12 @@ export default function Contact() {
                 <label>Servicio de interés *</label>
                 <select value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} required disabled={loading}>
                   <option value="" disabled>Seleccioná una opción...</option>
+                  <option value="nexa_web">NEXA Web (sitio web)</option>
                   <option value="marketing_integral">Marketing & Estrategia Integral</option>
-                  <option value="redes_sociales">Redes Sociales y Contenido</option>
-                  <option value="meta_ads">Campañas Meta/Google Ads</option>
-                  <option value="crm_estructuras">CRM y Orden Digital</option>
+                  <option value="redes_sociales">Redes Sociales y Contenido (NEXA Social)</option>
+                  <option value="meta_ads">Campañas Meta / Google Ads (NEXA Ads)</option>
+                  <option value="crm_seguimiento">CRM y Seguimiento Comercial</option>
+                  <option value="orden_digital">Orden Digital y Estructura de Marca</option>
                   <option value="nexa_recover">NEXA Recover</option>
                 </select>
               </div>
@@ -111,13 +127,25 @@ export default function Contact() {
 
             {/* WhatsApp fallback */}
             <div style={{ textAlign: 'center', marginTop: 32 }}>
-              <a href="https://wa.me/5492215774681" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#25D366', fontWeight: 700, fontSize: '0.9rem' }}>
+              <a href="https://wa.me/5491124527402" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#25D366', fontWeight: 700, fontSize: '0.9rem' }}>
                 <MessageCircle size={16} /> ¿Preferís escribirnos por WhatsApp?
               </a>
             </div>
           </div>
         </section>
       </main>
+    </>
+  );
+}
+
+export default function Contact() {
+  return (
+    <>
+      <Navbar />
+      <WhatsAppFloat />
+      <Suspense fallback={null}>
+        <ContactFormSection />
+      </Suspense>
       <Footer />
     </>
   );
