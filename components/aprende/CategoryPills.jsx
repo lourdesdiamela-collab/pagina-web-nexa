@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 import { getCategoryIcon } from '@/lib/categoryIcons';
 
 export function CategoryPillsFilter({ active, onSelect, categories = [] }) {
@@ -35,7 +36,8 @@ export function CategoryLinksGrid({ categories = [], counts = {} }) {
         const Icon = getCategoryIcon(cat.slug);
         return (
           <Link key={cat.slug} href={`/aprende/categoria/${cat.slug}`} className="aprende-cat-card" style={{ '--cat-color': cat.color }}>
-            <span className="aprende-cat-icon"><Icon size={22} strokeWidth={1.7} /></span>
+            <span className="aprende-cat-arrow"><ArrowUpRight size={14} /></span>
+            <span className="aprende-cat-icon"><Icon size={24} strokeWidth={1.7} /></span>
             <span className="aprende-cat-label">{cat.label}</span>
             <span className="aprende-cat-count">{counts[cat.slug] ?? 0} recursos</span>
           </Link>

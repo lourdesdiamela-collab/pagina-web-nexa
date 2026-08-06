@@ -30,7 +30,7 @@ export default function ProductCard({ product }) {
           {!product.deal && !product.isNew && product.bestSeller && <span className="aprende-badge aprende-badge-best">Más vendido</span>}
         </div>
         <div className="aprende-card-body">
-          <span className="aprende-card-category" style={{ color: product.categoryColor }}>{product.categoryLabel}</span>
+          <span className="aprende-card-category" style={{ '--cat-color': product.categoryColor }}>{product.categoryLabel}</span>
           <h3 className="aprende-card-title">{product.title}</h3>
           <p className="aprende-card-subtitle">{product.subtitle}</p>
           <StarRating rating={product.rating} count={product.reviewsCount} size={12} />

@@ -30,7 +30,7 @@ const scaleIn = {
   show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
 };
 
-/* ─── Data: catálogo detallado ─── */
+/* ─── Data: catálogo detallado (orden = recorrido del cliente: estrategia → fundamentos → contenido → performance → retención → sistemas) ─── */
 const SERVICES = [
   {
     value: 'marketing_integral',
@@ -39,6 +39,8 @@ const SERVICES = [
     color: '#B89BFF',
     accent: 'rgba(184,155,255,0.12)',
     border: 'rgba(184,155,255,0.3)',
+    priceLineId: 'marketing',
+    priceFrom: '$149.900/mes',
     title: 'Marketing & Estrategia',
     summary: 'Un plan de marketing accionable, basado en el diagnóstico real de tu marca y tu mercado, para posicionarte y dominar tu nicho.',
     includes: [
@@ -52,6 +54,29 @@ const SERVICES = [
     outcome: 'Una estrategia clara y accionable, con foco en posicionamiento de marca y ventas medibles dentro de los primeros 90 días.',
     idealFor: 'marcas en crecimiento sin dirección clara',
     timeframe: 'Primeros entregables en 2-3 semanas',
+  },
+  {
+    value: 'orden_digital',
+    icon: Layers,
+    tag: 'Fundamentos',
+    color: '#FE8FD9',
+    accent: 'rgba(254,143,217,0.14)',
+    border: 'rgba(254,143,217,0.35)',
+    priceLineId: 'web',
+    priceFrom: '$99.000',
+    title: 'Orden Digital y Estructura',
+    summary: 'Auditoría, diseño y organización profunda de tu marca en todos los puntos de contacto digital.',
+    includes: [
+      'Auditoría completa de presencia digital (web, redes, Google Business)',
+      'Rediseño de identidad visual y manual de marca básico',
+      'Optimización de perfiles, biografías y enlaces',
+      'Estructuración de Google Business / Maps',
+      'Landing page nueva o mejora del sitio existente',
+    ],
+    how: 'Revisamos todo lo que un cliente ve de tu marca online, detectamos inconsistencias y lo unificamos bajo una imagen profesional y coherente en cada canal.',
+    outcome: 'Una marca percibida como más confiable y profesional, con mejor primera impresión y mayor conversión de visitas a consultas.',
+    idealFor: 'marcas con presencia digital desprolija o desactualizada',
+    timeframe: 'Diagnóstico y plan de orden en 1 semana',
   },
   {
     value: 'redes_sociales',
@@ -100,50 +125,6 @@ const SERVICES = [
     timeframe: 'Campañas activas en 5-7 días hábiles',
   },
   {
-    value: 'crm_seguimiento',
-    icon: Users,
-    tag: 'Tecnología',
-    color: '#835CE6',
-    accent: 'rgba(131,92,230,0.12)',
-    border: 'rgba(131,92,230,0.3)',
-    title: 'CRM y Seguimiento',
-    summary: 'Sistemas inteligentes para organizar el seguimiento comercial, para que ningún lead se pierda entre chats y planillas.',
-    includes: [
-      'Implementación de CRM a medida (NEXA OS o el que ya uses)',
-      'Automatización de seguimiento por WhatsApp y Email',
-      'Embudos de venta configurados por etapa',
-      'Capacitación del equipo comercial',
-      'Alertas automáticas de leads sin seguimiento',
-    ],
-    how: 'Mapeamos tu proceso de ventas actual, lo digitalizamos en el CRM y automatizamos los recordatorios y mensajes para que ningún lead se enfríe por falta de respuesta.',
-    outcome: 'Mayor tasa de conversión de leads a clientes y visibilidad total del embudo comercial en un solo lugar.',
-    idealFor: 'equipos que hoy gestionan leads por WhatsApp o planillas',
-    timeframe: 'CRM operativo en 1-2 semanas',
-  },
-  {
-    value: 'orden_digital',
-    icon: Layers,
-    tag: 'Fundamentos',
-    color: '#FE8FD9',
-    accent: 'rgba(254,143,217,0.14)',
-    border: 'rgba(254,143,217,0.35)',
-    priceLineId: 'web',
-    priceFrom: '$99.000',
-    title: 'Orden Digital y Estructura',
-    summary: 'Auditoría, diseño y organización profunda de tu marca en todos los puntos de contacto digital.',
-    includes: [
-      'Auditoría completa de presencia digital (web, redes, Google Business)',
-      'Rediseño de identidad visual y manual de marca básico',
-      'Optimización de perfiles, biografías y enlaces',
-      'Estructuración de Google Business / Maps',
-      'Landing page nueva o mejora del sitio existente',
-    ],
-    how: 'Revisamos todo lo que un cliente ve de tu marca online, detectamos inconsistencias y lo unificamos bajo una imagen profesional y coherente en cada canal.',
-    outcome: 'Una marca percibida como más confiable y profesional, con mejor primera impresión y mayor conversión de visitas a consultas.',
-    idealFor: 'marcas con presencia digital desprolija o desactualizada',
-    timeframe: 'Diagnóstico y plan de orden en 1 semana',
-  },
-  {
     value: 'nexa_recover',
     icon: RefreshCw,
     tag: 'Premium Feature',
@@ -166,10 +147,72 @@ const SERVICES = [
     idealFor: 'negocios con base de clientes o leads acumulada sin explotar',
     timeframe: 'Primeras reactivaciones dentro de los 30 días',
   },
+  {
+    value: 'crm_seguimiento',
+    icon: Users,
+    tag: 'Tecnología',
+    color: '#835CE6',
+    accent: 'rgba(131,92,230,0.12)',
+    border: 'rgba(131,92,230,0.3)',
+    priceLineId: 'crm',
+    priceFrom: '$149.900/mes',
+    title: 'CRM y Seguimiento',
+    summary: 'Sistemas inteligentes para organizar el seguimiento comercial, para que ningún lead se pierda entre chats y planillas.',
+    includes: [
+      'Implementación de CRM (NEXA OS o el que ya uses)',
+      'Automatización de seguimiento por WhatsApp y Email',
+      'Embudos de venta configurados por etapa',
+      'Capacitación del equipo comercial',
+      'Alertas automáticas de leads sin seguimiento',
+    ],
+    how: 'Mapeamos tu proceso de ventas actual, lo digitalizamos en el CRM y automatizamos los recordatorios y mensajes para que ningún lead se enfríe por falta de respuesta.',
+    outcome: 'Mayor tasa de conversión de leads a clientes y visibilidad total del embudo comercial en un solo lugar.',
+    idealFor: 'equipos que hoy gestionan leads por WhatsApp o planillas',
+    timeframe: 'CRM operativo en 1-2 semanas',
+  },
 ];
 
-/* ─── Data: líneas de producto con precio fijo ─── */
+/* ─── Data: líneas de producto con precio fijo ───
+   Marketing & Estrategia y CRM y Seguimiento comparten estructura de precios
+   con las líneas más afines conceptualmente (Ads y Recover respectivamente),
+   con beneficios redactados para su propio alcance. ─── */
 const PRICING_LINES = [
+  {
+    id: 'marketing',
+    slug: 'marketing_integral',
+    label: 'Marketing & Estrategia',
+    shortLabel: 'Estrategia',
+    color: '#B89BFF',
+    accent: 'rgba(184,155,255,0.12)',
+    border: 'rgba(184,155,255,0.3)',
+    billing: 'Plan mensual',
+    tagline: 'Diagnóstico, plan y ejecución de tu estrategia de marketing.',
+    tiers: [
+      {
+        name: 'Start',
+        price: '$149.900',
+        suffix: '/mes',
+        badge: false,
+        features: ['Diagnóstico de marca, competencia y audiencia', 'Plan de marketing a 90 días', 'Propuesta de valor y mensajes clave', 'Calendario de acciones por canal (orgánico + pago)', 'Reunión mensual de revisión', 'Recomendaciones priorizadas', 'Acceso al portal cliente'],
+      },
+      {
+        name: 'Growth',
+        price: '$299.900',
+        suffix: '/mes',
+        badge: true,
+        includesPrevious: 'Start',
+        features: ['Plan de marketing trimestral con objetivos medibles', 'Estrategia multicanal (orgánico + pago + email)', 'Análisis de competencia y benchmarking', 'Reuniones quincenales de revisión', 'Ajustes de estrategia basados en datos', 'Dashboard de indicadores clave', 'Soporte prioritario'],
+      },
+      {
+        name: 'Scale',
+        price: '$549.900',
+        suffix: '/mes',
+        badge: false,
+        includesPrevious: 'Growth',
+        features: ['Estrategia de marketing integral a 12 meses', 'Coordinación con equipos de Ads, Social y CRM', 'Planificación comercial mensual', 'Reuniones semanales de seguimiento', 'Dashboard ejecutivo personalizado', 'Optimización continua de la estrategia', 'Acompañamiento prioritario permanente'],
+      },
+    ],
+  },
   {
     id: 'web',
     slug: 'nexa_web',
@@ -204,42 +247,6 @@ const PRICING_LINES = [
       },
     ],
     footnote: 'Aceptamos todos los medios de pago: Visa, Mastercard, Amex, Mercado Pago y Naranja X. Pagando por transferencia bancaria tenés 10% de descuento.',
-  },
-  {
-    id: 'recover',
-    slug: 'nexa_recover',
-    label: 'NEXA Recover',
-    shortLabel: 'Recover',
-    color: '#D2F23A',
-    accent: 'rgba(210,242,58,0.12)',
-    border: 'rgba(210,242,58,0.3)',
-    billing: 'Plan mensual',
-    tagline: 'Reactivación de clientes inactivos y leads perdidos.',
-    tiers: [
-      {
-        name: 'Start',
-        price: '$149.900',
-        suffix: '/mes',
-        badge: false,
-        features: ['Hasta 500 contactos', 'Limpieza de base de datos', 'Segmentación inicial', 'Automatización básica', 'Recuperación de consultas', 'Seguimiento por WhatsApp', 'Reporte mensual', 'Dashboard básico'],
-      },
-      {
-        name: 'Growth',
-        price: '$349.900',
-        suffix: '/mes',
-        badge: true,
-        includesPrevious: 'Start',
-        features: ['Hasta 2.000 contactos', 'Recuperación de presupuestos', 'Automatizaciones avanzadas', 'Estrategias de recompra', 'Segmentación avanzada', 'Seguimiento multicanal', 'Dashboard avanzado', 'Reportes quincenales', 'Optimización continua', 'Soporte prioritario'],
-      },
-      {
-        name: 'Scale',
-        price: '$699.900',
-        suffix: '/mes',
-        badge: false,
-        includesPrevious: 'Growth',
-        features: ['Más de 5.000 contactos', 'Automatizaciones empresariales', 'Flujos personalizados', 'Recuperación avanzada de clientes', 'Estrategias de retención', 'Programas de fidelización', 'Dashboard ejecutivo', 'Integraciones con CRM', 'Seguimiento comercial avanzado', 'Reportes semanales', 'Soporte VIP'],
-      },
-    ],
   },
   {
     id: 'social',
@@ -313,6 +320,78 @@ const PRICING_LINES = [
       },
     ],
   },
+  {
+    id: 'recover',
+    slug: 'nexa_recover',
+    label: 'NEXA Recover',
+    shortLabel: 'Recover',
+    color: '#D2F23A',
+    accent: 'rgba(210,242,58,0.12)',
+    border: 'rgba(210,242,58,0.3)',
+    billing: 'Plan mensual',
+    tagline: 'Reactivación de clientes inactivos y leads perdidos.',
+    tiers: [
+      {
+        name: 'Start',
+        price: '$149.900',
+        suffix: '/mes',
+        badge: false,
+        features: ['Hasta 500 contactos', 'Limpieza de base de datos', 'Segmentación inicial', 'Automatización básica', 'Recuperación de consultas', 'Seguimiento por WhatsApp', 'Reporte mensual', 'Dashboard básico'],
+      },
+      {
+        name: 'Growth',
+        price: '$349.900',
+        suffix: '/mes',
+        badge: true,
+        includesPrevious: 'Start',
+        features: ['Hasta 2.000 contactos', 'Recuperación de presupuestos', 'Automatizaciones avanzadas', 'Estrategias de recompra', 'Segmentación avanzada', 'Seguimiento multicanal', 'Dashboard avanzado', 'Reportes quincenales', 'Optimización continua', 'Soporte prioritario'],
+      },
+      {
+        name: 'Scale',
+        price: '$699.900',
+        suffix: '/mes',
+        badge: false,
+        includesPrevious: 'Growth',
+        features: ['Más de 5.000 contactos', 'Automatizaciones empresariales', 'Flujos personalizados', 'Recuperación avanzada de clientes', 'Estrategias de retención', 'Programas de fidelización', 'Dashboard ejecutivo', 'Integraciones con CRM', 'Seguimiento comercial avanzado', 'Reportes semanales', 'Soporte VIP'],
+      },
+    ],
+  },
+  {
+    id: 'crm',
+    slug: 'crm_seguimiento',
+    label: 'CRM y Seguimiento',
+    shortLabel: 'CRM',
+    color: '#835CE6',
+    accent: 'rgba(131,92,230,0.12)',
+    border: 'rgba(131,92,230,0.3)',
+    billing: 'Plan mensual',
+    tagline: 'Sistemas de seguimiento comercial para que ningún lead se pierda.',
+    tiers: [
+      {
+        name: 'Start',
+        price: '$149.900',
+        suffix: '/mes',
+        badge: false,
+        features: ['Implementación de CRM hasta 500 contactos', 'Migración y organización de tu base de leads', 'Embudo de ventas configurado por etapa', 'Automatización básica de seguimiento por WhatsApp', 'Alertas de leads sin respuesta', 'Capacitación inicial del equipo', 'Reporte mensual de conversión', 'Dashboard básico'],
+      },
+      {
+        name: 'Growth',
+        price: '$349.900',
+        suffix: '/mes',
+        badge: true,
+        includesPrevious: 'Start',
+        features: ['Hasta 2.000 contactos', 'Automatización avanzada por WhatsApp y Email', 'Múltiples embudos por producto/servicio', 'Segmentación y etiquetado avanzado de leads', 'Alertas y recordatorios inteligentes', 'Reportes quincenales de conversión', 'Dashboard avanzado del equipo comercial', 'Soporte prioritario'],
+      },
+      {
+        name: 'Scale',
+        price: '$699.900',
+        suffix: '/mes',
+        badge: false,
+        includesPrevious: 'Growth',
+        features: ['Más de 5.000 contactos', 'Automatizaciones comerciales empresariales', 'Integraciones con otras herramientas (Ads, Web, Social)', 'Flujos personalizados por segmento', 'Capacitación continua del equipo', 'Dashboard ejecutivo en tiempo real', 'Reportes semanales de performance', 'Soporte VIP'],
+      },
+    ],
+  },
 ];
 
 const TRUST_CHIPS = [
@@ -339,7 +418,7 @@ const FAQS = [
   },
   {
     q: '¿Cómo se define la inversión de cada servicio?',
-    a: 'NEXA Web, Recover, Social y Ads tienen planes con precio fijo y público: los ves completos en la sección "Planes y precios" de esta página. Marketing Estratégico integral y CRM a medida se cotizan según el alcance del proyecto; te confirmamos ese presupuesto por escrito antes de empezar.',
+    a: 'Los seis servicios tienen planes con precio fijo y público, sin cotizaciones a medida: los ves completos en la sección "Planes y precios" de esta página, cada uno con 3 niveles (Start, Growth y Scale) según el alcance que necesites.',
   },
   {
     q: '¿Los planes son mensuales?',
@@ -514,11 +593,7 @@ export default function Services() {
                       <span className="svc-meta-chip">{s.timeframe}</span>
                     </div>
 
-                    {s.priceLineId ? (
-                      <ServicePricing line={PRICING_LINES.find((l) => l.id === s.priceLineId)} />
-                    ) : (
-                      <div className="svc-price-badge svc-price-badge-quote">Cotización a medida</div>
-                    )}
+                    <ServicePricing line={PRICING_LINES.find((l) => l.id === s.priceLineId)} />
 
                     <div className="svc-cta-row">
                       <Link href={`/contacto?servicio=${s.value}`} className="btn btn-lima btn-sm">
@@ -535,10 +610,10 @@ export default function Services() {
 
             <motion.div className="pricing-note" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
               <div>
-                <h4>NEXA Web, Recover, Social y Ads ya tienen precio fijo y público</h4>
-                <p>Mirá los planes completos más abajo. Marketing Estratégico integral y CRM a medida se cotizan según el alcance del proyecto — te confirmamos ese presupuesto por escrito antes de empezar.</p>
+                <h4>Los 6 servicios tienen precio fijo y público</h4>
+                <p>Sin cotizaciones a medida: mirá los planes completos de cada servicio más abajo, con 3 niveles para elegir según el alcance que necesites.</p>
               </div>
-              <button type="button" onClick={() => goToPlans('web')} className="btn btn-primary btn-sm">
+              <button type="button" onClick={() => goToPlans('marketing')} className="btn btn-primary btn-sm">
                 Ver planes y precios <ArrowRight size={15} />
               </button>
             </motion.div>
