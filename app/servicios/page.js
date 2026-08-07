@@ -434,65 +434,6 @@ const FAQS = [
   },
 ];
 
-/* ─── Precio compacto embebido en la tarjeta de servicio ─── */
-function ServicePricing({ line }) {
-  const featuredIndex = line.tiers.findIndex((t) => t.badge);
-  const [activeTier, setActiveTier] = useState(featuredIndex >= 0 ? featuredIndex : 0);
-  const tier = line.tiers[activeTier];
-  const planPriceText = tier.suffix === 'pago único' ? `${tier.price}, pago único` : `${tier.price}${tier.suffix}`;
-  const planLabel = `${tier.name} — NEXA ${line.shortLabel} (${planPriceText})`;
-  const waPlanText = encodeURIComponent(`Hola NEXA! Quiero contratar el plan ${tier.name} de NEXA ${line.shortLabel} (${planPriceText}). ¿Cómo seguimos?`);
-
-  return (
-    <div className="svc-pricing" style={{ borderColor: line.border, background: line.accent }}>
-      <div className="svc-pricing-billing" style={{ color: line.color }}>{line.billing}</div>
-
-      <div className="svc-pricing-tabs" role="tablist">
-        {line.tiers.map((t, i) => (
-          <button
-            key={t.name}
-            type="button"
-            role="tab"
-            aria-selected={activeTier === i}
-            className={`svc-pricing-tab ${activeTier === i ? 'active' : ''}`}
-            style={activeTier === i ? { color: line.color, borderColor: line.color, background: 'var(--bg-main)' } : undefined}
-            onClick={() => setActiveTier(i)}
-          >
-            {t.name}
-          </button>
-        ))}
-      </div>
-
-      <div className="svc-pricing-price">
-        {tier.price}
-        <span>{tier.suffix === 'pago único' ? 'pago único' : tier.suffix}</span>
-        {tier.badge && <span className="svc-pricing-badge" style={{ background: line.color }}>Más elegido</span>}
-      </div>
-
-      {tier.includesPrevious && (
-        <div className="svc-pricing-includes" style={{ color: line.color }}>Todo lo de {tier.includesPrevious}, más:</div>
-      )}
-      <ul className="svc-pricing-features">
-        {tier.features.slice(0, 4).map((f) => (
-          <li key={f}><CheckCircle2 size={13} style={{ color: line.color }} /><span>{f}</span></li>
-        ))}
-        {tier.features.length > 4 && <li className="svc-pricing-more">+{tier.features.length - 4} beneficios más</li>}
-      </ul>
-
-      <div className="svc-pricing-cta">
-        <Link href={`/contacto?servicio=${line.slug}&plan=${encodeURIComponent(planLabel)}`} className="btn btn-lima btn-sm" style={{ justifyContent: 'center' }}>
-          Quiero el plan {tier.name}
-        </Link>
-        <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waPlanText}`} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ justifyContent: 'center' }}>
-          <MessageCircle size={14} /> WhatsApp
-        </a>
-      </div>
-
-      {line.footnote && <p className="svc-pricing-footnote">{line.footnote}</p>}
-    </div>
-  );
-}
-
 export default function Services() {
   const [activeFaq, setActiveFaq] = useState(null);
   const [activeLine, setActiveLine] = useState(PRICING_LINES[0].id);
@@ -593,15 +534,22 @@ export default function Services() {
                       <span className="svc-meta-chip">{s.timeframe}</span>
                     </div>
 
-                    <ServicePricing line={PRICING_LINES.find((l) => l.id === s.priceLineId)} />
-
-                    <div className="svc-cta-row">
-                      <Link href={`/contacto?servicio=${s.value}`} className="btn btn-lima btn-sm">
-                        Quiero este servicio <ArrowRight size={15} />
-                      </Link>
-                      <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-wa">
-                        <MessageCircle size={15} /> Consultar por WhatsApp
-                      </a>
+                    <div className="svc-footer">
+                      <div className="svc-price">
+                        <span className="svc-price-label">Desde</span>
+                        <span className="svc-price-value" style={{ color: s.color }}>{s.priceFrom}</span>
+                      </div>
+                      <div className="svc-cta-row">
+                        <Link href={`/contacto?servicio=${s.value}`} className="btn btn-lima btn-sm">
+                          Quiero este servicio <ArrowRight size={15} />
+                        </Link>
+                        <button type="button" onClick={() => goToPlans(s.priceLineId)} className="svc-plans-link">
+                          Ver planes y precios
+                        </button>
+                        <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-wa">
+                          <MessageCircle size={15} /> WhatsApp
+                        </a>
+                      </div>
                     </div>
                   </motion.article>
                 );

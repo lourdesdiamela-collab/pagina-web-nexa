@@ -11,8 +11,8 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'NEXA | Ecosistemas de Crecimiento & CRM Inteligente',
-  description: 'Transformamos marketing, seguimiento comercial, automatización y datos en crecimiento medible para tu empresa.',
+  title: 'NEXA | Marketing Digital, Redes Sociales y Publicidad con IA',
+  description: 'Agencia de marketing digital: gestión de redes sociales, campañas de publicidad y automatización con IA para conseguir más clientes y vender más.',
   metadataBase: new URL('https://nexagrowth.com.ar'),
   alternates: {
     canonical: '/',
@@ -21,8 +21,8 @@ export const metadata = {
     icon: '/favicon.svg',
   },
   openGraph: {
-    title: 'NEXA | Ecosistemas de Crecimiento & CRM Inteligente',
-    description: 'Transformamos marketing, seguimiento comercial, automatización y datos en crecimiento medible para tu empresa.',
+    title: 'NEXA | Marketing Digital, Redes Sociales y Publicidad con IA',
+    description: 'Agencia de marketing digital: gestión de redes sociales, campañas de publicidad y automatización con IA para conseguir más clientes y vender más.',
     url: 'https://nexagrowth.com.ar',
     siteName: 'NEXA',
     locale: 'es_AR',
@@ -32,14 +32,14 @@ export const metadata = {
         url: '/nexa-hero-new.png',
         width: 1200,
         height: 630,
-        alt: 'NEXA Growth Systems',
+        alt: 'NEXA Marketing Digital',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'NEXA | Ecosistemas de Crecimiento & CRM Inteligente',
-    description: 'Transformamos marketing, seguimiento comercial, automatización y datos en crecimiento medible para tu empresa.',
+    title: 'NEXA | Marketing Digital, Redes Sociales y Publicidad con IA',
+    description: 'Agencia de marketing digital: gestión de redes sociales, campañas de publicidad y automatización con IA para conseguir más clientes y vender más.',
     images: ['/nexa-hero-new.png'],
   },
   robots: {
@@ -61,7 +61,7 @@ export default function RootLayout({ children }) {
               "name": "NEXA",
               "url": "https://nexagrowth.com.ar",
               "logo": "https://nexagrowth.com.ar/favicon.svg",
-              "description": "Empresa tecnológica orientada a crecimiento empresarial mediante automatización, CRM e IA.",
+              "description": "Agencia de marketing digital especializada en redes sociales, publicidad y automatización con IA aplicada al crecimiento de marcas.",
               "sameAs": [
                 "https://www.linkedin.com/company/nexagrowth",
                 "https://www.instagram.com/nexagrowth.ar"

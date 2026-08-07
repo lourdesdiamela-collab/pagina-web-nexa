@@ -414,22 +414,23 @@ p { color: var(--text-body); line-height: 1.7; }
 .svc-catalog-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 28px;
+  gap: 32px;
+  align-items: stretch;
 }
 .svc-card {
   display: flex;
   flex-direction: column;
-  gap: 20px;
-  background: var(--bg-main);
+  gap: 22px;
+  background: var(--bg-white, #fff);
   border: 1px solid var(--border-light);
   border-radius: 28px;
   padding: 40px;
   position: relative;
   overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  height: 100%;
+  transition: box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .svc-card:hover {
-  background: white;
   border-color: transparent;
   box-shadow: 0 28px 64px rgba(184, 155, 255, 0.16);
 }
@@ -470,7 +471,7 @@ p { color: var(--text-body); line-height: 1.7; }
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 18px;
-  background: rgba(184, 155, 255, 0.05);
+  background: var(--bg-soft);
   border-radius: 16px;
   padding: 18px;
 }
@@ -487,7 +488,36 @@ p { color: var(--text-body); line-height: 1.7; }
   border-radius: 999px;
 }
 
-.svc-cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: auto; padding-top: 4px; }
+/* ── Footer de la tarjeta: precio + acciones, siempre al final ── */
+.svc-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 1px solid var(--border-light);
+}
+.svc-price { display: flex; align-items: baseline; gap: 8px; }
+.svc-price-label { font-size: 0.76rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.svc-price-value { font-size: 1.5rem; font-weight: 900; letter-spacing: -0.02em; color: var(--text-dark); }
+
+.svc-cta-row { display: flex; align-items: center; gap: 8px 16px; flex-wrap: wrap; }
+.svc-plans-link {
+  background: none;
+  border: none;
+  padding: 4px 2px;
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--lilac-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(131, 92, 230, 0.35);
+  cursor: pointer;
+  transition: color 0.25s;
+}
+.svc-plans-link:hover { color: var(--text-dark); }
+
 .btn-sm { padding: 12px 22px; font-size: 0.86rem; }
 .btn-wa {
   display: inline-flex;
@@ -503,89 +533,6 @@ p { color: var(--text-body); line-height: 1.7; }
   transition: all 0.3s;
 }
 .btn-wa:hover { background: rgba(37, 211, 102, 0.16); transform: translateY(-2px); }
-
-/* ── Precio compacto embebido en tarjeta de servicio ── */
-.svc-pricing {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  border: 1px solid;
-  border-radius: 18px;
-  padding: 20px;
-  margin-top: 2px;
-}
-.svc-pricing-billing {
-  font-size: 0.7rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.svc-pricing-tabs { display: flex; gap: 6px; }
-.svc-pricing-tab {
-  flex: 1;
-  padding: 8px 10px;
-  border-radius: 10px;
-  border: 1px solid var(--border-light);
-  background: rgba(255, 255, 255, 0.5);
-  color: var(--text-body);
-  font-weight: 700;
-  font-size: 0.78rem;
-  font-family: inherit;
-  cursor: pointer;
-  transition: all 0.25s;
-}
-.svc-pricing-tab:hover { color: var(--text-dark); }
-.svc-pricing-tab.active { font-weight: 800; }
-.svc-pricing-price {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 8px;
-  font-size: 1.7rem;
-  font-weight: 900;
-  letter-spacing: -0.03em;
-  color: var(--text-dark);
-  line-height: 1;
-}
-.svc-pricing-price span {
-  font-size: 0.7rem;
-  font-weight: 700;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-.svc-pricing-badge {
-  margin-left: auto;
-  padding: 5px 12px;
-  border-radius: 999px;
-  font-size: 0.66rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: #12141D;
-  white-space: nowrap;
-}
-.svc-pricing-includes {
-  font-size: 0.72rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-top: -4px;
-}
-.svc-pricing-features { display: flex; flex-direction: column; gap: 7px; }
-.svc-pricing-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.85rem; color: var(--text-body); line-height: 1.5; }
-.svc-pricing-features svg { flex-shrink: 0; margin-top: 3px; }
-.svc-pricing-more { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); padding-left: 21px; }
-.svc-pricing-cta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
-.svc-pricing-cta > * { flex: 1; min-width: 140px; }
-.svc-pricing-footnote {
-  font-size: 0.74rem;
-  color: var(--text-muted);
-  line-height: 1.5;
-  margin: 0;
-  padding-top: 4px;
-  border-top: 1px solid var(--border-light);
-}
 
 .pricing-note {
   margin-top: 12px;
