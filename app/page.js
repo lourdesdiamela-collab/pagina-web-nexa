@@ -1,4 +1,4 @@
-'use client';
+                                                                                                                                                                                                                                                                                                                                                                         'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import WhatsAppFloat from '@/components/WhatsAppFloat';
+import WhatsAppFloat from '@/components/WhatsAppFloat';             
 import { MarketingBadges } from '@/components/ui/marketing-badges';
 
 /* ─── Animation Variants ─── */
@@ -39,17 +39,17 @@ const scaleIn = {
 const SERVICES = [
   {
     icon: Cpu,
-    title: 'Sistemas CRM & IA',
-    desc: 'Automatizamos la gestión comercial de tu negocio integrando CRM a medida y asistentes de Inteligencia Artificial para atención y cierre de ventas.',
-    tag: 'Tecnología',
+    title: 'Seguimiento de Clientes con IA',
+    desc: 'Ordenamos tus contactos y leads en un sistema simple, con asistentes de Inteligencia Artificial que responden y hacen seguimiento para que ninguna venta se enfríe.',
+    tag: 'CRM',
     tagColor: '#B89BFF',
     accent: 'rgba(184,155,255,0.12)',
     border: 'rgba(184,155,255,0.25)',
   },
   {
     icon: TrendingUp,
-    title: 'Adquisición & Pauta Inteligente',
-    desc: 'Diseñamos y optimizamos campañas de Meta & Google Ads basadas en datos, enfocadas exclusivamente en retorno de inversión y escala.',
+    title: 'Publicidad que Convierte',
+    desc:'Creamos y optimizamos campañas de Instagram, Facebook y Google Ads enfocadas en un solo objetivo: traerte clientes reales, no solo clics.',
     tag: 'Performance',
     tagColor: '#D2F23A',
     accent: 'rgba(210,242,58,0.08)',
@@ -57,8 +57,8 @@ const SERVICES = [
   },
   {
     icon: Database,
-    title: 'Automatización & Datos',
-    desc: 'Conectamos tus herramientas en piloto automático. Automatizamos reportes, facturación, y flujos de trabajo para ahorrar cientos de horas mensuales.',
+    title: 'Automatización de Marketing',
+    desc: 'Ponemos tu marketing en piloto automático: reportes, mensajes de seguimiento y tareas repetitivas resueltos solos, para que tu equipo se enfoque en vender.',
     tag: 'Eficiencia',
     tagColor: '#EAA1FB',
     accent: 'rgba(234,161,251,0.08)',
@@ -109,27 +109,27 @@ const TESTIMONIALS = [
 
 const CHANNEL_FEATURES = [
   'Estrategia multicanal integrada',
-  'Campañas optimizadas con IA generativa',
-  'Optimización continua basada en datos',
+      'Contenido y campañas optimizados con Inteligencia Artificial',
+      'Optimización continua basada en datos reales',
   'Reportes semanales 100% transparentes',
 ];
 
 const FAQS = [
   {
     question: '¿Qué diferencia a NEXA de una agencia de marketing tradicional?',
-    answer: 'No somos una agencia boutique que hace posteos estéticos. Somos una consultora tecnológica que integra desarrollo de software, CRM, automatización de procesos con IA y adquisición paga orientada a datos y crecimiento de negocio medible.',
+          answer: 'Sí, somos una agencia de marketing - pero no nos quedamos en lo estético. Sumamos Inteligencia Artificial a la gestión de redes, la publicidad y el seguimiento de tus clientes, para que cada campaña se traduzca en ventas medibles y no solo en likes.',
   },
   {
     question: '¿Cómo funciona la integración con nuestro negocio?',
-    answer: 'Realizamos una inmersión técnica inicial, implementamos el ecosistema digital a medida (CRM, embudos, integraciones API) y capacitamos a tu equipo. Todo queda centralizado en una sola plataforma operativa.',
+          answer: 'Arrancamos con un diagnóstico de tu marca, tus redes y tu forma actual de conseguir clientes. Con eso armamos el plan de marketing, las campañas y el sistema de seguimiento comercial que necesitás, y capacitamos a tu equipo para usarlo. Todo queda centralizado en un solo lugar.',
   },
   {
     question: '¿Qué es NEXA Recover y cuándo veo resultados?',
-    answer: 'NEXA Recover es nuestro sistema especializado en reactivar oportunidades comerciales dormidas en tu base de datos mediante automatización. Los resultados suelen verse en los primeros 30 días.',
+          answer: 'NEXA Recover es nuestro servicio para reactivar clientes inactivos y leads que quedaron sin cerrar en tu base de contactos, con mensajes automatizados de seguimiento. Los resultados suelen verse en los primeros 30 días.',
   },
   {
-    question: '¿Cuáles son los requisitos técnicos para empezar?',
-    answer: 'Ninguno por tu parte. Nosotros nos encargamos de las integraciones con tus canales actuales (WhatsApp, Email, CRM existente) utilizando APIs seguras.',
+          question: '¿Necesito saber de tecnología para trabajar con NEXA?',
+          answer: 'Para nada. Nosotros nos encargamos de todo: conectamos tu WhatsApp, tus redes y tu sistema de seguimiento de clientes sin que tengas que ocuparte de ningún detalle técnico.',
   },
 ];
 
@@ -207,10 +207,10 @@ function StatItem({ stat, index }) {
 export default function HomePage() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    service: 'CRM & Automatización',
+        service: 'Redes Sociales y Contenido',
     companyName: '',
     website: '',
-    goals: 'Optimizar Procesos',
+        goals: 'Ordenar mi Marketing',
     contactName: '',
     contactEmail: '',
     contactPhone: '',
@@ -251,7 +251,7 @@ export default function HomePage() {
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || 'No se pudo enviar');
       setStatus('ok');
-      setFormData({ service: 'CRM & Automatización', companyName: '', website: '', goals: 'Optimizar Procesos', contactName: '', contactEmail: '', contactPhone: '' });
+            setFormData({ service: 'Redes Sociales y Contenido', companyName: '', website: '', goals: 'Ordenar mi Marketing', contactName: '', contactEmail: '', contactPhone: '' });
       setStep(1);
     } catch (err) {
       console.error(err); setStatus('error');
@@ -291,16 +291,16 @@ export default function HomePage() {
             >
               <motion.div variants={fadeUp} className="hero-badge">
                 <Sparkles size={14} />
-                <span>Ecosistemas de Crecimiento Tecnológico</span>
+                        <span>Marketing Digital con Inteligencia Artificial</span>
               </motion.div>
 
               <motion.h1 variants={fadeUp} className="hero-title">
-                Transformamos marketing, seguimiento comercial y datos en{' '}
+                        Transformamos tus redes, tu publicidad y tu seguimiento de clientes en{' '}
                 <span className="text-highlight">crecimiento medible.</span>
               </motion.h1>
 
               <motion.p variants={fadeUp} className="hero-subtitle">
-                Integramos CRM, IA y pauta inteligente en un solo ecosistema digital que convierte datos en ventas reales.
+                        Gestionamos tus redes sociales, tus campañas de publicidad y el seguimiento de tus clientes con Inteligencia Artificial aplicada al marketing, para convertir seguidores en ventas reales.
               </motion.p>
 
               <motion.div variants={fadeUp} className="hero-actions">
@@ -445,7 +445,7 @@ export default function HomePage() {
           transition={{ duration: 0.6 }}
         >
           <div className="container">
-            <p className="clients-title">Infraestructura comercial validada en múltiples industrias</p>
+                    <p className="clients-title">Marcas que ya crecieron con NEXA</p>
             <div className="clients-row">
               {['Ciudad Moto', 'Corven Motos', 'Roca Viviendas', 'Casa Diez', 'Estética Funcional', 'Aqualaf'].map((name, i) => (
                 <motion.div
@@ -490,9 +490,9 @@ export default function HomePage() {
               viewport={{ once: true, margin: '-60px' }}
             >
               <motion.span variants={fadeUp} className="section-tag">Soluciones</motion.span>
-              <motion.h2 variants={fadeUp} className="section-title">Nuestra Suite Tecnológica</motion.h2>
+                        <motion.h2 variants={fadeUp} className="section-title">Cómo te ayudamos a crecer</motion.h2>
               <motion.p variants={fadeUp} className="section-subtitle">
-                Reemplazamos los procesos manuales por sistemas escalables orientados a conversión.
+                            Reemplazamos la improvisación por un plan de marketing que funciona, canal por canal.
               </motion.p>
             </motion.div>
 
@@ -743,9 +743,9 @@ export default function HomePage() {
               >
                 <div className="benefit-list">
                   {[
-                    'Conexión directa con tu CRM actual',
-                    'Análisis de base de datos sin cargo',
-                    'Reporte de automatización personalizado',
+                                    'Diagnóstico de marketing y redes sin cargo',
+                                    'Análisis de tu competencia y tu marca',
+                                    'Plan de acción personalizado, sin compromiso',
                   ].map((b, i) => (
                     <motion.div
                       key={b}
@@ -822,7 +822,7 @@ export default function HomePage() {
                       >
                         <h3>¿Qué solución necesitás prioritariamente?</h3>
                         <div className="options-grid">
-                          {['CRM & Automatización', 'Pauta Paga Ads', 'Nexa Recover', 'Consultoría Técnica Completa'].map((srv) => (
+                      {['Redes Sociales y Contenido', 'Publicidad y Ads', 'Recuperar Clientes Inactivos', 'Plan de Marketing Completo'].map((srv) => (
                             <motion.button
                               key={srv}
                               type="button"
@@ -872,7 +872,7 @@ export default function HomePage() {
                       >
                         <h3>¿Cuál es tu objetivo comercial principal?</h3>
                         <div className="options-grid">
-                          {['Optimizar Procesos', 'Duplicar Ventas de Leads', 'Recuperar Clientes Inactivos', 'Automatizar Flujos / Ahorrar Tiempo'].map((goal) => (
+                      {['Ordenar mi Marketing', 'Conseguir Más Clientes', 'Recuperar Clientes Inactivos', 'Ahorrar Tiempo con Automatización'].map((goal) => (
                             <motion.button
                               key={goal}
                               type="button"
