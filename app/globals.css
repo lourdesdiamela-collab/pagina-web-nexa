@@ -1337,10 +1337,12 @@ p { color: var(--text-body); line-height: 1.7; }
 .aprende-review-empty { color: var(--text-muted); }
 
 /* ── Botón flotante de carrito ── */
+/* bottom: 104px para no quedar tapado por el botón flotante de WhatsApp
+   (fixed, bottom 30px, alto 60px -> ocupa hasta 90px desde abajo) */
 .aprende-cart-fab {
   position: fixed;
   right: 24px;
-  bottom: 24px;
+  bottom: 104px;
   z-index: 90;
   width: 56px; height: 56px;
   border-radius: 50%;
@@ -1556,7 +1558,7 @@ p { color: var(--text-body); line-height: 1.7; }
   .aprende-cart-item { grid-template-columns: 48px 1fr; grid-template-areas: "cover info" "cover qty" "cover subtotal"; row-gap: 6px; }
   .aprende-cart-item-remove { position: absolute; top: 10px; right: 10px; }
   .aprende-cart-item { position: relative; }
-  .aprende-cart-fab { right: 16px; bottom: 16px; width: 50px; height: 50px; }
+  .aprende-cart-fab { right: 16px; bottom: 96px; width: 50px; height: 50px; }
 }
 
 @media (max-width: 480px) {
