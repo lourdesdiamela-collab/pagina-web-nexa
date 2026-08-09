@@ -5,6 +5,36 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { getArticleBySlug } from '@/lib/articles';
 
+export async function generateMetadata({ params }) {
+  const article = getArticleBySlug(params.slug);
+  if (!article) {
+    return { title: 'Artículo no encontrado | NEXA' };
+  }
+  const title = `${article.title} | Blog NEXA`;
+  return {
+    title,
+    description: article.summary,
+    alternates: {
+      canonical: `/blog/${article.slug}`,
+    },
+    openGraph: {
+      title,
+      description: article.summary,
+      url: `/blog/${article.slug}`,
+      siteName: 'NEXA',
+      locale: 'es_AR',
+      type: 'article',
+      images: [{ url: article.cover, alt: article.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description: article.summary,
+      images: [article.cover],
+    },
+  };
+}
+
 function renderSection(section) {
   if (section.type === 'h2') {
     return <h2 style={{ margin: '24px 0 10px', fontSize: '1.55rem', color: '#101222' }}>{section.content}</h2>;
