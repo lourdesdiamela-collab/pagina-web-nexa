@@ -17,6 +17,7 @@ function formatDate(d) {
 const STATUS_LABEL = {
   APPROVED: 'Aprobado',
   PENDING: 'Pendiente',
+  PENDING_TRANSFER: 'Esperando transferencia',
   REJECTED: 'Rechazado',
   CANCELLED: 'Cancelado',
 };
@@ -84,7 +85,9 @@ export default async function MisRecursosPage() {
                         )
                       ) : (
                         <span className="aprende-download-btn disabled">
-                          {order.status === 'PENDING' ? 'Esperando pago' : 'No disponible'}
+                          {order.status === 'PENDING' && 'Esperando pago'}
+                          {order.status === 'PENDING_TRANSFER' && 'Esperando transferencia'}
+                          {order.status !== 'PENDING' && order.status !== 'PENDING_TRANSFER' && 'No disponible'}
                         </span>
                       )}
                     </div>

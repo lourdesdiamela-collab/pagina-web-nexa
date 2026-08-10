@@ -8,6 +8,7 @@ import ProductCover from '@/components/aprende/ProductCover';
 import { useCart } from '@/components/aprende/CartContext';
 import { formatPrice } from '@/lib/products.mjs';
 import { nextPromoHint } from '@/lib/pricing';
+import UrgencyCountdown from '@/components/aprende/UrgencyCountdown';
 
 export default function CartPage() {
   const { items, updateQty, removeItem, totals, isLoaded, resolveProduct, catalogLoaded } = useCart();
@@ -91,6 +92,10 @@ export default function CartPage() {
                 </div>
 
                 <p className="aprende-cart-hint">{nextPromoHint(totals.totalUnits)}</p>
+
+                <div style={{ margin: '4px 0 14px' }}>
+                  <UrgencyCountdown compact />
+                </div>
 
                 <Link href="/aprende/checkout" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                   Ir a checkout

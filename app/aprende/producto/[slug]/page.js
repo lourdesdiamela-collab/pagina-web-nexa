@@ -7,6 +7,7 @@ import WhatsAppFloat from '@/components/WhatsAppFloat';
 import ProductCover from '@/components/aprende/ProductCover';
 import ProductCard from '@/components/aprende/ProductCard';
 import ProductActions from '@/components/aprende/ProductActions';
+import UrgencyCountdown from '@/components/aprende/UrgencyCountdown';
 import StarRating from '@/components/aprende/StarRating';
 import ReviewList from '@/components/aprende/ReviewList';
 import { formatPrice } from '@/lib/products.mjs';
@@ -95,6 +96,10 @@ export default async function ProductDetailPage({ params }) {
               </div>
 
               <ProductActions product={product} />
+
+              <div style={{ marginTop: 14 }}>
+                <UrgencyCountdown compact />
+              </div>
 
               <p className="aprende-product-description">{product.description}</p>
 

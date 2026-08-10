@@ -50,9 +50,18 @@ Flujo real implementado:
 - Sin estas variables, `isMpConfigured()` (`lib/mercadopago.js`) devuelve `false` y el checkout usa un **modo de simulación de pago** — un botón "Simular pago aprobado (modo desarrollo)" que corre exactamente la misma lógica de aprobación que usaría el webhook real (mismo código, `lib/orders.js`), para poder probar y demostrar el flujo completo sin credenciales. Ese botón se autodesactiva solo apenas Lu carga `MP_ACCESS_TOKEN` (la ruta `/api/checkout/simulate` rechaza pedidos si Mercado Pago ya está configurado).
 - **Se probó en navegador**: compra completa con 2 productos + cupón `BIENVENIDA10` (10% OFF), pago simulado aprobado, pedido creado en la base con estado `APPROVED`, visible en "Mis Recursos" y en el panel admin con las cifras correctas.
 
+## 3.1 Pago por transferencia bancaria (alternativa a Mercado Pago)
+
+Pedido explícito de Lu: en el checkout, además de Mercado Pago, hay una opción de **transferencia bancaria con 10% OFF automático** (no reemplaza a Mercado Pago, es una alternativa — el botón de WhatsApp que existía antes se sacó, ya no se coordina la compra por ahí).
+
+- `POST /api/checkout/bank-transfer` (`app/api/checkout/bank-transfer/route.js`) — misma resolución de carrito/cupón que Mercado Pago, aplica `applyTransferDiscount()` (`lib/pricing.js`, 10% OFF) y crea el `Order` en estado `PENDING_TRANSFER`.
+- El checkout muestra los datos reales de la cuenta de Lu (CBU, alias, titular) con botones para copiar, y un countdown de 10 minutos (`components/aprende/TransferReservationTimer.jsx`) avisando que el precio con descuento queda reservado por ese tiempo — es un aviso de UX, no hay expiración forzada server-side todavía.
+- No hay verificación automática del ingreso (no hay integración bancaria). Lu tiene que confirmar manualmente desde `/aprende/admin/pedidos` cambiando el estado a `APPROVED`, lo que dispara `approveOrder()` (mismo código que usa el webhook de Mercado Pago) y dicho email de compra confirmada.
+- **Elemento de urgencia** (`components/aprende/UrgencyCountdown.jsx`): countdown real hasta la medianoche local, mostrado en la home de Aprende, ficha de producto, carrito y checkout, con el copy "Precios promo de hoy terminan en HH:MM:SS" — pedido explícito de Lu para incentivar el pago rápido.
+
 ## 4. Post-compra: pedido, email, "Mis Recursos"
 
-- `lib/orders.js` — `approveOrder()` es la función única que corre tanto desde el webhook real como desde la simulación de desarrollo: marca el pedido `APPROVED`, incrementa el uso del cupón si corresponde, y dispara el email de confirmación.
+- `lib/orders.js` — `createPendingOrder()` dispara un email inmediato de "recibimos tu pedido, en breve nos contactamos para enviarte el material" apenas se registra la orden (sea Mercado Pago o transferencia) — pedido explícito de Lu para que toda compra online tenga una respuesta automática. `approveOrder()` es la función única que corre tanto desde el webhook real, la simulación de desarrollo o la aprobación manual de un pedido por transferencia: marca el pedido `APPROVED`, incrementa el uso del cupón si corresponde, y dispara un segundo email con el resumen de compra confirmada y el link a "Mis Recursos".
 - **Email**: se reutiliza exactamente el mismo transporter de Nodemailer que ya usaba `app/api/contact/route.js` (Gmail + `GMAIL_USER`/`GMAIL_APP_PASSWORD`, ahora centralizado en `lib/mailer.js`). Mismo criterio que el resto del sitio: si esas variables no están configuradas, el email se omite con un `console.log` pero el resto del flujo sigue funcionando (no rompe la compra). **Confirmado en la sesión**: como no había `GMAIL_USER` cargado en este entorno, se vio el log `"Nodemailer no configurado: omitiendo email..."` — el mecanismo está listo, sólo falta que Lu cargue esas dos variables (ya las tiene configuradas en Vercel para `/api/contact`, así que puede ser la misma cuenta).
 - `/aprende/mis-recursos` (`app/aprende/mis-recursos/page.js`) — lista real de pedidos del usuario logueado, leída directo de Prisma. Cada ítem muestra "Descargar" si el producto tiene `fileUrl` cargado, o "Próximamente" si no.
 - `GET /api/download/[productId]` — ruta de descarga **gateada**: verifica sesión + que el usuario tenga un `OrderItem` de ese producto en un pedido `APPROVED` antes de servir el archivo. Probado explícitamente: descarga real de un PDF de prueba (200 + archivo correcto), bloqueo a un usuario que no compró el producto (403), bloqueo a producto sin archivo cargado (404).
@@ -64,7 +73,7 @@ Protegido por rol (`requireAdminPage()` en `lib/adminAuth.js`, redirige si no es
 - **Resumen** (`/aprende/admin`) — ingresos aprobados, pedidos, usuarios, productos, reseñas, productos más vendidos y últimos pedidos, todo calculado en vivo con `prisma.groupBy`/`count`/etc.
 - **Productos** (`/aprende/admin/productos`) — alta/edición/baja real. El formulario de producto (`ProductForm.jsx`) permite **subir un PDF**, que se guarda con `lib/storage.js` y asocia automáticamente al campo `Product.fileUrl` — apenas se sube, el botón "Descargar" en Mis Recursos deja de decir "Próximamente" para los compradores. Probado: creación de un producto nuevo que apareció al instante en `/aprende/categoria/ia` (11 recursos en vez de 10).
 - **Categorías** (`/aprende/admin/categorias`) — alta/edición/baja (no deja borrar una categoría con productos adentro).
-- **Pedidos** (`/aprende/admin/pedidos`) — listado completo + cambio manual de estado (útil para pagos coordinados por WhatsApp/transferencia, igual que el botón de WhatsApp que sigue disponible en el checkout como alternativa).
+- **Pedidos** (`/aprende/admin/pedidos`) — listado completo + cambio manual de estado. Los pedidos por transferencia entran en `PENDING_TRANSFER`; cambiar el estado a `APPROVED` ahí mismo dispara la misma lógica de aprobación que el webhook de Mercado Pago (`approveOrder`), incluido el email de compra confirmada.
 - **Usuarios** (`/aprende/admin/usuarios`) — listado + promover/quitar admin.
 - **Reseñas** (`/aprende/admin/resenas`) — aprobar/ocultar/eliminar. Las reseñas mock de la Fase 1 ahora son filas reales en la tabla `Review` (300 reseñas de ejemplo, sembradas una sola vez); una reseña oculta no cuenta para el rating del producto (el rating se calcula en vivo con `groupBy` sobre reseñas aprobadas).
 - **Cupones** (`/aprende/admin/cupones`) — alta/edición/baja, tipo porcentaje o monto fijo, con límite de usos y vencimiento opcional. Hay un cupón de ejemplo sembrado: `BIENVENIDA10` (10% OFF).
@@ -105,6 +114,7 @@ Login admin: `lu@nexaarg.com` / `CambiarInmediatamente123` (definido en `.env.lo
 ## 9. Qué queda honestamente pendiente
 
 - **Credenciales reales de Mercado Pago** (bloqueante para pagos reales — ver sección 3).
+- **Verificación de transferencias**: es 100% manual — Lu tiene que mirar la cuenta bancaria y comparar contra `/aprende/admin/pedidos` para confirmar cada pedido `PENDING_TRANSFER`. No hay integración automática con el banco.
 - **Storage de archivos para producción en Vercel** (Vercel Blob o S3 — ver sección 6). Local funciona, pero no sobrevive a un deploy en Vercel.
 - **Migrar la base a Postgres** antes de deployar (ver sección 1) — hoy corre en SQLite local.
 - **Newsletter** sigue sin conectar a un proveedor real (Mailchimp/Brevo) — quedó igual que en Fase 1.
