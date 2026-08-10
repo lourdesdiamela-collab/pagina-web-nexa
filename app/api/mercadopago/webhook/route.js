@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getPayment } from '@/lib/mercadopago';
 import { approveOrder, rejectOrder } from '@/lib/orders';
+import { sendServicePaymentApprovedEmails } from '@/lib/serviceCheckout';
 
 // Mercado Pago llama a esta URL (notification_url) cuando cambia el estado
 // de un pago. Puede mandar los datos como query params (?type=payment&data.id=)
@@ -27,6 +28,33 @@ export async function POST(request) {
     const payment = await getPayment(paymentId);
     const orderId = payment.external_reference;
     if (!orderId) return NextResponse.json({ received: true });
+
+    // Pago de un plan de servicio (Marketing/Social/Ads/Recover/CRM/Web):
+    // no tiene Order en la base como Aprende, así que la referencia y los
+    // datos del cliente viajan en la metadata de la preferencia (ver
+    // app/api/checkout/servicio-preference/route.js). Nota: sin una tabla
+    // propia no hay forma de marcar "ya procesado", así que si Mercado Pago
+    // reintenta la notificación del mismo pago aprobado, el email de
+    // confirmación se puede volver a mandar — riesgo aceptado y documentado
+    // en SERVICIOS_CHECKOUT.md (no debería pasar seguido: MP no reintenta
+    // notificaciones ya entregadas con 200 OK).
+    if (payment.metadata?.kind === 'servicio' && payment.status === 'approved') {
+      try {
+        await sendServicePaymentApprovedEmails({
+          reference: payment.metadata.reference || orderId,
+          name: payment.metadata.name || 'Cliente',
+          email: payment.metadata.email,
+          planLabel: payment.metadata.plan_label || 'tu plan',
+          amount: payment.transaction_amount,
+        });
+      } catch (serviceMailError) {
+        console.error('Error mandando email de pago de servicio aprobado:', serviceMailError);
+      }
+      return NextResponse.json({ received: true });
+    }
+    if (payment.metadata?.kind === 'servicio') {
+      return NextResponse.json({ received: true });
+    }
 
     const order = await prisma.order.findUnique({ where: { id: orderId } });
     if (!order || order.status !== 'PENDING') {

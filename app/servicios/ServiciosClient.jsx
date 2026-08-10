@@ -438,7 +438,7 @@ const STEPS = [
 const FAQS = [
   {
     q: '¿Cómo arranco a trabajar con NEXA?',
-    a: 'Elegís el servicio que más te urge, completás el formulario de contacto (o nos escribís por WhatsApp) y te confirmamos el alcance exacto y el presupuesto en menos de 24 horas.',
+    a: 'Elegís el plan que más se ajusta a lo que necesitás y pagás directo con Mercado Pago o transferencia bancaria. Si todavía tenés dudas, también podés pedir un diagnóstico gratis sin compromiso antes de pagar, o escribirnos por WhatsApp.',
   },
   {
     q: '¿Necesito agendar una llamada antes de contratar?',
@@ -454,7 +454,7 @@ const FAQS = [
   },
   {
     q: '¿Qué medios de pago aceptan?',
-    a: 'Aceptamos Visa, Mastercard, Amex, Mercado Pago y Naranja X. En NEXA Web, pagando por transferencia bancaria tenés un 10% de descuento.',
+    a: 'Aceptamos tarjeta de crédito y débito a través de Mercado Pago, y transferencia bancaria. Pagando por transferencia tenés un 10% de descuento automático en cualquier plan. En los planes mensuales, el primer pago corresponde al mes 1; la renovación de los meses siguientes se coordina directamente con vos.',
   },
   {
     q: '¿Puedo combinar más de un servicio?',
@@ -586,15 +586,15 @@ function ServiciosContent() {
                         <span className="svc-price-value" style={{ color: s.color }}>{s.priceFrom}</span>
                       </div>
                       <div className="svc-cta-row">
-                        <Link href={`/contacto?servicio=${s.value}`} className="btn btn-lima btn-sm">
+                        <button type="button" onClick={() => goToPlans(s.priceLineId)} className="btn btn-lima btn-sm">
                           Quiero este servicio <ArrowRight size={15} />
-                        </Link>
-                        <button type="button" onClick={() => goToPlans(s.priceLineId)} className="svc-plans-link">
-                          Ver planes y precios
                         </button>
                         <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-wa">
                           <MessageCircle size={15} /> WhatsApp
                         </a>
+                        <Link href={`/contacto?servicio=${s.value}`} className="svc-plans-link">
+                          Prefiero un diagnóstico gratis primero
+                        </Link>
                       </div>
                     </div>
                   </motion.article>
@@ -657,7 +657,10 @@ function ServiciosContent() {
                   <div className="pricing-grid">
                     {line.tiers.map((tier) => {
                       const planPriceText = tier.suffix === 'pago único' ? `${tier.price}, pago único` : `${tier.price}${tier.suffix}`;
-                      const planLabel = `${tier.name} — NEXA ${line.shortLabel} (${planPriceText})`;
+                      const isOneOff = tier.suffix === 'pago único';
+                      const amountNumber = parseInt(tier.price.replace(/[^\d]/g, ''), 10) || 0;
+                      const lineTitle = `NEXA ${line.shortLabel}`;
+                      const checkoutHref = `/servicios/checkout?servicio=${line.slug}&planName=${encodeURIComponent(tier.name)}&line=${encodeURIComponent(lineTitle)}&amount=${amountNumber}&billing=${isOneOff ? 'unico' : 'mensual'}`;
                       const waPlanText = encodeURIComponent(`Hola NEXA! Quiero contratar el plan ${tier.name} de NEXA ${line.shortLabel} (${planPriceText}). ¿Cómo seguimos?`);
                       return (
                         <div
@@ -685,12 +688,15 @@ function ServiciosContent() {
                             ))}
                           </ul>
                           <div className="pricing-card-cta">
-                            <Link href={`/contacto?servicio=${line.slug}&plan=${encodeURIComponent(planLabel)}`} className="btn btn-lima btn-sm" style={{ justifyContent: 'center' }}>
+                            <Link href={checkoutHref} className="btn btn-lima btn-sm" style={{ justifyContent: 'center' }}>
                               Quiero el plan {tier.name}
                             </Link>
                             <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waPlanText}`} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ justifyContent: 'center' }}>
                               <MessageCircle size={14} /> WhatsApp
                             </a>
+                            <Link href={`/contacto?servicio=${line.slug}&plan=${encodeURIComponent(`${tier.name} — ${lineTitle} (${planPriceText})`)}`} style={{ textAlign: 'center', fontSize: '0.76rem', color: 'var(--text-muted)' }}>
+                              ¿Dudas? Pedí tu diagnóstico gratis
+                            </Link>
                           </div>
                         </div>
                       );
