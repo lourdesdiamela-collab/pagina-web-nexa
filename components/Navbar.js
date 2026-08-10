@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, UserRound, X } from 'lucide-react';
+import { Menu, UserRound, Briefcase, X } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
 const LINKS = [
@@ -31,7 +31,7 @@ export default function Navbar() {
     : '/aprende/cuenta/login';
   const accountLabel = session?.user
     ? (session.user.role === 'ADMIN' ? 'Panel admin' : 'Mis recursos')
-    : 'Ingresar';
+    : 'Ingresar a Aprende';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -79,8 +79,12 @@ export default function Navbar() {
             <Link href={accountHref} className="nav-portal">
               <UserRound size={14} /> {accountLabel}
             </Link>
-            <Link href="https://crm.nexagrowth.com.ar" className="nav-portal nav-portal-crm">
-              Ingresar al CRM
+            <Link
+              href="https://crm.nexagrowth.com.ar"
+              className="nav-portal nav-portal-crm"
+              title="Acceso exclusivo para clientes de NEXA con servicios activos"
+            >
+              <Briefcase size={13} /> Portal de Clientes
             </Link>
           </div>
         </nav>
@@ -119,8 +123,9 @@ export default function Navbar() {
             <Link href={accountHref} className="mobile-menu-link mobile-menu-link-accent">
               <UserRound size={16} /> {accountLabel}
             </Link>
-            <Link href="https://crm.nexagrowth.com.ar" className="mobile-menu-link mobile-menu-link-accent">
-              <UserRound size={16} /> Ingresar al CRM
+            <Link href="https://crm.nexagrowth.com.ar" className="mobile-menu-link mobile-menu-link-ghost">
+              <Briefcase size={16} /> Portal de Clientes
+              <span className="mobile-menu-link-hint">¿Ya sos cliente de NEXA? Ingresá acá</span>
             </Link>
           </motion.div>
         )}

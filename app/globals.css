@@ -267,12 +267,20 @@ p { color: var(--text-body); line-height: 1.7; }
   box-shadow: 0 10px 24px rgba(184, 155, 255, 0.18);
 }
 .nav-portal-crm {
-  background: var(--dark-deep);
-  color: #fff;
-  border-color: var(--dark-deep);
+  background: transparent;
+  color: var(--text-body);
+  border-color: var(--border-light);
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 9px 16px;
+  opacity: 0.85;
 }
 .nav-portal-crm:hover {
-  box-shadow: 0 10px 24px rgba(13, 14, 21, 0.28);
+  opacity: 1;
+  border-color: var(--border-light);
+  box-shadow: none;
+  background: var(--bg-soft);
+  transform: none;
 }
 
 .mobile-toggle {
@@ -319,6 +327,20 @@ p { color: var(--text-body); line-height: 1.7; }
 .mobile-menu-link.active { color: var(--lilac-deep); background: rgba(184, 155, 255, 0.1); }
 .mobile-menu-divider { height: 1px; background: var(--border-light); margin: 8px 4px; }
 .mobile-menu-link-accent { color: var(--lilac-deep); font-weight: 800; }
+.mobile-menu-link-ghost {
+  color: var(--text-muted);
+  font-weight: 700;
+  font-size: 0.92rem;
+  flex-wrap: wrap;
+}
+.mobile-menu-link-hint {
+  width: 100%;
+  font-size: 0.74rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  opacity: 0.8;
+  padding-left: 24px;
+}
 
 @media (max-width: 900px) {
   .nav-links-wrapper { display: none; }
@@ -659,6 +681,22 @@ p { color: var(--text-body); line-height: 1.7; }
 .svc-faq-icon { flex-shrink: 0; color: var(--lilac-deep); display: flex; align-items: center; }
 .svc-faq-answer { padding: 0 4px 22px; }
 .svc-faq-answer p { color: var(--text-body); line-height: 1.7; font-size: 0.95rem; }
+
+/* ══════════════════════════════════════
+   SERVICE TESTIMONIALS (dark strip)
+   ══════════════════════════════════════ */
+.svc-testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.svc-testi-card { padding: 30px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 22px; display: flex; flex-direction: column; gap: 14px; transition: border-color 0.3s; }
+.svc-testi-card:hover { border-color: rgba(184,155,255,0.25); }
+.svc-testi-stars { display: flex; gap: 3px; }
+.svc-testi-text { font-size: 0.9rem; color: rgba(255,255,255,0.75); line-height: 1.7; flex: 1; }
+.svc-testi-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.07); }
+.svc-testi-author { display: flex; align-items: center; gap: 10px; }
+.svc-testi-avatar { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #835CE6, #EAA1FB); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; color: white; flex-shrink: 0; }
+.svc-testi-name { font-weight: 700; font-size: 0.85rem; color: white; }
+.svc-testi-role { font-size: 0.7rem; color: rgba(255,255,255,0.4); margin-top: 1px; }
+.svc-testi-metric { font-weight: 900; font-size: 0.85rem; font-variant-numeric: tabular-nums; }
+@media (max-width: 900px) { .svc-testi-grid { grid-template-columns: 1fr; } }
 
 /* ══════════════════════════════════════
    METHODOLOGY
@@ -1648,7 +1686,105 @@ p { color: var(--text-body); line-height: 1.7; }
 .aprende-status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px; border-radius: 100px; font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; }
 .aprende-status-APPROVED { background: rgba(210, 242, 58, 0.2); color: #5c6a12; }
 .aprende-status-PENDING { background: rgba(184, 155, 255, 0.18); color: var(--lilac-deep); }
+.aprende-status-PENDING_TRANSFER { background: rgba(254, 143, 217, 0.2); color: #b2337a; }
 .aprende-status-REJECTED, .aprende-status-CANCELLED { background: rgba(209, 71, 122, 0.12); color: #b23e63; }
+
+/* ── Urgencia / oferta por tiempo limitado ── */
+.aprende-urgency-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(254, 143, 217, 0.14);
+  border: 1px solid rgba(254, 143, 217, 0.4);
+  color: #8a1f47;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.aprende-urgency-bar svg { color: #d1477a; flex-shrink: 0; }
+.aprende-urgency-bar strong { font-variant-numeric: tabular-nums; color: #8a1f47; }
+.aprende-urgency-bar.compact { font-size: 0.74rem; padding: 6px 14px; }
+.aprende-urgency-hero { margin: 22px auto 0; width: fit-content; }
+
+/* ── Checkout: pago con Mercado Pago / transferencia ── */
+.aprende-payment-copy {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 0.85rem;
+  color: var(--text-body);
+  line-height: 1.5;
+  margin-bottom: 16px;
+}
+.aprende-payment-copy strong { color: var(--text-dark); }
+.aprende-payment-methods { display: flex; flex-direction: column; gap: 10px; }
+.aprende-payment-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 100px;
+  border: 1px solid var(--border-light);
+  background: var(--bg-white);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.aprende-payment-option:hover { border-color: var(--lilac-deep); }
+.aprende-payment-option.active { border-color: var(--lilac-deep); box-shadow: 0 0 0 3px rgba(131, 92, 230, 0.12); }
+.aprende-transfer-box {
+  background: var(--bg-soft);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 18px 20px;
+  margin-top: 12px;
+}
+.aprende-transfer-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 0;
+  border-bottom: 1px dashed var(--border-light);
+  font-size: 0.86rem;
+}
+.aprende-transfer-row:last-child { border-bottom: none; }
+.aprende-transfer-row span:first-child { color: var(--text-muted); font-weight: 600; }
+.aprende-transfer-row strong { font-family: 'SFMono-Regular', Consolas, monospace; font-size: 0.9rem; color: var(--text-dark); word-break: break-all; }
+.aprende-copy-btn {
+  border: 1px solid var(--border-light);
+  background: var(--bg-white);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--text-dark);
+}
+.aprende-copy-btn:hover { border-color: var(--lilac-deep); color: var(--lilac-deep); }
+.aprende-transfer-timer {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: rgba(131, 92, 230, 0.08);
+  border: 1px solid rgba(131, 92, 230, 0.25);
+  color: var(--lilac-deep);
+  padding: 12px 16px;
+  border-radius: 14px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-top: 14px;
+  line-height: 1.5;
+}
+.aprende-transfer-timer svg { flex-shrink: 0; margin-top: 2px; }
+.aprende-transfer-timer .timer-value { font-variant-numeric: tabular-nums; font-weight: 800; }
+.aprende-transfer-timer.expired { background: rgba(209, 71, 122, 0.08); border-color: rgba(209, 71, 122, 0.25); color: #b23e63; }
 .aprende-resource-item { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 8px 0; font-size: 0.9rem; }
 .aprende-resource-item-title { color: var(--text-dark); font-weight: 600; }
 .aprende-download-btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 100px; background: var(--dark-deep); color: #fff; font-size: 0.8rem; font-weight: 700; white-space: nowrap; }

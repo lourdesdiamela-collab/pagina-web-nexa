@@ -45,6 +45,7 @@ const SERVICES = [
     tagColor: '#B89BFF',
     accent: 'rgba(184,155,255,0.12)',
     border: 'rgba(184,155,255,0.25)',
+    slug: 'crm_seguimiento',
   },
   {
     icon: TrendingUp,
@@ -54,6 +55,7 @@ const SERVICES = [
     tagColor: '#D2F23A',
     accent: 'rgba(210,242,58,0.08)',
     border: 'rgba(210,242,58,0.2)',
+    slug: 'meta_ads',
   },
   {
     icon: Database,
@@ -63,6 +65,7 @@ const SERVICES = [
     tagColor: '#EAA1FB',
     accent: 'rgba(234,161,251,0.08)',
     border: 'rgba(234,161,251,0.2)',
+    slug: 'nexa_recover',
   },
 ];
 
@@ -506,27 +509,28 @@ export default function HomePage() {
               {SERVICES.map((service) => {
                 const Icon = service.icon;
                 return (
-                  <motion.article
-                    key={service.title}
-                    variants={scaleIn}
-                    className="service-card-premium"
-                    whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                    style={{ '--card-accent': service.tagColor, '--card-glow': service.accent }}
-                  >
-                    <div className="svc-glow" style={{ background: `radial-gradient(circle at top right, ${service.accent}, transparent 60%)` }} />
-                    <div className="svc-tag" style={{ color: service.tagColor, background: service.accent, border: `1px solid ${service.border}` }}>
-                      {service.tag}
-                    </div>
-                    <div className="service-icon-wrapper" style={{ background: service.accent, border: `1px solid ${service.border}` }}>
-                      <Icon size={26} color={service.tagColor} />
-                    </div>
-                    <h3 style={{ color: 'white' }}>{service.title}</h3>
-                    <p>{service.desc}</p>
-                    <div className="svc-learn-more" style={{ color: service.tagColor }}>
-                      <span>Saber más</span>
-                      <ChevronRight size={14} />
-                    </div>
-                  </motion.article>
+                  <Link key={service.title} href={`/servicios?servicio=${service.slug}#planes`} style={{ textDecoration: 'none', display: 'block' }}>
+                    <motion.article
+                      variants={scaleIn}
+                      className="service-card-premium"
+                      whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                      style={{ '--card-accent': service.tagColor, '--card-glow': service.accent, cursor: 'pointer' }}
+                    >
+                      <div className="svc-glow" style={{ background: `radial-gradient(circle at top right, ${service.accent}, transparent 60%)` }} />
+                      <div className="svc-tag" style={{ color: service.tagColor, background: service.accent, border: `1px solid ${service.border}` }}>
+                        {service.tag}
+                      </div>
+                      <div className="service-icon-wrapper" style={{ background: service.accent, border: `1px solid ${service.border}` }}>
+                        <Icon size={26} color={service.tagColor} />
+                      </div>
+                      <h3 style={{ color: 'white' }}>{service.title}</h3>
+                      <p>{service.desc}</p>
+                      <div className="svc-learn-more" style={{ color: service.tagColor }}>
+                        <span>Ver detalles y precios</span>
+                        <ChevronRight size={14} />
+                      </div>
+                    </motion.article>
+                  </Link>
                 );
               })}
             </motion.div>

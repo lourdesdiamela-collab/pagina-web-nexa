@@ -1,10 +1,11 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   Target, BarChart3, Users, Layers, RefreshCw, ArrowRight,
-  CheckCircle2, MessageCircle, Plus, Award,
+  CheckCircle2, MessageCircle, Plus, Award, Star, Quote,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -394,6 +395,33 @@ const PRICING_LINES = [
   },
 ];
 
+const TESTIMONIALS = [
+  {
+    name: 'Martina González',
+    role: 'CEO · Boutique Aurea',
+    initials: 'MG',
+    text: 'En 3 meses, NEXA duplicó nuestras ventas online. El CRM personalizado que desarrollaron cambió totalmente la forma en que gestionamos clientes.',
+    metric: '+210% ventas',
+    metricColor: '#D2F23A',
+  },
+  {
+    name: 'Carlos Ruiz',
+    role: 'Director · TechFlow Solutions',
+    initials: 'CR',
+    text: 'Las campañas de Google Ads que gestionan tienen el mejor ROI que he visto en 8 años. Resultados medibles desde el primer mes de trabajo.',
+    metric: '4.1x ROI',
+    metricColor: '#B89BFF',
+  },
+  {
+    name: 'Valentina Méndez',
+    role: 'Fundadora · Estudio Vivo',
+    initials: 'VM',
+    text: 'La estrategia de contenido transformó nuestra marca. Pasamos de 2k a 28k seguidores orgánicos en solo 6 meses trabajando con NEXA.',
+    metric: '+1300% seguidores',
+    metricColor: '#EAA1FB',
+  },
+];
+
 const TRUST_CHIPS = [
   { icon: Users, label: '+20 marcas asesoradas' },
   { icon: BarChart3, label: '3x ROI promedio' },
@@ -434,7 +462,13 @@ const FAQS = [
   },
 ];
 
-export default function ServiciosClient() {
+const SERVICE_TO_LINE = SERVICES.reduce((acc, s) => {
+  acc[s.value] = s.priceLineId;
+  return acc;
+}, {});
+
+function ServiciosContent() {
+  const searchParams = useSearchParams();
   const [activeFaq, setActiveFaq] = useState(null);
   const [activeLine, setActiveLine] = useState(PRICING_LINES[0].id);
 
@@ -442,6 +476,18 @@ export default function ServiciosClient() {
     setActiveLine(id);
     document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+
+  // Si llega desde un CTA de Home con ?servicio=slug, preseleccionamos el plan correspondiente
+  useEffect(() => {
+    const servicio = searchParams.get('servicio');
+    const line = servicio && SERVICE_TO_LINE[servicio];
+    if (line) {
+      setActiveLine(line);
+      setTimeout(() => {
+        document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+    }
+  }, [searchParams]);
 
   return (
     <>
@@ -658,6 +704,40 @@ export default function ServiciosClient() {
           </div>
         </section>
 
+        {/* ══════ TESTIMONIALS ══════ */}
+        <section style={{ background: '#0D0E15', padding: 'clamp(56px, 9vw, 100px) 0 0' }}>
+          <div className="container">
+            <motion.div className="section-header" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
+              <motion.span variants={fadeUp} className="section-tag" style={{ background: 'rgba(210,242,58,0.1)', color: '#D2F23A', border: '1px solid rgba(210,242,58,0.2)' }}>Resultados reales</motion.span>
+              <motion.h2 variants={fadeUp} className="section-title text-white">Lo que dicen nuestros clientes</motion.h2>
+              <motion.p variants={fadeUp} className="section-subtitle text-white-50" style={{ margin: '0 auto' }}>
+                Más de 20 empresas ya escalaron su negocio contratando estos mismos servicios.
+              </motion.p>
+            </motion.div>
+            <motion.div className="svc-testi-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }}>
+              {TESTIMONIALS.map((t) => (
+                <motion.div key={t.name} variants={scaleIn} className="svc-testi-card" whileHover={{ y: -6 }}>
+                  <div className="svc-testi-stars">
+                    {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#D2F23A" color="#D2F23A" />)}
+                  </div>
+                  <Quote size={18} style={{ color: 'rgba(184,155,255,0.4)' }} />
+                  <p className="svc-testi-text">{t.text}</p>
+                  <div className="svc-testi-footer">
+                    <div className="svc-testi-author">
+                      <div className="svc-testi-avatar">{t.initials}</div>
+                      <div>
+                        <div className="svc-testi-name">{t.name}</div>
+                        <div className="svc-testi-role">{t.role}</div>
+                      </div>
+                    </div>
+                    <div className="svc-testi-metric" style={{ color: t.metricColor }}>{t.metric}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
         {/* ══════ Methodology ══════ */}
         <section style={{ background: '#0D0E15', padding: 'clamp(64px, 10vw, 120px) 0' }}>
           <div className="container">
@@ -742,5 +822,13 @@ export default function ServiciosClient() {
       </main>
       <Footer />
     </>
+  );
+}
+
+export default function ServiciosClient() {
+  return (
+    <Suspense fallback={null}>
+      <ServiciosContent />
+    </Suspense>
   );
 }

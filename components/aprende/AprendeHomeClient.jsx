@@ -15,6 +15,7 @@ import { CategoryLinksGrid } from '@/components/aprende/CategoryPills';
 import FAQAccordion from '@/components/aprende/FAQAccordion';
 import Newsletter from '@/components/aprende/Newsletter';
 import Testimonials from '@/components/aprende/Testimonials';
+import UrgencyCountdown from '@/components/aprende/UrgencyCountdown';
 
 const fadeUp = {
   hidden: { opacity: 0, y: 32 },
@@ -96,6 +97,21 @@ export default function AprendeHomeClient({ categories, categoryCounts, featured
                 <span className="hero-trust-chip"><Layers3 size={15} /> 10 categorías</span>
                 <span className="hero-trust-chip"><Download size={15} /> Descarga inmediata</span>
                 <span className="hero-trust-chip"><ShieldCheck size={15} /> Contenido en español</span>
+              </motion.div>
+
+              {deals?.length > 0 && (
+                <motion.div variants={fadeUp} style={{ marginTop: 24, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <a href="#catalogo" onClick={(e) => { e.preventDefault(); document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="btn btn-primary btn-sm">
+                    Ver más vendidos
+                  </a>
+                  <a href="#catalogo" onClick={(e) => { e.preventDefault(); document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="btn btn-lima btn-sm">
+                    Ver ofertas por tiempo limitado
+                  </a>
+                </motion.div>
+              )}
+
+              <motion.div variants={fadeUp} className="aprende-urgency-hero">
+                <UrgencyCountdown />
               </motion.div>
             </motion.div>
           </div>

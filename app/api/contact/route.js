@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 export async function POST(request) {
   try {
     const body = await request.json();
-    const required = ['name', 'email', 'company', 'service'];
+    const required = ['name', 'email', 'phone', 'service'];
     const missing = required.filter((field) => !String(body[field] || '').trim());
 
     if (missing.length > 0) {
@@ -28,7 +28,7 @@ export async function POST(request) {
       lead = await saveLead({
         name: body.name,
         email: body.email,
-        company: body.company,
+        company: body.company || 'No especificado',
         phone: body.phone,
         service: body.service,
         challenge: body.challenge,
@@ -50,7 +50,7 @@ export async function POST(request) {
           nombre: body.name,
           email: body.email,
           telefono: body.phone || 'No especificado',
-          empresa: body.company,
+          empresa: body.company || 'No especificado',
           mensaje: `[Servicio: ${body.service}] — ${body.challenge}`,
         }),
       });
@@ -90,12 +90,12 @@ export async function POST(request) {
         await transporter.sendMail({
           from: `"NEXA Web" <${process.env.GMAIL_USER}>`,
           to: process.env.CONTACT_EMAIL || 'hola@nexaarg.com',
-          subject: `Nueva consulta de ${body.name} - ${body.company}`,
+          subject: `Nueva consulta de ${body.name}${body.company ? ' - ' + body.company : ''}`,
           html: `
             <h2>Nueva consulta desde la web</h2>
             <table cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
               <tr><td><strong>Nombre</strong></td><td>${body.name}</td></tr>
-              <tr><td><strong>Empresa</strong></td><td>${body.company}</td></tr>
+              <tr><td><strong>Empresa</strong></td><td>${body.company || 'No especificado'}</td></tr>
               <tr><td><strong>Email</strong></td><td>${body.email}</td></tr>
               <tr><td><strong>Teléfono</strong></td><td>${body.phone || '—'}</td></tr>
               <tr><td><strong>Servicio</strong></td><td>${body.service}</td></tr>
@@ -114,8 +114,7 @@ export async function POST(request) {
             <p>Hola ${body.name},</p>
             <p>Gracias por ponerte en contacto con NEXA. Recibimos tus datos para la solicitud de diagnóstico técnico.</p>
             <p>
-              <strong>Servicio seleccionado:</strong> ${body.service}<br/>
-              <strong>Negocio:</strong> ${body.company}
+              <strong>Servicio seleccionado:</strong> ${body.service}${body.company ? `<br/><strong>Negocio:</strong> ${body.company}` : ''}
             </p>
             <p>Un consultor de nuestro equipo analizará la información y se contactará con vos para coordinar el paso siguiente.</p>
             <p>— El equipo de NEXA</p>
