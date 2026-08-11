@@ -54,7 +54,7 @@ export default async function CheckoutSuccessPage({ searchParams }) {
               <>
                 <Clock3 size={40} color="var(--lilac-deep)" style={{ marginBottom: 12 }} />
                 <h1>Estamos confirmando tu pago</h1>
-                <p>Tu pedido #{order.id.slice(-8).toUpperCase()} está siendo procesado. Esto puede tardar unos minutos — vas a ver el resultado en "Mis Recursos".</p>
+                <p>Tu pedido #{order.id.slice(-8).toUpperCase()} está siendo procesado. Esto puede tardar unos minutos — vas a ver el resultado en &quot;Mis Recursos&quot;.</p>
               </>
             )}
 

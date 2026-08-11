@@ -7,7 +7,7 @@ export default async function AdminCouponsPage() {
   return (
     <>
       <h1>Cupones</h1>
-      <p className="admin-subtitle">Se aplican en el checkout con el campo "Cupón". El descuento es sobre el total ya calculado con las promociones automáticas.</p>
+      <p className="admin-subtitle">Se aplican en el checkout con el campo &quot;Cupón&quot;. El descuento es sobre el total ya calculado con las promociones automáticas.</p>
 
       <div className="aprende-admin-card">
         <h2>Cupones actuales</h2>
