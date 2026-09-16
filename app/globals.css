@@ -1718,6 +1718,13 @@ p { color: var(--text-body); line-height: 1.7; }
   line-height: 1.5;
   margin-bottom: 16px;
 }
+/* Texto neutro para productos que todavía no tienen ninguna reseña. */
+.aprende-stars-empty {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
 .aprende-payment-copy strong { color: var(--text-dark); }
 
 /* Aviso informativo del checkout — se usa cuando el pago con tarjeta no está

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
   Target, BarChart3, Users, Layers, RefreshCw, ArrowRight,
-  CheckCircle2, MessageCircle, Plus, Award, Star, Quote,
+  CheckCircle2, MessageCircle, Plus,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -395,38 +395,14 @@ const PRICING_LINES = [
   },
 ];
 
-const TESTIMONIALS = [
-  {
-    name: 'Martina González',
-    role: 'CEO · Boutique Aurea',
-    initials: 'MG',
-    text: 'En 3 meses, NEXA duplicó nuestras ventas online. El CRM personalizado que desarrollaron cambió totalmente la forma en que gestionamos clientes.',
-    metric: '+210% ventas',
-    metricColor: '#D2F23A',
-  },
-  {
-    name: 'Carlos Ruiz',
-    role: 'Director · TechFlow Solutions',
-    initials: 'CR',
-    text: 'Las campañas de Google Ads que gestionan tienen el mejor ROI que he visto en 8 años. Resultados medibles desde el primer mes de trabajo.',
-    metric: '4.1x ROI',
-    metricColor: '#B89BFF',
-  },
-  {
-    name: 'Valentina Méndez',
-    role: 'Fundadora · Estudio Vivo',
-    initials: 'VM',
-    text: 'La estrategia de contenido transformó nuestra marca. Pasamos de 2k a 28k seguidores orgánicos en solo 6 meses trabajando con NEXA.',
-    metric: '+1300% seguidores',
-    metricColor: '#EAA1FB',
-  },
-];
-
-const TRUST_CHIPS = [
-  { icon: Users, label: '+20 marcas asesoradas' },
-  { icon: BarChart3, label: '3x ROI promedio' },
-  { icon: Award, label: '+6 años de experiencia' },
-];
+/*
+ * NOTA (septiembre 2026): se eliminaron de esta página TESTIMONIALS (tres
+ * testimonios firmados por Martina González / Boutique Aurea, Carlos Ruiz /
+ * TechFlow Solutions y Valentina Méndez / Estudio Vivo) y TRUST_CHIPS
+ * (+20 marcas asesoradas, 3x ROI promedio, +6 años de experiencia), porque
+ * eran datos inventados: NEXA todavía no tiene clientes ni resultados que los
+ * respalden. No reponer sin datos reales y verificables.
+ */
 
 const STEPS = [
   { num: '01', title: 'Diagnóstico Estratégico', desc: 'Analizamos el estado actual de tu marca, tu competencia y tus canales activos.', output: 'Entregable: informe con oportunidades priorizadas.' },
@@ -503,14 +479,8 @@ function ServiciosContent() {
             <motion.p variants={fadeUp} className="section-subtitle" style={{ margin: '0 auto 28px' }}>
               Seis soluciones pensadas para posicionar tu marca, ordenar el seguimiento comercial y facturar más — con el detalle necesario para que decidas sin necesitar una llamada previa.
             </motion.p>
-            <motion.div variants={fadeUp} className="hero-trust-row">
-              {TRUST_CHIPS.map(({ icon: Icon, label }) => (
-                <div key={label} className="hero-trust-chip">
-                  <Icon size={14} />
-                  <span>{label}</span>
-                </div>
-              ))}
-            </motion.div>
+            {/* Se eliminaron los chips de "confianza" (+20 marcas asesoradas,
+                3x ROI promedio, +6 años de experiencia): datos inventados. */}
           </motion.div>
         </section>
 
@@ -710,39 +680,11 @@ function ServiciosContent() {
           </div>
         </section>
 
-        {/* ══════ TESTIMONIALS ══════ */}
-        <section style={{ background: '#0D0E15', padding: 'clamp(56px, 9vw, 100px) 0 0' }}>
-          <div className="container">
-            <motion.div className="section-header" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
-              <motion.span variants={fadeUp} className="section-tag" style={{ background: 'rgba(210,242,58,0.1)', color: '#D2F23A', border: '1px solid rgba(210,242,58,0.2)' }}>Resultados reales</motion.span>
-              <motion.h2 variants={fadeUp} className="section-title text-white">Lo que dicen nuestros clientes</motion.h2>
-              <motion.p variants={fadeUp} className="section-subtitle text-white-50" style={{ margin: '0 auto' }}>
-                Más de 20 empresas ya escalaron su negocio contratando estos mismos servicios.
-              </motion.p>
-            </motion.div>
-            <motion.div className="svc-testi-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }}>
-              {TESTIMONIALS.map((t) => (
-                <motion.div key={t.name} variants={scaleIn} className="svc-testi-card" whileHover={{ y: -6 }}>
-                  <div className="svc-testi-stars">
-                    {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#D2F23A" color="#D2F23A" />)}
-                  </div>
-                  <Quote size={18} style={{ color: 'rgba(184,155,255,0.4)' }} />
-                  <p className="svc-testi-text">{t.text}</p>
-                  <div className="svc-testi-footer">
-                    <div className="svc-testi-author">
-                      <div className="svc-testi-avatar">{t.initials}</div>
-                      <div>
-                        <div className="svc-testi-name">{t.name}</div>
-                        <div className="svc-testi-role">{t.role}</div>
-                      </div>
-                    </div>
-                    <div className="svc-testi-metric" style={{ color: t.metricColor }}>{t.metric}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
+        {/* Se eliminó la sección de testimonios ("Lo que dicen nuestros
+            clientes" + "Más de 20 empresas ya escalaron su negocio
+            contratando estos mismos servicios" + tres testimonios firmados).
+            Todo inventado. La sección siguiente ("El método NEXA") ya abre el
+            bloque oscuro, así que no queda hueco en el diseño. */}
 
         {/* ══════ Methodology ══════ */}
         <section style={{ background: '#0D0E15', padding: 'clamp(64px, 10vw, 120px) 0' }}>

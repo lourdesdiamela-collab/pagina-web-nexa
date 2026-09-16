@@ -11,7 +11,7 @@ import { NexaLogo } from './NexaLogo';
 const LINKS = [
   { href: '/', label: 'Inicio' },
   { href: '/servicios', label: 'Servicios' },
-  { href: '/casos', label: 'Casos' },
+  { href: '/casos', label: 'Enfoque' },
   { href: '/aprende', label: 'Aprende' },
   { href: '/contacto', label: 'Contacto' },
 ];

@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence, useMotionValue, useSpring, useScroll, useTransform } from 'motion/react';
+import { motion, AnimatePresence, useMotionValue, useSpring } from 'motion/react';
 import {
-  ArrowRight, CheckCircle2, Sparkles, TrendingUp, Search,
-  Database, Cpu, Zap, Plus, Minus, Star, Quote, BarChart3,
-  Users, Award, Megaphone, ChevronRight,
+  ArrowRight, CheckCircle2, Sparkles, TrendingUp,
+  Database, Cpu, Plus, Megaphone, ChevronRight,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -17,10 +16,6 @@ import { MarketingBadges } from '@/components/ui/marketing-badges';
 const fadeUp = {
   hidden: { opacity: 0, y: 40 },
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
-};
-const fadeIn = {
-  hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
 };
 const stagger = {
   hidden: {},
@@ -76,39 +71,15 @@ const RECOVER_ITEMS = [
   { title: 'Bases de Datos Frías', desc: 'Explotamos bases de correos y teléfonos archivadas mediante secuencias inteligentes.', color: '#FE8FD9' },
 ];
 
-const STATS = [
-  { value: '+20', label: 'Marcas asesoradas', icon: Users, color: '#D2F23A', glow: 'rgba(210,242,58,0.3)' },
-  { value: '+275%', label: 'Aumento en ventas', icon: TrendingUp, color: '#B89BFF', glow: 'rgba(184,155,255,0.3)' },
-  { value: '3x', label: 'ROI promedio', icon: BarChart3, color: '#EAA1FB', glow: 'rgba(234,161,251,0.3)' },
-  { value: '+6', label: 'Años de experiencia', icon: Award, color: '#D2F23A', glow: 'rgba(210,242,58,0.3)' },
-];
-
-const TESTIMONIALS = [
-  {
-    name: 'Martina González',
-    role: 'CEO · Boutique Aurea',
-    initials: 'MG',
-    text: 'En 3 meses, NEXA duplicó nuestras ventas online. El CRM personalizado que desarrollaron cambió totalmente la forma en que gestionamos clientes.',
-    metric: '+210% ventas',
-    metricColor: '#D2F23A',
-  },
-  {
-    name: 'Carlos Ruiz',
-    role: 'Director · TechFlow Solutions',
-    initials: 'CR',
-    text: 'Las campañas de Google Ads que gestionan tienen el mejor ROI que he visto en 8 años. Resultados medibles desde el primer mes de trabajo.',
-    metric: '4.1x ROI',
-    metricColor: '#B89BFF',
-  },
-  {
-    name: 'Valentina Méndez',
-    role: 'Fundadora · Estudio Vivo',
-    initials: 'VM',
-    text: 'La estrategia de contenido transformó nuestra marca. Pasamos de 2k a 28k seguidores orgánicos en solo 6 meses trabajando con NEXA.',
-    metric: '+1300% seguidores',
-    metricColor: '#EAA1FB',
-  },
-];
+/*
+ * NOTA (septiembre 2026): se eliminaron de esta página los bloques STATS
+ * (+20 marcas asesoradas, +275% aumento en ventas, 3x ROI promedio, +6 años
+ * de experiencia), TESTIMONIALS (tres testimonios con nombre, empresa y
+ * métrica) y la tira de logos de clientes, porque eran datos inventados:
+ * NEXA no tiene todavía clientes ni resultados que respalden esas cifras.
+ * No reemplazar por números "de referencia del rubro": mientras no haya
+ * datos reales y verificables, estas secciones no van.
+ */
 
 const CHANNEL_FEATURES = [
   'Estrategia multicanal integrada',
@@ -153,57 +124,6 @@ function useMouseGradient() {
   }, [mouseX, mouseY]);
 
   return { springX, springY };
-}
-
-/* ─── Count-Up Hook ─── */
-function useCountUp(target, duration = 1.5, inView) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!inView) return;
-    const num = parseFloat(target.replace(/[^0-9.]/g, ''));
-    if (!num) return;
-    let start = 0;
-    const step = num / (duration * 60);
-    const timer = setInterval(() => {
-      start += step;
-      if (start >= num) { setCount(num); clearInterval(timer); }
-      else setCount(Math.floor(start));
-    }, 1000 / 60);
-    return () => clearInterval(timer);
-  }, [inView, target, duration]);
-  const prefix = target.match(/^\+/) ? '+' : '';
-  const suffix = target.match(/%$/) ? '%' : target.match(/x$/) ? 'x' : '';
-  return `${prefix}${count}${suffix}`;
-}
-
-/* ─── Stat Item ─── */
-function StatItem({ stat, index }) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  const Icon = stat.icon;
-  const display = useCountUp(stat.value, 1.5, inView);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) setInView(true); }, { threshold: 0.3 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <motion.div
-      ref={ref}
-      variants={fadeUp}
-      custom={index}
-      className="stat-item-premium"
-      whileHover={{ y: -6, transition: { duration: 0.3 } }}
-    >
-      <div className="stat-icon-ring" style={{ background: `${stat.color}18`, boxShadow: `0 0 0 1px ${stat.color}30` }}>
-        <Icon size={22} color={stat.color} />
-      </div>
-      <div className="stat-value-premium" style={{ color: stat.color }}>{display}</div>
-      <div className="stat-label-premium">{stat.label}</div>
-    </motion.div>
-  );
 }
 
 /* ─── Page ─── */
@@ -326,161 +246,28 @@ export default function HomePage() {
                 </motion.a>
               </motion.div>
 
-              <motion.div variants={fadeUp} className="hero-metrics">
-                {[
-                  { icon: Users, label: '+20 Marcas activas', color: '#B89BFF', bg: 'rgba(184,155,255,0.12)' },
-                  { icon: Star, label: '3x ROI Promedio', color: '#EAA1FB', bg: 'rgba(234,161,251,0.12)' },
-                  { icon: TrendingUp, label: '+275% en ventas', color: '#D2F23A', bg: 'rgba(210,242,58,0.12)' },
-                ].map(({ icon: Icon, label, color, bg }) => (
-                  <div key={label} className="metric-chip">
-                    <div className="metric-chip-icon" style={{ background: bg }}>
-                      <Icon size={14} color={color} />
-                    </div>
-                    <span className="metric-chip-label">{label}</span>
-                  </div>
-                ))}
-              </motion.div>
+              {/* Se eliminaron los chips de métricas del hero ("+20 Marcas
+                  activas", "3x ROI Promedio", "+275% en ventas"): eran cifras
+                  inventadas. No reponer sin datos reales. */}
             </motion.div>
 
-            {/* Dashboard visual */}
-            <motion.div
-              className="hero-visual"
-              initial={{ opacity: 0, x: 60, scale: 0.94 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ duration: 0.9, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <motion.div
-                className="dashboard-card"
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <div className="dash-header">
-                  <div>
-                    <div className="dash-eyebrow">RENDIMIENTO MENSUAL</div>
-                    <div className="dash-value">+<span className="dash-lima">127</span>%</div>
-                  </div>
-                  <div className="dash-badge-up">↑ En alza</div>
-                </div>
-                <div className="dash-chart-wrap">
-                  <svg viewBox="0 0 340 90" className="dash-chart" preserveAspectRatio="none">
-                    <defs>
-                      <linearGradient id="chartFill" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#D2F23A" stopOpacity="0.25" />
-                        <stop offset="100%" stopColor="#D2F23A" stopOpacity="0" />
-                      </linearGradient>
-                    </defs>
-                    <path d="M0,80 C40,72 70,55 110,44 S160,30 200,20 S260,8 340,4" fill="none" stroke="#D2F23A" strokeWidth="2.5" strokeLinecap="round" />
-                    <path d="M0,80 C40,72 70,55 110,44 S160,30 200,20 S260,8 340,4 L340,90 L0,90 Z" fill="url(#chartFill)" />
-                    <circle cx="340" cy="4" r="5" fill="#D2F23A" />
-                    <circle cx="340" cy="4" r="10" fill="#D2F23A" fillOpacity="0.2" />
-                  </svg>
-                </div>
-                <div className="dash-metrics">
-                  {[
-                    { val: '248', label: 'Leads', color: 'white', bg: 'rgba(255,255,255,0.04)' },
-                    { val: '73%', label: 'Conversión', color: '#D2F23A', bg: 'rgba(210,242,58,0.08)' },
-                    { val: '3.8x', label: 'ROI', color: '#B89BFF', bg: 'rgba(184,155,255,0.08)' },
-                  ].map(({ val, label, color, bg }) => (
-                    <div key={label} className="dash-metric-cell" style={{ background: bg }}>
-                      <div className="dash-metric-val" style={{ color }}>{val}</div>
-                      <div className="dash-metric-label">{label}</div>
-                    </div>
-                  ))}
-                </div>
-                <div className="dash-bars">
-                  {[
-                    { label: 'Google Ads', pct: 84, color: '#D2F23A' },
-                    { label: 'Meta Ads', pct: 67, color: '#B89BFF' },
-                    { label: 'Email Mktg', pct: 91, color: '#EAA1FB' },
-                  ].map((b) => (
-                    <div key={b.label} className="dash-bar-row">
-                      <span className="dash-bar-label">{b.label}</span>
-                      <div className="dash-bar-track">
-                        <motion.div
-                          className="dash-bar-fill"
-                          style={{ background: b.color }}
-                          initial={{ width: 0 }}
-                          animate={{ width: `${b.pct}%` }}
-                          transition={{ duration: 1.2, delay: 0.8 + Math.random() * 0.3, ease: [0.16, 1, 0.3, 1] }}
-                        />
-                      </div>
-                      <span className="dash-bar-pct">{b.pct}%</span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="float-chip float-chip-top"
-                initial={{ opacity: 0, y: -20, x: 20 }}
-                animate={{ opacity: 1, y: 0, x: 0 }}
-                transition={{ delay: 1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div className="float-dot" />
-                <div>
-                  <div className="float-chip-title">Nuevo cliente</div>
-                  <div className="float-chip-sub">Empresa XYZ firmó propuesta</div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="float-chip float-chip-bottom"
-                initial={{ opacity: 0, y: 20, x: -20 }}
-                animate={{ opacity: 1, y: 0, x: 0 }}
-                transition={{ delay: 1.2, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div>
-                  <div className="float-chip-sub">ROI último mes</div>
-                  <div className="float-chip-title" style={{ fontSize: '1.4rem', color: '#D2F23A' }}>3.2x</div>
-                  <div style={{ fontSize: '0.72rem', color: '#4ade80' }}>↑ +45% vs mes anterior</div>
-                </div>
-              </motion.div>
-            </motion.div>
+            {/* Se eliminó el panel de dashboard del hero: mostraba métricas
+                fabricadas ("+127% rendimiento mensual", "248 leads",
+                "73% conversión", "3.8x ROI", barras por canal, "Nuevo cliente
+                — Empresa XYZ firmó propuesta", "ROI último mes 3.2x / +45% vs
+                mes anterior") como si fueran resultados reales de NEXA.
+                El hero pasa a una sola columna centrada. */}
           </div>
         </section>
 
-        {/* ══════ CLIENTS STRIP ══════ */}
-        <motion.section
-          className="clients-strip"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
-          <div className="container">
-            <p className="clients-title">Marcas que ya crecieron con NEXA</p>
-            <div className="clients-row">
-              {['Ciudad Moto', 'Corven Motos', 'Roca Viviendas', 'Casa Diez', 'Estética Funcional', 'Aqualaf'].map((name, i) => (
-                <motion.div
-                  key={name}
-                  className="client-logo-card"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08, duration: 0.5 }}
-                  whileHover={{ borderColor: 'rgba(184,155,255,0.4)', y: -3 }}
-                >
-                  {name}
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </motion.section>
+        {/* Se eliminó la tira de logos "Marcas que ya crecieron con NEXA"
+            (Ciudad Moto, Corven Motos, Roca Viviendas, Casa Diez, Estética
+            Funcional, Aqualaf): son marcas ajenas presentadas como clientes.
 
-        {/* ══════ STATS ══════ */}
-        <section className="stats-bar">
-          <div className="container">
-            <motion.div
-              className="stats-grid-premium"
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: '-80px' }}
-            >
-              {STATS.map((stat, i) => <StatItem key={stat.label} stat={stat} index={i} />)}
-            </motion.div>
-          </div>
-        </section>
+            Se eliminó la barra de estadísticas (+20 marcas asesoradas,
+            +275% aumento en ventas, 3x ROI promedio, +6 años de experiencia):
+            además de inventadas, se veían como "+0" porque el contador solo se
+            animaba al entrar en viewport. */}
 
         {/* ══════ SERVICES ══════ */}
         <section id="servicios" className="services-section">
@@ -651,67 +438,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ══════ TESTIMONIALS ══════ */}
-        <section className="testimonials-section">
-          <div className="container">
-            <motion.div
-              className="section-header"
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-            >
-              <motion.span variants={fadeUp} className="section-tag" style={{ background: 'rgba(210,242,58,0.12)', color: '#D2F23A' }}>Resultados reales</motion.span>
-              <motion.h2 variants={fadeUp} className="section-title">Lo que dicen nuestros clientes</motion.h2>
-              <motion.p variants={fadeUp} className="section-subtitle">
-                Más de 20 empresas ya escalaron su negocio con NEXA. Estos son algunos de sus testimonios.
-              </motion.p>
-            </motion.div>
-
-            <motion.div
-              className="testimonials-grid"
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: '-40px' }}
-            >
-              {TESTIMONIALS.map((t) => (
-                <motion.div
-                  key={t.name}
-                  variants={scaleIn}
-                  className="testimonial-card-premium"
-                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                >
-                  <div className="testimonial-stars">
-                    {[...Array(5)].map((_, i) => (
-                      <motion.span
-                        key={i}
-                        initial={{ opacity: 0, scale: 0 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.06, type: 'spring', stiffness: 300 }}
-                      >
-                        <Star size={13} fill="#D2F23A" color="#D2F23A" />
-                      </motion.span>
-                    ))}
-                  </div>
-                  <Quote size={20} className="testimonial-quote-icon" style={{ color: 'rgba(184,155,255,0.4)' }} />
-                  <p className="testimonial-text">{t.text}</p>
-                  <div className="testimonial-footer">
-                    <div className="testimonial-author">
-                      <div className="testimonial-avatar">{t.initials}</div>
-                      <div>
-                        <div className="testimonial-name">{t.name}</div>
-                        <div className="testimonial-role">{t.role}</div>
-                      </div>
-                    </div>
-                    <div className="testimonial-metric" style={{ color: t.metricColor }}>{t.metric}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
+        {/* Se eliminó la sección de testimonios ("Lo que dicen nuestros
+            clientes" + "Más de 20 empresas ya escalaron su negocio con NEXA"
+            + tres testimonios firmados por Martina González / Boutique Aurea,
+            Carlos Ruiz / TechFlow Solutions y Valentina Méndez / Estudio
+            Vivo). Eran inventados: NEXA no tiene clientes todavía. */}
 
         {/* ══════ CONTACT ══════ */}
         <section id="contacto" className="contact-section">
@@ -764,13 +495,8 @@ export default function HomePage() {
                     </motion.div>
                   ))}
                 </div>
-                <div className="contact-live-card">
-                  <div className="contact-live-dot" />
-                  <div>
-                    <div className="contact-live-title">+8 empresas esta semana</div>
-                    <div className="contact-live-sub">ya solicitaron su diagnóstico</div>
-                  </div>
-                </div>
+                {/* Se eliminó el cartel "+8 empresas esta semana / ya
+                    solicitaron su diagnóstico": dato inventado. */}
               </motion.div>
 
               <motion.div
@@ -1012,63 +738,19 @@ export default function HomePage() {
         @keyframes orbDrift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,30px)} }
         @keyframes orbDrift3 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(15px,-25px)} }
 
-        .hero-container { display: grid; grid-template-columns: 1.1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
-        .hero-content { max-width: 650px; }
+        /* El hero pasó a una sola columna centrada al sacarse el panel de
+           métricas fabricadas que ocupaba la columna derecha. */
+        .hero-container { display: flex; justify-content: center; position: relative; z-index: 1; }
+        .hero-content { max-width: 760px; text-align: center; }
+        .hero-subtitle-center { margin-left: auto; margin-right: auto; }
         .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(184,155,255,0.1); border: 1px solid rgba(184,155,255,0.25); border-radius: 999px; color: #C3B5FD; font-weight: 700; font-size: 0.82rem; margin-bottom: 24px; }
         .hero-title { font-size: clamp(2.4rem, 5vw, 4.2rem); line-height: 1.04; font-weight: 900; letter-spacing: -0.04em; color: white; margin-bottom: 20px; }
         .text-highlight { background: linear-gradient(135deg, #B89BFF, #EAA1FB, #FE8FD9); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline; }
-        .hero-subtitle { color: #94A3B8; font-size: 1.15rem; line-height: 1.7; margin-bottom: 32px; max-width: 540px; }
-        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
-        .hero-metrics { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
-        .metric-chip { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; backdrop-filter: blur(10px); }
-        .metric-chip-icon { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .metric-chip-label { font-size: 0.78rem; font-weight: 600; color: #CBD5E1; }
-
-        /* Dashboard */
-        .hero-visual { position: relative; }
-        .dashboard-card { background: rgba(255,255,255,0.028); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; padding: 28px; box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.04) inset; backdrop-filter: blur(20px); }
-        .dash-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
-        .dash-eyebrow { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: #505466; margin-bottom: 4px; }
-        .dash-value { font-size: 2.6rem; font-weight: 900; color: white; letter-spacing: -0.05em; }
-        .dash-lima { color: #D2F23A; }
-        .dash-badge-up { padding: 6px 14px; background: rgba(74,222,128,0.12); color: #4ade80; font-size: 0.76rem; font-weight: 700; border-radius: 999px; border: 1px solid rgba(74,222,128,0.22); }
-        .dash-chart-wrap { margin-bottom: 16px; }
-        .dash-chart { width: 100%; height: 90px; }
-        .dash-metrics { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 16px; }
-        .dash-metric-cell { border-radius: 14px; padding: 12px; text-align: center; }
-        .dash-metric-val { font-weight: 800; font-size: 1.1rem; line-height: 1; }
-        .dash-metric-label { font-size: 0.68rem; color: #64748B; margin-top: 3px; }
-        .dash-bars { display: flex; flex-direction: column; gap: 8px; }
-        .dash-bar-row { display: flex; align-items: center; gap: 10px; }
-        .dash-bar-label { font-size: 0.7rem; color: #64748B; width: 90px; flex-shrink: 0; }
-        .dash-bar-track { flex: 1; height: 5px; background: rgba(255,255,255,0.07); border-radius: 999px; overflow: hidden; }
-        .dash-bar-fill { height: 100%; border-radius: 999px; }
-        .dash-bar-pct { font-size: 0.7rem; color: #505466; width: 28px; text-align: right; }
-        .float-chip { position: absolute; display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: rgba(16,17,26,0.95); border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); }
-        .float-chip-top { top: -16px; right: -24px; }
-        .float-chip-bottom { bottom: -16px; left: -24px; }
-        .float-dot { width: 8px; height: 8px; border-radius: 50%; background: #4ade80; animation: pulseDot 2s ease-in-out infinite; flex-shrink: 0; }
-        @keyframes pulseDot { 0%,100%{box-shadow:0 0 0 0 rgba(74,222,128,0.5)} 50%{box-shadow:0 0 0 7px rgba(74,222,128,0)} }
-        .float-chip-title { font-weight: 700; font-size: 0.82rem; color: white; }
-        .float-chip-sub { font-size: 0.68rem; color: #64748B; margin-top: 1px; }
-
+        .hero-subtitle { color: #94A3B8; font-size: 1.15rem; line-height: 1.7; margin: 0 auto 32px; max-width: 620px; }
+        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
         /* ── BUTTONS ── */
         .btn-lima-cta { display: inline-flex; align-items: center; gap: 8px; padding: 15px 30px; background: #D2F23A; color: #0A0B10; font-weight: 800; font-size: 0.93rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.04em; transition: all 0.3s; text-decoration: none; }
         .btn-outline-dark { display: inline-flex; align-items: center; gap: 8px; padding: 15px 28px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.03); color: rgba(255,255,255,0.8); font-weight: 700; font-size: 0.93rem; border-radius: 100px; transition: all 0.3s; text-decoration: none; }
-
-        /* ── CLIENTS ── */
-        .clients-strip { padding: 48px 0; border-top: 1px solid rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.04); }
-        .clients-title { text-align: center; font-size: 0.78rem; font-weight: 600; color: #4B5563; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 28px; }
-        .clients-row { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; align-items: center; }
-        .client-logo-card { padding: 10px 22px; border: 1px solid rgba(255,255,255,0.07); border-radius: 12px; color: #6B7280; font-size: 0.85rem; font-weight: 700; background: rgba(255,255,255,0.02); transition: all 0.3s; cursor: default; }
-
-        /* ── STATS ── */
-        .stats-bar { padding: 80px 0; }
-        .stats-grid-premium { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
-        .stat-item-premium { display: flex; flex-direction: column; align-items: center; text-align: center; padding: 32px 24px; background: rgba(255,255,255,0.024); border: 1px solid rgba(255,255,255,0.07); border-radius: 24px; cursor: default; transition: border-color 0.3s; }
-        .stat-icon-ring { width: 52px; height: 52px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
-        .stat-value-premium { font-size: 2.6rem; font-weight: 900; letter-spacing: -0.05em; line-height: 1; margin-bottom: 6px; }
-        .stat-label-premium { font-size: 0.82rem; color: #6B7280; font-weight: 500; }
 
         /* ── SERVICES ── */
         .services-section { padding: 100px 0; }
@@ -1107,21 +789,6 @@ export default function HomePage() {
         .recover-card-premium h4 { font-size: 1rem; font-weight: 800; margin-bottom: 8px; }
         .recover-card-premium p { font-size: 0.87rem; color: #94A3B8; line-height: 1.6; }
 
-        /* ── TESTIMONIALS ── */
-        .testimonials-section { padding: 100px 0; }
-        .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .testimonial-card-premium { padding: 32px; background: rgba(255,255,255,0.028); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px; display: flex; flex-direction: column; gap: 16px; cursor: default; transition: border-color 0.3s; }
-        .testimonial-card-premium:hover { border-color: rgba(184,155,255,0.2); }
-        .testimonial-stars { display: flex; gap: 4px; }
-        .testimonial-quote-icon { opacity: 0.35; }
-        .testimonial-text { font-size: 0.92rem; color: #CBD5E1; line-height: 1.75; flex: 1; }
-        .testimonial-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.06); }
-        .testimonial-author { display: flex; align-items: center; gap: 12px; }
-        .testimonial-avatar { width: 40px; height: 40px; border-radius: 12px; background: linear-gradient(135deg, #835CE6, #EAA1FB); display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; color: white; flex-shrink: 0; }
-        .testimonial-name { font-weight: 700; font-size: 0.88rem; color: white; }
-        .testimonial-role { font-size: 0.72rem; color: #6B7280; margin-top: 2px; }
-        .testimonial-metric { font-weight: 900; font-size: 0.88rem; font-variant-numeric: tabular-nums; }
-
         /* ── CONTACT ── */
         .contact-section { padding: 100px 0; }
         .contact-pretitle { text-align: center; margin-bottom: 64px; }
@@ -1133,10 +800,6 @@ export default function HomePage() {
         .benefit-list { display: flex; flex-direction: column; gap: 16px; }
         .benefit-item { display: flex; align-items: center; gap: 12px; color: #CBD5E1; font-size: 0.9rem; }
         .benefit-icon { color: #D2F23A; flex-shrink: 0; }
-        .contact-live-card { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: rgba(74,222,128,0.06); border: 1px solid rgba(74,222,128,0.15); border-radius: 16px; }
-        .contact-live-dot { width: 10px; height: 10px; border-radius: 50%; background: #4ade80; animation: pulseDot 2s ease-in-out infinite; flex-shrink: 0; }
-        .contact-live-title { font-weight: 700; font-size: 0.9rem; color: white; }
-        .contact-live-sub { font-size: 0.75rem; color: #6B7280; margin-top: 2px; }
         .form-card-container { background: rgba(255,255,255,0.028); border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; padding: 40px; backdrop-filter: blur(20px); }
         .form-steps-header { display: flex; gap: 10px; margin-bottom: 28px; }
         .step-indicator { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; background: rgba(255,255,255,0.06); color: #6B7280; border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s; }
@@ -1182,9 +845,6 @@ export default function HomePage() {
 
         /* ── RESPONSIVE ── */
         @media (max-width: 1024px) {
-          .hero-container { grid-template-columns: 1fr; gap: 60px; }
-          .hero-visual { max-width: 520px; margin: 0 auto; }
-          .stats-grid-premium { grid-template-columns: repeat(2, 1fr); }
           .services-grid { grid-template-columns: repeat(2, 1fr); }
           .channels-grid { grid-template-columns: 1fr; gap: 48px; }
           .contact-wrapper { grid-template-columns: 1fr; }
@@ -1192,10 +852,7 @@ export default function HomePage() {
         @media (max-width: 768px) {
           .hero-section { padding: 120px 0 80px; }
           .services-grid { grid-template-columns: 1fr; }
-          .testimonials-grid { grid-template-columns: 1fr; }
           .recover-grid-visual { grid-template-columns: 1fr; }
-          .stats-grid-premium { grid-template-columns: repeat(2, 1fr); }
-          .float-chip-top, .float-chip-bottom { display: none; }
           .options-grid { grid-template-columns: 1fr; }
         }
       `}} />

@@ -6,9 +6,11 @@ import ProductCard from './ProductCard';
 import { CategoryPillsFilter } from './CategoryPills';
 import { filterProducts } from '@/lib/catalogFilter';
 
+// Se sacó el orden "Más vendidos": ordenaba por rating * reviewsCount, o sea
+// por las reseñas inventadas. Cuando haya ventas reales se puede reponer,
+// ordenando por cantidad de OrderItem vendidos.
 const SORTS = [
   { value: 'relevancia', label: 'Relevancia' },
-  { value: 'vendidos', label: 'Más vendidos' },
   { value: 'nuevos', label: 'Más nuevos' },
   { value: 'precio-asc', label: 'Precio: menor a mayor' },
   { value: 'precio-desc', label: 'Precio: mayor a menor' },
@@ -33,7 +35,6 @@ export default function ProductExplorer({
   const results = useMemo(() => {
     const base = filterProducts(products, query, category);
     const sorted = [...base];
-    if (sort === 'vendidos') sorted.sort((a, b) => b.rating * b.reviewsCount - a.rating * a.reviewsCount);
     if (sort === 'nuevos') sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     if (sort === 'precio-asc') sorted.sort((a, b) => a.price - b.price || a.title.localeCompare(b.title));
     if (sort === 'precio-desc') sorted.sort((a, b) => b.price - a.price || a.title.localeCompare(b.title));
