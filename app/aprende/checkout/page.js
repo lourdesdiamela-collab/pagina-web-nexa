@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useSession } from 'next-auth/react';
-import { ArrowLeft, ShieldCheck, Zap, FlaskConical, CreditCard, Landmark, Copy, Check, TimerReset } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Zap, FlaskConical, CreditCard, Landmark, Copy, Check, TimerReset, Info } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { useCart } from '@/components/aprende/CartContext';
@@ -47,9 +47,53 @@ export default function CheckoutPage() {
   const [couponCode, setCouponCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [devOrder, setDevOrder] = useState(null); // { orderId } cuando MP no está configurado
+  const [devOrder, setDevOrder] = useState(null); // { orderId } — solo en desarrollo con el simulador habilitado
   const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago' | 'transfer'
   const [transferOrder, setTransferOrder] = useState(null); // { orderId, total } cuando ya se registró el pedido por transferencia
+
+  // Medios de pago realmente disponibles, según el servidor (ver
+  // /api/checkout/payment-methods). Mientras no se sabe, se asume que Mercado
+  // Pago NO está disponible: es el default seguro — nunca se muestra un botón
+  // de pago con tarjeta que no va a funcionar.
+  const [methods, setMethods] = useState({ mercadopago: false, transfer: true, simulation: false, loaded: false });
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/checkout/payment-methods')
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        setMethods({
+          mercadopago: Boolean(data.mercadopago),
+          transfer: data.transfer !== false,
+          simulation: Boolean(data.simulation),
+          loaded: true,
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setMethods((prev) => ({ ...prev, loaded: true }));
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  // Doble candado para el simulador: el servidor tiene que habilitarlo Y el
+  // bundle tiene que ser de desarrollo (NODE_ENV lo inlinea Next en tiempo de
+  // build, así que en un build de producción esto es false siempre y el botón
+  // directamente no existe en el código enviado al navegador).
+  const simulationEnabled = methods.simulation && process.env.NODE_ENV === 'development';
+
+  // La opción "pagar con tarjeta" se ofrece si hay Mercado Pago de verdad, o
+  // si estamos en desarrollo con el simulador habilitado. En producción sin
+  // credenciales: no se ofrece, y se explica por qué.
+  const cardPaymentAvailable = methods.mercadopago || simulationEnabled;
+
+  // Si el único medio disponible es transferencia, se preselecciona para que
+  // el usuario no se quede mirando una lista de un solo ítem sin elegir.
+  useEffect(() => {
+    if (methods.loaded && !cardPaymentAvailable && paymentMethod === null) {
+      setPaymentMethod('transfer');
+    }
+  }, [methods.loaded, cardPaymentAvailable, paymentMethod]);
 
   const resolved = items
     .map((item) => ({ item, product: resolveProduct(item.slug) }))
@@ -69,6 +113,12 @@ export default function CheckoutPage() {
       const data = await res.json();
       if (!res.ok) {
         setError(data.error || 'No pudimos iniciar el pago.');
+        // El servidor avisa que el pago con tarjeta no está disponible:
+        // reflejarlo en la UI y sacar la opción de Mercado Pago.
+        if (data.paymentUnavailable) {
+          setMethods((prev) => ({ ...prev, mercadopago: false, simulation: false, loaded: true }));
+          setPaymentMethod('transfer');
+        }
         setLoading(false);
         return;
       }
@@ -76,7 +126,12 @@ export default function CheckoutPage() {
         window.location.href = data.initPoint;
         return;
       }
-      setDevOrder({ orderId: data.orderId });
+      if (data.simulationAvailable && simulationEnabled) {
+        setDevOrder({ orderId: data.orderId });
+        setLoading(false);
+        return;
+      }
+      setError('El pago con tarjeta no está disponible por el momento. Podés completar tu compra por transferencia bancaria.');
       setLoading(false);
     } catch {
       setError('No pudimos iniciar el pago. Intentá de nuevo.');
@@ -86,6 +141,9 @@ export default function CheckoutPage() {
 
   async function handleSimulate() {
     if (!devOrder) return;
+    // Guarda extra: el endpoint ya responde 404 fuera de desarrollo, pero
+    // acá ni siquiera se intenta.
+    if (!simulationEnabled) return;
     setLoading(true);
     setError('');
     try {
@@ -212,20 +270,42 @@ export default function CheckoutPage() {
                     </div>
 
                     <div className="aprende-payment-copy">
-                      Aceptamos <strong>tarjeta de crédito, débito y transferencia bancaria</strong>.
-                      Pagando por transferencia tenés <strong>10% de descuento</strong> automático sobre el total.
+                      {cardPaymentAvailable ? (
+                        <>
+                          Aceptamos <strong>tarjeta de crédito, débito y transferencia bancaria</strong>.
+                          Pagando por transferencia tenés <strong>10% de descuento</strong> automático sobre el total.
+                        </>
+                      ) : (
+                        <>
+                          Por el momento cobramos únicamente por <strong>transferencia bancaria</strong>,
+                          con <strong>10% de descuento</strong> sobre el total.
+                        </>
+                      )}
                     </div>
+
+                    {methods.loaded && !cardPaymentAvailable && (
+                      <div className="aprende-payment-notice">
+                        <Info size={16} style={{ flexShrink: 0, marginTop: 2 }} />
+                        <span>
+                          <strong>El pago online con tarjeta no está disponible por el momento.</strong>{' '}
+                          Podés completar tu compra por transferencia bancaria — te dejamos los datos acá abajo
+                          y apenas verificamos el ingreso te enviamos el material.
+                        </span>
+                      </div>
+                    )}
 
                     {error && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{error}</div>}
 
                     <div className="aprende-payment-methods">
-                      <button
-                        type="button"
-                        className={`aprende-payment-option${paymentMethod === 'mercadopago' ? ' active' : ''}`}
-                        onClick={() => setPaymentMethod('mercadopago')}
-                      >
-                        <CreditCard size={18} /> Mercado Pago — tarjeta, débito o dinero en cuenta
-                      </button>
+                      {cardPaymentAvailable && (
+                        <button
+                          type="button"
+                          className={`aprende-payment-option${paymentMethod === 'mercadopago' ? ' active' : ''}`}
+                          onClick={() => setPaymentMethod('mercadopago')}
+                        >
+                          <CreditCard size={18} /> Mercado Pago — tarjeta, débito o dinero en cuenta
+                        </button>
+                      )}
                       <button
                         type="button"
                         className={`aprende-payment-option${paymentMethod === 'transfer' ? ' active' : ''}`}
@@ -235,25 +315,30 @@ export default function CheckoutPage() {
                       </button>
                     </div>
 
-                    {paymentMethod === 'mercadopago' && (
+                    {paymentMethod === 'mercadopago' && cardPaymentAvailable && (
                       <div style={{ marginTop: 16 }}>
                         {!devOrder ? (
                           <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePay} disabled={loading}>
                             <Zap size={16} /> {loading ? 'Redirigiendo…' : 'Pagar con Mercado Pago'}
                           </button>
                         ) : (
-                          <div>
-                            <div className="aprende-form-success" style={{ marginBottom: 12, display: 'flex', gap: 8, alignItems: 'flex-start' }}>
-                              <FlaskConical size={16} style={{ flexShrink: 0, marginTop: 2 }} />
-                              <span>
-                                Mercado Pago todavía no está configurado (falta que Lu cargue sus credenciales). Este es el <strong>modo de prueba</strong>:
-                                simulá el pago aprobado para ver el flujo completo (pedido, email, Mis Recursos) funcionando de verdad.
-                              </span>
+                          /* Solo alcanzable en desarrollo con ALLOW_PAYMENT_SIMULATION=true.
+                             En un build de producción simulationEnabled es false en tiempo de
+                             compilación y este bloque nunca se renderiza. */
+                          simulationEnabled && (
+                            <div>
+                              <div className="aprende-form-success" style={{ marginBottom: 12, display: 'flex', gap: 8, alignItems: 'flex-start' }}>
+                                <FlaskConical size={16} style={{ flexShrink: 0, marginTop: 2 }} />
+                                <span>
+                                  <strong>Entorno de desarrollo.</strong> Mercado Pago no está configurado y el simulador
+                                  está habilitado a mano (ALLOW_PAYMENT_SIMULATION). Esto no existe en producción.
+                                </span>
+                              </div>
+                              <button type="button" className="btn btn-lima" style={{ width: '100%', justifyContent: 'center' }} onClick={handleSimulate} disabled={loading}>
+                                {loading ? 'Procesando…' : 'Simular pago aprobado (solo desarrollo)'}
+                              </button>
                             </div>
-                            <button type="button" className="btn btn-lima" style={{ width: '100%', justifyContent: 'center' }} onClick={handleSimulate} disabled={loading}>
-                              {loading ? 'Procesando…' : 'Simular pago aprobado (modo desarrollo)'}
-                            </button>
-                          </div>
+                          )
                         )}
                         <p className="aprende-cart-hint" style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
                           <ShieldCheck size={14} /> Pago seguro procesado por Mercado Pago.

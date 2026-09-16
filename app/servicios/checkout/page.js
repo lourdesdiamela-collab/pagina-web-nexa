@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, ShieldCheck, Zap, CreditCard, Landmark, Copy, Check, TimerReset, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Zap, CreditCard, Landmark, Copy, Check, TimerReset, MessageCircle, Info } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import TransferReservationTimer from '@/components/aprende/TransferReservationTimer';
@@ -60,6 +60,30 @@ function ServicioCheckoutContent() {
   const [error, setError] = useState('');
   const [devMessage, setDevMessage] = useState('');
   const [transferOrder, setTransferOrder] = useState(null); // { reference, total }
+
+  // Medios de pago realmente disponibles (ver /api/checkout/payment-methods).
+  // Default seguro: hasta que responda el servidor, se asume que no hay pago
+  // con tarjeta, así no se ofrece un botón que va a fallar.
+  const [methods, setMethods] = useState({ mercadopago: false, loaded: false });
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/checkout/payment-methods')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) setMethods({ mercadopago: Boolean(data.mercadopago), loaded: true });
+      })
+      .catch(() => {
+        if (!cancelled) setMethods((prev) => ({ ...prev, loaded: true }));
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    if (methods.loaded && !methods.mercadopago && paymentMethod === null) {
+      setPaymentMethod('transfer');
+    }
+  }, [methods.loaded, methods.mercadopago, paymentMethod]);
 
   const missingPlan = !amount || amount <= 0;
   const formValid = form.name.trim() && form.email.trim() && form.phone.trim();
@@ -209,22 +233,44 @@ function ServicioCheckoutContent() {
                 )}
 
                 <div className="aprende-payment-copy">
-                  Aceptamos <strong>tarjeta de crédito, débito y transferencia bancaria</strong>.
-                  Pagando por transferencia tenés <strong>10% de descuento</strong> automático sobre el total.
+                  {methods.mercadopago ? (
+                    <>
+                      Aceptamos <strong>tarjeta de crédito, débito y transferencia bancaria</strong>.
+                      Pagando por transferencia tenés <strong>10% de descuento</strong> automático sobre el total.
+                    </>
+                  ) : (
+                    <>
+                      Por el momento cobramos únicamente por <strong>transferencia bancaria</strong>,
+                      con <strong>10% de descuento</strong> sobre el total.
+                    </>
+                  )}
                 </div>
+
+                {methods.loaded && !methods.mercadopago && (
+                  <div className="aprende-payment-notice">
+                    <Info size={16} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <span>
+                      <strong>El pago online con tarjeta no está disponible por el momento.</strong>{' '}
+                      Podés contratar por transferencia bancaria — te dejamos los datos acá abajo — o
+                      escribirnos por WhatsApp y coordinamos.
+                    </span>
+                  </div>
+                )}
 
                 {error && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{error}</div>}
                 {devMessage && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{devMessage}</div>}
 
                 <div className="aprende-payment-methods">
-                  <button
-                    type="button"
-                    className={`aprende-payment-option${paymentMethod === 'mercadopago' ? ' active' : ''}`}
-                    onClick={() => setPaymentMethod('mercadopago')}
-                    disabled={!formValid}
-                  >
-                    <CreditCard size={18} /> Mercado Pago — tarjeta, débito o dinero en cuenta
-                  </button>
+                  {methods.mercadopago && (
+                    <button
+                      type="button"
+                      className={`aprende-payment-option${paymentMethod === 'mercadopago' ? ' active' : ''}`}
+                      onClick={() => setPaymentMethod('mercadopago')}
+                      disabled={!formValid}
+                    >
+                      <CreditCard size={18} /> Mercado Pago — tarjeta, débito o dinero en cuenta
+                    </button>
+                  )}
                   <button
                     type="button"
                     className={`aprende-payment-option${paymentMethod === 'transfer' ? ' active' : ''}`}
@@ -235,7 +281,7 @@ function ServicioCheckoutContent() {
                   </button>
                 </div>
 
-                {paymentMethod === 'mercadopago' && formValid && (
+                {paymentMethod === 'mercadopago' && formValid && methods.mercadopago && (
                   <div style={{ marginTop: 16 }}>
                     <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePayMercadoPago} disabled={loading}>
                       <Zap size={16} /> {loading ? 'Redirigiendo…' : 'Pagar con Mercado Pago'}

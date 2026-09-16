@@ -24,6 +24,22 @@ export async function POST(request) {
     return NextResponse.json({ error: validationError }, { status: 400 });
   }
 
+  // Sin credenciales de Mercado Pago no hay pago con tarjeta posible: se corta
+  // acá, antes de guardar el lead y antes de mandar el mail de "recibimos tu
+  // pedido vía Mercado Pago", que sería engañoso. La UI ya no ofrece esta
+  // opción cuando MP está apagado (ver /api/checkout/payment-methods), así que
+  // este camino solo se alcanza llamando la API a mano.
+  if (!isMpConfigured()) {
+    return NextResponse.json(
+      {
+        error: 'El pago online con tarjeta no está disponible por el momento. Podés contratar por transferencia bancaria.',
+        mpConfigured: false,
+        paymentUnavailable: true,
+      },
+      { status: 503 },
+    );
+  }
+
   const { name, email, phone, company, servicio, planLabel, billing } = body;
   const amount = Math.round(Number(body.amount));
   const reference = generateServiceReference();
@@ -56,14 +72,6 @@ export async function POST(request) {
     await sendServiceLeadEmails({ reference, name, email, phone, company, servicio, planLabel, amount, billing, method: 'mercadopago' });
   } catch (mailError) {
     console.error('Error enviando emails de pedido de servicio:', mailError);
-  }
-
-  if (!isMpConfigured()) {
-    return NextResponse.json({
-      reference,
-      mpConfigured: false,
-      message: 'Mercado Pago todavía no está activo en este entorno. Probá con transferencia bancaria o escribinos por WhatsApp y coordinamos el pago.',
-    });
   }
 
   try {

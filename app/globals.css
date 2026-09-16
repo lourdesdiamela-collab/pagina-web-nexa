@@ -1719,6 +1719,26 @@ p { color: var(--text-body); line-height: 1.7; }
   margin-bottom: 16px;
 }
 .aprende-payment-copy strong { color: var(--text-dark); }
+
+/* Aviso informativo del checkout — se usa cuando el pago con tarjeta no está
+   disponible y hay que derivar al usuario a transferencia bancaria. Es un
+   aviso, no un error: por eso el tono neutro y no el rojo de .aprende-form-error. */
+.aprende-payment-notice {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  background: rgba(13, 14, 21, 0.04);
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--text-dark);
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-body);
+  margin-bottom: 16px;
+}
+.aprende-payment-notice strong { color: var(--text-dark); }
+
 .aprende-payment-methods { display: flex; flex-direction: column; gap: 10px; }
 .aprende-payment-option {
   display: flex;
