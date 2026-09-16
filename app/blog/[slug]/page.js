@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -83,8 +84,8 @@ export default function ArticleDetailPage({ params }) {
             <ArrowLeft size={14} /> Volver al Blog
           </Link>
 
-          <div style={{ borderRadius: 18, border: '1px solid rgba(16,18,34,0.12)', background: 'white', overflow: 'hidden' }}>
-            <img src={article.cover} alt={article.title} style={{ width: '100%', height: 'clamp(190px, 34vw, 320px)', objectFit: 'cover' }} />
+          <div style={{ position: 'relative', height: 'clamp(190px, 34vw, 320px)', borderRadius: 18, border: '1px solid rgba(16,18,34,0.12)', background: 'white', overflow: 'hidden' }}>
+            <Image src={article.cover} alt={article.title} fill sizes="(max-width: 860px) 100vw, 860px" style={{ objectFit: 'cover' }} />
             <div style={{ padding: '18px clamp(14px, 4vw, 38px) 26px' }}>
               <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', color: '#5d6480', fontSize: '0.86rem' }}>
                 <span>{article.category}</span>

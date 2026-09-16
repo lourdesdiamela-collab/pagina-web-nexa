@@ -2,6 +2,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import {
   Target, BarChart3, Users, Layers, RefreshCw, ArrowRight,
@@ -278,8 +279,8 @@ function ServiciosContent() {
         {/* Banner */}
         <section style={{ padding: '24px 0 56px' }}>
           <div className="container">
-            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ position: 'relative', maxWidth: 980, margin: '0 auto', borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 70px rgba(13,14,21,0.14)' }}>
-              <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1400&q=80" alt="Equipo de NEXA planificando estrategia con datos" loading="lazy" style={{ width: '100%', height: 'clamp(220px, 32vw, 360px)', objectFit: 'cover', display: 'block' }} />
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} style={{ position: 'relative', height: 'clamp(220px, 32vw, 360px)', maxWidth: 980, margin: '0 auto', borderRadius: 28, overflow: 'hidden', boxShadow: '0 30px 70px rgba(13,14,21,0.14)' }}>
+              <Image src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=1400&q=80" alt="Equipo de NEXA planificando estrategia con datos" fill sizes="(max-width: 980px) 100vw, 980px" style={{ objectFit: 'cover' }} />
               <div style={{ position: 'absolute', left: 24, bottom: 24, background: '#fff', padding: '13px 22px', borderRadius: 100, fontSize: '0.86rem', fontWeight: 700, color: '#12141D', boxShadow: '0 14px 32px rgba(13,14,21,0.18)' }}>Estrategia + datos en un mismo equipo</div>
             </motion.div>
           </div>

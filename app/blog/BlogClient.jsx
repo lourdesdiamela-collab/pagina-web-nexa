@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, Search } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -69,7 +70,9 @@ export default function BlogClient() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
             {filtered.map((article) => (
               <article key={article.slug} style={{ borderRadius: 16, border: '1px solid rgba(16,18,34,0.12)', background: 'white', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                <img src={article.cover} alt={article.title} loading="lazy" style={{ width: '100%', height: 180, objectFit: 'cover' }} />
+                <div style={{ position: 'relative', height: 180 }}>
+                  <Image src={article.cover} alt={article.title} fill sizes="(max-width: 768px) 100vw, 340px" style={{ objectFit: 'cover' }} />
+                </div>
                 <div style={{ padding: 14, display: 'grid', gap: 10, flex: 1 }}>
                   <div style={{ fontSize: '0.78rem', color: '#6a35ff', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                     {article.category} · {article.readTime}
