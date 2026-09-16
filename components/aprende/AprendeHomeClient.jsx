@@ -14,7 +14,6 @@ import ProductCard from '@/components/aprende/ProductCard';
 import { CategoryLinksGrid } from '@/components/aprende/CategoryPills';
 import FAQAccordion from '@/components/aprende/FAQAccordion';
 import Newsletter from '@/components/aprende/Newsletter';
-import Testimonials from '@/components/aprende/Testimonials';
 import UrgencyCountdown from '@/components/aprende/UrgencyCountdown';
 
 const fadeUp = {
@@ -26,13 +25,13 @@ const stagger = {
   show: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 
-const TESTIMONIALS = [
-  { name: 'Rocío Fernández', role: 'Emprendedora, indumentaria', rating: 5, text: 'Compré el pack de Instagram y en dos semanas ya se notó el cambio en el feed y en las consultas por DM.' },
-  { name: 'Diego Aranda', role: 'Dueño de resto-bar', rating: 5, text: 'La guía de WhatsApp Business me ordenó algo que veníamos haciendo mal hace años. Simple y aplicable.' },
-  { name: 'Yamila Sosa', role: 'Freelance de diseño', rating: 4, text: 'Los prompts de IA me ahorran horas por semana. El PDF quedó como referencia fija en mi escritorio.' },
-  { name: 'Emiliano Ríos', role: 'Contador independiente', rating: 5, text: 'Empecé con la guía de finanzas para emprendedores y terminé llevándome el pack completo de la categoría.' },
-  { name: 'Brenda Coria', role: 'Marca de indumentaria', rating: 5, text: 'Muy por encima de lo que esperaba por el precio. Las plantillas de Excel ya las uso todas las semanas.' },
-];
+/*
+ * NOTA (septiembre 2026): se eliminó TESTIMONIALS — cinco testimonios
+ * inventados (Rocío Fernández, Diego Aranda, Yamila Sosa, Emiliano Ríos y
+ * Brenda Coria) con sus valoraciones. NEXA Aprende todavía no tiene
+ * compradores reales. No reponer sin reseñas verdaderas: cuando existan, van a
+ * salir solas de la tabla Review de la base de datos.
+ */
 
 const FAQS = [
   { q: '¿Cómo recibo el recurso que compro?', a: 'Es contenido 100% digital: el PDF y todos los materiales quedan disponibles para descargar apenas se acredita el pago, sin esperas ni envíos.' },
@@ -102,7 +101,7 @@ export default function AprendeHomeClient({ categories, categoryCounts, featured
               {deals?.length > 0 && (
                 <motion.div variants={fadeUp} style={{ marginTop: 24, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
                   <a href="#catalogo" onClick={(e) => { e.preventDefault(); document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="btn btn-primary btn-sm">
-                    Ver más vendidos
+                    Ver todo el catálogo
                   </a>
                   <a href="#catalogo" onClick={(e) => { e.preventDefault(); document.getElementById('catalogo')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); }} className="btn btn-lima btn-sm">
                     Ver ofertas por tiempo limitado
@@ -132,8 +131,10 @@ export default function AprendeHomeClient({ categories, categoryCounts, featured
         {/* ── DESTACADOS ── */}
         <ProductRow tag="Selección NEXA" title="Destacados" subtitle="Los recursos que más recomendamos para arrancar." products={featured} />
 
-        {/* ── MÁS VENDIDOS ── */}
-        <ProductRow tag="Lo más elegido" title="Más vendidos" subtitle="Los recursos con mejor calificación y más ventas de la biblioteca." products={bestSellers} tint />
+        {/* Se eliminó la fila "Más vendidos" ("Lo más elegido" / "Los recursos
+            con mejor calificación y más ventas de la biblioteca"): todavía no
+            hubo ninguna venta, así que ni el ranking ni la calificación
+            existían — los marcaba un flag fabricado en lib/products.mjs. */}
 
         {/* ── NUEVOS ── */}
         <ProductRow tag="Recién llegados" title="Nuevos" subtitle="Las últimas guías incorporadas a NEXA Aprende." products={newArrivals} />
@@ -191,16 +192,8 @@ export default function AprendeHomeClient({ categories, categoryCounts, featured
           </div>
         </section>
 
-        {/* ── TESTIMONIOS ── */}
-        <section className="section">
-          <div className="container">
-            <motion.div className="section-header" initial="hidden" whileInView="show" viewport={{ once: true }} variants={stagger}>
-              <motion.span variants={fadeUp} className="section-tag">Lo que dicen</motion.span>
-              <motion.h2 variants={fadeUp} className="section-title">Resultados reales de la comunidad</motion.h2>
-            </motion.div>
-            <Testimonials items={TESTIMONIALS} />
-          </div>
-        </section>
+        {/* Se eliminó la sección de testimonios ("Lo que dicen" / "Resultados
+            reales de la comunidad"): los cinco testimonios eran inventados. */}
 
         {/* ── FAQ ── */}
         <section className="section-sm" style={{ background: 'var(--bg-white)' }}>

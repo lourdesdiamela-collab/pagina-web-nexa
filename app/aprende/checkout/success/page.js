@@ -23,10 +23,23 @@ export default async function CheckoutSuccessPage({ searchParams }) {
   if (!order || order.userId !== session.user.id) redirect('/aprende');
 
   // Red de seguridad por si el webhook todavía no llegó: verificamos el pago directo contra Mercado Pago.
+  //
+  // IMPORTANTE: además de que el pago esté aprobado, hay que verificar que ese
+  // pago corresponda EXACTAMENTE a este pedido (external_reference). Sin ese
+  // chequeo, cualquiera podía pegar en la URL el payment_id de un pago
+  // aprobado cualquiera (por ejemplo el de una compra propia de $1) junto al
+  // order_id de un pedido caro y hacérselo aprobar gratis.
   if (order.status === 'PENDING' && searchParams.payment_id && isMpConfigured()) {
     try {
       const payment = await getPayment(searchParams.payment_id);
-      if (payment.status === 'approved') {
+      const belongsToThisOrder = String(payment.external_reference || '') === String(order.id);
+
+      if (!belongsToThisOrder) {
+        console.warn(
+          `[checkout/success] payment_id ${searchParams.payment_id} no corresponde al pedido ${order.id} ` +
+          `(external_reference: ${payment.external_reference}). No se aprueba nada.`,
+        );
+      } else if (payment.status === 'approved') {
         order = await approveOrder(order.id, { mpPaymentId: String(payment.id), payerEmail: payment.payer?.email });
       } else if (payment.status === 'rejected') {
         order = await rejectOrder(order.id, { mpPaymentId: String(payment.id) });

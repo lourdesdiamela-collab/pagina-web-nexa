@@ -5,11 +5,12 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
   Target, BarChart3, Users, Layers, RefreshCw, ArrowRight,
-  CheckCircle2, MessageCircle, Plus, Award, Star, Quote,
+  CheckCircle2, MessageCircle, Plus, Info,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+import { SERVICE_LINES, planPriceLabel } from '@/lib/servicePlans.mjs';
 
 const WHATSAPP_NUMBER = '5491124527402';
 
@@ -177,256 +178,22 @@ const SERVICES = [
    Marketing & Estrategia y CRM y Seguimiento comparten estructura de precios
    con las líneas más afines conceptualmente (Ads y Recover respectivamente),
    con beneficios redactados para su propio alcance. ─── */
-const PRICING_LINES = [
-  {
-    id: 'marketing',
-    slug: 'marketing_integral',
-    label: 'Marketing & Estrategia',
-    shortLabel: 'Estrategia',
-    color: '#B89BFF',
-    accent: 'rgba(184,155,255,0.12)',
-    border: 'rgba(184,155,255,0.3)',
-    billing: 'Plan mensual',
-    tagline: 'Diagnóstico, plan y ejecución de tu estrategia de marketing.',
-    tiers: [
-      {
-        name: 'Start',
-        price: '$149.900',
-        suffix: '/mes',
-        badge: false,
-        features: ['Diagnóstico de marca, competencia y audiencia', 'Plan de marketing a 90 días', 'Propuesta de valor y mensajes clave', 'Calendario de acciones por canal (orgánico + pago)', 'Reunión mensual de revisión', 'Recomendaciones priorizadas', 'Acceso al portal cliente'],
-      },
-      {
-        name: 'Growth',
-        price: '$299.900',
-        suffix: '/mes',
-        badge: true,
-        includesPrevious: 'Start',
-        features: ['Plan de marketing trimestral con objetivos medibles', 'Estrategia multicanal (orgánico + pago + email)', 'Análisis de competencia y benchmarking', 'Reuniones quincenales de revisión', 'Ajustes de estrategia basados en datos', 'Dashboard de indicadores clave', 'Soporte prioritario'],
-      },
-      {
-        name: 'Scale',
-        price: '$549.900',
-        suffix: '/mes',
-        badge: false,
-        includesPrevious: 'Growth',
-        features: ['Estrategia de marketing integral a 12 meses', 'Coordinación con equipos de Ads, Social y CRM', 'Planificación comercial mensual', 'Reuniones semanales de seguimiento', 'Dashboard ejecutivo personalizado', 'Optimización continua de la estrategia', 'Acompañamiento prioritario permanente'],
-      },
-    ],
-  },
-  {
-    id: 'web',
-    slug: 'nexa_web',
-    label: 'NEXA Web',
-    shortLabel: 'Web',
-    color: '#B89BFF',
-    accent: 'rgba(184,155,255,0.12)',
-    border: 'rgba(184,155,255,0.3)',
-    billing: 'Pago único',
-    tagline: 'Sitios web profesionales, sin mensualidad.',
-    tiers: [
-      {
-        name: 'Básico',
-        price: '$99.000',
-        suffix: 'pago único',
-        badge: false,
-        features: ['Sitio de hasta 5 secciones', 'Diseño moderno responsive', 'Formulario de contacto', 'Integración con redes sociales', 'SEO básico'],
-      },
-      {
-        name: 'Profesional',
-        price: '$159.000',
-        suffix: 'pago único',
-        badge: true,
-        features: ['Hasta 10 secciones', 'Diseño premium', 'Formulario + integración WhatsApp', 'SEO avanzado', 'Blog autoadministrable', 'Integración con redes sociales', 'Analíticas y reportes básicos'],
-      },
-      {
-        name: 'Avanzado',
-        price: '$249.000',
-        suffix: 'pago único',
-        badge: false,
-        features: ['Secciones ilimitadas', 'Diseño premium 100% personalizado', 'E-commerce', 'SEO avanzado', 'Blog autoadministrable', 'Integraciones avanzadas', 'Soporte prioritario', 'Prevención y seguridad'],
-      },
-    ],
-    footnote: 'Aceptamos todos los medios de pago: Visa, Mastercard, Amex, Mercado Pago y Naranja X. Pagando por transferencia bancaria tenés 10% de descuento.',
-  },
-  {
-    id: 'social',
-    slug: 'redes_sociales',
-    label: 'NEXA Social',
-    shortLabel: 'Social',
-    color: '#EAA1FB',
-    accent: 'rgba(234,161,251,0.12)',
-    border: 'rgba(234,161,251,0.3)',
-    billing: 'Plan mensual',
-    tagline: 'Gestión profesional de redes sociales.',
-    tiers: [
-      {
-        name: 'Start',
-        price: '$119.900',
-        suffix: '/mes',
-        badge: false,
-        features: ['Estrategia inicial de contenidos', 'Calendario mensual', '8 publicaciones/mes', 'Diseño de piezas', 'Redacción de copys', 'Optimización de perfil', 'Historias destacadas', 'Reporte mensual', 'Recomendaciones', 'Acceso al portal cliente'],
-      },
-      {
-        name: 'Growth',
-        price: '$219.900',
-        suffix: '/mes',
-        badge: true,
-        includesPrevious: 'Start',
-        features: ['12 publicaciones/mes', 'Stories estratégicas', 'Reels/videos (hasta 4/mes)', 'Diseño premium', 'Estrategia de interacción', 'Análisis de competencia', 'Reporte quincenal', 'Contenido de valor', 'Campañas de interacción', 'Soporte prioritario'],
-      },
-      {
-        name: 'Scale',
-        price: '$399.900',
-        suffix: '/mes',
-        badge: false,
-        includesPrevious: 'Growth',
-        features: ['20 publicaciones/mes', 'Reels ilimitados', 'Estrategia de contenidos avanzada', 'Campañas de conversión en redes', 'Segmentación y remarketing', 'Community management dedicado', 'Automatizaciones avanzadas', 'Reporte semanal', 'Estrategias multicanal', 'Soporte VIP'],
-      },
-    ],
-  },
-  {
-    id: 'ads',
-    slug: 'meta_ads',
-    label: 'NEXA Ads',
-    shortLabel: 'Ads',
-    color: '#FE8FD9',
-    accent: 'rgba(254,143,217,0.14)',
-    border: 'rgba(254,143,217,0.35)',
-    billing: 'Plan mensual',
-    tagline: 'Publicidad en Meta Ads orientada a resultados.',
-    tiers: [
-      {
-        name: 'Start',
-        price: '$149.900',
-        suffix: '/mes',
-        badge: false,
-        features: ['Auditoría inicial', '1 campaña activa', 'Segmentación básica', 'Diseño de anuncios y copys', 'Optimización semanal', 'Reporte de resultados', 'Seguimiento estratégico', 'Recomendaciones', 'Acceso al portal cliente'],
-      },
-      {
-        name: 'Growth',
-        price: '$299.900',
-        suffix: '/mes',
-        badge: true,
-        includesPrevious: 'Start',
-        features: ['Hasta 3 campañas simultáneas', 'Campañas de WhatsApp/formularios', 'Remarketing', 'Públicos personalizados', 'Optimización diaria', 'Pruebas A/B', 'Análisis de competencia', 'Dashboard de métricas', 'Reportes avanzados', 'Seguimiento prioritario', 'Estrategia trimestral', 'Ajustes permanentes'],
-      },
-      {
-        name: 'Scale',
-        price: '$549.900',
-        suffix: '/mes',
-        badge: false,
-        includesPrevious: 'Growth',
-        features: ['Campañas ilimitadas', 'Embudos de venta completos', 'Captación de leads avanzada', 'Estrategias de conversión', 'Automatizaciones comerciales', 'Optimización 24/7', 'Análisis profundo de datos', 'Dashboard personalizado', 'Estrategias de escalado', 'Acompañamiento prioritario', 'Planificación comercial mensual', 'Implementación de nuevas oportunidades'],
-      },
-    ],
-  },
-  {
-    id: 'recover',
-    slug: 'nexa_recover',
-    label: 'NEXA Recover',
-    shortLabel: 'Recover',
-    color: '#D2F23A',
-    accent: 'rgba(210,242,58,0.12)',
-    border: 'rgba(210,242,58,0.3)',
-    billing: 'Plan mensual',
-    tagline: 'Reactivación de clientes inactivos y leads perdidos.',
-    tiers: [
-      {
-        name: 'Start',
-        price: '$149.900',
-        suffix: '/mes',
-        badge: false,
-        features: ['Hasta 500 contactos', 'Limpieza de base de datos', 'Segmentación inicial', 'Automatización básica', 'Recuperación de consultas', 'Seguimiento por WhatsApp', 'Reporte mensual', 'Dashboard básico'],
-      },
-      {
-        name: 'Growth',
-        price: '$349.900',
-        suffix: '/mes',
-        badge: true,
-        includesPrevious: 'Start',
-        features: ['Hasta 2.000 contactos', 'Recuperación de presupuestos', 'Automatizaciones avanzadas', 'Estrategias de recompra', 'Segmentación avanzada', 'Seguimiento multicanal', 'Dashboard avanzado', 'Reportes quincenales', 'Optimización continua', 'Soporte prioritario'],
-      },
-      {
-        name: 'Scale',
-        price: '$699.900',
-        suffix: '/mes',
-        badge: false,
-        includesPrevious: 'Growth',
-        features: ['Más de 5.000 contactos', 'Automatizaciones empresariales', 'Flujos personalizados', 'Recuperación avanzada de clientes', 'Estrategias de retención', 'Programas de fidelización', 'Dashboard ejecutivo', 'Integraciones con CRM', 'Seguimiento comercial avanzado', 'Reportes semanales', 'Soporte VIP'],
-      },
-    ],
-  },
-  {
-    id: 'crm',
-    slug: 'crm_seguimiento',
-    label: 'CRM y Seguimiento',
-    shortLabel: 'CRM',
-    color: '#835CE6',
-    accent: 'rgba(131,92,230,0.12)',
-    border: 'rgba(131,92,230,0.3)',
-    billing: 'Plan mensual',
-    tagline: 'Sistemas de seguimiento comercial para que ningún lead se pierda.',
-    tiers: [
-      {
-        name: 'Start',
-        price: '$149.900',
-        suffix: '/mes',
-        badge: false,
-        features: ['Implementación de CRM hasta 500 contactos', 'Migración y organización de tu base de leads', 'Embudo de ventas configurado por etapa', 'Automatización básica de seguimiento por WhatsApp', 'Alertas de leads sin respuesta', 'Capacitación inicial del equipo', 'Reporte mensual de conversión', 'Dashboard básico'],
-      },
-      {
-        name: 'Growth',
-        price: '$349.900',
-        suffix: '/mes',
-        badge: true,
-        includesPrevious: 'Start',
-        features: ['Hasta 2.000 contactos', 'Automatización avanzada por WhatsApp y Email', 'Múltiples embudos por producto/servicio', 'Segmentación y etiquetado avanzado de leads', 'Alertas y recordatorios inteligentes', 'Reportes quincenales de conversión', 'Dashboard avanzado del equipo comercial', 'Soporte prioritario'],
-      },
-      {
-        name: 'Scale',
-        price: '$699.900',
-        suffix: '/mes',
-        badge: false,
-        includesPrevious: 'Growth',
-        features: ['Más de 5.000 contactos', 'Automatizaciones comerciales empresariales', 'Integraciones con otras herramientas (Ads, Web, Social)', 'Flujos personalizados por segmento', 'Capacitación continua del equipo', 'Dashboard ejecutivo en tiempo real', 'Reportes semanales de performance', 'Soporte VIP'],
-      },
-    ],
-  },
-];
+/*
+ * Los precios y los planes YA NO viven acá. Están en lib/servicePlans.mjs, que
+ * es la única fuente: la misma que usa el servidor para saber cuánto cobrar.
+ * Así lo que se muestra en pantalla y lo que se cobra no se pueden
+ * desincronizar, y el monto ya no viaja en la URL del checkout.
+ */
+const PRICING_LINES = SERVICE_LINES;
 
-const TESTIMONIALS = [
-  {
-    name: 'Martina González',
-    role: 'CEO · Boutique Aurea',
-    initials: 'MG',
-    text: 'En 3 meses, NEXA duplicó nuestras ventas online. El CRM personalizado que desarrollaron cambió totalmente la forma en que gestionamos clientes.',
-    metric: '+210% ventas',
-    metricColor: '#D2F23A',
-  },
-  {
-    name: 'Carlos Ruiz',
-    role: 'Director · TechFlow Solutions',
-    initials: 'CR',
-    text: 'Las campañas de Google Ads que gestionan tienen el mejor ROI que he visto en 8 años. Resultados medibles desde el primer mes de trabajo.',
-    metric: '4.1x ROI',
-    metricColor: '#B89BFF',
-  },
-  {
-    name: 'Valentina Méndez',
-    role: 'Fundadora · Estudio Vivo',
-    initials: 'VM',
-    text: 'La estrategia de contenido transformó nuestra marca. Pasamos de 2k a 28k seguidores orgánicos en solo 6 meses trabajando con NEXA.',
-    metric: '+1300% seguidores',
-    metricColor: '#EAA1FB',
-  },
-];
-
-const TRUST_CHIPS = [
-  { icon: Users, label: '+20 marcas asesoradas' },
-  { icon: BarChart3, label: '3x ROI promedio' },
-  { icon: Award, label: '+6 años de experiencia' },
-];
+/*
+ * NOTA (septiembre 2026): se eliminaron de esta página TESTIMONIALS (tres
+ * testimonios firmados por Martina González / Boutique Aurea, Carlos Ruiz /
+ * TechFlow Solutions y Valentina Méndez / Estudio Vivo) y TRUST_CHIPS
+ * (+20 marcas asesoradas, 3x ROI promedio, +6 años de experiencia), porque
+ * eran datos inventados: NEXA todavía no tiene clientes ni resultados que los
+ * respalden. No reponer sin datos reales y verificables.
+ */
 
 const STEPS = [
   { num: '01', title: 'Diagnóstico Estratégico', desc: 'Analizamos el estado actual de tu marca, tu competencia y tus canales activos.', output: 'Entregable: informe con oportunidades priorizadas.' },
@@ -503,14 +270,8 @@ function ServiciosContent() {
             <motion.p variants={fadeUp} className="section-subtitle" style={{ margin: '0 auto 28px' }}>
               Seis soluciones pensadas para posicionar tu marca, ordenar el seguimiento comercial y facturar más — con el detalle necesario para que decidas sin necesitar una llamada previa.
             </motion.p>
-            <motion.div variants={fadeUp} className="hero-trust-row">
-              {TRUST_CHIPS.map(({ icon: Icon, label }) => (
-                <div key={label} className="hero-trust-chip">
-                  <Icon size={14} />
-                  <span>{label}</span>
-                </div>
-              ))}
-            </motion.div>
+            {/* Se eliminaron los chips de "confianza" (+20 marcas asesoradas,
+                3x ROI promedio, +6 años de experiencia): datos inventados. */}
           </motion.div>
         </section>
 
@@ -654,13 +415,27 @@ function ServiciosContent() {
                     <span style={{ color: line.color, fontWeight: 800 }}>{line.billing}</span> — {line.tagline}
                   </p>
 
+                  <p className="pricing-fees-notice">
+                    <Info size={15} />
+                    <span>
+                      Los precios son <strong>honorarios de gestión</strong>: cubren nuestro trabajo.
+                      La <strong>inversión publicitaria en Meta y Google va aparte</strong> y la pagás vos,
+                      directamente a cada plataforma.
+                    </span>
+                  </p>
+
                   <div className="pricing-grid">
                     {line.tiers.map((tier) => {
-                      const planPriceText = tier.suffix === 'pago único' ? `${tier.price}, pago único` : `${tier.price}${tier.suffix}`;
-                      const isOneOff = tier.suffix === 'pago único';
-                      const amountNumber = parseInt(tier.price.replace(/[^\d]/g, ''), 10) || 0;
+                      const priceText = planPriceLabel(tier);
+                      const planPriceText = tier.suffix === 'pago único' ? `${priceText}, pago único` : `${priceText}${tier.suffix}`;
                       const lineTitle = `NEXA ${line.shortLabel}`;
-                      const checkoutHref = `/servicios/checkout?servicio=${line.slug}&planName=${encodeURIComponent(tier.name)}&line=${encodeURIComponent(lineTitle)}&amount=${amountNumber}&billing=${isOneOff ? 'unico' : 'mensual'}`;
+                      /*
+                       * El link del checkout lleva SOLO el identificador del plan.
+                       * Ya no viaja el monto: el servidor lo busca en
+                       * lib/servicePlans.mjs. Así, editar la URL no cambia el
+                       * precio que se cobra.
+                       */
+                      const checkoutHref = `/servicios/checkout?plan=${encodeURIComponent(tier.id)}`;
                       const waPlanText = encodeURIComponent(`Hola NEXA! Quiero contratar el plan ${tier.name} de NEXA ${line.shortLabel} (${planPriceText}). ¿Cómo seguimos?`);
                       return (
                         <div
@@ -673,7 +448,7 @@ function ServiciosContent() {
                           )}
                           <div className="pricing-card-name">{tier.name}</div>
                           <div className="pricing-card-price">
-                            {tier.price}
+                            {priceText}
                             <span>{tier.suffix === 'pago único' ? 'pago único' : tier.suffix}</span>
                           </div>
                           {tier.includesPrevious && (
@@ -710,39 +485,11 @@ function ServiciosContent() {
           </div>
         </section>
 
-        {/* ══════ TESTIMONIALS ══════ */}
-        <section style={{ background: '#0D0E15', padding: 'clamp(56px, 9vw, 100px) 0 0' }}>
-          <div className="container">
-            <motion.div className="section-header" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
-              <motion.span variants={fadeUp} className="section-tag" style={{ background: 'rgba(210,242,58,0.1)', color: '#D2F23A', border: '1px solid rgba(210,242,58,0.2)' }}>Resultados reales</motion.span>
-              <motion.h2 variants={fadeUp} className="section-title text-white">Lo que dicen nuestros clientes</motion.h2>
-              <motion.p variants={fadeUp} className="section-subtitle text-white-50" style={{ margin: '0 auto' }}>
-                Más de 20 empresas ya escalaron su negocio contratando estos mismos servicios.
-              </motion.p>
-            </motion.div>
-            <motion.div className="svc-testi-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }}>
-              {TESTIMONIALS.map((t) => (
-                <motion.div key={t.name} variants={scaleIn} className="svc-testi-card" whileHover={{ y: -6 }}>
-                  <div className="svc-testi-stars">
-                    {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#D2F23A" color="#D2F23A" />)}
-                  </div>
-                  <Quote size={18} style={{ color: 'rgba(184,155,255,0.4)' }} />
-                  <p className="svc-testi-text">{t.text}</p>
-                  <div className="svc-testi-footer">
-                    <div className="svc-testi-author">
-                      <div className="svc-testi-avatar">{t.initials}</div>
-                      <div>
-                        <div className="svc-testi-name">{t.name}</div>
-                        <div className="svc-testi-role">{t.role}</div>
-                      </div>
-                    </div>
-                    <div className="svc-testi-metric" style={{ color: t.metricColor }}>{t.metric}</div>
-                  </div>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </section>
+        {/* Se eliminó la sección de testimonios ("Lo que dicen nuestros
+            clientes" + "Más de 20 empresas ya escalaron su negocio
+            contratando estos mismos servicios" + tres testimonios firmados).
+            Todo inventado. La sección siguiente ("El método NEXA") ya abre el
+            bloque oscuro, así que no queda hueco en el diseño. */}
 
         {/* ══════ Methodology ══════ */}
         <section style={{ background: '#0D0E15', padding: 'clamp(64px, 10vw, 120px) 0' }}>

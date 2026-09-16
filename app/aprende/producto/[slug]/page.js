@@ -54,11 +54,18 @@ export default async function ProductDetailPage({ params }) {
       price: product.price,
       availability: 'https://schema.org/InStock',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: product.rating,
-      reviewCount: product.reviewsCount,
-    },
+    // El bloque aggregateRating solo se incluye si hay reseñas de verdad.
+    // Antes se emitía siempre, así que sin reseñas mandaba a Google una
+    // valoración de 0 — datos estructurados inválidos, además de falsos.
+    ...(product.reviewsCount > 0
+      ? {
+          aggregateRating: {
+            '@type': 'AggregateRating',
+            ratingValue: product.rating,
+            reviewCount: product.reviewsCount,
+          },
+        }
+      : {}),
   };
 
   return (
@@ -87,7 +94,7 @@ export default async function ProductDetailPage({ params }) {
                 <span><Clock size={14} /> {product.readTime}</span>
               </div>
 
-              <StarRating rating={product.rating} count={product.reviewsCount} size={15} />
+              <StarRating rating={product.rating} count={product.reviewsCount} size={15} emptyLabel="Todavía sin reseñas" />
 
               <div className="aprende-product-price-row">
                 {product.compareAtPrice && <span className="aprende-card-price-old" style={{ fontSize: '1.1rem' }}>{formatPrice(product.compareAtPrice)}</span>}

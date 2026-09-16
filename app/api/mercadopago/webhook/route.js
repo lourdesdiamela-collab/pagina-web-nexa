@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { getPayment } from '@/lib/mercadopago';
+import { getPayment, verifyWebhookSignature } from '@/lib/mercadopago';
 import { approveOrder, rejectOrder } from '@/lib/orders';
 import { sendServicePaymentApprovedEmails } from '@/lib/serviceCheckout';
 
@@ -23,6 +23,24 @@ export async function POST(request) {
 
     if (type !== 'payment' || !paymentId) {
       return NextResponse.json({ received: true });
+    }
+
+    // Validación de firma (ver lib/mercadopago.js). Si MP_WEBHOOK_SECRET no
+    // está cargado se saltea con un aviso en el log: el pago igual se verifica
+    // contra la API de Mercado Pago más abajo, así que una notificación falsa
+    // no puede aprobar nada, pero conviene cargar la clave.
+    const signatureCheck = verifyWebhookSignature({
+      signatureHeader: request.headers.get('x-signature'),
+      requestIdHeader: request.headers.get('x-request-id'),
+      dataId: paymentId,
+    });
+
+    if (signatureCheck === 'invalid') {
+      console.warn('[mp-webhook] Firma inválida — notificación descartada.');
+      return NextResponse.json({ received: true });
+    }
+    if (signatureCheck === 'skipped') {
+      console.warn('[mp-webhook] MP_WEBHOOK_SECRET no configurado: no se valida la firma de la notificación.');
     }
 
     const payment = await getPayment(paymentId);

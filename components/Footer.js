@@ -6,10 +6,23 @@ import { NexaLogo } from './NexaLogo';
 
 const NAV_LINKS = [
   { href: '/servicios', label: 'Servicios' },
-  { href: '/casos', label: 'Casos' },
+  { href: '/casos', label: 'Enfoque' },
   { href: '/aprende', label: 'Aprende' },
   { href: '/blog', label: 'Blog' },
   { href: '/contacto', label: 'Contacto' },
+];
+
+/*
+ * Links legales obligatorios. El Botón de Arrepentimiento, además de estar
+ * acá, tiene que estar visible en la primera pantalla del sitio: en Argentina
+ * la Resolución 424/2020 de Secretaría de Comercio Interior exige que esté
+ * "en un lugar destacado y de fácil visualización" de la home. Por eso vive
+ * también en components/ArrepentimientoBanner.js, montado en el layout raíz.
+ */
+const LEGAL_LINKS = [
+  { href: '/terminos', label: 'Términos y Condiciones' },
+  { href: '/privacidad', label: 'Política de Privacidad' },
+  { href: '/arrepentimiento', label: 'Botón de Arrepentimiento' },
 ];
 
 const SOCIALS = [
@@ -46,8 +59,46 @@ export default function Footer() {
           </nav>
         </div>
 
+        {/* Franja legal: links obligatorios + espacio para el Data Fiscal */}
+        <div className="footer-legal-row">
+          <nav className="footer-legal-links" aria-label="Enlaces legales">
+            {LEGAL_LINKS.map((link) => (
+              <Link key={link.href} href={link.href}>{link.label}</Link>
+            ))}
+          </nav>
+
+          {/*
+            ESPACIO RESERVADO PARA EL DATA FISCAL DE ARCA.
+
+            Lu genera el código en el sitio de ARCA (ex AFIP) y de ahí salen dos
+            cosas: la URL de verificación del contribuyente y el isotipo oficial.
+
+            Para activarlo:
+              1) Descargar el isotipo y guardarlo como public/data-fiscal.jpg
+              2) Reemplazar este bloque por:
+
+                 <a
+                   href="https://serviciosweb.afip.gob.ar/clavefiscal/qr/response.aspx?qr=TU_CODIGO"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="footer-datafiscal-slot"
+                 >
+                   <img src="/data-fiscal.jpg" alt="Data Fiscal - ARCA" />
+                 </a>
+
+            El isotipo tiene que quedar enlazado a la URL que da ARCA: si es
+            solo una imagen, no cumple.
+          */}
+          <div className="footer-datafiscal-slot">
+            <div className="footer-datafiscal-empty" aria-hidden="true" />
+            <span className="footer-datafiscal-note">
+              Espacio reservado para el Data Fiscal de ARCA (pendiente de carga).
+            </span>
+          </div>
+        </div>
+
         {/* Divider + Bottom */}
-        <div style={{ marginTop: 32, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem' }}>
             © {new Date().getFullYear()} NEXA. Todos los derechos reservados.
           </span>

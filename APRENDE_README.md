@@ -47,8 +47,22 @@ Flujo real implementado:
 
 **PENDIENTE DE LU — esto es lo único que falta para que el pago sea 100% real:**
 - `MP_ACCESS_TOKEN` y `MP_PUBLIC_KEY` en las variables de entorno (`.env.local` en dev, Vercel env vars en producción). Se consiguen en el panel de desarrolladores de Mercado Pago (`https://www.mercadopago.com.ar/developers/panel/app`) con la cuenta de vendedor real de Lu.
-- Sin estas variables, `isMpConfigured()` (`lib/mercadopago.js`) devuelve `false` y el checkout usa un **modo de simulación de pago** — un botón "Simular pago aprobado (modo desarrollo)" que corre exactamente la misma lógica de aprobación que usaría el webhook real (mismo código, `lib/orders.js`), para poder probar y demostrar el flujo completo sin credenciales. Ese botón se autodesactiva solo apenas Lu carga `MP_ACCESS_TOKEN` (la ruta `/api/checkout/simulate` rechaza pedidos si Mercado Pago ya está configurado).
-- **Se probó en navegador**: compra completa con 2 productos + cupón `BIENVENIDA10` (10% OFF), pago simulado aprobado, pedido creado en la base con estado `APPROVED`, visible en "Mis Recursos" y en el panel admin con las cifras correctas.
+- Sin estas variables, `isMpConfigured()` (`lib/mercadopago.js`) devuelve `false` y **el checkout no ofrece pago con tarjeta**: muestra un aviso claro de que el pago online no está disponible por el momento y deriva a transferencia bancaria. No se crea ningún pedido pendiente que después no se pueda pagar.
+
+### Simulador de pago — SOLO DESARROLLO
+
+La ruta `/api/checkout/simulate` aprueba un pedido sin pago real, con la misma lógica que usa el webhook (`lib/orders.js`), para poder probar el flujo de punta a punta sin credenciales.
+
+> **Corregido (septiembre 2026):** antes el único candado era que `MP_ACCESS_TOKEN` estuviera vacío. Como en producción estaba vacío, **el simulador quedaba abierto en producción**: cualquier usuario registrado podía aprobarse su propio pedido y descargar el material sin pagar. El botón además se renderizaba en el checkout público.
+
+Ahora el candado es `isSimulationAllowed()` (`lib/mercadopago.js`) y exige **las cuatro condiciones a la vez**:
+
+1. `NODE_ENV === 'development'`
+2. `VERCEL_ENV` distinto de `production` y `preview`
+3. `ALLOW_PAYMENT_SIMULATION === 'true'` (opt-in manual y explícito en el `.env.local` de desarrollo)
+4. `MP_ACCESS_TOKEN` vacío
+
+Si falta cualquiera, el endpoint responde `404` y el botón no se renderiza (el cliente además chequea `NODE_ENV`, que Next inlinea en tiempo de build: en un build de producción el botón directamente no existe en el bundle).
 
 ## 3.1 Pago por transferencia bancaria (alternativa a Mercado Pago)
 

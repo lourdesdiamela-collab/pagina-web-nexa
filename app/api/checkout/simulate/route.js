@@ -3,15 +3,29 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { approveOrder } from '@/lib/orders';
-import { isMpConfigured } from '@/lib/mercadopago';
+import { isSimulationAllowed } from '@/lib/mercadopago';
 
-// Solo existe para poder probar el flujo de compra de punta a punta sin
-// credenciales reales de Mercado Pago. Se autodesactiva apenas Lu carga
-// MP_ACCESS_TOKEN: a partir de ahí el checkout usa Mercado Pago real y esta
-// ruta deja de aceptar pedidos.
+/*
+ * Simulador de pago aprobado — SOLO ENTORNO DE DESARROLLO.
+ *
+ * Existe para poder probar el flujo de compra de punta a punta sin
+ * credenciales reales de Mercado Pago.
+ *
+ * El candado es isSimulationAllowed() (ver lib/mercadopago.js), que exige un
+ * chequeo explícito de entorno de desarrollo + un opt-in manual
+ * (ALLOW_PAYMENT_SIMULATION=true), NO solamente que MP_ACCESS_TOKEN esté
+ * vacío. Con el candado viejo (solo token vacío) esta ruta quedaba abierta en
+ * producción y permitía que cualquier usuario registrado se aprobara su
+ * propio pedido sin pagar.
+ *
+ * Se responde 404 y no 403 a propósito: fuera de desarrollo la ruta se
+ * comporta como si no existiera, sin confirmarle a nadie que el simulador
+ * está ahí.
+ */
 export async function POST(request) {
-  if (isMpConfigured()) {
-    return NextResponse.json({ error: 'Mercado Pago ya está configurado — usá el checkout real.' }, { status: 403 });
+  if (!isSimulationAllowed()) {
+    console.warn('[simulate] Intento de simular un pago con el simulador deshabilitado.');
+    return NextResponse.json({ error: 'No encontrado.' }, { status: 404 });
   }
 
   const session = await getServerSession(authOptions);

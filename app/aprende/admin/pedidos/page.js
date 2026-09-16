@@ -26,7 +26,7 @@ export default async function AdminOrdersPage() {
         <div className="aprende-admin-table-wrap">
           <table className="aprende-admin-table">
             <thead>
-              <tr><th>Pedido</th><th>Cliente</th><th>Fecha</th><th>Ítems</th><th>Total</th><th>Cupón</th><th>Estado</th></tr>
+              <tr><th>Pedido</th><th>Cliente</th><th>Fecha</th><th>Ítems</th><th>Total</th><th>Cupón</th><th>Aceptó T&amp;C</th><th>Estado</th></tr>
             </thead>
             <tbody>
               {orders.map((o) => (
@@ -37,6 +37,20 @@ export default async function AdminOrdersPage() {
                   <td>{o.items.map((i) => `${i.title} ×${i.qty}`).join(', ')}</td>
                   <td>{formatPrice(o.total)}</td>
                   <td>{o.couponCode || '—'}</td>
+                  {/* Registro de aceptación de T&C, para poder responder un
+                      reclamo con fecha, hora, IP y versión del texto. Los
+                      pedidos anteriores a esta función no lo tienen. */}
+                  <td style={{ fontSize: '0.78rem' }}>
+                    {o.termsAcceptedAt ? (
+                      <>
+                        {new Date(o.termsAcceptedAt).toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}
+                        <br />
+                        <span style={{ color: 'var(--text-muted)' }}>
+                          IP {o.termsAcceptedIp || 'no disponible'} · v{o.termsVersion || '—'}
+                        </span>
+                      </>
+                    ) : '—'}
+                  </td>
                   <td>
                     <form action={updateOrderStatus} style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
                       <input type="hidden" name="id" value={o.id} />

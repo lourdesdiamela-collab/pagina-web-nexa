@@ -34,6 +34,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# clave de sesión generada automáticamente si no hay NEXTAUTH_SECRET
+# (ver lib/auth.js). NUNCA subir esto: permite falsificar sesiones.
+/.nexa/
+
 # vercel
 .vercel
 

@@ -1,13 +1,14 @@
 'use client';
 
-import { useState, Suspense } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { ArrowLeft, ShieldCheck, Zap, CreditCard, Landmark, Copy, Check, TimerReset, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ShieldCheck, Zap, CreditCard, Landmark, Copy, Check, TimerReset, MessageCircle, Info } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import TransferReservationTimer from '@/components/aprende/TransferReservationTimer';
 import { formatPrice } from '@/lib/products.mjs';
+import { getServicePlan } from '@/lib/servicePlans.mjs';
 
 const WHATSAPP_NUMBER = '5491124527402';
 
@@ -44,13 +45,22 @@ const TRANSFER_TITULAR = 'Alarcón Lourdes';
 function ServicioCheckoutContent() {
   const searchParams = useSearchParams();
 
-  const servicio = searchParams.get('servicio') || '';
-  const planName = searchParams.get('planName') || '';
-  const line = searchParams.get('line') || '';
-  const amount = Number(searchParams.get('amount') || 0);
-  const billing = searchParams.get('billing') === 'unico' ? 'unico' : 'mensual';
+  /*
+   * El precio NO viene por la URL. Del link solo llega el identificador del
+   * plan (ej: 'ads-scale') y el precio se lee de lib/servicePlans.mjs, la misma
+   * lista que usa el servidor para cobrar. Editar la URL no cambia el monto.
+   *
+   * Si el identificador no existe, getServicePlan devuelve null y la página
+   * muestra "No encontramos el plan" en vez de un checkout con precio inventado.
+   */
+  const planId = searchParams.get('plan') || '';
+  const plan = getServicePlan(planId);
 
-  const planLabel = [planName, line].filter(Boolean).join(' — ') || 'Plan NEXA';
+  const servicio = plan?.lineSlug || '';
+  const planLabel = plan?.planLabel || '';
+  const amount = plan?.amount || 0;
+  const billing = plan?.billing === 'unico' ? 'unico' : 'mensual';
+
   const billingText = billing === 'unico' ? 'Pago único' : 'Primer pago — mes 1 (plan mensual)';
   const estimatedTransferTotal = Math.round(amount * 0.9);
 
@@ -61,20 +71,51 @@ function ServicioCheckoutContent() {
   const [devMessage, setDevMessage] = useState('');
   const [transferOrder, setTransferOrder] = useState(null); // { reference, total }
 
-  const missingPlan = !amount || amount <= 0;
+  // Medios de pago realmente disponibles (ver /api/checkout/payment-methods).
+  // Default seguro: hasta que responda el servidor, se asume que no hay pago
+  // con tarjeta, así no se ofrece un botón que va a fallar.
+  const [methods, setMethods] = useState({ mercadopago: false, loaded: false });
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/checkout/payment-methods')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) setMethods({ mercadopago: Boolean(data.mercadopago), loaded: true });
+      })
+      .catch(() => {
+        if (!cancelled) setMethods((prev) => ({ ...prev, loaded: true }));
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    if (methods.loaded && !methods.mercadopago && paymentMethod === null) {
+      setPaymentMethod('transfer');
+    }
+  }, [methods.loaded, methods.mercadopago, paymentMethod]);
+
+  // Aceptación de Términos y Condiciones: obligatoria para poder contratar.
+  // El servidor la vuelve a validar (ver lib/terms.js).
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
+  const missingPlan = !plan;
   const formValid = form.name.trim() && form.email.trim() && form.phone.trim();
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  /*
+   * Al servidor se le manda el identificador del plan, NO el monto. El precio
+   * lo resuelve él contra lib/servicePlans.mjs. Si acá mandáramos el importe,
+   * volveríamos al problema de que el cliente elige cuánto paga.
+   */
   function buildPayload() {
     return {
       ...form,
-      servicio,
-      planLabel,
-      amount,
-      billing,
+      plan: planId,
+      acceptedTerms,
     };
   }
 
@@ -182,6 +223,15 @@ function ServicioCheckoutContent() {
                 </p>
               )}
 
+              <div className="pricing-fees-notice" style={{ marginTop: 16, marginBottom: 0 }}>
+                <Info size={15} />
+                <span>
+                  Este importe son <strong>honorarios de gestión</strong>: cubren nuestro trabajo.
+                  La <strong>inversión publicitaria en Meta y Google va aparte</strong> y la pagás vos,
+                  directamente a cada plataforma.
+                </span>
+              </div>
+
               <div style={{ marginTop: 20 }}>
                 <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
                   <div className="aprende-field">
@@ -209,22 +259,58 @@ function ServicioCheckoutContent() {
                 )}
 
                 <div className="aprende-payment-copy">
-                  Aceptamos <strong>tarjeta de crédito, débito y transferencia bancaria</strong>.
-                  Pagando por transferencia tenés <strong>10% de descuento</strong> automático sobre el total.
+                  {methods.mercadopago ? (
+                    <>
+                      Aceptamos <strong>tarjeta de crédito, débito y transferencia bancaria</strong>.
+                      Pagando por transferencia tenés <strong>10% de descuento</strong> automático sobre el total.
+                    </>
+                  ) : (
+                    <>
+                      Por el momento cobramos únicamente por <strong>transferencia bancaria</strong>,
+                      con <strong>10% de descuento</strong> sobre el total.
+                    </>
+                  )}
                 </div>
+
+                {methods.loaded && !methods.mercadopago && (
+                  <div className="aprende-payment-notice">
+                    <Info size={16} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <span>
+                      <strong>El pago online con tarjeta no está disponible por el momento.</strong>{' '}
+                      Podés contratar por transferencia bancaria — te dejamos los datos acá abajo — o
+                      escribirnos por WhatsApp y coordinamos.
+                    </span>
+                  </div>
+                )}
 
                 {error && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{error}</div>}
                 {devMessage && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{devMessage}</div>}
 
+                <label className="checkout-terms">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                  />
+                  <span>
+                    Leí y acepto los{' '}
+                    <Link href="/terminos" target="_blank" rel="noopener noreferrer">Términos y Condiciones</Link>
+                    {' '}y la{' '}
+                    <Link href="/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad</Link>.
+                  </span>
+                </label>
+
                 <div className="aprende-payment-methods">
-                  <button
-                    type="button"
-                    className={`aprende-payment-option${paymentMethod === 'mercadopago' ? ' active' : ''}`}
-                    onClick={() => setPaymentMethod('mercadopago')}
-                    disabled={!formValid}
-                  >
-                    <CreditCard size={18} /> Mercado Pago — tarjeta, débito o dinero en cuenta
-                  </button>
+                  {methods.mercadopago && (
+                    <button
+                      type="button"
+                      className={`aprende-payment-option${paymentMethod === 'mercadopago' ? ' active' : ''}`}
+                      onClick={() => setPaymentMethod('mercadopago')}
+                      disabled={!formValid}
+                    >
+                      <CreditCard size={18} /> Mercado Pago — tarjeta, débito o dinero en cuenta
+                    </button>
+                  )}
                   <button
                     type="button"
                     className={`aprende-payment-option${paymentMethod === 'transfer' ? ' active' : ''}`}
@@ -235,11 +321,14 @@ function ServicioCheckoutContent() {
                   </button>
                 </div>
 
-                {paymentMethod === 'mercadopago' && formValid && (
+                {paymentMethod === 'mercadopago' && formValid && methods.mercadopago && (
                   <div style={{ marginTop: 16 }}>
-                    <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePayMercadoPago} disabled={loading}>
+                    <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePayMercadoPago} disabled={loading || !acceptedTerms}>
                       <Zap size={16} /> {loading ? 'Redirigiendo…' : 'Pagar con Mercado Pago'}
                     </button>
+                    {!acceptedTerms && (
+                      <p className="checkout-terms-hint">Tildá la aceptación de los Términos para poder continuar.</p>
+                    )}
                     <p className="aprende-cart-hint" style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
                       <ShieldCheck size={14} /> Pago seguro procesado por Mercado Pago.
                     </p>
@@ -267,10 +356,13 @@ function ServicioCheckoutContent() {
                       className="btn btn-lima"
                       style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}
                       onClick={handleConfirmTransfer}
-                      disabled={loading}
+                      disabled={loading || !acceptedTerms}
                     >
                       <TimerReset size={16} /> {loading ? 'Registrando…' : 'Ya transferí, confirmar pedido'}
                     </button>
+                    {!acceptedTerms && (
+                      <p className="checkout-terms-hint">Tildá la aceptación de los Términos para poder continuar.</p>
+                    )}
                     <p className="aprende-cart-hint" style={{ marginTop: 10 }}>
                       Al confirmar, registramos tu pedido y te enviamos un email. En breve verificamos el ingreso y nos contactamos para coordinar el arranque.
                     </p>

@@ -2,7 +2,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Send, MessageCircle, CheckCircle2, Star, Quote } from 'lucide-react';
+import { Send, MessageCircle, CheckCircle2 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
@@ -87,25 +87,9 @@ function ContactFormSection() {
                   ))}
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '16px 20px', background: 'rgba(74,222,128,0.06)', border: '1px solid rgba(74,222,128,0.15)', borderRadius: 16, marginBottom: 24 }}>
-                  <div style={{ width: 10, height: 10, borderRadius: '50%', background: '#4ade80', flexShrink: 0 }} />
-                  <div>
-                    <div style={{ fontWeight: 700, fontSize: '0.9rem', color: 'white' }}>+8 empresas esta semana</div>
-                    <div style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: 2 }}>ya solicitaron su diagnóstico</div>
-                  </div>
-                </div>
-
-                <div style={{ padding: 22, background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 20 }}>
-                  <div style={{ display: 'flex', gap: 3, marginBottom: 10 }}>
-                    {[...Array(5)].map((_, i) => <Star key={i} size={13} fill="#D2F23A" color="#D2F23A" />)}
-                  </div>
-                  <Quote size={18} style={{ color: 'rgba(184,155,255,0.4)', marginBottom: 6 }} />
-                  <p style={{ fontSize: '0.87rem', color: '#CBD5E1', lineHeight: 1.7, marginBottom: 14 }}>
-                    &ldquo;En 3 meses, NEXA duplicó nuestras ventas online. El seguimiento de clientes que armaron cambió totalmente la forma en que trabajamos.&rdquo;
-                  </p>
-                  <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'white' }}>Martina González</div>
-                  <div style={{ fontSize: '0.72rem', color: '#6B7280' }}>CEO · Boutique Aurea</div>
-                </div>
+                {/* Se eliminaron el cartel "+8 empresas esta semana / ya
+                    solicitaron su diagnóstico" y el testimonio de "Martina
+                    González — CEO · Boutique Aurea": ambos inventados. */}
               </div>
 
               {/* Form */}

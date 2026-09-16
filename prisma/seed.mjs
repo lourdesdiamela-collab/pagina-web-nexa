@@ -20,11 +20,10 @@ async function main() {
 
   console.log('Seed: sincronizando productos...');
   const products = listProducts();
-  let reviewsCreated = 0;
   for (const p of products) {
     const categoryId = categoryIdBySlug.get(p.category);
     if (!categoryId) continue;
-    const row = await prisma.product.upsert({
+    await prisma.product.upsert({
       where: { slug: p.slug },
       update: {
         title: p.title,
@@ -60,29 +59,35 @@ async function main() {
       },
     });
 
-    // Reseñas de ejemplo (solo la primera vez — si el producto ya tiene
-    // reseñas cargadas, no se duplican en cada re-seed).
-    const existingReviews = await prisma.review.count({ where: { productId: row.id } });
-    if (existingReviews === 0 && Array.isArray(p.reviews) && p.reviews.length > 0) {
-      await prisma.review.createMany({
-        data: p.reviews.map((r) => ({
-          productId: row.id,
-          name: r.name,
-          rating: r.rating,
-          comment: r.comment,
-          approved: true,
-          createdAt: new Date(r.date),
-        })),
-      });
-      reviewsCreated += p.reviews.length;
-    }
+    // El seed YA NO crea reseñas. Antes cargaba 3 reseñas inventadas por
+    // producto, y como el rating mostrado es el promedio de esas 3 filas,
+    // los ~100 recursos terminaban mostrando todos la misma valoración
+    // idéntica: "4.7 (3)". Las reseñas ahora solo pueden venir de compradores
+    // reales.
+    //
+    // OJO: esto no borra las reseñas falsas que ya estén cargadas en una base
+    // existente. Para limpiarlas, correr: node prisma/limpiar-resenas-falsas.mjs
   }
-  console.log(`Seed: ${products.length} productos sincronizados, ${reviewsCreated} reseñas de ejemplo creadas.`);
+  console.log(`Seed: ${products.length} productos sincronizados. No se crean reseñas (solo reseñas de compradores reales).`);
 
   const adminEmail = process.env.ADMIN_EMAIL || 'lu@nexaarg.com';
-  const adminPassword = process.env.ADMIN_PASSWORD || 'CambiarInmediatamente123';
+  const adminPassword = process.env.ADMIN_PASSWORD;
   const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
-  if (!existingAdmin) {
+  if (!existingAdmin && !adminPassword) {
+    // Antes, si ADMIN_PASSWORD no estaba cargada, el seed creaba el usuario
+    // administrador con una contraseña por defecto escrita en el código del
+    // repositorio. Como este repo es público, cualquiera que lo leyera podía
+    // entrar al panel admin. Ahora el seed se niega a crear el admin sin
+    // contraseña, y tampoco la imprime en consola.
+    //
+    // ACCIÓN PENDIENTE: esa contraseña por defecto sigue estando en el
+    // historial de git y en la rama master. Si la cuenta de administrador se
+    // creó con ella, hay que cambiarla desde el panel.
+    console.error(
+      'Seed: NO se creó el usuario admin porque falta la variable ADMIN_PASSWORD.\n' +
+      '      Cargala en .env.local (o en las variables de entorno del hosting) y volvé a correr el seed.',
+    );
+  } else if (!existingAdmin) {
     const passwordHash = await bcrypt.hash(adminPassword, 10);
     await prisma.user.create({
       data: {
@@ -92,7 +97,9 @@ async function main() {
         role: 'ADMIN',
       },
     });
-    console.log(`Seed: usuario admin creado -> ${adminEmail} / ${adminPassword} (¡cambiar la contraseña luego de ingresar!)`);
+    // No se loguea la contraseña: queda en el historial de la terminal y en
+    // los logs de build del hosting.
+    console.log(`Seed: usuario admin creado -> ${adminEmail} (con la contraseña de ADMIN_PASSWORD).`);
   } else if (existingAdmin.role !== 'ADMIN') {
     await prisma.user.update({ where: { email: adminEmail }, data: { role: 'ADMIN' } });
     console.log(`Seed: usuario existente ${adminEmail} promovido a ADMIN.`);
