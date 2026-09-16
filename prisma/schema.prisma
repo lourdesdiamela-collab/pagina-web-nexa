@@ -156,20 +156,18 @@ model Coupon {
   createdAt  DateTime  @default(now())
 }
 
-/*
- * Leads que entran por el sitio: formulario de contacto y checkout de
- * servicios.
- *
- * Antes lib/crm.js era un stub que recibía el lead y NO lo guardaba en ningún
- * lado: devolvía el objeto y listo. Los únicos registros eran los emails que le
- * llegaban a Lu, así que un mail perdido o en spam era un lead perdido, sin
- * rastro. Ahora cada lead queda acá.
- *
- * Esta es la base del SITIO. El CRM (repo Nexa-CRM) es otro sistema con su
- * propia base: el envío al CRM se sigue intentando desde /api/contact, y el
- * campo `syncedToCrm` deja registrado si esa sincronización salió bien. Los
- * que queden en false hay que pasarlos al CRM cuando la integración exista.
- */
+// Leads que entran por el sitio: formulario de contacto y checkout de
+// servicios.
+//
+// Antes lib/crm.js era un stub que recibía el lead y NO lo guardaba en ningún
+// lado: devolvía el objeto y listo. Los únicos registros eran los emails que le
+// llegaban a Lu, así que un mail perdido o en spam era un lead perdido, sin
+// rastro. Ahora cada lead queda acá.
+//
+// Esta es la base del SITIO. El CRM (repo Nexa-CRM) es otro sistema con su
+// propia base: el envío al CRM se sigue intentando desde /api/contact, y el
+// campo `syncedToCrm` deja registrado si esa sincronización salió bien. Los
+// que queden en false hay que pasarlos al CRM cuando la integración exista.
 model Lead {
   id      String @id @default(cuid())
   name    String
