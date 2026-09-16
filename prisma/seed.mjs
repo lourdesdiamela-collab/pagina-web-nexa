@@ -23,7 +23,7 @@ async function main() {
   for (const p of products) {
     const categoryId = categoryIdBySlug.get(p.category);
     if (!categoryId) continue;
-    const row = await prisma.product.upsert({
+    await prisma.product.upsert({
       where: { slug: p.slug },
       update: {
         title: p.title,

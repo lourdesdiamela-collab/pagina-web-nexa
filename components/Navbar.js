@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, UserRound, Briefcase, X } from 'lucide-react';
+import { Menu, UserRound, Briefcase, X, RotateCcw } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
 const LINKS = [
@@ -76,6 +76,15 @@ export default function Navbar() {
             })}
           </div>
           <div className="nav-cta-group">
+            {/*
+              Botón de Arrepentimiento en la primera pantalla: en Argentina la
+              Resolución 424/2020 exige que esté en un lugar destacado y de
+              fácil visualización, no escondido en el pie. Por eso va también
+              acá, visible sin hacer scroll.
+            */}
+            <Link href="/arrepentimiento" className="nav-arrepentimiento">
+              <RotateCcw size={13} /> Arrepentimiento
+            </Link>
             <Link href={accountHref} className="nav-portal">
               <UserRound size={14} /> {accountLabel}
             </Link>
@@ -119,6 +128,9 @@ export default function Navbar() {
                 </Link>
               );
             })}
+            <Link href="/arrepentimiento" className="mobile-menu-link">
+              Botón de Arrepentimiento
+            </Link>
             <div className="mobile-menu-divider" />
             <Link href={accountHref} className="mobile-menu-link mobile-menu-link-accent">
               <UserRound size={16} /> {accountLabel}

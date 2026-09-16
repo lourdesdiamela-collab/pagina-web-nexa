@@ -85,6 +85,10 @@ function ServicioCheckoutContent() {
     }
   }, [methods.loaded, methods.mercadopago, paymentMethod]);
 
+  // Aceptación de Términos y Condiciones: obligatoria para poder contratar.
+  // El servidor la vuelve a validar (ver lib/terms.js).
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
   const missingPlan = !amount || amount <= 0;
   const formValid = form.name.trim() && form.email.trim() && form.phone.trim();
 
@@ -99,6 +103,7 @@ function ServicioCheckoutContent() {
       planLabel,
       amount,
       billing,
+      acceptedTerms,
     };
   }
 
@@ -206,6 +211,15 @@ function ServicioCheckoutContent() {
                 </p>
               )}
 
+              <div className="pricing-fees-notice" style={{ marginTop: 16, marginBottom: 0 }}>
+                <Info size={15} />
+                <span>
+                  Este importe son <strong>honorarios de gestión</strong>: cubren nuestro trabajo.
+                  La <strong>inversión publicitaria en Meta y Google va aparte</strong> y la pagás vos,
+                  directamente a cada plataforma.
+                </span>
+              </div>
+
               <div style={{ marginTop: 20 }}>
                 <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
                   <div className="aprende-field">
@@ -260,6 +274,20 @@ function ServicioCheckoutContent() {
                 {error && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{error}</div>}
                 {devMessage && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{devMessage}</div>}
 
+                <label className="checkout-terms">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                  />
+                  <span>
+                    Leí y acepto los{' '}
+                    <Link href="/terminos" target="_blank" rel="noopener noreferrer">Términos y Condiciones</Link>
+                    {' '}y la{' '}
+                    <Link href="/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad</Link>.
+                  </span>
+                </label>
+
                 <div className="aprende-payment-methods">
                   {methods.mercadopago && (
                     <button
@@ -283,9 +311,12 @@ function ServicioCheckoutContent() {
 
                 {paymentMethod === 'mercadopago' && formValid && methods.mercadopago && (
                   <div style={{ marginTop: 16 }}>
-                    <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePayMercadoPago} disabled={loading}>
+                    <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePayMercadoPago} disabled={loading || !acceptedTerms}>
                       <Zap size={16} /> {loading ? 'Redirigiendo…' : 'Pagar con Mercado Pago'}
                     </button>
+                    {!acceptedTerms && (
+                      <p className="checkout-terms-hint">Tildá la aceptación de los Términos para poder continuar.</p>
+                    )}
                     <p className="aprende-cart-hint" style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
                       <ShieldCheck size={14} /> Pago seguro procesado por Mercado Pago.
                     </p>
@@ -313,10 +344,13 @@ function ServicioCheckoutContent() {
                       className="btn btn-lima"
                       style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}
                       onClick={handleConfirmTransfer}
-                      disabled={loading}
+                      disabled={loading || !acceptedTerms}
                     >
                       <TimerReset size={16} /> {loading ? 'Registrando…' : 'Ya transferí, confirmar pedido'}
                     </button>
+                    {!acceptedTerms && (
+                      <p className="checkout-terms-hint">Tildá la aceptación de los Términos para poder continuar.</p>
+                    )}
                     <p className="aprende-cart-hint" style={{ marginTop: 10 }}>
                       Al confirmar, registramos tu pedido y te enviamos un email. En breve verificamos el ingreso y nos contactamos para coordinar el arranque.
                     </p>

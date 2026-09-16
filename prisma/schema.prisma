@@ -97,6 +97,14 @@ model Order {
   mpPreferenceId String?
   mpPaymentId    String?
   payerEmail     String?
+
+  // Aceptación de los Términos y Condiciones en el checkout.
+  // Se guarda para poder demostrar, ante un reclamo, quién aceptó qué y cuándo.
+  // El "quién" es el userId del pedido (más el email, que queda en User).
+  termsAcceptedAt DateTime? // fecha y hora exactas de la aceptación
+  termsAcceptedIp String? //   IP desde la que se aceptó
+  termsVersion    String? //   versión del texto de T&C vigente al aceptar
+
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
 

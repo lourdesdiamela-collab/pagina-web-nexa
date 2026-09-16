@@ -47,6 +47,9 @@ export default function CheckoutPage() {
   const [couponCode, setCouponCode] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  // Aceptación de Términos y Condiciones: obligatoria para poder pagar.
+  // El servidor la vuelve a validar (ver lib/terms.js).
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [devOrder, setDevOrder] = useState(null); // { orderId } — solo en desarrollo con el simulador habilitado
   const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago' | 'transfer'
   const [transferOrder, setTransferOrder] = useState(null); // { orderId, total } cuando ya se registró el pedido por transferencia
@@ -108,7 +111,7 @@ export default function CheckoutPage() {
       const res = await fetch('/api/checkout/create-preference', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, couponCode: couponCode || undefined }),
+        body: JSON.stringify({ items, couponCode: couponCode || undefined, acceptedTerms }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -173,7 +176,7 @@ export default function CheckoutPage() {
       const res = await fetch('/api/checkout/bank-transfer', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, couponCode: couponCode || undefined }),
+        body: JSON.stringify({ items, couponCode: couponCode || undefined, acceptedTerms }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -296,6 +299,20 @@ export default function CheckoutPage() {
 
                     {error && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{error}</div>}
 
+                    <label className="checkout-terms">
+                      <input
+                        type="checkbox"
+                        checked={acceptedTerms}
+                        onChange={(e) => setAcceptedTerms(e.target.checked)}
+                      />
+                      <span>
+                        Leí y acepto los{' '}
+                        <Link href="/terminos" target="_blank" rel="noopener noreferrer">Términos y Condiciones</Link>
+                        {' '}y la{' '}
+                        <Link href="/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad</Link>.
+                      </span>
+                    </label>
+
                     <div className="aprende-payment-methods">
                       {cardPaymentAvailable && (
                         <button
@@ -318,7 +335,7 @@ export default function CheckoutPage() {
                     {paymentMethod === 'mercadopago' && cardPaymentAvailable && (
                       <div style={{ marginTop: 16 }}>
                         {!devOrder ? (
-                          <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePay} disabled={loading}>
+                          <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePay} disabled={loading || !acceptedTerms}>
                             <Zap size={16} /> {loading ? 'Redirigiendo…' : 'Pagar con Mercado Pago'}
                           </button>
                         ) : (
@@ -339,6 +356,9 @@ export default function CheckoutPage() {
                               </button>
                             </div>
                           )
+                        )}
+                        {!acceptedTerms && (
+                          <p className="checkout-terms-hint">Tildá la aceptación de los Términos para poder continuar.</p>
                         )}
                         <p className="aprende-cart-hint" style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
                           <ShieldCheck size={14} /> Pago seguro procesado por Mercado Pago.
@@ -367,10 +387,13 @@ export default function CheckoutPage() {
                           className="btn btn-lima"
                           style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}
                           onClick={handleConfirmTransfer}
-                          disabled={loading}
+                          disabled={loading || !acceptedTerms}
                         >
                           <TimerReset size={16} /> {loading ? 'Registrando…' : 'Ya transferí, confirmar pedido'}
                         </button>
+                        {!acceptedTerms && (
+                          <p className="checkout-terms-hint">Tildá la aceptación de los Términos para poder continuar.</p>
+                        )}
                         <p className="aprende-cart-hint" style={{ marginTop: 10 }}>
                           Al confirmar, registramos tu pedido y te enviamos un email. En breve verificamos el ingreso y nos contactamos para enviarte el material.
                         </p>

@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { resolveCartFromDb, applyCoupon, createPendingOrder } from '@/lib/orders';
 import { isMpConfigured, isSimulationAllowed, createPreference } from '@/lib/mercadopago';
+import { buildTermsAcceptance } from '@/lib/terms';
 
 export async function POST(request) {
   const session = await getServerSession(authOptions);
@@ -29,6 +30,14 @@ export async function POST(request) {
   }
 
   const body = await request.json().catch(() => ({}));
+
+  // La aceptación de los T&C se valida en el servidor: que el botón esté
+  // deshabilitado en el navegador no impide llamar a esta API a mano.
+  const { error: termsError, data: termsAcceptance } = buildTermsAcceptance(body, request);
+  if (termsError) {
+    return NextResponse.json({ error: termsError }, { status: 400 });
+  }
+
   const items = Array.isArray(body.items) ? body.items.filter((i) => i?.slug && i?.qty > 0) : [];
   if (items.length === 0) {
     return NextResponse.json({ error: 'El carrito está vacío.' }, { status: 400 });
@@ -56,6 +65,7 @@ export async function POST(request) {
     resolvedItems,
     totals: finalTotals,
     couponCode: coupon ? coupon.code : null,
+    termsAcceptance,
   });
 
   // Único caso que llega acá sin Mercado Pago configurado: entorno de

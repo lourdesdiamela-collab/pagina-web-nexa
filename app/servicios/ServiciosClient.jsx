@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
   Target, BarChart3, Users, Layers, RefreshCw, ArrowRight,
-  CheckCircle2, MessageCircle, Plus,
+  CheckCircle2, MessageCircle, Plus, Info,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -622,6 +622,15 @@ function ServiciosContent() {
                 >
                   <p className="pricing-line-tagline">
                     <span style={{ color: line.color, fontWeight: 800 }}>{line.billing}</span> — {line.tagline}
+                  </p>
+
+                  <p className="pricing-fees-notice">
+                    <Info size={15} />
+                    <span>
+                      Los precios son <strong>honorarios de gestión</strong>: cubren nuestro trabajo.
+                      La <strong>inversión publicitaria en Meta y Google va aparte</strong> y la pagás vos,
+                      directamente a cada plataforma.
+                    </span>
                   </p>
 
                   <div className="pricing-grid">

@@ -3,6 +3,7 @@ import { isMpConfigured, createPreference } from '@/lib/mercadopago';
 import { generateServiceReference, validateServiceCheckoutBody, sendServiceLeadEmails } from '@/lib/serviceCheckout';
 import { saveLead } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
+import { buildTermsAcceptance } from '@/lib/terms';
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -22,6 +23,13 @@ export async function POST(request) {
   const validationError = validateServiceCheckoutBody(body);
   if (validationError) {
     return NextResponse.json({ error: validationError }, { status: 400 });
+  }
+
+  // La aceptación de los T&C se valida en el servidor: que el botón esté
+  // deshabilitado en el navegador no impide llamar a esta API a mano.
+  const { error: termsError, data: termsAcceptance } = buildTermsAcceptance(body, request);
+  if (termsError) {
+    return NextResponse.json({ error: termsError }, { status: 400 });
   }
 
   // Sin credenciales de Mercado Pago no hay pago con tarjeta posible: se corta
@@ -52,6 +60,13 @@ export async function POST(request) {
       phone,
       service: servicio,
       challenge: `Pago iniciado — ${planLabel} vía Mercado Pago`,
+      // Aceptación de T&C. Un servicio no genera una fila Order (ver
+      // lib/serviceCheckout.js), así que el dato viaja al CRM y al mail.
+      // PENDIENTE DEL LADO DEL CRM: crear los campos que lo reciban
+      // (ver el informe: repo Nexa-CRM).
+      termsAcceptedAt: termsAcceptance.termsAcceptedAt.toISOString(),
+      termsAcceptedIp: termsAcceptance.termsAcceptedIp,
+      termsVersion: termsAcceptance.termsVersion,
     });
   } catch (dbError) {
     console.error('Error al guardar lead de servicio:', dbError);
@@ -69,7 +84,7 @@ export async function POST(request) {
   }
 
   try {
-    await sendServiceLeadEmails({ reference, name, email, phone, company, servicio, planLabel, amount, billing, method: 'mercadopago' });
+    await sendServiceLeadEmails({ reference, name, email, phone, company, servicio, planLabel, amount, billing, method: 'mercadopago', termsAcceptance });
   } catch (mailError) {
     console.error('Error enviando emails de pedido de servicio:', mailError);
   }

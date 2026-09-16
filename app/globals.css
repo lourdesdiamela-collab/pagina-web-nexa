@@ -266,6 +266,33 @@ p { color: var(--text-body); line-height: 1.7; }
   transform: translateY(-2px);
   box-shadow: 0 10px 24px rgba(184, 155, 255, 0.18);
 }
+
+/* Botón de Arrepentimiento en la barra superior (obligatorio en Argentina que
+   esté visible en la primera pantalla, no solo en el pie). Discreto pero
+   legible: no compite con los CTA, pero se lee sin buscarlo. */
+.nav-arrepentimiento {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 9px 14px;
+  border-radius: 100px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  border: 1px solid var(--border-light);
+  background: transparent;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+.nav-arrepentimiento:hover {
+  color: var(--text-dark);
+  border-color: var(--lilac);
+}
+/* En pantallas medianas se esconde de la barra para no romper el layout:
+   sigue estando en el menú móvil y en el pie. */
+@media (max-width: 1180px) {
+  .nav-arrepentimiento { display: none; }
+}
 .nav-portal-crm {
   background: transparent;
   color: var(--text-body);
@@ -645,6 +672,96 @@ p { color: var(--text-body); line-height: 1.7; }
 .pricing-card-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 0.86rem; color: var(--text-body); line-height: 1.5; }
 .pricing-card-features svg { flex-shrink: 0; margin-top: 3px; }
 .pricing-card-cta { display: flex; flex-direction: column; gap: 8px; margin-top: auto; padding-top: 6px; }
+
+/* ── Páginas legales (/terminos, /privacidad, /arrepentimiento) ── */
+.legal-body { color: var(--text-body); font-size: 0.95rem; line-height: 1.75; }
+.legal-body h2 {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin: 32px 0 10px;
+}
+.legal-body p { margin-bottom: 14px; }
+.legal-body ul { margin: 0 0 14px 20px; list-style: disc; }
+.legal-body li { margin-bottom: 6px; }
+
+.legal-placeholder {
+  background: rgba(210, 242, 58, 0.1);
+  border: 1px dashed rgba(184, 155, 255, 0.5);
+  border-radius: 16px;
+  padding: 24px 26px;
+}
+.legal-placeholder strong {
+  display: block;
+  font-size: 1rem;
+  color: var(--text-dark);
+  margin-bottom: 10px;
+  letter-spacing: 0.02em;
+}
+.legal-placeholder p { margin: 0 0 10px; font-size: 0.88rem; color: var(--text-body); }
+.legal-placeholder p:last-child { margin-bottom: 0; }
+
+/* Franja legal del pie: links obligatorios + espacio para el Data Fiscal. */
+.footer-legal-row {
+  margin-top: 26px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.footer-legal-links { display: flex; gap: 18px; flex-wrap: wrap; }
+.footer-legal-links a {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.82rem;
+  transition: color 0.3s;
+}
+.footer-legal-links a:hover { color: rgba(255, 255, 255, 0.9); }
+
+/* Placeholder del Data Fiscal de ARCA. El isotipo oficial mide 40x53 px. */
+.footer-datafiscal-slot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 53px;
+}
+.footer-datafiscal-slot img { width: 40px; height: 53px; display: block; }
+.footer-datafiscal-empty {
+  width: 40px;
+  height: 53px;
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.footer-datafiscal-note {
+  color: rgba(255, 255, 255, 0.3);
+  font-size: 0.68rem;
+  line-height: 1.4;
+  max-width: 190px;
+}
+
+/* Aclaración de honorarios: el precio del plan no incluye la pauta publicitaria.
+   Va arriba de las tarjetas de precio, visible antes de elegir un plan. */
+.pricing-fees-notice {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  max-width: 720px;
+  margin: 0 auto 28px;
+  padding: 13px 18px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border-light);
+  border-left: 3px solid var(--lilac-deep);
+  border-radius: 14px;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--text-body);
+  text-align: left;
+}
+.pricing-fees-notice svg { flex-shrink: 0; margin-top: 2px; color: var(--lilac-deep); }
+.pricing-fees-notice strong { color: var(--text-dark); }
 
 .pricing-footnote {
   text-align: center;
@@ -1718,6 +1835,41 @@ p { color: var(--text-body); line-height: 1.7; }
   line-height: 1.5;
   margin-bottom: 16px;
 }
+/* Casilla obligatoria de aceptación de Términos en el checkout. */
+.checkout-terms {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  background: var(--bg-white);
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--text-body);
+  cursor: pointer;
+}
+.checkout-terms input[type='checkbox'] {
+  width: 17px;
+  height: 17px;
+  margin-top: 1px;
+  flex-shrink: 0;
+  accent-color: var(--lilac-deep);
+  cursor: pointer;
+}
+.checkout-terms a {
+  color: var(--lilac-deep);
+  font-weight: 700;
+  text-decoration: underline;
+}
+.checkout-terms-hint {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
 /* Texto neutro para productos que todavía no tienen ninguna reseña. */
 .aprende-stars-empty {
   font-size: 0.78rem;

@@ -3,6 +3,7 @@ import { applyTransferDiscount } from '@/lib/pricing';
 import { generateServiceReference, validateServiceCheckoutBody, sendServiceLeadEmails } from '@/lib/serviceCheckout';
 import { saveLead } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
+import { buildTermsAcceptance } from '@/lib/terms';
 
 // Pedido "voy a pagar por transferencia bancaria" para un plan de servicio,
 // con el mismo 10% OFF que ya se usa en el checkout de Aprende
@@ -18,6 +19,13 @@ export async function POST(request) {
     return NextResponse.json({ error: validationError }, { status: 400 });
   }
 
+  // La aceptación de los T&C se valida en el servidor: que el botón esté
+  // deshabilitado en el navegador no impide llamar a esta API a mano.
+  const { error: termsError, data: termsAcceptance } = buildTermsAcceptance(body, request);
+  if (termsError) {
+    return NextResponse.json({ error: termsError }, { status: 400 });
+  }
+
   const { name, email, phone, company, servicio, planLabel, billing } = body;
   const amount = Math.round(Number(body.amount));
   const discountedTotal = applyTransferDiscount(amount);
@@ -31,6 +39,12 @@ export async function POST(request) {
       phone,
       service: servicio,
       challenge: `Pedido por transferencia — ${planLabel}`,
+      // Aceptación de T&C. Un servicio no genera una fila Order, así que el
+      // dato viaja al CRM y al mail. PENDIENTE DEL LADO DEL CRM: crear los
+      // campos que lo reciban (ver el informe: repo Nexa-CRM).
+      termsAcceptedAt: termsAcceptance.termsAcceptedAt.toISOString(),
+      termsAcceptedIp: termsAcceptance.termsAcceptedIp,
+      termsVersion: termsAcceptance.termsVersion,
     });
   } catch (dbError) {
     console.error('Error al guardar lead de servicio:', dbError);
@@ -48,7 +62,7 @@ export async function POST(request) {
   }
 
   try {
-    await sendServiceLeadEmails({ reference, name, email, phone, company, servicio, planLabel, amount: discountedTotal, billing, method: 'transfer' });
+    await sendServiceLeadEmails({ reference, name, email, phone, company, servicio, planLabel, amount: discountedTotal, billing, method: 'transfer', termsAcceptance });
   } catch (mailError) {
     console.error('Error enviando emails de pedido de servicio:', mailError);
   }
