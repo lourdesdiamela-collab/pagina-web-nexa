@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
-import { saveLead } from '@/lib/crm';
+import { saveLead, markLeadSynced } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 
 // Transporter de Nodemailer para avisos por email
@@ -22,22 +22,18 @@ export async function POST(request) {
       return NextResponse.json({ error: 'Faltan campos obligatorios.' }, { status: 400 });
     }
 
-    // 1. Guardar el lead en el almacenamiento de la web (Supabase con fallback JSON)
-    let lead;
-    try {
-      lead = await saveLead({
-        name: body.name,
-        email: body.email,
-        company: body.company || 'No especificado',
-        phone: body.phone,
-        service: body.service,
-        challenge: body.challenge,
-      });
-    } catch (dbError) {
-      console.error('Error al guardar lead en base de datos local/Supabase:', dbError);
-      // Creamos un objeto mock para que el flujo continúe
-      lead = { ...body, createdAt: new Date().toISOString() };
-    }
+    // 1. Guardar el lead en la base del sitio (tabla Lead, ver lib/crm.js).
+    //    saveLead nunca lanza: si la base falla, loguea y devuelve el lead en
+    //    memoria para que el formulario no se le rompa al visitante.
+    const lead = await saveLead({
+      name: body.name,
+      email: body.email,
+      company: body.company || 'No especificado',
+      phone: body.phone,
+      service: body.service,
+      challenge: body.challenge,
+      source: 'formulario_contacto',
+    });
 
     // 2. Enviar el lead al CRM real centralizado vía API pública
     const crmBaseUrl = process.env.NEXT_PUBLIC_CRM_URL || 'https://crm.nexagrowth.com.ar';
@@ -56,6 +52,9 @@ export async function POST(request) {
       });
       if (crmRes.ok) {
         crmSuccess = true;
+        // Queda registrado en la base del sitio que este lead ya viajó al CRM.
+        // Los que quedan en false son los que hay que pasar a mano.
+        await markLeadSynced(lead?.id);
         console.log('Lead registrado exitosamente en el CRM centralizado.');
       } else {
         const crmErr = await crmRes.json().catch(() => ({}));

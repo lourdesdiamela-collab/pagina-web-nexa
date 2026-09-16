@@ -1,9 +1,21 @@
-// Esquema de base de datos — NEXA Aprende (Fase 2)
+// Esquema de base de datos — NEXA
 //
-// Dev local: SQLite (provider abajo). Producción (Vercel): Postgres administrado
-// (Vercel Postgres / Neon). Para pasar a producción: cambiar `provider` a
-// "postgresql" y setear DATABASE_URL con la connection string real, luego
-// correr `npx prisma migrate deploy`. Ver APRENDE_README.md.
+// PROVIDER: sqlite. Es lo que realmente hay hoy y lo que funciona sin
+// configurar nada: la base es un archivo local (prisma/dev.db) y DATABASE_URL
+// arranca con "file:".
+//
+// Corregido (septiembre 2026): el schema declaraba `postgresql`, pero todas
+// las migraciones de prisma/migrations están escritas en SQL de SQLite y
+// DATABASE_URL apuntaba a un archivo. Esa combinación no arranca: Prisma
+// rechaza una URL "file:" cuando el provider es postgres. Ahora los tres
+// coinciden en SQLite.
+//
+// SI ALGÚN DÍA SE PASA A POSTGRES (Vercel Postgres / Neon), hay que hacer tres
+// cosas juntas, no una sola:
+//   1) cambiar `provider` acá a "postgresql"
+//   2) cambiar el provider en prisma/migrations/migration_lock.toml
+//   3) regenerar el historial de migraciones (el SQL de SQLite no corre en
+//      Postgres: DATETIME no existe, va TIMESTAMP(3))
 //
 // Nota: los campos de "enum" se modelan como String (no `enum` de Prisma) a
 // propósito, para que el mismo schema funcione igual en SQLite (que no
@@ -14,7 +26,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -142,4 +154,51 @@ model Coupon {
   usageLimit Int?
   usedCount  Int       @default(0)
   createdAt  DateTime  @default(now())
+}
+
+/*
+ * Leads que entran por el sitio: formulario de contacto y checkout de
+ * servicios.
+ *
+ * Antes lib/crm.js era un stub que recibía el lead y NO lo guardaba en ningún
+ * lado: devolvía el objeto y listo. Los únicos registros eran los emails que le
+ * llegaban a Lu, así que un mail perdido o en spam era un lead perdido, sin
+ * rastro. Ahora cada lead queda acá.
+ *
+ * Esta es la base del SITIO. El CRM (repo Nexa-CRM) es otro sistema con su
+ * propia base: el envío al CRM se sigue intentando desde /api/contact, y el
+ * campo `syncedToCrm` deja registrado si esa sincronización salió bien. Los
+ * que queden en false hay que pasarlos al CRM cuando la integración exista.
+ */
+model Lead {
+  id      String @id @default(cuid())
+  name    String
+  email   String
+  phone   String?
+  company String?
+
+  service String? // línea de servicio consultada o contratada
+  message String? // el "challenge" del formulario, o el detalle del pedido
+
+  // De dónde vino: formulario_contacto | checkout_servicio_transferencia |
+  // checkout_servicio_mercadopago
+  source String @default("formulario_contacto")
+
+  // Solo para leads que vienen del checkout de servicios
+  reference String? // referencia del pedido (SRV-...)
+  planId    String? // identificador del plan (ver lib/servicePlans.mjs)
+  amount    Int? // monto en pesos resuelto por el servidor
+
+  // Aceptación de Términos y Condiciones (ver lib/terms.js)
+  termsAcceptedAt DateTime?
+  termsAcceptedIp String?
+  termsVersion    String?
+
+  // Sincronización con el CRM central
+  syncedToCrm Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([source])
 }

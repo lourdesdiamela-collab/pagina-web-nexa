@@ -1,11 +1,32 @@
-import { Plus_Jakarta_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import AuthProvider from '@/components/aprende/AuthProvider';
 import './globals.css';
 
-const plusJakartaSans = Plus_Jakarta_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
+/*
+ * Tipografía Plus Jakarta Sans, servida desde el propio repositorio.
+ *
+ * ANTES se usaba `next/font/google`, que descarga la tipografía desde los
+ * servidores de Google EN CADA BUILD. Eso significa que el build depende de
+ * una conexión a internet y de que Google responda: si falla, el build se
+ * cuelga o rompe. Ahora el archivo está en app/fonts/, así que el build no
+ * sale a la red y además es más rápido.
+ *
+ * Es exactamente la misma tipografía y los mismos pesos, así que el sitio se
+ * ve igual: es el archivo variable oficial (subconjunto latino, pesos 200 a
+ * 800, que cubre los 400/500/600/700/800 que usa el diseño), y se expone con
+ * la misma variable CSS de antes (--font-plus-jakarta), que es la que lee
+ * globals.css.
+ *
+ * Licencia: SIL Open Font License 1.1 — permite usarla y redistribuirla.
+ * El texto de la licencia está en app/fonts/LICENSE-PlusJakartaSans.txt.
+ */
+const plusJakartaSans = localFont({
+  src: './fonts/plus-jakarta-sans-latin.woff2',
+  weight: '200 800',
+  style: 'normal',
+  display: 'swap',
   variable: '--font-plus-jakarta',
+  fallback: ['-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
 });
 
 export const dynamic = 'force-dynamic';

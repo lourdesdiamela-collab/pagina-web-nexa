@@ -8,6 +8,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import TransferReservationTimer from '@/components/aprende/TransferReservationTimer';
 import { formatPrice } from '@/lib/products.mjs';
+import { getServicePlan } from '@/lib/servicePlans.mjs';
 
 const WHATSAPP_NUMBER = '5491124527402';
 
@@ -44,13 +45,22 @@ const TRANSFER_TITULAR = 'Alarcón Lourdes';
 function ServicioCheckoutContent() {
   const searchParams = useSearchParams();
 
-  const servicio = searchParams.get('servicio') || '';
-  const planName = searchParams.get('planName') || '';
-  const line = searchParams.get('line') || '';
-  const amount = Number(searchParams.get('amount') || 0);
-  const billing = searchParams.get('billing') === 'unico' ? 'unico' : 'mensual';
+  /*
+   * El precio NO viene por la URL. Del link solo llega el identificador del
+   * plan (ej: 'ads-scale') y el precio se lee de lib/servicePlans.mjs, la misma
+   * lista que usa el servidor para cobrar. Editar la URL no cambia el monto.
+   *
+   * Si el identificador no existe, getServicePlan devuelve null y la página
+   * muestra "No encontramos el plan" en vez de un checkout con precio inventado.
+   */
+  const planId = searchParams.get('plan') || '';
+  const plan = getServicePlan(planId);
 
-  const planLabel = [planName, line].filter(Boolean).join(' — ') || 'Plan NEXA';
+  const servicio = plan?.lineSlug || '';
+  const planLabel = plan?.planLabel || '';
+  const amount = plan?.amount || 0;
+  const billing = plan?.billing === 'unico' ? 'unico' : 'mensual';
+
   const billingText = billing === 'unico' ? 'Pago único' : 'Primer pago — mes 1 (plan mensual)';
   const estimatedTransferTotal = Math.round(amount * 0.9);
 
@@ -89,20 +99,22 @@ function ServicioCheckoutContent() {
   // El servidor la vuelve a validar (ver lib/terms.js).
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  const missingPlan = !amount || amount <= 0;
+  const missingPlan = !plan;
   const formValid = form.name.trim() && form.email.trim() && form.phone.trim();
 
   function updateField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
   }
 
+  /*
+   * Al servidor se le manda el identificador del plan, NO el monto. El precio
+   * lo resuelve él contra lib/servicePlans.mjs. Si acá mandáramos el importe,
+   * volveríamos al problema de que el cliente elige cuánto paga.
+   */
   function buildPayload() {
     return {
       ...form,
-      servicio,
-      planLabel,
-      amount,
-      billing,
+      plan: planId,
       acceptedTerms,
     };
   }

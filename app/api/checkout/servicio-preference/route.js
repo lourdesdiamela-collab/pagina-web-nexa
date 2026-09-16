@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isMpConfigured, createPreference } from '@/lib/mercadopago';
-import { generateServiceReference, validateServiceCheckoutBody, sendServiceLeadEmails } from '@/lib/serviceCheckout';
+import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails } from '@/lib/serviceCheckout';
 import { saveLead } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 import { buildTermsAcceptance } from '@/lib/terms';
@@ -15,12 +15,14 @@ function siteUrl() {
 // Order en la base: acá el pedido viaja en la metadata de la preferencia
 // (ver lib/mercadopago.js) y en el email que recibe Lu.
 //
-// Para planes mensuales, este pago es solo el primer mes. Ver
-// SERVICIOS_CHECKOUT.md para la decisión de por qué no hay suscripción
-// automática recurrente todavía.
+// El precio NO viene del cliente: se resuelve contra lib/servicePlans.mjs a
+// partir del identificador de plan (ver resolveServiceCheckout).
+//
+// Para planes mensuales, este pago es solo el primer mes.
 export async function POST(request) {
   const body = await request.json().catch(() => ({}));
-  const validationError = validateServiceCheckoutBody(body);
+
+  const { error: validationError, plan, contacto } = resolveServiceCheckout(body);
   if (validationError) {
     return NextResponse.json({ error: validationError }, { status: 400 });
   }
@@ -48,8 +50,8 @@ export async function POST(request) {
     );
   }
 
-  const { name, email, phone, company, servicio, planLabel, billing } = body;
-  const amount = Math.round(Number(body.amount));
+  const { name, email, phone, company } = contacto;
+  const amount = plan.amount;
   const reference = generateServiceReference();
 
   try {
@@ -58,12 +60,12 @@ export async function POST(request) {
       email,
       company: company || 'No especificado',
       phone,
-      service: servicio,
-      challenge: `Pago iniciado — ${planLabel} vía Mercado Pago`,
-      // Aceptación de T&C. Un servicio no genera una fila Order (ver
-      // lib/serviceCheckout.js), así que el dato viaja al CRM y al mail.
-      // PENDIENTE DEL LADO DEL CRM: crear los campos que lo reciban
-      // (ver el informe: repo Nexa-CRM).
+      service: plan.lineSlug,
+      challenge: `Pago iniciado — ${plan.planLabel} vía Mercado Pago`,
+      source: 'checkout_servicio_mercadopago',
+      reference,
+      planId: plan.planId,
+      amount,
       termsAcceptedAt: termsAcceptance.termsAcceptedAt.toISOString(),
       termsAcceptedIp: termsAcceptance.termsAcceptedIp,
       termsVersion: termsAcceptance.termsVersion,
@@ -76,15 +78,27 @@ export async function POST(request) {
     await notifyEvent({
       type: 'servicio_pago_iniciado',
       title: 'Pago de servicio iniciado (Mercado Pago)',
-      message: `${name} inició el pago de ${planLabel}.`,
-      details: { reference, servicio, planLabel, amount },
+      message: `${name} inició el pago de ${plan.planLabel}.`,
+      details: { reference, servicio: plan.lineSlug, planLabel: plan.planLabel, amount },
     });
   } catch (notifyErr) {
     console.error('Error en notifyEvent:', notifyErr);
   }
 
   try {
-    await sendServiceLeadEmails({ reference, name, email, phone, company, servicio, planLabel, amount, billing, method: 'mercadopago', termsAcceptance });
+    await sendServiceLeadEmails({
+      reference,
+      name,
+      email,
+      phone,
+      company,
+      servicio: plan.lineSlug,
+      planLabel: plan.planLabel,
+      amount,
+      billing: plan.billing,
+      method: 'mercadopago',
+      termsAcceptance,
+    });
   } catch (mailError) {
     console.error('Error enviando emails de pedido de servicio:', mailError);
   }
@@ -93,7 +107,7 @@ export async function POST(request) {
     const base = siteUrl();
     const preference = await createPreference({
       orderId: reference,
-      title: `NEXA — ${planLabel}`,
+      title: `NEXA — ${plan.planLabel}`,
       total: amount,
       payerEmail: email,
       backUrls: {
@@ -104,9 +118,10 @@ export async function POST(request) {
       metadata: {
         kind: 'servicio',
         reference,
-        servicio,
-        plan_label: planLabel,
-        billing: billing || 'mensual',
+        servicio: plan.lineSlug,
+        plan_id: plan.planId,
+        plan_label: plan.planLabel,
+        billing: plan.billing,
         name,
         email,
         phone,
