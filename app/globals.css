@@ -1086,6 +1086,12 @@ p { color: var(--text-body); line-height: 1.7; }
   padding: 8px 8px 8px 20px;
   box-shadow: 0 16px 40px rgba(184, 155, 255, 0.14);
 }
+/* El input adentro pierde el outline nativo (línea de abajo), así que el
+   foco visible por teclado queda acá, en el contenedor. */
+.aprende-hero-search:focus-within {
+  border-color: var(--lilac-deep, #7c3aed);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.25), 0 16px 40px rgba(184, 155, 255, 0.14);
+}
 .aprende-hero-search svg { color: var(--text-muted); flex-shrink: 0; }
 .aprende-hero-search input {
   flex: 1;
@@ -1365,6 +1371,12 @@ p { color: var(--text-body); line-height: 1.7; }
   border-radius: 14px;
   padding: 12px 16px;
 }
+/* Los inputs/select adentro pierden el outline nativo, asi que el foco
+   visible por teclado queda en el contenedor (:focus-within). */
+.aprende-search:focus-within, .aprende-sort:focus-within {
+  border-color: var(--lilac-deep);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+}
 .aprende-search svg { color: var(--text-muted); flex-shrink: 0; }
 .aprende-search input { flex: 1; border: none; outline: none; background: transparent; font-family: inherit; font-size: 0.95rem; color: var(--text-dark); min-width: 0; }
 .aprende-sort {
@@ -1436,6 +1448,10 @@ p { color: var(--text-body); line-height: 1.7; }
   font-family: inherit;
   color: var(--text-dark);
   outline: none;
+}
+.aprende-newsletter-form input:focus {
+  border-color: var(--lilac-deep);
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
 }
 .aprende-newsletter-success {
   display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -1713,7 +1729,10 @@ p { color: var(--text-body); line-height: 1.7; }
   .aprende-cart-item { grid-template-columns: 48px 1fr; grid-template-areas: "cover info" "cover qty" "cover subtotal"; row-gap: 6px; }
   .aprende-cart-item-remove { position: absolute; top: 10px; right: 10px; }
   .aprende-cart-item { position: relative; }
-  .aprende-cart-fab { right: 16px; bottom: 96px; width: 50px; height: 50px; }
+  /* bottom: 104px, igual que en desktop, para no quedar pegado al botón
+     flotante de WhatsApp (fixed, bottom 30px, alto 60px -> hasta 90px). Antes
+     decía 96px acá y quedaba a 6px del botón de WhatsApp en mobile. */
+  .aprende-cart-fab { right: 16px; bottom: 104px; width: 50px; height: 50px; }
 }
 
 @media (max-width: 480px) {
