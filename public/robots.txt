@@ -1,7 +1,10 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /clientes/
+Disallow: /aprende/admin/
+Disallow: /aprende/cuenta/
+Disallow: /aprende/carrito
+Disallow: /aprende/checkout
+Disallow: /servicios/checkout
 Disallow: /api/
 
 Sitemap: https://nexagrowth.com.ar/sitemap.xml
