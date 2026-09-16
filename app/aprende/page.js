@@ -6,6 +6,17 @@ import {
   listProducts, getCategories, getFeaturedProducts, getBestSellers, getNewArrivals, getDeals,
 } from '@/lib/catalogQueries';
 
+export const metadata = {
+  title: 'NEXA Aprende | Guías y Recursos Descargables de Marketing',
+  description: 'Guías, plantillas y recursos descargables sobre marketing digital, redes sociales, publicidad y ventas para aplicar en tu negocio.',
+  alternates: { canonical: '/aprende' },
+  openGraph: {
+    title: 'NEXA Aprende | Guías y Recursos Descargables de Marketing',
+    description: 'Guías, plantillas y recursos descargables sobre marketing digital, redes sociales, publicidad y ventas para aplicar en tu negocio.',
+    url: 'https://nexagrowth.com.ar/aprende',
+  },
+};
+
 /*
  * Si la base de datos no está disponible (por ejemplo, migraciones sin correr),
  * esta página mostraba un error 500 crudo. Ahora muestra un aviso claro y el
