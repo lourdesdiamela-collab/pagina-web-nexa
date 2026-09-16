@@ -1,32 +1,36 @@
 // Esquema de base de datos — NEXA
 //
-// PROVIDER: sqlite. Es lo que realmente hay hoy y lo que funciona sin
-// configurar nada: la base es un archivo local (prisma/dev.db) y DATABASE_URL
-// arranca con "file:".
+// PROVIDER: postgresql. La base real de producción es Postgres (Neon),
+// conectada en Vercel via DATABASE_URL / DATABASE_URL_UNPOOLED.
 //
-// Corregido (septiembre 2026): el schema declaraba `postgresql`, pero todas
-// las migraciones de prisma/migrations están escritas en SQL de SQLite y
-// DATABASE_URL apuntaba a un archivo. Esa combinación no arranca: Prisma
-// rechaza una URL "file:" cuando el provider es postgres. Ahora los tres
-// coinciden en SQLite.
+// Corregido (septiembre 2026): un cambio anterior había puesto `provider =
+// "sqlite"` acá para que coincidiera con el DATABASE_URL="file:..." del .env
+// LOCAL de Lu. Eso rompía el deploy: el build de producción corre
+// `prisma db push` contra la Postgres real de Neon, y con el provider en
+// sqlite esa conexión es inválida. El entorno desactualizado era el local,
+// no producción. El .env local sigue apuntando a SQLite porque Lu no tiene
+// (todavía) las credenciales de Neon a mano en su máquina — eso es normal,
+// no hace falta para trabajar en el código, solo para correr comandos de
+// Prisma que toquen la base de verdad.
 //
-// SI ALGÚN DÍA SE PASA A POSTGRES (Vercel Postgres / Neon), hay que hacer tres
-// cosas juntas, no una sola:
-//   1) cambiar `provider` acá a "postgresql"
-//   2) cambiar el provider en prisma/migrations/migration_lock.toml
-//   3) regenerar el historial de migraciones (el SQL de SQLite no corre en
-//      Postgres: DATETIME no existe, va TIMESTAMP(3))
+// El historial de migraciones (prisma/migrations) se regeneró en Postgres:
+// el SQL de SQLite no corre en Postgres (DATETIME no existe, va
+// TIMESTAMP(3), entre otras diferencias). De todos modos el build de
+// producción usa `prisma db push`, no `prisma migrate deploy`, así que estas
+// migraciones no se aplican solas en cada deploy — quedan como historial
+// coherente para quien corra `prisma migrate dev/deploy` localmente con una
+// Postgres de verdad.
 //
 // Nota: los campos de "enum" se modelan como String (no `enum` de Prisma) a
-// propósito, para que el mismo schema funcione igual en SQLite (que no
-// soporta enums nativos) y en Postgres sin tener que reescribirlo.
+// propósito — quedó así de cuando el schema era compatible con SQLite y no
+// hace falta deshacerlo ahora, pero ya no es una restricción real.
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
