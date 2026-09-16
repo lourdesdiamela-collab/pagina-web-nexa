@@ -353,9 +353,6 @@ function ServiciosContent() {
                         <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-wa">
                           <MessageCircle size={15} /> WhatsApp
                         </a>
-                        <Link href={`/contacto?servicio=${s.value}`} className="svc-plans-link">
-                          Prefiero un diagnóstico gratis primero
-                        </Link>
                       </div>
                     </div>
                   </motion.article>
