@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, Suspense } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import { Send, MessageCircle, CheckCircle2 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -73,8 +74,8 @@ function ContactFormSection() {
             <div className="contacto-grid">
               {/* Sidebar: prueba social + beneficios + urgencia */}
               <div className="contacto-sidebar">
-                <div style={{ position: 'relative', borderRadius: 24, overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.35)', marginBottom: 24 }}>
-                  <img src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&q=80" alt="Equipo de NEXA conversando sobre estrategia con un cliente" loading="lazy" style={{ width: '100%', height: 200, objectFit: 'cover', display: 'block' }} />
+                <div style={{ position: 'relative', height: 200, borderRadius: 24, overflow: 'hidden', boxShadow: '0 24px 60px rgba(0,0,0,0.35)', marginBottom: 24 }}>
+                  <Image src="https://images.unsplash.com/photo-1573497620053-ea5300f94f21?w=1400&q=80" alt="Equipo de NEXA conversando sobre estrategia con un cliente" fill sizes="(max-width: 900px) 100vw, 480px" style={{ objectFit: 'cover' }} />
                   <div style={{ position: 'absolute', left: 18, bottom: 18, background: '#fff', padding: '10px 18px', borderRadius: 100, fontSize: '0.78rem', fontWeight: 700, color: '#12141D', boxShadow: '0 14px 32px rgba(13,14,21,0.18)' }}>Te respondemos en menos de 24 horas</div>
                 </div>
 
@@ -113,27 +114,27 @@ function ContactFormSection() {
 
                   <div className="form-row">
                     <div className="form-field">
-                      <label>Nombre y Apellido *</label>
-                      <input type="text" placeholder="Ej: Juan Pérez" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required disabled={loading} />
+                      <label htmlFor="contacto-name">Nombre y Apellido *</label>
+                      <input id="contacto-name" type="text" placeholder="Ej: Juan Pérez" value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required disabled={loading} />
                     </div>
                     <div className="form-field">
-                      <label>Teléfono / WhatsApp *</label>
-                      <input type="tel" placeholder="+54 9 11 1234 5678" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required disabled={loading} />
+                      <label htmlFor="contacto-phone">Teléfono / WhatsApp *</label>
+                      <input id="contacto-phone" type="tel" placeholder="+54 9 11 1234 5678" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} required disabled={loading} />
                     </div>
                   </div>
                   <div className="form-row">
                     <div className="form-field">
-                      <label>Email *</label>
-                      <input type="email" placeholder="juan@empresa.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} required disabled={loading} />
+                      <label htmlFor="contacto-email">Email *</label>
+                      <input id="contacto-email" type="email" placeholder="juan@empresa.com" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} required disabled={loading} />
                     </div>
                     <div className="form-field">
-                      <label>Empresa / Negocio (opcional)</label>
-                      <input type="text" placeholder="Nombre de tu marca" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} disabled={loading} />
+                      <label htmlFor="contacto-company">Empresa / Negocio (opcional)</label>
+                      <input id="contacto-company" type="text" placeholder="Nombre de tu marca" value={formData.company} onChange={e => setFormData({...formData, company: e.target.value})} disabled={loading} />
                     </div>
                   </div>
                   <div className="form-field">
-                    <label>Servicio de interés *</label>
-                    <select value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} required disabled={loading}>
+                    <label htmlFor="contacto-service">Servicio de interés *</label>
+                    <select id="contacto-service" value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} required disabled={loading}>
                       <option value="" disabled>Seleccioná una opción...</option>
                       <option value="nexa_web">NEXA Web (sitio web)</option>
                       <option value="marketing_integral">Marketing & Estrategia Integral</option>
@@ -145,8 +146,8 @@ function ContactFormSection() {
                     </select>
                   </div>
                   <div className="form-field">
-                    <label>Desafío principal (opcional)</label>
-                    <textarea placeholder="Contanos brevemente qué te gustaría mejorar..." value={formData.challenge} onChange={e => setFormData({...formData, challenge: e.target.value})} disabled={loading} />
+                    <label htmlFor="contacto-challenge">Desafío principal (opcional)</label>
+                    <textarea id="contacto-challenge" placeholder="Contanos brevemente qué te gustaría mejorar..." value={formData.challenge} onChange={e => setFormData({...formData, challenge: e.target.value})} disabled={loading} />
                   </div>
                   <button type="submit" className="btn-submit" disabled={loading} style={{ opacity: loading ? 0.65 : 1 }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>

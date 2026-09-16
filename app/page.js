@@ -578,12 +578,12 @@ export default function HomePage() {
                       >
                         <h3>Contanos de tu negocio</h3>
                         <div className="form-group">
-                          <label>Nombre de la Empresa</label>
-                          <input type="text" required value={formData.companyName} onChange={(e) => updateField('companyName', e.target.value)} placeholder="Ej: Nexa Solutions" />
+                          <label htmlFor="home-companyName">Nombre de la Empresa</label>
+                          <input id="home-companyName" type="text" required value={formData.companyName} onChange={(e) => updateField('companyName', e.target.value)} placeholder="Ej: Nexa Solutions" />
                         </div>
                         <div className="form-group">
-                          <label>Sitio Web (Opcional)</label>
-                          <input type="text" value={formData.website} onChange={(e) => updateField('website', e.target.value)} placeholder="www.tuempresa.com" />
+                          <label htmlFor="home-website">Sitio Web (Opcional)</label>
+                          <input id="home-website" type="text" value={formData.website} onChange={(e) => updateField('website', e.target.value)} placeholder="www.tuempresa.com" />
                         </div>
                         <div className="form-navigation">
                           <button type="button" onClick={prevStep} className="btn-back">Atrás</button>
@@ -631,16 +631,16 @@ export default function HomePage() {
                       >
                         <h3>Completá tus datos de contacto</h3>
                         <div className="form-group">
-                          <label>Nombre y Apellido</label>
-                          <input type="text" required value={formData.contactName} onChange={(e) => updateField('contactName', e.target.value)} placeholder="Ej: Carlos Pérez" />
+                          <label htmlFor="home-contactName">Nombre y Apellido</label>
+                          <input id="home-contactName" type="text" required value={formData.contactName} onChange={(e) => updateField('contactName', e.target.value)} placeholder="Ej: Carlos Pérez" />
                         </div>
                         <div className="form-group">
-                          <label>Email Corporativo</label>
-                          <input type="email" required value={formData.contactEmail} onChange={(e) => updateField('contactEmail', e.target.value)} placeholder="carlos@empresa.com" />
+                          <label htmlFor="home-contactEmail">Email Corporativo</label>
+                          <input id="home-contactEmail" type="email" required value={formData.contactEmail} onChange={(e) => updateField('contactEmail', e.target.value)} placeholder="carlos@empresa.com" />
                         </div>
                         <div className="form-group">
-                          <label>Teléfono / WhatsApp</label>
-                          <input type="tel" required value={formData.contactPhone} onChange={(e) => updateField('contactPhone', e.target.value)} placeholder="+54 9 11 1234 5678" />
+                          <label htmlFor="home-contactPhone">Teléfono / WhatsApp</label>
+                          <input id="home-contactPhone" type="tel" required value={formData.contactPhone} onChange={(e) => updateField('contactPhone', e.target.value)} placeholder="+54 9 11 1234 5678" />
                         </div>
                         <div className="form-navigation">
                           <button type="button" onClick={prevStep} className="btn-back">Atrás</button>
