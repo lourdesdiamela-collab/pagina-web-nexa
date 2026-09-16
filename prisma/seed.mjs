@@ -75,9 +75,14 @@ async function main() {
   const existingAdmin = await prisma.user.findUnique({ where: { email: adminEmail } });
   if (!existingAdmin && !adminPassword) {
     // Antes, si ADMIN_PASSWORD no estaba cargada, el seed creaba el usuario
-    // administrador con la contraseña 'CambiarInmediatamente123', escrita en
-    // el código del repositorio. Cualquiera que leyera el repo podía entrar al
-    // panel admin. Ahora el seed se niega a crear el admin sin contraseña.
+    // administrador con una contraseña por defecto escrita en el código del
+    // repositorio. Como este repo es público, cualquiera que lo leyera podía
+    // entrar al panel admin. Ahora el seed se niega a crear el admin sin
+    // contraseña, y tampoco la imprime en consola.
+    //
+    // ACCIÓN PENDIENTE: esa contraseña por defecto sigue estando en el
+    // historial de git y en la rama master. Si la cuenta de administrador se
+    // creó con ella, hay que cambiarla desde el panel.
     console.error(
       'Seed: NO se creó el usuario admin porque falta la variable ADMIN_PASSWORD.\n' +
       '      Cargala en .env.local (o en las variables de entorno del hosting) y volvé a correr el seed.',
