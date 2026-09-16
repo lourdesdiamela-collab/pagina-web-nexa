@@ -89,12 +89,6 @@ export default function Footer() {
             El isotipo tiene que quedar enlazado a la URL que da ARCA: si es
             solo una imagen, no cumple.
           */}
-          <div className="footer-datafiscal-slot">
-            <div className="footer-datafiscal-empty" aria-hidden="true" />
-            <span className="footer-datafiscal-note">
-              Espacio reservado para el Data Fiscal de ARCA (pendiente de carga).
-            </span>
-          </div>
         </div>
 
         {/* Divider + Bottom */}
