@@ -1,5 +1,6 @@
 import { prisma } from '@/lib/db';
 import { formatPrice } from '@/lib/products.mjs';
+import { resyncLeadToCrm } from '@/lib/adminActions';
 
 /*
  * Consultas y pedidos que entraron por el sitio.
@@ -36,7 +37,7 @@ export default async function AdminLeadsPage() {
       <p className="admin-subtitle">
         {errorBase
           ? errorBase
-          : `${leads.length} consultas (últimas 300). ${pendientes} sin sincronizar con el CRM central — esas hay que pasarlas a mano hasta que la integración esté hecha.`}
+          : `${leads.length} consultas (últimas 300). ${pendientes} sin sincronizar con el CRM central — los pagos de servicio (con botón "Reintentar") se pueden reintentar acá; el resto hay que pasarlo a mano.`}
       </p>
 
       {!errorBase && leads.length === 0 && (
@@ -54,7 +55,7 @@ export default async function AdminLeadsPage() {
               <thead>
                 <tr>
                   <th>Fecha</th><th>Nombre</th><th>Contacto</th><th>Empresa</th>
-                  <th>Interés</th><th>Mensaje</th><th>Origen</th><th>CRM</th>
+                  <th>Interés</th><th>Mensaje</th><th>Origen</th><th>CRM</th><th></th>
                 </tr>
               </thead>
               <tbody>
@@ -78,6 +79,17 @@ export default async function AdminLeadsPage() {
                     <td style={{ fontSize: '0.78rem' }}>{SOURCE_LABEL[l.source] || l.source}</td>
                     <td style={{ fontSize: '0.78rem' }}>
                       {l.syncedToCrm ? 'Sincronizado' : 'Pendiente'}
+                      {!l.syncedToCrm && l.syncError && (
+                        <div style={{ color: 'var(--red, #d33)', fontSize: '0.72rem', marginTop: 2 }}>{l.syncError}</div>
+                      )}
+                    </td>
+                    <td>
+                      {!l.syncedToCrm && l.mpPaymentId && (
+                        <form action={resyncLeadToCrm}>
+                          <input type="hidden" name="id" value={l.id} />
+                          <button type="submit" className="btn btn-outline btn-sm">Reintentar</button>
+                        </form>
+                      )}
                     </td>
                   </tr>
                 ))}

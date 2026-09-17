@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { getPayment, verifyWebhookSignature } from '@/lib/mercadopago';
 import { approveOrder, rejectOrder } from '@/lib/orders';
 import { sendServicePaymentApprovedEmails } from '@/lib/serviceCheckout';
+import { altaAutomaticaPorPago } from '@/lib/crmSync';
 
 // Mercado Pago llama a esta URL (notification_url) cuando cambia el estado
 // de un pago. Puede mandar los datos como query params (?type=payment&data.id=)
@@ -50,16 +51,13 @@ export async function POST(request) {
     // Pago de un plan de servicio (Marketing/Social/Ads/Recover/CRM/Web):
     // no tiene Order en la base como Aprende, así que la referencia y los
     // datos del cliente viajan en la metadata de la preferencia (ver
-    // app/api/checkout/servicio-preference/route.js). Nota: sin una tabla
-    // propia no hay forma de marcar "ya procesado", así que si Mercado Pago
-    // reintenta la notificación del mismo pago aprobado, el email de
-    // confirmación se puede volver a mandar — riesgo aceptado y documentado
-    // en SERVICIOS_CHECKOUT.md (no debería pasar seguido: MP no reintenta
-    // notificaciones ya entregadas con 200 OK).
+    // app/api/checkout/servicio-preference/route.js).
     if (payment.metadata?.kind === 'servicio' && payment.status === 'approved') {
+      const reference = payment.metadata.reference || orderId;
+
       try {
         await sendServicePaymentApprovedEmails({
-          reference: payment.metadata.reference || orderId,
+          reference,
           name: payment.metadata.name || 'Cliente',
           email: payment.metadata.email,
           planLabel: payment.metadata.plan_label || 'tu plan',
@@ -68,6 +66,47 @@ export async function POST(request) {
       } catch (serviceMailError) {
         console.error('Error mandando email de pago de servicio aprobado:', serviceMailError);
       }
+
+      // Alta automática en el CRM (herramienta #1 del brief de Lu). Si el
+      // CRM no responde o el pago ya se había procesado (MP reintenta
+      // notificaciones seguido), altaAutomaticaPorPago() no tira excepción:
+      // devuelve {ok:false, error} para que quede registrado sin perder el
+      // pago. El Lead que ya se guardó en /api/checkout/servicio-preference
+      // queda como el registro de "esto entró"; acá solo lo actualizamos
+      // con el resultado de la sincronización.
+      let sync = { ok: false, error: 'No se intentó sincronizar (sin datos de contacto).' };
+      if (payment.metadata.email) {
+        sync = await altaAutomaticaPorPago({
+          mpPaymentId: String(payment.id),
+          reference,
+          lineSlug: payment.metadata.servicio,
+          planId: payment.metadata.plan_id,
+          planLabel: payment.metadata.plan_label,
+          monto: payment.transaction_amount,
+          nombre: payment.metadata.name,
+          email: payment.metadata.email,
+          telefono: payment.metadata.phone,
+          empresa: payment.metadata.company,
+        });
+      }
+
+      try {
+        await prisma.lead.updateMany({
+          where: { reference, source: 'checkout_servicio_mercadopago' },
+          data: {
+            mpPaymentId: String(payment.id),
+            syncedToCrm: sync.ok,
+            syncError: sync.ok ? null : sync.error || 'Error desconocido al sincronizar con el CRM.',
+          },
+        });
+      } catch (leadUpdateError) {
+        console.error('No se pudo actualizar el Lead con el resultado de la sincronización:', leadUpdateError);
+      }
+
+      if (!sync.ok) {
+        console.error(`[mp-webhook] No se pudo dar de alta en el CRM el pago ${reference}:`, sync.error);
+      }
+
       return NextResponse.json({ received: true });
     }
     if (payment.metadata?.kind === 'servicio') {

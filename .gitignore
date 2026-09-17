@@ -33,6 +33,12 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# .env.example nunca tiene secretos reales, solo placeholders -- tiene que
+# quedar versionado para que la lista de variables no se pierda. Se
+# descubrió corriendo `git ls-files` que este archivo nunca había estado
+# en el repo pese a documentarse en varias sesiones: el patrón de arriba lo
+# tapaba.
+!.env.example
 
 # clave de sesión generada automáticamente si no hay NEXTAUTH_SECRET
 # (ver lib/auth.js). NUNCA subir esto: permite falsificar sesiones.
