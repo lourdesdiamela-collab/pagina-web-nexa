@@ -112,11 +112,9 @@ de una versión anterior, no hace falta cargarlas en Vercel):
   y marcados `noindex` a propósito para que no aparezcan vacíos en buscadores.
   Cuando Lu cargue el texto definitivo de cada uno, sacar la línea `robots` de
   la metadata de esa página para que Google empiece a indexarla.
-- **Data Fiscal de ARCA (ex AFIP).** El pie de página tiene el espacio
-  reservado y comentado (`components/Footer.js`) con las instrucciones
-  exactas de qué pegar ahí una vez que Lu genere el código en el sitio de
-  ARCA: el isotipo oficial (`public/data-fiscal.jpg`) y la URL de verificación
-  del contribuyente, enlazados entre sí.
+
+> Data Fiscal de ARCA: **no lo toques.** Lu todavía no tiene cuenta asociada
+> en ARCA, así que no hay nada que integrar por ahora.
 
 ---
 

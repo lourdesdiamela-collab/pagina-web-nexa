@@ -59,36 +59,13 @@ export default function Footer() {
           </nav>
         </div>
 
-        {/* Franja legal: links obligatorios + espacio para el Data Fiscal */}
+        {/* Franja legal: links obligatorios */}
         <div className="footer-legal-row">
           <nav className="footer-legal-links" aria-label="Enlaces legales">
             {LEGAL_LINKS.map((link) => (
               <Link key={link.href} href={link.href}>{link.label}</Link>
             ))}
           </nav>
-
-          {/*
-            ESPACIO RESERVADO PARA EL DATA FISCAL DE ARCA.
-
-            Lu genera el código en el sitio de ARCA (ex AFIP) y de ahí salen dos
-            cosas: la URL de verificación del contribuyente y el isotipo oficial.
-
-            Para activarlo:
-              1) Descargar el isotipo y guardarlo como public/data-fiscal.jpg
-              2) Reemplazar este bloque por:
-
-                 <a
-                   href="https://serviciosweb.afip.gob.ar/clavefiscal/qr/response.aspx?qr=TU_CODIGO"
-                   target="_blank"
-                   rel="noopener noreferrer"
-                   className="footer-datafiscal-slot"
-                 >
-                   <img src="/data-fiscal.jpg" alt="Data Fiscal - ARCA" />
-                 </a>
-
-            El isotipo tiene que quedar enlazado a la URL que da ARCA: si es
-            solo una imagen, no cumple.
-          */}
         </div>
 
         {/* Divider + Bottom */}

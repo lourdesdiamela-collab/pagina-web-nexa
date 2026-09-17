@@ -701,7 +701,7 @@ p { color: var(--text-body); line-height: 1.7; }
 .legal-placeholder p { margin: 0 0 10px; font-size: 0.88rem; color: var(--text-body); }
 .legal-placeholder p:last-child { margin-bottom: 0; }
 
-/* Franja legal del pie: links obligatorios + espacio para el Data Fiscal. */
+/* Franja legal del pie: links obligatorios. */
 .footer-legal-row {
   margin-top: 26px;
   padding-top: 18px;
@@ -719,28 +719,6 @@ p { color: var(--text-body); line-height: 1.7; }
   transition: color 0.3s;
 }
 .footer-legal-links a:hover { color: rgba(255, 255, 255, 0.9); }
-
-/* Placeholder del Data Fiscal de ARCA. El isotipo oficial mide 40x53 px. */
-.footer-datafiscal-slot {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 53px;
-}
-.footer-datafiscal-slot img { width: 40px; height: 53px; display: block; }
-.footer-datafiscal-empty {
-  width: 40px;
-  height: 53px;
-  border: 1px dashed rgba(255, 255, 255, 0.25);
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-.footer-datafiscal-note {
-  color: rgba(255, 255, 255, 0.3);
-  font-size: 0.68rem;
-  line-height: 1.4;
-  max-width: 190px;
-}
 
 /* Aclaración de honorarios: el precio del plan no incluye la pauta publicitaria.
    Va arriba de las tarjetas de precio, visible antes de elegir un plan. */
