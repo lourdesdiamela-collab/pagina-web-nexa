@@ -207,3 +207,31 @@ model Lead {
   @@index([source])
   @@index([mpPaymentId])
 }
+
+// Solicitudes de arrepentimiento (herramienta #10 del brief de Fase 2).
+//
+// Cada solicitud que llega por el formulario de /arrepentimiento queda acá
+// con su número de trámite (ARR-2026-0001), generado por el sitio en el
+// momento de la confirmación — no depende de que el CRM responda. La
+// gestión del caso (ver estado, cambiarlo) vive en el CRM central; acá solo
+// queda el registro de lo que se mandó y si la sincronización con el CRM
+// salió bien, para poder reintentarla si no.
+model ArrepentimientoRequest {
+  id                   String   @id @default(cuid())
+  numero               String   @unique // ARR-{año}-{correlativo}
+
+  nombre               String
+  email                String
+  telefono             String?
+  identificacionCompra String // referencia del pedido o descripción libre
+  motivo               String?
+
+  // Sincronización con el CRM central
+  syncedToCrm Boolean @default(false)
+  syncError   String?
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([numero])
+}
