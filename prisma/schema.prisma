@@ -194,9 +194,16 @@ model Lead {
 
   // Sincronización con el CRM central
   syncedToCrm Boolean @default(false)
+  syncError   String? // último error al intentar sincronizar, si falló
+
+  // Id del pago de Mercado Pago que aprobó este lead (checkout de servicios
+  // vía MP). Se usa para no dar de alta el mismo cliente dos veces en el
+  // CRM si la notificación de pago llega repetida.
+  mpPaymentId String?
 
   createdAt DateTime @default(now())
 
   @@index([createdAt])
   @@index([source])
+  @@index([mpPaymentId])
 }
