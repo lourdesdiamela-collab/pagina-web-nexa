@@ -1,16 +1,7 @@
 import { NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
 import { saveLead, markLeadSynced } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
-
-// Transporter de Nodemailer para avisos por email
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.GMAIL_USER,
-    pass: process.env.GMAIL_APP_PASSWORD,
-  },
-});
+import { sendMail } from '@/lib/mailer';
 
 export async function POST(request) {
   try {
@@ -82,49 +73,43 @@ export async function POST(request) {
       console.error('Error en notifyEvent:', notifyErr);
     }
 
-    // 4. Envío de correos por nodemailer (si el transporter está configurado)
-    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-      try {
-        // Notificación interna a NEXA
-        await transporter.sendMail({
-          from: `"NEXA Web" <${process.env.GMAIL_USER}>`,
-          to: process.env.CONTACT_EMAIL || 'hola@nexaarg.com',
-          subject: `Nueva consulta de ${body.name}${body.company ? ' - ' + body.company : ''}`,
-          html: `
-            <h2>Nueva consulta desde la web</h2>
-            <table cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
-              <tr><td><strong>Nombre</strong></td><td>${body.name}</td></tr>
-              <tr><td><strong>Empresa</strong></td><td>${body.company || 'No especificado'}</td></tr>
-              <tr><td><strong>Email</strong></td><td>${body.email}</td></tr>
-              <tr><td><strong>Teléfono</strong></td><td>${body.phone || '—'}</td></tr>
-              <tr><td><strong>Servicio</strong></td><td>${body.service}</td></tr>
-              <tr><td><strong>Detalles del diagnóstico</strong></td><td>${body.challenge || '—'}</td></tr>
-              <tr><td><strong>Estado de Sincronización CRM</strong></td><td>${crmSuccess ? 'Exitosa (leads)' : 'Fallida / Pendiente de carga manual'}</td></tr>
-            </table>
-          `,
-        });
+    // 4. Envío de correos (sendMail nunca tira: si GMAIL_USER/GMAIL_APP_PASSWORD
+    //    no están configuradas, loguea y sigue — ver lib/mailer.js).
 
-        // Email de confirmación al lead
-        await transporter.sendMail({
-          from: `"NEXA" <${process.env.GMAIL_USER}>`,
-          to: body.email,
-          subject: '¡Recibimos tu solicitud de diagnóstico! — NEXA',
-          html: `
-            <p>Hola ${body.name},</p>
-            <p>Gracias por ponerte en contacto con NEXA. Recibimos tus datos para la solicitud de diagnóstico técnico.</p>
-            <p>
-              <strong>Servicio seleccionado:</strong> ${body.service}${body.company ? `<br/><strong>Negocio:</strong> ${body.company}` : ''}
-            </p>
-            <p>Un consultor de nuestro equipo analizará la información y se contactará con vos para coordinar el paso siguiente.</p>
-            <p>— El equipo de NEXA</p>
-          `,
-        });
-      } catch (mailError) {
-        console.error('Error al enviar correos electrónicos por Gmail:', mailError.message);
-      }
-    } else {
-      console.log('Nodemailer no configurado: omitiendo emails.');
-    }
+    // Notificación interna a NEXA
+    await sendMail({
+      to: process.env.CONTACT_EMAIL || 'hola@nexaarg.com',
+      fromName: 'NEXA Web',
+      subject: `Nueva consulta de ${body.name}${body.company ? ' - ' + body.company : ''}`,
+      html: `
+        <h2>Nueva consulta desde la web</h2>
+        <table cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
+          <tr><td><strong>Nombre</strong></td><td>${body.name}</td></tr>
+          <tr><td><strong>Empresa</strong></td><td>${body.company || 'No especificado'}</td></tr>
+          <tr><td><strong>Email</strong></td><td>${body.email}</td></tr>
+          <tr><td><strong>Teléfono</strong></td><td>${body.phone || '—'}</td></tr>
+          <tr><td><strong>Servicio</strong></td><td>${body.service}</td></tr>
+          <tr><td><strong>Detalles del diagnóstico</strong></td><td>${body.challenge || '—'}</td></tr>
+          <tr><td><strong>Estado de Sincronización CRM</strong></td><td>${crmSuccess ? 'Exitosa (leads)' : 'Fallida / Pendiente de carga manual'}</td></tr>
+        </table>
+      `,
+    });
+
+    // Email de confirmación al lead
+    await sendMail({
+      to: body.email,
+      fromName: 'NEXA',
+      subject: '¡Recibimos tu solicitud de diagnóstico! — NEXA',
+      html: `
+        <p>Hola ${body.name},</p>
+        <p>Gracias por ponerte en contacto con NEXA. Recibimos tus datos para la solicitud de diagnóstico técnico.</p>
+        <p>
+          <strong>Servicio seleccionado:</strong> ${body.service}${body.company ? `<br/><strong>Negocio:</strong> ${body.company}` : ''}
+        </p>
+        <p>Un consultor de nuestro equipo analizará la información y se contactará con vos para coordinar el paso siguiente.</p>
+        <p>— El equipo de NEXA</p>
+      `,
+    });
 
     return NextResponse.json({
       success: true,
