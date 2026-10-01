@@ -685,21 +685,13 @@ p { color: var(--text-body); line-height: 1.7; }
 .legal-body ul { margin: 0 0 14px 20px; list-style: disc; }
 .legal-body li { margin-bottom: 6px; }
 
-.legal-placeholder {
-  background: rgba(210, 242, 58, 0.1);
-  border: 1px dashed rgba(184, 155, 255, 0.5);
-  border-radius: 16px;
-  padding: 24px 26px;
+.legal-en-preparacion p {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: var(--text-muted);
 }
-.legal-placeholder strong {
-  display: block;
-  font-size: 1rem;
-  color: var(--text-dark);
-  margin-bottom: 10px;
-  letter-spacing: 0.02em;
-}
-.legal-placeholder p { margin: 0 0 10px; font-size: 0.88rem; color: var(--text-body); }
-.legal-placeholder p:last-child { margin-bottom: 0; }
+.legal-en-preparacion p:last-child { margin-bottom: 0; }
+.legal-en-preparacion a { color: var(--lilac-deep); text-decoration: underline; }
 
 /* Franja legal del pie: links obligatorios. */
 .footer-legal-row {
