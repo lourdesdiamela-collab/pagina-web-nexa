@@ -486,24 +486,23 @@ function ServiciosContent() {
         {/* Se eliminó la sección de testimonios ("Lo que dicen nuestros
             clientes" + "Más de 20 empresas ya escalaron su negocio
             contratando estos mismos servicios" + tres testimonios firmados).
-            Todo inventado. La sección siguiente ("El método NEXA") ya abre el
-            bloque oscuro, así que no queda hueco en el diseño. */}
+            Todo inventado. */}
 
         {/* ══════ Methodology ══════ */}
-        <section style={{ background: '#0D0E15', padding: 'clamp(64px, 10vw, 120px) 0' }}>
+        <section className="methodology">
           <div className="container">
             <motion.div className="section-header" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
-              <motion.span variants={fadeUp} className="section-tag" style={{ background: 'rgba(210,242,58,0.1)', color: '#D2F23A', border: '1px solid rgba(210,242,58,0.2)' }}>Nuestro proceso</motion.span>
-              <motion.h2 variants={fadeUp} className="section-title text-white">El método NEXA</motion.h2>
-              <motion.p variants={fadeUp} className="section-subtitle text-white-50" style={{ margin: '0 auto' }}>Un framework claro, aplicado a cualquier servicio que elijas, para construir marcas sostenibles y escalables.</motion.p>
+              <motion.span variants={fadeUp} className="section-tag" style={{ background: 'rgba(210,242,58,0.14)', color: '#8a9a0f', border: '1px solid rgba(210,242,58,0.3)' }}>Nuestro proceso</motion.span>
+              <motion.h2 variants={fadeUp} className="section-title">El método NEXA</motion.h2>
+              <motion.p variants={fadeUp} className="section-subtitle" style={{ margin: '0 auto' }}>Un framework claro, aplicado a cualquier servicio que elijas, para construir marcas sostenibles y escalables.</motion.p>
             </motion.div>
             <motion.div className="method-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }}>
               {STEPS.map((step) => (
-                <motion.div key={step.num} variants={fadeUp} className="method-step" style={{ background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)' }} whileHover={{ y: -6 }}>
-                  <div className="method-number" style={{ background: 'rgba(255,255,255,0.06)', borderColor: 'rgba(255,255,255,0.1)', color: '#D2F23A' }}>{step.num}</div>
-                  <h4 style={{ color: 'white' }}>{step.title}</h4>
-                  <p style={{ color: 'rgba(255,255,255,0.55)' }}>{step.desc}</p>
-                  <p style={{ color: '#D2F23A', fontSize: '0.78rem', fontWeight: 700, marginTop: 14 }}>{step.output}</p>
+                <motion.div key={step.num} variants={fadeUp} className="method-step" whileHover={{ y: -6 }}>
+                  <div className="method-number">{step.num}</div>
+                  <h4>{step.title}</h4>
+                  <p>{step.desc}</p>
+                  <p style={{ color: '#8a9a0f', fontSize: '0.78rem', fontWeight: 700, marginTop: 14 }}>{step.output}</p>
                 </motion.div>
               ))}
             </motion.div>

@@ -36,12 +36,12 @@ export default function ArrepentimientoForm() {
 
   if (status?.tipo === 'success') {
     return (
-      <div style={{ background: 'rgba(210,242,58,0.08)', border: '1px solid rgba(210,242,58,0.2)', borderRadius: 16, padding: 28, textAlign: 'center' }}>
-        <CheckCircle2 size={32} style={{ color: '#D2F23A', marginBottom: 8 }} />
-        <p style={{ fontWeight: 700, fontSize: '1.05rem', color: '#E2F57D', marginBottom: 6 }}>
+      <div style={{ background: 'rgba(210,242,58,0.12)', border: '1px solid rgba(210,242,58,0.3)', borderRadius: 16, padding: 28, textAlign: 'center' }}>
+        <CheckCircle2 size={32} style={{ color: '#8a9a0f', marginBottom: 8 }} />
+        <p style={{ fontWeight: 700, fontSize: '1.05rem', color: '#5c6b00', marginBottom: 6 }}>
           Solicitud recibida — trámite N° {status.numero}
         </p>
-        <p style={{ color: '#CBD5E1', fontSize: '0.9rem' }}>
+        <p style={{ color: 'var(--text-body)', fontSize: '0.9rem' }}>
           Te mandamos la constancia por email con este número. Guardalo para cualquier consulta sobre el estado de tu pedido.
         </p>
       </div>
@@ -50,13 +50,14 @@ export default function ArrepentimientoForm() {
 
   return (
     <form onSubmit={handleSubmit} className="contact-form-pro" style={{
-      background: 'rgba(255,255,255,0.03)',
-      border: '1px solid rgba(255,255,255,0.08)',
+      background: 'var(--bg-white)',
+      border: '1px solid var(--border-light)',
       borderRadius: 24,
       padding: 'clamp(24px, 5vw, 40px)',
+      boxShadow: '0 20px 56px rgba(131,92,230,0.08)',
     }}>
       {status?.tipo === 'error' && (
-        <div style={{ background: 'rgba(255,107,107,0.08)', color: '#ff9b9b', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(255,107,107,0.2)', textAlign: 'center', marginBottom: 20 }}>
+        <div style={{ background: 'rgba(248,113,113,0.1)', color: '#c23636', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(248,113,113,0.25)', textAlign: 'center', marginBottom: 20 }}>
           {status.mensaje}
         </div>
       )}
@@ -100,7 +101,7 @@ export default function ArrepentimientoForm() {
           <Send size={16} /> {loading ? 'Enviando solicitud...' : 'Enviar solicitud de arrepentimiento'}
         </span>
       </button>
-      <p style={{ fontSize: '0.74rem', color: '#6B7280', textAlign: 'center', marginTop: 12 }}>
+      <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: 12 }}>
         Al enviar vas a recibir un email con tu número de trámite.
       </p>
     </form>
