@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard, Package, FolderTree, ShoppingBag, Users, MessageSquare, Ticket, ArrowLeft, Inbox, Undo2,
+  LayoutDashboard, Package, FolderTree, ShoppingBag, Users, MessageSquare, Ticket, ArrowLeft, Inbox, Undo2, MessageCircle,
 } from 'lucide-react';
 
 const LINKS = [
@@ -12,6 +12,7 @@ const LINKS = [
   { href: '/aprende/admin/categorias', label: 'Categorías', icon: FolderTree },
   { href: '/aprende/admin/pedidos', label: 'Pedidos', icon: ShoppingBag },
   { href: '/aprende/admin/leads', label: 'Consultas', icon: Inbox },
+  { href: '/aprende/admin/whatsapp', label: 'WhatsApp', icon: MessageCircle },
   { href: '/aprende/admin/arrepentimiento', label: 'Arrepentimiento', icon: Undo2 },
   { href: '/aprende/admin/usuarios', label: 'Usuarios', icon: Users },
   { href: '/aprende/admin/resenas', label: 'Reseñas', icon: MessageSquare },
