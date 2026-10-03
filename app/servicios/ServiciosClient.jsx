@@ -492,7 +492,7 @@ function ServiciosContent() {
         <section className="methodology">
           <div className="container">
             <motion.div className="section-header" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
-              <motion.span variants={fadeUp} className="section-tag" style={{ background: 'rgba(210,242,58,0.14)', color: '#8a9a0f', border: '1px solid rgba(210,242,58,0.3)' }}>Nuestro proceso</motion.span>
+              <motion.span variants={fadeUp} className="section-tag" style={{ background: 'rgba(210,242,58,0.14)', color: '#5c6608', border: '1px solid rgba(210,242,58,0.3)' }}>Nuestro proceso</motion.span>
               <motion.h2 variants={fadeUp} className="section-title">El método NEXA</motion.h2>
               <motion.p variants={fadeUp} className="section-subtitle" style={{ margin: '0 auto' }}>Un framework claro, aplicado a cualquier servicio que elijas, para construir marcas sostenibles y escalables.</motion.p>
             </motion.div>
@@ -502,7 +502,7 @@ function ServiciosContent() {
                   <div className="method-number">{step.num}</div>
                   <h4>{step.title}</h4>
                   <p>{step.desc}</p>
-                  <p style={{ color: '#8a9a0f', fontSize: '0.78rem', fontWeight: 700, marginTop: 14 }}>{step.output}</p>
+                  <p style={{ color: '#5c6608', fontSize: '0.78rem', fontWeight: 700, marginTop: 14 }}>{step.output}</p>
                 </motion.div>
               ))}
             </motion.div>
