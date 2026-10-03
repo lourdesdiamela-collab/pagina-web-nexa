@@ -1,4 +1,4 @@
-import LegalPage, { LegalPlaceholder } from '@/components/LegalPage';
+import LegalPage, { LegalEnPreparacion } from '@/components/LegalPage';
 
 export const metadata = {
   title: 'Términos y Condiciones | NEXA',
@@ -13,7 +13,7 @@ export default function TerminosPage() {
       title="Términos y Condiciones"
       intro="Condiciones de contratación de los servicios y de compra de los recursos digitales de NEXA."
     >
-      <LegalPlaceholder nota="Mientras el texto no esté cargado, esta página está marcada como no indexable (robots: noindex) para que no aparezca vacía en los buscadores. Cuando cargues el texto, sacá la línea robots de la metadata en app/terminos/page.js." />
+      <LegalEnPreparacion />
     </LegalPage>
   );
 }

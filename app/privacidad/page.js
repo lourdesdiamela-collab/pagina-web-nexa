@@ -1,4 +1,4 @@
-import LegalPage, { LegalPlaceholder } from '@/components/LegalPage';
+import LegalPage, { LegalEnPreparacion } from '@/components/LegalPage';
 
 export const metadata = {
   title: 'Política de Privacidad | NEXA',
@@ -13,7 +13,7 @@ export default function PrivacidadPage() {
       title="Política de Privacidad"
       intro="Qué datos personales recolecta NEXA, para qué los usa y cómo ejercer tus derechos sobre ellos."
     >
-      <LegalPlaceholder nota="Mientras el texto no esté cargado, esta página está marcada como no indexable (robots: noindex). Cuando cargues el texto, sacá la línea robots de la metadata en app/privacidad/page.js." />
+      <LegalEnPreparacion />
     </LegalPage>
   );
 }

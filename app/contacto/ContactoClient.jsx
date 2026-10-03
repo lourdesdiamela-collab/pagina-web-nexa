@@ -56,13 +56,13 @@ function ContactFormSection() {
 
   return (
     <>
-      <main style={{ paddingTop: 'clamp(100px, 12vw, 140px)', background: '#0D0E15', minHeight: '100vh' }}>
+      <main style={{ paddingTop: 'clamp(100px, 12vw, 140px)', background: 'var(--bg-main)', minHeight: '100vh' }}>
         {/* Header */}
         <section style={{ textAlign: 'center', marginBottom: 48 }}>
           <div className="container" style={{ maxWidth: 700 }}>
-            <span className="section-tag" style={{ background: 'rgba(210,242,58,0.1)', color: '#D2F23A', border: '1px solid rgba(210,242,58,0.2)' }}>Contacto</span>
-            <h1 className="section-title text-white">Hablemos de tu <span className="text-gradient">marca.</span></h1>
-            <p className="section-subtitle text-white-50">
+            <span className="section-tag" style={{ background: 'rgba(210,242,58,0.14)', color: '#5c6608', border: '1px solid rgba(210,242,58,0.3)' }}>Contacto</span>
+            <h1 className="section-title">Hablemos de tu <span className="text-gradient">marca.</span></h1>
+            <p className="section-subtitle">
               Si estás listo para profesionalizar tu marketing, ordenar tu captura de leads y escalar tu negocio, dejá tus datos y nuestro equipo se comunicará con vos.
             </p>
           </div>
@@ -81,8 +81,8 @@ function ContactFormSection() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
                   {BENEFITS.map((b) => (
-                    <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 12, color: '#CBD5E1', fontSize: '0.9rem' }}>
-                      <CheckCircle2 size={18} style={{ color: '#D2F23A', flexShrink: 0 }} />
+                    <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 12, color: 'var(--text-body)', fontSize: '0.9rem' }}>
+                      <CheckCircle2 size={18} style={{ color: '#5c6608', flexShrink: 0 }} />
                       <span>{b}</span>
                     </div>
                   ))}
@@ -96,19 +96,20 @@ function ContactFormSection() {
               {/* Form */}
               <div>
                 <form onSubmit={handleSubmit} className="contact-form-pro" style={{
-                  background: 'rgba(255,255,255,0.03)',
-                  border: '1px solid rgba(255,255,255,0.08)',
+                  background: 'var(--bg-white)',
+                  border: '1px solid var(--border-light)',
                   borderRadius: 24,
                   padding: 'clamp(24px, 5vw, 40px)',
+                  boxShadow: '0 20px 56px rgba(131,92,230,0.08)',
                 }}>
                   {status === 'success' && (
-                    <div style={{ background: 'rgba(210,242,58,0.08)', color: '#E2F57D', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(210,242,58,0.2)', textAlign: 'center' }}>
+                    <div style={{ background: 'rgba(210,242,58,0.12)', color: '#5c6b00', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(210,242,58,0.3)', textAlign: 'center' }}>
                       ✓ ¡Mensaje enviado! Nos comunicaremos con vos a la brevedad.
                     </div>
                   )}
                   {status === 'error' && (
-                    <div style={{ background: 'rgba(255,107,107,0.08)', color: '#ff9b9b', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(255,107,107,0.2)', textAlign: 'center' }}>
-                      Ocurrió un error. Podés contactarnos por <a href="https://wa.me/5491124527402" target="_blank" rel="noreferrer" style={{ color: '#25D366', textDecoration: 'underline' }}>WhatsApp</a>.
+                    <div style={{ background: 'rgba(248,113,113,0.1)', color: '#c23636', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(248,113,113,0.25)', textAlign: 'center' }}>
+                      Ocurrió un error. Podés contactarnos por <a href="https://wa.me/5491124527402" target="_blank" rel="noreferrer" style={{ color: '#1a9e52', textDecoration: 'underline' }}>WhatsApp</a>.
                     </div>
                   )}
 
@@ -154,7 +155,7 @@ function ContactFormSection() {
                       <Send size={16} /> {loading ? 'Enviando solicitud...' : 'Quiero mi diagnóstico gratis'}
                     </span>
                   </button>
-                  <p style={{ fontSize: '0.74rem', color: '#6B7280', textAlign: 'center', marginTop: 12 }}>
+                  <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: 12 }}>
                     Sin compromiso. Tus datos solo se usan para contactarte por este diagnóstico.
                   </p>
                 </form>

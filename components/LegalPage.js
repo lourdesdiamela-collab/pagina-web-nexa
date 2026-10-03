@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
@@ -5,13 +6,15 @@ import Footer from '@/components/Footer';
  * Andamiaje compartido de las páginas legales (/terminos, /privacidad,
  * /arrepentimiento).
  *
- * IMPORTANTE: el texto legal lo escribe Lu. Acá no hay ni debe haber texto
- * legal redactado por nadie más: cada página muestra el marcador
- * [FALTA: texto de Lu] hasta que ella pase el contenido definitivo.
+ * IMPORTANTE: el texto legal lo escribe Lu (o su asesoría legal). Acá no hay
+ * ni debe haber texto legal redactado por nadie más. Mientras una página no
+ * tenga su contenido definitivo, se usa <LegalEnPreparacion /> -- un aviso
+ * breve y neutro para el visitante, sin ningún detalle interno ni de
+ * implementación. Nunca mostrar acá instrucciones internas del equipo.
  *
  * Para completar una página: abrir el archivo app/<ruta>/page.js y reemplazar
- * el bloque <LegalPlaceholder /> por el texto, usando <h2> para los títulos de
- * sección y <p> para los párrafos.
+ * el bloque <LegalEnPreparacion /> por el texto, usando <h2> para los
+ * títulos de sección y <p> para los párrafos.
  */
 export default function LegalPage({ title, intro, children }) {
   return (
@@ -34,18 +37,16 @@ export default function LegalPage({ title, intro, children }) {
 }
 
 /*
- * Marcador visible mientras falte el texto. Se ve en pantalla a propósito:
- * es preferible que se note que falta a que la página parezca completa.
+ * Aviso para el visitante mientras una página legal no tiene su contenido
+ * definitivo. A propósito NO dice nada interno (quién lo redacta, en qué
+ * archivo se carga, etc.) — eso es información de equipo, no para publicar.
+ * Texto breve, neutro, sin aspecto de advertencia.
  */
-export function LegalPlaceholder({ nota }) {
+export function LegalEnPreparacion() {
   return (
-    <div className="legal-placeholder">
-      <strong>[FALTA: texto de Lu]</strong>
-      <p>
-        Esta página todavía no tiene su contenido legal. El texto lo redacta Lu
-        (o su asesoría legal) y se carga en el archivo de esta ruta.
-      </p>
-      {nota && <p>{nota}</p>}
+    <div className="legal-en-preparacion">
+      <p>Estamos terminando de preparar el contenido de esta página.</p>
+      <p>Si tenés alguna consulta mientras tanto, <Link href="/contacto">escribinos</Link> y te respondemos a la brevedad.</p>
     </div>
   );
 }
