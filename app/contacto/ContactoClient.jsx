@@ -60,7 +60,7 @@ function ContactFormSection() {
         {/* Header */}
         <section style={{ textAlign: 'center', marginBottom: 48 }}>
           <div className="container" style={{ maxWidth: 700 }}>
-            <span className="section-tag" style={{ background: 'rgba(210,242,58,0.14)', color: '#8a9a0f', border: '1px solid rgba(210,242,58,0.3)' }}>Contacto</span>
+            <span className="section-tag" style={{ background: 'rgba(210,242,58,0.14)', color: '#5c6608', border: '1px solid rgba(210,242,58,0.3)' }}>Contacto</span>
             <h1 className="section-title">Hablemos de tu <span className="text-gradient">marca.</span></h1>
             <p className="section-subtitle">
               Si estás listo para profesionalizar tu marketing, ordenar tu captura de leads y escalar tu negocio, dejá tus datos y nuestro equipo se comunicará con vos.
@@ -82,7 +82,7 @@ function ContactFormSection() {
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 24 }}>
                   {BENEFITS.map((b) => (
                     <div key={b} style={{ display: 'flex', alignItems: 'center', gap: 12, color: 'var(--text-body)', fontSize: '0.9rem' }}>
-                      <CheckCircle2 size={18} style={{ color: '#8a9a0f', flexShrink: 0 }} />
+                      <CheckCircle2 size={18} style={{ color: '#5c6608', flexShrink: 0 }} />
                       <span>{b}</span>
                     </div>
                   ))}
