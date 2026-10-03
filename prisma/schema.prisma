@@ -235,3 +235,40 @@ model ArrepentimientoRequest {
   @@index([createdAt])
   @@index([numero])
 }
+
+// Clics en los botones de WhatsApp del sitio (herramienta #8: leads de
+// WhatsApp con campaña de origen).
+//
+// Cada botón de WhatsApp pasa por /wa (app/wa/route.js), que registra el clic
+// acá y le agrega al mensaje un código corto ("ref. W7K2QX"). Cuando la
+// consulta llega a WhatsApp, ese código se busca en /aprende/admin/whatsapp y
+// muestra de qué campaña vino la persona (utm_*, gclid de Google Ads, fbclid
+// de Meta), por qué página entró y desde qué botón escribió.
+//
+// `syncedToCrm` queda listo para cuando el CRM tenga su endpoint de clics de
+// WhatsApp; hoy no se sincroniza.
+model WhatsAppClick {
+  id          String  @id @default(cuid())
+  ref         String  @unique // código que viaja en el mensaje, ej. W7K2QX
+  location    String // botón: boton_flotante, contacto, plan_card, checkout...
+  page        String? // página desde la que se hizo clic
+
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmContent  String?
+  utmTerm     String?
+  gclid       String? // clic de Google Ads
+  fbclid      String? // clic de Meta (Facebook / Instagram)
+
+  landingPage String? // primera página por la que entró al sitio
+  referrer    String? // sitio del que venía (si no venía de una campaña)
+  firstTouch  String? // primera visita completa, en JSON
+
+  syncedToCrm Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([utmCampaign])
+}
