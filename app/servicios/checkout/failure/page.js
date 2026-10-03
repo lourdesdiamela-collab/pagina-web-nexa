@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { XCircle, MessageCircle } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { waHref } from '@/lib/whatsapp';
 
 export const metadata = { title: 'Pago no procesado | NEXA' };
 
@@ -19,7 +20,7 @@ export default function ServicioCheckoutFailurePage() {
               <Link href="/servicios" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                 Volver a intentar
               </Link>
-              <a href="https://wa.me/5491124527402" target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ width: '100%', justifyContent: 'center' }}>
+              <a href={waHref('checkout_fallido')} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ width: '100%', justifyContent: 'center' }}>
                 <MessageCircle size={16} /> Coordinar por WhatsApp
               </a>
             </div>
