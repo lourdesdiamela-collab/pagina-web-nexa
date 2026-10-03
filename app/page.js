@@ -11,6 +11,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import { MarketingBadges } from '@/components/ui/marketing-badges';
+import { track } from '@/lib/track';
 import HomeCarousel from '@/components/HomeCarousel';
 
 /* ─── Animation Variants ─── */
@@ -175,6 +176,7 @@ export default function HomePage() {
       const payload = await response.json();
       if (!response.ok) throw new Error(payload.error || 'No se pudo enviar');
       setStatus('ok');
+      track('generate_lead', { form_id: 'home_diagnostico', service: formData.service });
       setFormData({ service: 'Redes Sociales y Contenido', companyName: '', website: '', goals: 'Ordenar mi Marketing', contactName: '', contactEmail: '', contactPhone: '' });
       setStep(1);
     } catch (err) {
