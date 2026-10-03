@@ -11,10 +11,12 @@ import Image from 'next/image';
  * trabajando. Son ilustrativas: el texto alternativo describe la escena y en
  * ningún lado se dice que sean el equipo de NEXA ni clientes de NEXA.
  *
- * Cómo se mueve: la lista de fotos está repetida dos veces seguidas y una
- * animación CSS la desplaza hasta la mitad, así el movimiento es continuo y sin
- * saltos. No usa JavaScript para moverse. Se frena al pasar el mouse y queda
- * quieta si el sistema del visitante pide reducir el movimiento.
+ * Cómo se mueve: cada 3 segundos la tira avanza una foto (0,6 s de
+ * movimiento y 2,4 s de pausa). La lista está repetida dos veces seguidas y la
+ * animación CSS llega exactamente al final de la primera vuelta, así el ciclo
+ * vuelve a empezar sin saltos. No usa JavaScript para moverse. Se frena al
+ * pasar el mouse y queda quieta si el sistema del visitante pide reducir el
+ * movimiento.
  */
 
 const UNSPLASH = (id) => `https://images.unsplash.com/${id}?auto=format&fit=crop&w=900&q=75`;
@@ -50,22 +52,24 @@ export default function HomeCarousel() {
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        .hc-strip { padding: 24px 0 80px; overflow: hidden; }
-        .hc-track { display: flex; gap: 20px; width: max-content; animation: hc-scroll 48s linear infinite; }
+        .hc-strip { --step: 460px; padding: 24px 0 80px; overflow: hidden; }
+        .hc-track { display: flex; gap: 20px; width: max-content; animation: hc-step 18s ease-in-out infinite; }
         .hc-strip:hover .hc-track { animation-play-state: paused; }
         .hc-photo { position: relative; flex: 0 0 auto; width: 440px; height: 300px; border-radius: 24px; overflow: hidden; background: var(--bg-soft); box-shadow: 0 10px 30px rgba(18,20,29,0.08); }
-        @keyframes hc-scroll {
-          from { transform: translateX(0); }
-          to { transform: translateX(calc(-50% - 10px)); }
+        /* 6 fotos x 3 s = 18 s por vuelta; --step = ancho de una foto + el espacio entre fotos */
+        @keyframes hc-step {
+          0%, 13.333% { transform: translateX(0); }
+          16.667%, 30% { transform: translateX(calc(var(--step) * -1)); }
+          33.333%, 46.667% { transform: translateX(calc(var(--step) * -2)); }
+          50%, 63.333% { transform: translateX(calc(var(--step) * -3)); }
+          66.667%, 80% { transform: translateX(calc(var(--step) * -4)); }
+          83.333%, 96.667% { transform: translateX(calc(var(--step) * -5)); }
+          100% { transform: translateX(calc(var(--step) * -6)); }
         }
         @media (max-width: 640px) {
-          .hc-strip { padding: 12px 0 56px; }
-          .hc-track { gap: 12px; animation-duration: 36s; }
+          .hc-strip { --step: 272px; padding: 12px 0 56px; }
+          .hc-track { gap: 12px; }
           .hc-photo { width: 260px; height: 190px; border-radius: 18px; }
-          @keyframes hc-scroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(calc(-50% - 6px)); }
-          }
         }
         @media (prefers-reduced-motion: reduce) {
           .hc-track { animation: none; }
