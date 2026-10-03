@@ -12,8 +12,9 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import { SERVICE_LINES, planPriceLabel } from '@/lib/servicePlans.mjs';
+import { waHref } from '@/lib/whatsapp';
 
-const WHATSAPP_NUMBER = '5491124527402';
+// Los links de WhatsApp pasan por /wa para registrar el origen (ver lib/whatsapp.js).
 
 const InstaIcon = ({ size }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
@@ -299,7 +300,7 @@ function ServiciosContent() {
 
             <motion.div className="svc-catalog-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }}>
               {SERVICES.map((s) => {
-                const waText = encodeURIComponent(`Hola NEXA! Quiero contratar el servicio de ${s.title}. ¿Me contás cuál es el siguiente paso?`);
+                const waText = `Hola NEXA! Quiero contratar el servicio de ${s.title}. ¿Me contás cuál es el siguiente paso?`;
                 return (
                   <motion.article key={s.value} variants={scaleIn} className="svc-card" whileHover={{ y: -8, transition: { duration: 0.3 } }}>
                     <div className="svc-card-head">
@@ -351,7 +352,7 @@ function ServiciosContent() {
                         <button type="button" onClick={() => goToPlans(s.priceLineId)} className="btn btn-lima btn-sm">
                           Quiero este servicio <ArrowRight size={15} />
                         </button>
-                        <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-wa">
+                        <a href={waHref('servicio_card', waText)} target="_blank" rel="noopener noreferrer" className="btn-wa">
                           <MessageCircle size={15} /> WhatsApp
                         </a>
                       </div>
@@ -434,7 +435,7 @@ function ServiciosContent() {
                        * precio que se cobra.
                        */
                       const checkoutHref = `/servicios/checkout?plan=${encodeURIComponent(tier.id)}`;
-                      const waPlanText = encodeURIComponent(`Hola NEXA! Quiero contratar el plan ${tier.name} de NEXA ${line.shortLabel} (${planPriceText}). ¿Cómo seguimos?`);
+                      const waPlanText = `Hola NEXA! Quiero contratar el plan ${tier.name} de NEXA ${line.shortLabel} (${planPriceText}). ¿Cómo seguimos?`;
                       return (
                         <div
                           key={tier.name}
@@ -464,7 +465,7 @@ function ServiciosContent() {
                             <Link href={checkoutHref} className="btn btn-lima btn-sm" style={{ justifyContent: 'center' }}>
                               Quiero el plan {tier.name}
                             </Link>
-                            <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waPlanText}`} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ justifyContent: 'center' }}>
+                            <a href={waHref('plan_card', waPlanText)} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ justifyContent: 'center' }}>
                               <MessageCircle size={14} /> WhatsApp
                             </a>
                             <Link href={`/contacto?servicio=${line.slug}&plan=${encodeURIComponent(`${tier.name} — ${lineTitle} (${planPriceText})`)}`} style={{ textAlign: 'center', fontSize: '0.76rem', color: 'var(--text-muted)' }}>
@@ -563,7 +564,7 @@ function ServiciosContent() {
               <Link href="/contacto" className="btn btn-lima" style={{ fontSize: '1rem' }}>
                 Quiero potenciar mi negocio <ArrowRight size={18} />
               </Link>
-              <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ fontSize: '0.95rem', padding: '16px 30px' }}>
+              <a href={waHref('servicios_cta')} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ fontSize: '0.95rem', padding: '16px 30px' }}>
                 <MessageCircle size={18} /> Hablar por WhatsApp
               </a>
             </div>
