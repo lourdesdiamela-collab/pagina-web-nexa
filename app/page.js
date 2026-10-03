@@ -37,7 +37,7 @@ const SERVICES = [
     title: 'Seguimiento de Clientes con IA',
     desc: 'Ordenamos tus contactos y leads en un sistema simple, con asistentes de Inteligencia Artificial que responden y hacen seguimiento para que ninguna venta se enfríe.',
     tag: 'CRM',
-    tagColor: '#B89BFF',
+    tagColor: '#6D4AD6',
     accent: 'rgba(184,155,255,0.12)',
     border: 'rgba(184,155,255,0.25)',
     slug: 'crm_seguimiento',
@@ -47,7 +47,7 @@ const SERVICES = [
     title: 'Publicidad que Convierte',
     desc: 'Creamos y optimizamos campañas de Instagram, Facebook y Google Ads enfocadas en un solo objetivo: traerte clientes reales, no solo clics.',
     tag: 'Performance',
-    tagColor: '#D2F23A',
+    tagColor: '#C026D3',
     accent: 'rgba(210,242,58,0.08)',
     border: 'rgba(210,242,58,0.2)',
     slug: 'meta_ads',
@@ -57,7 +57,7 @@ const SERVICES = [
     title: 'Automatización de Marketing',
     desc: 'Ponemos tu marketing en piloto automático: reportes, mensajes de seguimiento y tareas repetitivas resueltos solos, para que tu equipo se enfoque en vender.',
     tag: 'Eficiencia',
-    tagColor: '#EAA1FB',
+    tagColor: '#835CE6',
     accent: 'rgba(234,161,251,0.08)',
     border: 'rgba(234,161,251,0.2)',
     slug: 'nexa_recover',
@@ -310,7 +310,7 @@ export default function HomePage() {
                       <div className="service-icon-wrapper" style={{ background: service.accent, border: `1px solid ${service.border}` }}>
                         <Icon size={26} color={service.tagColor} />
                       </div>
-                      <h3 style={{ color: 'white' }}>{service.title}</h3>
+                      <h3>{service.title}</h3>
                       <p>{service.desc}</p>
                       <div className="svc-learn-more" style={{ color: service.tagColor }}>
                         <span>Ver detalles y precios</span>
@@ -350,7 +350,7 @@ export default function HomePage() {
                 <motion.ul variants={staggerFast} className="channels-list">
                   {CHANNEL_FEATURES.map((item) => (
                     <motion.li key={item} variants={fadeUp} className="channels-list-item">
-                      <CheckCircle2 size={15} color="#D2F23A" />
+                      <CheckCircle2 size={15} color="#835CE6" />
                       <span>{item}</span>
                     </motion.li>
                   ))}
@@ -430,7 +430,7 @@ export default function HomePage() {
                   style={{ '--item-color': item.color }}
                 >
                   <div className="recover-card-dot" style={{ background: item.color, boxShadow: `0 0 12px ${item.color}60` }} />
-                  <h4 style={{ color: item.color }}>{item.title}</h4>
+                  <h4>{item.title}</h4>
                   <p>{item.desc}</p>
                 </motion.div>
               ))}
@@ -767,7 +767,7 @@ export default function HomePage() {
         /* ── CHANNELS ── */
         .channels-section { padding: 100px 0; }
         .channels-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
-        .channels-tag { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(210,242,58,0.14); border: 1px solid rgba(210,242,58,0.3); border-radius: 999px; color: #8a9a0f; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; }
+        .channels-tag { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(210,242,58,0.14); border: 1px solid rgba(210,242,58,0.3); border-radius: 999px; color: #5c6608; font-size: 0.8rem; font-weight: 700; margin-bottom: 20px; }
         .channels-title { font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 900; color: var(--text-dark); letter-spacing: -0.04em; margin-bottom: 16px; }
         .channels-desc { color: var(--text-body); line-height: 1.7; margin-bottom: 24px; }
         .channels-list { display: flex; flex-direction: column; gap: 12px; }
@@ -779,7 +779,7 @@ export default function HomePage() {
         /* ── RECOVER ── */
         .recover-section { padding: 100px 0; background: linear-gradient(180deg, transparent, rgba(124,58,237,0.07) 50%, transparent); }
         .recover-header { text-align: center; margin-bottom: 64px; }
-        .section-tag-recover { display: inline-flex; padding: 7px 18px; background: rgba(210,242,58,0.14); border: 1px solid rgba(210,242,58,0.3); border-radius: 999px; color: #8a9a0f; font-size: 0.76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
+        .section-tag-recover { display: inline-flex; padding: 7px 18px; background: rgba(210,242,58,0.14); border: 1px solid rgba(210,242,58,0.3); border-radius: 999px; color: #5c6608; font-size: 0.76rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
         .recover-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; color: var(--text-dark); letter-spacing: -0.05em; margin-bottom: 12px; }
         .recover-subtitle { font-size: 1.15rem; color: var(--lilac-deep); font-style: italic; margin-bottom: 16px; }
         .recover-desc { color: var(--text-body); max-width: 600px; margin: 0 auto 28px; line-height: 1.7; }
@@ -800,12 +800,12 @@ export default function HomePage() {
         .contact-info { display: flex; flex-direction: column; gap: 24px; }
         .benefit-list { display: flex; flex-direction: column; gap: 16px; }
         .benefit-item { display: flex; align-items: center; gap: 12px; color: var(--text-body); font-size: 0.9rem; }
-        .benefit-icon { color: #8a9a0f; flex-shrink: 0; }
+        .benefit-icon { color: #5c6608; flex-shrink: 0; }
         .form-card-container { background: var(--bg-white); border: 1px solid var(--border-light); border-radius: 28px; padding: 40px; box-shadow: 0 20px 56px rgba(131,92,230,0.1); }
         .form-steps-header { display: flex; gap: 10px; margin-bottom: 28px; }
         .step-indicator { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 800; background: var(--bg-soft); color: var(--text-muted); border: 1px solid var(--border-light); transition: all 0.3s; }
         .step-indicator.active { background: #835CE6; color: white; border-color: #835CE6; box-shadow: 0 0 20px rgba(131,92,230,0.35); }
-        .step-indicator.completed { background: rgba(210,242,58,0.2); color: #8a9a0f; border-color: rgba(210,242,58,0.4); }
+        .step-indicator.completed { background: rgba(210,242,58,0.2); color: #5c6608; border-color: rgba(210,242,58,0.4); }
         .multistep-form h3 { font-size: 1.15rem; font-weight: 800; color: var(--text-dark); margin-bottom: 20px; letter-spacing: -0.02em; }
         .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
         .form-group label { font-size: 0.82rem; font-weight: 600; color: var(--text-muted); }
