@@ -7,6 +7,8 @@ import { Send, MessageCircle, CheckCircle2 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
+import { waHref } from '@/lib/whatsapp';
+import { track } from '@/lib/track';
 
 const BENEFITS = [
   'Diagnóstico de marketing y redes sin cargo',
@@ -46,6 +48,7 @@ function ContactFormSection() {
       });
       if (!res.ok) throw new Error('Error al enviar');
       setStatus('success');
+      track('generate_lead', { form_id: 'contacto', service: formData.service || 'sin_especificar' });
       setFormData({ name: '', company: '', email: '', phone: '', service: '', challenge: '' });
     } catch {
       setStatus('error');
@@ -109,7 +112,7 @@ function ContactFormSection() {
                   )}
                   {status === 'error' && (
                     <div style={{ background: 'rgba(248,113,113,0.1)', color: '#c23636', padding: 20, borderRadius: 16, fontWeight: 700, border: '1px solid rgba(248,113,113,0.25)', textAlign: 'center' }}>
-                      Ocurrió un error. Podés contactarnos por <a href="https://wa.me/5491124527402" target="_blank" rel="noreferrer" style={{ color: '#1a9e52', textDecoration: 'underline' }}>WhatsApp</a>.
+                      Ocurrió un error. Podés contactarnos por <a href={waHref('contacto_error')} target="_blank" rel="noreferrer" style={{ color: '#1a9e52', textDecoration: 'underline' }}>WhatsApp</a>.
                     </div>
                   )}
 
@@ -162,7 +165,7 @@ function ContactFormSection() {
 
                 {/* WhatsApp fallback */}
                 <div style={{ textAlign: 'center', marginTop: 24 }}>
-                  <a href="https://wa.me/5491124527402" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#25D366', fontWeight: 700, fontSize: '0.9rem' }}>
+                  <a href={waHref('contacto')} target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#25D366', fontWeight: 700, fontSize: '0.9rem' }}>
                     <MessageCircle size={16} /> ¿Preferís escribirnos por WhatsApp?
                   </a>
                 </div>
