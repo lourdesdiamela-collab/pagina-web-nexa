@@ -1,10 +1,11 @@
 'use client';
 import React from 'react';
+import { waHref } from '@/lib/whatsapp';
 
 export default function WhatsAppFloat() {
   return (
     <a
-      href="https://wa.me/5491124527402"
+      href={waHref('boton_flotante')}
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float shadow-lg hover:scale-110 transition-transform duration-300"

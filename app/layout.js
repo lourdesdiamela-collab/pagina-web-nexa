@@ -1,5 +1,6 @@
 import localFont from 'next/font/local';
 import AuthProvider from '@/components/aprende/AuthProvider';
+import TrackingScripts from '@/components/TrackingScripts';
 import './globals.css';
 
 /*
@@ -93,6 +94,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AuthProvider>{children}</AuthProvider>
+        <TrackingScripts />
       </body>
     </html>
   );

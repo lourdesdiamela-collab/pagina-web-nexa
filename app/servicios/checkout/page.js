@@ -9,8 +9,9 @@ import Footer from '@/components/Footer';
 import TransferReservationTimer from '@/components/aprende/TransferReservationTimer';
 import { formatPrice } from '@/lib/products.mjs';
 import { getServicePlan } from '@/lib/servicePlans.mjs';
+import { waHref } from '@/lib/whatsapp';
 
-const WHATSAPP_NUMBER = '5491124527402';
+// Los links de WhatsApp pasan por /wa para registrar el origen (ver lib/whatsapp.js).
 
 function CopyField({ label, value }) {
   const [copied, setCopied] = useState(false);
@@ -170,7 +171,7 @@ function ServicioCheckoutContent() {
     }
   }
 
-  const waText = encodeURIComponent(`Hola NEXA! Quiero contratar el plan ${planLabel}. ¿Cómo seguimos con el pago?`);
+  const waText = `Hola NEXA! Quiero contratar el plan ${planLabel}. ¿Cómo seguimos con el pago?`;
 
   return (
     <>
@@ -201,7 +202,7 @@ function ServicioCheckoutContent() {
                   en breve verificamos el ingreso y nos contactamos para coordinar el arranque.
                 </span>
               </div>
-              <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}>
+              <a href={waHref('checkout', waText)} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}>
                 <MessageCircle size={16} /> Avisar por WhatsApp que ya transferí
               </a>
             </div>
@@ -371,7 +372,7 @@ function ServicioCheckoutContent() {
               </div>
 
               <div style={{ textAlign: 'center', marginTop: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <a href={`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#25D366', fontWeight: 700, fontSize: '0.9rem', justifyContent: 'center' }}>
+                <a href={waHref('checkout_transferencia', waText)} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#25D366', fontWeight: 700, fontSize: '0.9rem', justifyContent: 'center' }}>
                   <MessageCircle size={16} /> ¿Preferís coordinar el pago por WhatsApp?
                 </a>
                 <Link href={`/contacto?servicio=${servicio}`} style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>

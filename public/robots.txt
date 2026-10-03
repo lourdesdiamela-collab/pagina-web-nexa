@@ -6,5 +6,6 @@ Disallow: /aprende/carrito
 Disallow: /aprende/checkout
 Disallow: /servicios/checkout
 Disallow: /api/
+Disallow: /wa
 
 Sitemap: https://nexagrowth.com.ar/sitemap.xml

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { saveLead, markLeadSynced } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 import { sendMail } from '@/lib/mailer';
+import { COOKIE_LAST, COOKIE_FIRST, readAttributionCookie, describeAttribution } from '@/lib/attribution';
 
 export async function POST(request) {
   try {
@@ -11,6 +12,17 @@ export async function POST(request) {
 
     if (missing.length > 0) {
       return NextResponse.json({ error: 'Faltan campos obligatorios.' }, { status: 400 });
+    }
+
+    // Campaña de origen (herramienta #8): sale de las cookies que guarda
+    // components/TrackingScripts.jsx. Se agrega al detalle de la consulta para
+    // que se vea en el CRM, en el admin y en el mail sin cambiar ningún formato.
+    const origen = describeAttribution(
+      readAttributionCookie(request.cookies?.get(COOKIE_LAST)?.value),
+      readAttributionCookie(request.cookies?.get(COOKIE_FIRST)?.value),
+    );
+    if (origen) {
+      body.challenge = `${body.challenge ? `${body.challenge}\n` : ''}[Origen] ${origen}`;
     }
 
     // 1. Guardar el lead en la base del sitio (tabla Lead, ver lib/crm.js).
