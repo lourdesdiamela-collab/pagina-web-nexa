@@ -11,6 +11,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import { MarketingBadges } from '@/components/ui/marketing-badges';
+import HomeCarousel from '@/components/HomeCarousel';
 
 /* ─── Animation Variants ─── */
 const fadeUp = {
@@ -259,6 +260,9 @@ export default function HomePage() {
                 El hero pasa a una sola columna centrada. */}
           </div>
         </section>
+
+        {/* ══════ CARRUSEL ILUSTRATIVO ══════ */}
+        <HomeCarousel />
 
         {/* Se eliminó la tira de logos "Marcas que ya crecieron con NEXA"
             (Ciudad Moto, Corven Motos, Roca Viviendas, Casa Diez, Estética
