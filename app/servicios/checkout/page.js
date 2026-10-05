@@ -233,7 +233,9 @@ function ServicioCheckoutContent() {
               <p className="aprende-cart-hint" style={{ marginTop: 8 }}>{billingText}</p>
               {billing === 'mensual' && (
                 <p className="aprende-cart-hint">
-                  Este pago corresponde al primer mes. La renovación de los meses siguientes la coordinamos directamente con vos.
+                  {renueva
+                    ? 'Este pago renueva tu plan por un mes más. Pagando con Mercado Pago la renovación se registra sola apenas se acredita.'
+                    : 'Este pago corresponde al primer mes. La renovación de los meses siguientes la coordinamos directamente con vos.'}
                 </p>
               )}
 
