@@ -15,7 +15,35 @@ import { sendMail } from '@/lib/mailer';
  * `tipo` distingue el recordatorio previo (todavía a tiempo) del aviso de
  * vencido (ya pasó la fecha) — son dos emails de tono distinto, no el mismo
  * texto con otra fecha.
+ *
+ * `linkPago` (opcional): link al checkout del mismo plan con
+ * `?renueva=<id del plan>`. Si el cliente paga desde ahí con Mercado Pago, el
+ * CRM renueva el plan solo (ya no hace falta apretar "Marcar renovado"). Solo
+ * se acepta un link a /servicios/checkout de este mismo sitio.
  */
+
+function linkDePagoValido(valor) {
+  if (!valor) return null;
+  try {
+    const url = new URL(String(valor));
+    const propios = new Set(['nexagrowth.com.ar', 'www.nexagrowth.com.ar']);
+    try {
+      if (process.env.NEXT_PUBLIC_SITE_URL) propios.add(new URL(process.env.NEXT_PUBLIC_SITE_URL).host);
+    } catch {
+      // NEXT_PUBLIC_SITE_URL mal cargada: se sigue con los dominios fijos.
+    }
+    if (url.protocol !== 'https:' || !propios.has(url.host) || url.pathname !== '/servicios/checkout') return null;
+    return url.toString().replace(/"/g, '%22');
+  } catch {
+    return null;
+  }
+}
+
+function botonPago(href) {
+  return `<p style="margin:24px 0"><a href="${href}" style="background:#6D4AD6;color:#ffffff;padding:12px 22px;border-radius:8px;text-decoration:none;font-weight:600;display:inline-block">Pagar ahora con Mercado Pago</a></p>
+      <p style="font-size:13px;color:#555">Al pagar desde este botón tu plan se renueva automáticamente, sin que tengas que avisarnos.</p>`;
+}
+
 export async function POST(request) {
   const auth = verifyCrmSecret(request);
   if (!auth.ok) {
@@ -35,6 +63,7 @@ export async function POST(request) {
   const servicio = String(body?.servicio || 'tu servicio con NEXA').trim();
   const monto = Number(body?.monto) || 0;
   const fechaVenc = String(body?.fechaVenc || '').trim();
+  const linkPago = linkDePagoValido(body?.linkPago);
 
   if (!to) {
     return NextResponse.json({ error: 'Falta el destinatario (to).' }, { status: 400 });
@@ -52,13 +81,15 @@ export async function POST(request) {
     ? `
       <p>Hola ${nombre || 'equipo'},</p>
       <p>Te escribimos porque el pago mensual de <strong>${servicio}</strong>${fechaVenc ? ` con vencimiento el ${fechaVenc}` : ''} todavía no lo tenemos registrado${montoTexto ? ` (${montoTexto})` : ''}.</p>
-      <p>Si ya lo hiciste, contanos por WhatsApp o respondé este mail para que lo actualicemos. Si todavía no, coordinemos para no interrumpir el servicio.</p>
+      ${linkPago ? botonPago(linkPago) : ''}
+      <p>Si ya lo hiciste por otro medio, contanos por WhatsApp o respondé este mail para que lo actualicemos. Si necesitás coordinar algo, escribinos para no interrumpir el servicio.</p>
       <p>— El equipo de NEXA</p>
     `
     : `
       <p>Hola ${nombre || 'equipo'},</p>
       <p>Te recordamos que el próximo pago mensual de <strong>${servicio}</strong> vence el <strong>${fechaVenc || 'próximo'}</strong>${montoTexto ? ` (${montoTexto})` : ''}.</p>
-      <p>Cualquier duda sobre el medio de pago, escribinos por WhatsApp o respondé este mail.</p>
+      ${linkPago ? botonPago(linkPago) : ''}
+      <p>Si preferís pagar por transferencia o tenés alguna duda, escribinos por WhatsApp o respondé este mail.</p>
       <p>— El equipo de NEXA</p>
     `;
 
