@@ -62,10 +62,22 @@ function ServicioCheckoutContent() {
   const amount = plan?.amount || 0;
   const billing = plan?.billing === 'unico' ? 'unico' : 'mensual';
 
-  const billingText = billing === 'unico' ? 'Pago único' : 'Primer pago — mes 1 (plan mensual)';
+  /*
+   * Renovación (herramienta #9): los mails de cobranza del CRM traen
+   * `&renueva=<id del plan>&email=<email del cliente>`. Con eso el pago se
+   * engancha al plan que ya existe en el CRM y lo renueva solo al acreditarse.
+   * El precio sigue saliendo de lib/servicePlans.mjs, igual que siempre.
+   */
+  const renuevaParam = searchParams.get('renueva') || '';
+  const renueva = /^[a-z0-9]{20,40}$/i.test(renuevaParam) ? renuevaParam : '';
+  const emailParam = (searchParams.get('email') || '').trim().slice(0, 200);
+
+  const billingText = billing === 'unico'
+    ? 'Pago único'
+    : renueva ? 'Renovación — próximo mes (plan mensual)' : 'Primer pago — mes 1 (plan mensual)';
   const estimatedTransferTotal = Math.round(amount * 0.9);
 
-  const [form, setForm] = useState({ name: '', email: '', phone: '', company: '' });
+  const [form, setForm] = useState({ name: '', email: emailParam, phone: '', company: '' });
   const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago' | 'transfer'
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -116,6 +128,7 @@ function ServicioCheckoutContent() {
     return {
       ...form,
       plan: planId,
+      ...(renueva ? { renueva } : {}),
       acceptedTerms,
     };
   }

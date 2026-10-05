@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { applyTransferDiscount } from '@/lib/pricing';
-import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails } from '@/lib/serviceCheckout';
+import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails, renewalPlanId } from '@/lib/serviceCheckout';
 import { saveLead } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 import { buildTermsAcceptance } from '@/lib/terms';
@@ -31,6 +31,10 @@ export async function POST(request) {
   const { name, email, phone, company } = contacto;
   const discountedTotal = applyTransferDiscount(plan.amount);
   const reference = generateServiceReference();
+  // Renovación pedida desde el link de un mail de cobranza. La transferencia
+  // no se puede verificar sola, así que acá solo queda anotado: cuando Lu ve
+  // el ingreso, aprieta "Marcar renovado" en el CRM.
+  const renueva = renewalPlanId(body);
 
   try {
     await saveLead({
@@ -39,7 +43,9 @@ export async function POST(request) {
       company: company || 'No especificado',
       phone,
       service: plan.lineSlug,
-      challenge: `Pedido por transferencia — ${plan.planLabel}`,
+      challenge: renueva
+        ? `Renovación por transferencia — ${plan.planLabel} (al verificar el pago, marcar renovado en el CRM)`
+        : `Pedido por transferencia — ${plan.planLabel}`,
       source: 'checkout_servicio_transferencia',
       reference,
       planId: plan.planId,
@@ -55,8 +61,10 @@ export async function POST(request) {
   try {
     await notifyEvent({
       type: 'servicio_pedido_transferencia',
-      title: 'Pedido de servicio por transferencia',
-      message: `${name} registró un pedido de ${plan.planLabel} por transferencia.`,
+      title: renueva ? 'Renovación por transferencia' : 'Pedido de servicio por transferencia',
+      message: renueva
+        ? `${name} avisó que renueva ${plan.planLabel} por transferencia. Cuando veas el ingreso, apretá "Marcar renovado" en su ficha del CRM.`
+        : `${name} registró un pedido de ${plan.planLabel} por transferencia.`,
       details: { reference, servicio: plan.lineSlug, planLabel: plan.planLabel, amount: discountedTotal },
     });
   } catch (notifyErr) {

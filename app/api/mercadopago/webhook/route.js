@@ -87,6 +87,10 @@ export async function POST(request) {
           email: payment.metadata.email,
           telefono: payment.metadata.phone,
           empresa: payment.metadata.company,
+          // Herramienta #9: si el pago salió del link de un mail de cobranza,
+          // el CRM renueva ese plan en vez de dar de alta uno nuevo.
+          renuevaPlanId: payment.metadata.renueva_plan_id || null,
+          billing: payment.metadata.billing || null,
         });
       }
 
