@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { isMpConfigured, createPreference } from '@/lib/mercadopago';
-import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails } from '@/lib/serviceCheckout';
+import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails, renewalPlanId } from '@/lib/serviceCheckout';
 import { saveLead } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 import { buildTermsAcceptance } from '@/lib/terms';
@@ -52,6 +52,9 @@ export async function POST(request) {
 
   const { name, email, phone, company } = contacto;
   const amount = plan.amount;
+  // Si viene del link de un mail de cobranza, es la renovación de un plan que
+  // ya existe en el CRM (ver renewalPlanId en lib/serviceCheckout.js).
+  const renueva = renewalPlanId(body);
   const reference = generateServiceReference();
 
   try {
@@ -61,7 +64,9 @@ export async function POST(request) {
       company: company || 'No especificado',
       phone,
       service: plan.lineSlug,
-      challenge: `Pago iniciado — ${plan.planLabel} vía Mercado Pago`,
+      challenge: renueva
+        ? `Renovación — ${plan.planLabel} vía Mercado Pago`
+        : `Pago iniciado — ${plan.planLabel} vía Mercado Pago`,
       source: 'checkout_servicio_mercadopago',
       reference,
       planId: plan.planId,
@@ -77,8 +82,8 @@ export async function POST(request) {
   try {
     await notifyEvent({
       type: 'servicio_pago_iniciado',
-      title: 'Pago de servicio iniciado (Mercado Pago)',
-      message: `${name} inició el pago de ${plan.planLabel}.`,
+      title: renueva ? 'Renovación de plan iniciada (Mercado Pago)' : 'Pago de servicio iniciado (Mercado Pago)',
+      message: `${name} inició el pago de ${plan.planLabel}${renueva ? ' (renovación)' : ''}.`,
       details: { reference, servicio: plan.lineSlug, planLabel: plan.planLabel, amount },
     });
   } catch (notifyErr) {
@@ -126,6 +131,7 @@ export async function POST(request) {
         email,
         phone,
         company: company || '',
+        renueva_plan_id: renueva || '',
       },
     });
     return NextResponse.json({ reference, mpConfigured: true, initPoint: preference.init_point });
