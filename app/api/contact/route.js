@@ -44,7 +44,14 @@ export async function POST(request) {
     try {
       const crmRes = await fetch(`${crmBaseUrl}/api/leads`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        // Mismo secreto compartido que ya usan las otras integraciones con el
+        // CRM (lib/crmSync.js). Se manda desde ahora para que el CRM pueda
+        // empezar a exigirlo en /api/leads sin cortar los leads del formulario.
+        headers: {
+          'Content-Type': 'application/json',
+          ...(process.env.SITE_TO_CRM_SECRET ? { 'x-site-secret': process.env.SITE_TO_CRM_SECRET } : {}),
+        },
+        signal: AbortSignal.timeout(10000),
         body: JSON.stringify({
           nombre: body.name,
           email: body.email,
