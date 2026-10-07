@@ -1,6 +1,7 @@
 import localFont from 'next/font/local';
 import AuthProvider from '@/components/aprende/AuthProvider';
 import TrackingScripts from '@/components/TrackingScripts';
+import AgenteVentas from '@/components/AgenteVentas';
 import './globals.css';
 
 /*
@@ -95,6 +96,7 @@ export default function RootLayout({ children }) {
       <body>
         <AuthProvider>{children}</AuthProvider>
         <TrackingScripts />
+        <AgenteVentas />
       </body>
     </html>
   );
