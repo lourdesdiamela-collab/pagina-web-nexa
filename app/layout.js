@@ -29,7 +29,26 @@ const plusJakartaSans = localFont({
   fallback: ['-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
 });
 
-export const dynamic = 'force-dynamic';
+/*
+ * ANTES acá había `export const dynamic = 'force-dynamic'`.
+ *
+ * Al estar en el layout RAÍZ, obligaba a TODO el sitio a renderizarse en el
+ * servidor en cada visita. Medido en producción, la respuesta venía con
+ * `cache-control: private, no-cache, no-store` y `x-vercel-cache: MISS`:
+ * ninguna página se guardaba en caché, ni siquiera /privacidad o /terminos,
+ * que no cambian nunca. El build lo confirmaba: 52 rutas dinámicas y 3
+ * estáticas.
+ *
+ * Lo que necesita datos frescos es el ecommerce (catálogo, carrito, checkout,
+ * cuenta, admin) y el portal, así que la directiva se movió ahí:
+ *   - app/aprende/layout.js  (cubre todo /aprende)
+ *   - app/portal/page.js
+ * Las rutas de API que ya la declaraban quedaron como estaban.
+ *
+ * Resultado del build después del cambio: 14 rutas estáticas y 41 dinámicas.
+ * La home, /servicios, /casos, /blog, /contacto y las legales ahora se
+ * prerenderizan y las sirve la CDN. El ecommerce sigue siendo dinámico.
+ */
 
 export const metadata = {
   title: 'NEXA | Marketing Digital, Redes Sociales y Publicidad con IA',
