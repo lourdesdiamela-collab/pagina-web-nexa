@@ -236,13 +236,20 @@ export default function HomePage() {
                   Iniciar Diagnóstico
                   <ArrowRight size={18} />
                 </motion.a>
+                {/*
+                  ANTES este botón era un ancla a "#servicios", una sección de
+                  esta misma página. El visitante que quería ver qué ofrece NEXA
+                  bajaba tres tarjetas y nunca llegaba a /servicios, que es donde
+                  están las 6 líneas completas con sus planes y precios.
+                  Ahora lleva a la página de servicios.
+                */}
                 <motion.a
-                  href="#servicios"
+                  href="/servicios"
                   className="btn-outline-dark"
                   whileHover={{ borderColor: 'rgba(184,155,255,0.6)', background: 'rgba(184,155,255,0.08)' }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Ver soluciones
+                  Ver servicios y precios
                 </motion.a>
               </motion.div>
 

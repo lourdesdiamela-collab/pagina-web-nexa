@@ -1,10 +1,48 @@
 'use client';
 import React from 'react';
+import { usePathname } from 'next/navigation';
+
+const WHATSAPP_NUMBER = '5491124527402';
+
+/*
+ * Mensaje inicial según la página desde la que se abre el chat.
+ *
+ * ANTES el botón abría un chat vacío: el visitante tenía que escribir desde
+ * cero y del otro lado llegaba un "hola" sin contexto, sin saber qué servicio
+ * estaba mirando. Ahora el mensaje viene redactado y dice de dónde salió, así
+ * que se puede responder con algo concreto desde el primer mensaje.
+ *
+ * El texto lo puede editar cualquiera acá, es texto común.
+ */
+const MENSAJES = {
+  '/servicios': 'Hola NEXA, estuve viendo los planes de servicios y quería hacer una consulta.',
+  '/casos': 'Hola NEXA, vi cómo trabajan y me gustaría saber más.',
+  '/blog': 'Hola NEXA, llegué desde una nota del blog y quería consultarles.',
+  '/contacto': 'Hola NEXA, quería hacerles una consulta.',
+  '/aprende': 'Hola NEXA, tengo una consulta sobre los recursos de NEXA Aprende.',
+};
+
+const MENSAJE_POR_DEFECTO =
+  'Hola NEXA, entré a la web y quería consultar por los servicios.';
+
+function mensajePara(pathname) {
+  if (!pathname) return MENSAJE_POR_DEFECTO;
+
+  // Coincidencia por prefijo: /blog/una-nota usa el mensaje de /blog.
+  const match = Object.keys(MENSAJES)
+    .filter((ruta) => pathname === ruta || pathname.startsWith(`${ruta}/`))
+    .sort((a, b) => b.length - a.length)[0];
+
+  return match ? MENSAJES[match] : MENSAJE_POR_DEFECTO;
+}
 
 export default function WhatsAppFloat() {
+  const pathname = usePathname();
+  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensajePara(pathname))}`;
+
   return (
     <a
-      href="https://wa.me/5491124527402"
+      href={href}
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float shadow-lg hover:scale-110 transition-transform duration-300"
