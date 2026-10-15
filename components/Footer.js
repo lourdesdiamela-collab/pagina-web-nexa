@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { RotateCcw } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
 const NAV_LINKS = [
@@ -13,16 +14,29 @@ const NAV_LINKS = [
 ];
 
 /*
- * Links legales obligatorios. El Botón de Arrepentimiento, además de estar
- * acá, tiene que estar visible en la primera pantalla del sitio: en Argentina
- * la Resolución 424/2020 de Secretaría de Comercio Interior exige que esté
- * "en un lugar destacado y de fácil visualización" de la home. Por eso vive
- * también en components/ArrepentimientoBanner.js, montado en el layout raíz.
+ * Links legales obligatorios.
+ *
+ * NOTA (octubre 2026): el comentario anterior decía que el Botón de
+ * Arrepentimiento vivía también en "components/ArrepentimientoBanner.js,
+ * montado en el layout raíz". Ese archivo NO EXISTE en el proyecto: o se
+ * borró en algún momento o nunca se creó. Se corrigió la nota para que no
+ * mande a buscar un componente inexistente.
+ *
+ * El botón estaba además en el menú principal (components/Navbar.js) y se
+ * sacó de ahí, porque en el menú de una agencia compite con los accesos
+ * comerciales. Ahora el pie es su único lugar, así que acá abajo tiene su
+ * propia franja destacada en vez de ser un link más entre los otros dos.
+ *
+ * La Resolución 424/2020 de Secretaría de Comercio Interior pide que el botón
+ * esté "en un lugar destacado y de fácil visualización". Un pie con franja
+ * propia es una interpretación razonable y es lo que hace buena parte del
+ * comercio electrónico argentino, pero conviene validarlo con asesoramiento
+ * legal. Si hiciera falta tenerlo visible sin scroll, la forma de hacerlo sin
+ * ensuciar el menú es una franja legal fina arriba del header.
  */
 const LEGAL_LINKS = [
   { href: '/terminos', label: 'Términos y Condiciones' },
   { href: '/privacidad', label: 'Política de Privacidad' },
-  { href: '/arrepentimiento', label: 'Botón de Arrepentimiento' },
 ];
 
 const SOCIALS = [
@@ -66,6 +80,49 @@ export default function Footer() {
               <Link key={link.href} href={link.href}>{link.label}</Link>
             ))}
           </nav>
+        </div>
+
+        {/*
+          Botón de Arrepentimiento con presencia propia. Al salir del menú
+          principal, este pasó a ser su único lugar en el sitio, así que va
+          destacado y con el encuadre legal explícito en vez de quedar como un
+          link suelto entre Términos y Privacidad.
+        */}
+        <div
+          style={{
+            marginTop: 16,
+            padding: '14px 18px',
+            borderRadius: 12,
+            border: '1px solid rgba(255,255,255,0.14)',
+            background: 'rgba(255,255,255,0.04)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+            flexWrap: 'wrap',
+          }}
+        >
+          <span style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.84rem', lineHeight: 1.5 }}>
+            ¿Compraste algo y querés dar marcha atrás? Tenés 10 días corridos
+            para arrepentirte, sin costo y sin tener que dar explicaciones.
+          </span>
+          <Link
+            href="/arrepentimiento"
+            style={{
+              flexShrink: 0,
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 8,
+              borderRadius: 999,
+              border: '1px solid rgba(255,255,255,0.28)',
+              padding: '9px 18px',
+              color: 'white',
+              fontWeight: 700,
+              fontSize: '0.84rem',
+            }}
+          >
+            <RotateCcw size={14} /> Botón de Arrepentimiento
+          </Link>
         </div>
 
         {/* Divider + Bottom */}

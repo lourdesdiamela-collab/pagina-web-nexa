@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, UserRound, Briefcase, X, RotateCcw } from 'lucide-react';
+import { Menu, UserRound, Briefcase, X } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
 const LINKS = [
@@ -77,14 +77,21 @@ export default function Navbar() {
           </div>
           <div className="nav-cta-group">
             {/*
-              Botón de Arrepentimiento en la primera pantalla: en Argentina la
-              Resolución 424/2020 exige que esté en un lugar destacado y de
-              fácil visualización, no escondido en el pie. Por eso va también
-              acá, visible sin hacer scroll.
+              El Botón de Arrepentimiento estaba acá, en el menú principal,
+              entre los accesos comerciales. Se movió al pie (ver
+              components/Footer.js, donde tiene su propia franja destacada)
+              porque en el menú de una agencia compite con Servicios y Portal
+              de Clientes y le da al sitio aire de tienda.
+
+              OJO si lo vas a tocar: la Resolución 424/2020 de Secretaría de
+              Comercio Interior pide que el botón esté "en un lugar destacado y
+              de fácil visualización". El pie con franja propia es una
+              interpretación razonable y es lo que hace buena parte del comercio
+              electrónico argentino, pero no es una certeza jurídica: conviene
+              validarlo con asesoramiento legal. Si hace falta volver a tenerlo
+              sin scroll, la opción es una franja legal fina arriba del header,
+              no reponerlo en este grupo de botones.
             */}
-            <Link href="/arrepentimiento" className="nav-arrepentimiento">
-              <RotateCcw size={13} /> Arrepentimiento
-            </Link>
             <Link href={accountHref} className="nav-portal">
               <UserRound size={14} /> {accountLabel}
             </Link>
@@ -128,9 +135,8 @@ export default function Navbar() {
                 </Link>
               );
             })}
-            <Link href="/arrepentimiento" className="mobile-menu-link">
-              Botón de Arrepentimiento
-            </Link>
+            {/* El Botón de Arrepentimiento se movió al pie. Ver el comentario
+                en el grupo de CTAs de escritorio, más arriba en este archivo. */}
             <div className="mobile-menu-divider" />
             <Link href={accountHref} className="mobile-menu-link mobile-menu-link-accent">
               <UserRound size={16} /> {accountLabel}
