@@ -1,6 +1,7 @@
 'use client';
 import React from 'react';
 import { usePathname } from 'next/navigation';
+import { obtenerOrigen, describirOrigen } from '@/lib/origen';
 
 const WHATSAPP_NUMBER = '5491124527402';
 
@@ -38,11 +39,42 @@ function mensajePara(pathname) {
 
 export default function WhatsAppFloat() {
   const pathname = usePathname();
+
+  /*
+   * El link se arma en el momento del clic, no al renderizar.
+   *
+   * Dos razones: el origen vive en sessionStorage, que no existe durante el
+   * prerenderizado en el servidor; y así se toma el origen más fresco sin
+   * tener que re-renderizar el botón.
+   */
+  function construirHref() {
+    let mensaje = mensajePara(pathname);
+
+    const origen = obtenerOrigen();
+    if (origen) {
+      const descripcion = describirOrigen(origen);
+      // Solo se agrega si dice algo útil: "Directo" no aporta nada al chat.
+      if (descripcion && descripcion !== 'Directo') {
+        mensaje += `\n\n(Vengo de: ${descripcion})`;
+      }
+    }
+
+    return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensaje)}`;
+  }
+
+  function handleClick(e) {
+    // Reescribe el destino justo antes de navegar, con el origen incluido.
+    e.currentTarget.href = construirHref();
+  }
+
+  // Valor inicial sin origen: es el que se prerenderiza y el que queda si el
+  // navegador bloquea sessionStorage. El clic lo completa si hay datos.
   const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(mensajePara(pathname))}`;
 
   return (
     <a
       href={href}
+      onClick={handleClick}
       target="_blank"
       rel="noopener noreferrer"
       className="whatsapp-float shadow-lg hover:scale-110 transition-transform duration-300"

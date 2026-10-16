@@ -11,6 +11,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import { MarketingBadges } from '@/components/ui/marketing-badges';
+import { capturarOrigen, obtenerOrigen } from '@/lib/origen';
 
 /* ─── Animation Variants ─── */
 const fadeUp = {
@@ -169,6 +170,8 @@ export default function HomePage() {
           company: formData.companyName,
           service: formData.service,
           challenge: `Objetivo: ${formData.goals}. Website: ${formData.website || 'No especificado'}.`,
+          // De qué campaña/anuncio viene esta consulta (ver lib/origen.js).
+          origen: obtenerOrigen(),
         }),
       });
       const payload = await response.json();

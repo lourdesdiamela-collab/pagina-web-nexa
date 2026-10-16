@@ -1,5 +1,6 @@
 import localFont from 'next/font/local';
 import AuthProvider from '@/components/aprende/AuthProvider';
+import OrigenTracker from '@/components/OrigenTracker';
 import './globals.css';
 
 /*
@@ -111,6 +112,9 @@ export default function RootLayout({ children }) {
         />
       </head>
       <body>
+        {/* Registra de qué campaña viene la visita. No renderiza nada.
+            Ver components/OrigenTracker.js y lib/origen.js. */}
+        <OrigenTracker />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

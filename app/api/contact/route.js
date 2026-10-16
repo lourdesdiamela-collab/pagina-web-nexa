@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { saveLead, markLeadSynced } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 import { sendMail } from '@/lib/mailer';
+import { enviarLeadAlCrm } from '@/lib/crmSync';
+import { describirOrigen } from '@/lib/origen';
 
 export async function POST(request) {
   try {
@@ -12,6 +14,11 @@ export async function POST(request) {
     if (missing.length > 0) {
       return NextResponse.json({ error: 'Faltan campos obligatorios.' }, { status: 400 });
     }
+
+    // De qué campaña/anuncio viene la consulta (herramienta #8 del plan de
+    // automatización). Lo manda el formulario del navegador, que lo capturó de
+    // los parámetros UTM de la URL. Si no hay nada, queda "Directo".
+    const origen = describirOrigen(body.origen);
 
     // 1. Guardar el lead en la base del sitio (tabla Lead, ver lib/crm.js).
     //    saveLead nunca lanza: si la base falla, loguea y devuelve el lead en
@@ -26,33 +33,35 @@ export async function POST(request) {
       source: 'formulario_contacto',
     });
 
-    // 2. Enviar el lead al CRM real centralizado vía API pública
-    const crmBaseUrl = process.env.NEXT_PUBLIC_CRM_URL || 'https://crm.nexagrowth.com.ar';
-    let crmSuccess = false;
-    try {
-      const crmRes = await fetch(`${crmBaseUrl}/api/leads`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          nombre: body.name,
-          email: body.email,
-          telefono: body.phone || 'No especificado',
-          empresa: body.company || 'No especificado',
-          mensaje: `[Servicio: ${body.service}] — ${body.challenge}`,
-        }),
-      });
-      if (crmRes.ok) {
-        crmSuccess = true;
-        // Queda registrado en la base del sitio que este lead ya viajó al CRM.
-        // Los que quedan en false son los que hay que pasar a mano.
-        await markLeadSynced(lead?.id);
-        console.log('Lead registrado exitosamente en el CRM centralizado.');
-      } else {
-        const crmErr = await crmRes.json().catch(() => ({}));
-        console.error('El CRM respondió con error:', crmErr);
-      }
-    } catch (crmFetchError) {
-      console.error('No se pudo conectar con el CRM central:', crmFetchError.message);
+    /*
+     * 2. Enviar el lead al CRM.
+     *
+     * ANTES acá había un `fetch` escrito a mano que NO mandaba el header
+     * `x-site-secret`. Venía de cuando /api/leads del CRM no verificaba nada.
+     * Cuando el CRM se cerró con verifySiteSecret, esta llamada empezó a
+     * recibir 401 (o 503 si el secreto no está cargado) y TODOS los leads del
+     * formulario quedaban sin sincronizar, en silencio.
+     *
+     * Ahora usa enviarLeadAlCrm de lib/crmSync.js, que es el mismo camino
+     * autenticado que ya usaban los pagos y el arrepentimiento.
+     */
+    const crmRes = await enviarLeadAlCrm({
+      nombre: body.name,
+      email: body.email,
+      telefono: body.phone,
+      empresa: body.company,
+      mensaje: `[Servicio: ${body.service}] — ${body.challenge ?? 'Sin detalle'}\n[Origen: ${origen}]`,
+    });
+
+    const crmSuccess = crmRes.ok;
+
+    if (crmSuccess) {
+      // Queda registrado en la base del sitio que este lead ya viajó al CRM.
+      // Los que quedan en false son los que hay que pasar a mano.
+      await markLeadSynced(lead?.id);
+      console.log('Lead registrado exitosamente en el CRM centralizado.');
+    } else {
+      console.error('El CRM no aceptó el lead:', crmRes.error);
     }
 
     // 3. Notificación interna por eventos
