@@ -1,19 +1,23 @@
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/db';
+import { permitidoPorIp } from '@/lib/seguridad';
 
 export async function POST(request) {
+  if (!permitidoPorIp(request, 'registro', { maximo: 10 })) {
+    return NextResponse.json({ error: 'Demasiados intentos. Probá de nuevo en unos minutos.' }, { status: 429 });
+  }
   try {
     const body = await request.json();
-    const name = String(body.name || '').trim();
-    const email = String(body.email || '').trim().toLowerCase();
+    const name = String(body.name || '').trim().slice(0, 120);
+    const email = String(body.email || '').trim().toLowerCase().slice(0, 200);
     const password = String(body.password || '');
 
     if (!name || !email || !password) {
       return NextResponse.json({ error: 'Faltan campos obligatorios.' }, { status: 400 });
     }
-    if (password.length < 6) {
-      return NextResponse.json({ error: 'La contraseña debe tener al menos 6 caracteres.' }, { status: 400 });
+    if (password.length < 8 || password.length > 200) {
+      return NextResponse.json({ error: 'La contraseña debe tener entre 8 y 200 caracteres.' }, { status: 400 });
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {

@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import { generarYCrearCaso } from '@/lib/arrepentimiento';
 import { sincronizarArrepentimiento } from '@/lib/crmSync';
 import { sendMail } from '@/lib/mailer';
+import { escapar, texto, EMAIL_VALIDO, permitidoPorIp } from '@/lib/seguridad';
 
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'hola@nexaarg.com';
 
@@ -13,13 +14,17 @@ function validar(body) {
   const identificacionCompra = String(body?.identificacionCompra || '').trim();
 
   if (!nombre) errores.push('nombre');
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errores.push('email válido');
+  if (!email || !EMAIL_VALIDO.test(email)) errores.push('email válido');
   if (!identificacionCompra) errores.push('identificación de la compra');
 
   return errores;
 }
 
 export async function POST(request) {
+  if (!permitidoPorIp(request, 'arrepentimiento', { maximo: 5 })) {
+    return NextResponse.json({ error: 'Recibimos muchos envíos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
+  }
+
   let body;
   try {
     body = await request.json();
@@ -33,12 +38,14 @@ export async function POST(request) {
   }
 
   const datos = {
-    nombre: String(body.nombre).trim(),
-    email: String(body.email).trim(),
-    telefono: String(body.telefono || '').trim() || null,
-    identificacionCompra: String(body.identificacionCompra).trim(),
-    motivo: String(body.motivo || '').trim() || null,
+    nombre: texto(body.nombre, 120),
+    email: texto(body.email, 200),
+    telefono: texto(body.telefono, 60) || null,
+    identificacionCompra: texto(body.identificacionCompra, 300),
+    motivo: texto(body.motivo, 2000) || null,
   };
+  // Versiones escapadas para meter en el HTML de los mails.
+  const e = Object.fromEntries(Object.entries(datos).map(([k, v]) => [k, escapar(v ?? '')]));
 
   let caso;
   try {
@@ -57,10 +64,10 @@ export async function POST(request) {
     fromName: 'NEXA',
     subject: `Recibimos tu solicitud de arrepentimiento — #${caso.numero}`,
     html: `
-      <p>Hola ${datos.nombre},</p>
+      <p>Hola ${e.nombre},</p>
       <p>Recibimos tu solicitud de arrepentimiento el ${fechaTexto} (hora Argentina). Tu número de trámite es <strong>${caso.numero}</strong> — guardalo para hacer cualquier consulta sobre el estado de tu pedido.</p>
-      <p><strong>Compra o contratación identificada:</strong> ${datos.identificacionCompra}</p>
-      ${datos.motivo ? `<p><strong>Motivo indicado:</strong> ${datos.motivo}</p>` : ''}
+      <p><strong>Compra o contratación identificada:</strong> ${e.identificacionCompra}</p>
+      ${e.motivo ? `<p><strong>Motivo indicado:</strong> ${e.motivo}</p>` : ''}
       <p>Vamos a procesar tu pedido y contactarte si necesitamos algún dato adicional.</p>
       <p>— El equipo de NEXA</p>
     `,
@@ -77,11 +84,11 @@ export async function POST(request) {
       <table cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
         <tr><td><strong>N° de trámite</strong></td><td>${caso.numero}</td></tr>
         <tr><td><strong>Fecha</strong></td><td>${fechaTexto}</td></tr>
-        <tr><td><strong>Nombre</strong></td><td>${datos.nombre}</td></tr>
-        <tr><td><strong>Email</strong></td><td>${datos.email}</td></tr>
-        <tr><td><strong>Teléfono</strong></td><td>${datos.telefono || '—'}</td></tr>
-        <tr><td><strong>Compra identificada</strong></td><td>${datos.identificacionCompra}</td></tr>
-        <tr><td><strong>Motivo</strong></td><td>${datos.motivo || '—'}</td></tr>
+        <tr><td><strong>Nombre</strong></td><td>${e.nombre}</td></tr>
+        <tr><td><strong>Email</strong></td><td>${e.email}</td></tr>
+        <tr><td><strong>Teléfono</strong></td><td>${e.telefono || '—'}</td></tr>
+        <tr><td><strong>Compra identificada</strong></td><td>${e.identificacionCompra}</td></tr>
+        <tr><td><strong>Motivo</strong></td><td>${e.motivo || '—'}</td></tr>
       </table>
       <p>El caso ya quedó registrado. Gestionalo desde el CRM (Solicitudes de arrepentimiento).</p>
     `,

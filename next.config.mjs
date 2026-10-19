@@ -1,6 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   distDir: 'dist',
+  // No anunciar con qué está hecho el sitio (header X-Powered-By).
+  poweredByHeader: false,
+  // Nunca publicar los mapas del código fuente en producción.
+  productionBrowserSourceMaps: false,
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
