@@ -5,13 +5,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import {
-  Target, BarChart3, Users, Layers, RefreshCw, ArrowRight,
+  Target, BarChart3, Layers, ArrowRight, Clock,
   CheckCircle2, MessageCircle, Plus, Info,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
-import { SERVICE_LINES, planPriceLabel } from '@/lib/servicePlans.mjs';
+import { SERVICE_LINES, SETUP_FEE, ADDONS, COMING_SOON, CONDITIONS, planPriceLabel, priceLabel } from '@/lib/servicePlans.mjs';
 import { waHref } from '@/lib/whatsapp';
 
 // Los links de WhatsApp pasan por /wa para registrar el origen (ver lib/whatsapp.js).
@@ -34,54 +34,8 @@ const scaleIn = {
   show: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] } },
 };
 
-/* ─── Data: catálogo detallado (orden = recorrido del cliente: estrategia → fundamentos → contenido → performance → retención → sistemas) ─── */
+/* ─── Data: catálogo (octubre 2026). Precios y alcances: lib/servicePlans.mjs ─── */
 const SERVICES = [
-  {
-    value: 'marketing_integral',
-    icon: BarChart3,
-    tag: 'Estrategia',
-    color: '#B89BFF',
-    accent: 'rgba(184,155,255,0.12)',
-    border: 'rgba(184,155,255,0.3)',
-    priceLineId: 'marketing',
-    priceFrom: '$149.900/mes',
-    title: 'Marketing & Estrategia',
-    summary: 'Un plan de marketing accionable, basado en el diagnóstico real de tu marca y tu mercado, para posicionarte y dominar tu nicho.',
-    includes: [
-      'Diagnóstico de marca, competencia y audiencia',
-      'Plan de marketing a 90 días con objetivos medibles',
-      'Definición de propuesta de valor y mensajes clave',
-      'Calendario de acciones por canal (orgánico + pago)',
-      'Reunión mensual de revisión de resultados',
-    ],
-    how: 'Analizamos tu situación actual, tu competencia y tu público objetivo. Con esa información diseñamos una hoja de ruta clara, con metas concretas por trimestre, que ejecutamos y ajustamos según los datos reales.',
-    outcome: 'Una estrategia clara y accionable, con foco en posicionamiento de marca y ventas medibles dentro de los primeros 90 días.',
-    idealFor: 'marcas en crecimiento sin dirección clara',
-    timeframe: 'Primeros entregables en 2-3 semanas',
-  },
-  {
-    value: 'orden_digital',
-    icon: Layers,
-    tag: 'Fundamentos',
-    color: '#FE8FD9',
-    accent: 'rgba(254,143,217,0.14)',
-    border: 'rgba(254,143,217,0.35)',
-    priceLineId: 'web',
-    priceFrom: '$99.000',
-    title: 'Orden Digital y Estructura',
-    summary: 'Auditoría, diseño y organización profunda de tu marca en todos los puntos de contacto digital.',
-    includes: [
-      'Auditoría completa de presencia digital (web, redes, Google Business)',
-      'Rediseño de identidad visual y manual de marca básico',
-      'Optimización de perfiles, biografías y enlaces',
-      'Estructuración de Google Business / Maps',
-      'Landing page nueva o mejora del sitio existente',
-    ],
-    how: 'Revisamos todo lo que un cliente ve de tu marca online, detectamos inconsistencias y lo unificamos bajo una imagen profesional y coherente en cada canal.',
-    outcome: 'Una marca percibida como más confiable y profesional, con mejor primera impresión y mayor conversión de visitas a consultas.',
-    idealFor: 'marcas con presencia digital desprolija o desactualizada',
-    timeframe: 'Diagnóstico y plan de orden en 1 semana',
-  },
   {
     value: 'redes_sociales',
     icon: InstaIcon,
@@ -90,96 +44,88 @@ const SERVICES = [
     accent: 'rgba(234,161,251,0.12)',
     border: 'rgba(234,161,251,0.3)',
     priceLineId: 'social',
-    priceFrom: '$119.900/mes',
-    title: 'Redes Sociales y Contenido',
-    summary: 'Gestión profesional y diseño premium de tu presencia digital en Instagram, TikTok y más, sin que pierdas calidad ni consistencia.',
+    title: 'NEXA Contenido',
+    summary: 'Tus redes ordenadas y constantes, con piezas diseñadas con tu marca y un calendario que aprobás antes de que se publique.',
     includes: [
-      'Calendario de contenido mensual (reels, posts, historias)',
-      'Diseño gráfico y edición de video profesional',
-      'Redacción de copys y guion de reels',
-      'Community management: respuesta a comentarios y DMs',
-      'Reporte mensual de alcance, interacciones y crecimiento',
+      'Calendario mensual aprobado en tu portal',
+      'Piezas y historias diseñadas con tus colores, tipografía y logo',
+      'Copys y hashtags listos para publicar',
+      'Reels editados con tu material (planes Crecimiento y Marca)',
+      'Informe mensual por escrito',
     ],
-    how: 'Definimos la línea editorial acorde a tu marca, producimos el contenido mes a mes y publicamos según calendario, optimizando el formato y el horario según lo que mejor performa.',
-    outcome: 'Presencia digital consistente, crecimiento sostenido de seguidores y engagement, y una marca percibida como más profesional.',
+    how: 'Con lo que cargás en el formulario de inicio armamos tu línea editorial. Cada mes te llega el calendario al portal; lo aprobás o pedís cambios, y producimos las piezas. Cada entrega pasa una revisión de calidad antes de llegarte.',
+    outcome: 'Presencia constante y profesional en tus redes, sin que tengas que pensar qué publicar cada semana.',
     idealFor: 'negocios que quieren delegar sus redes',
-    timeframe: 'Primer contenido publicado en la semana 1',
+    timeframe: 'Primer calendario a los 7 días hábiles del formulario completo',
   },
   {
     value: 'meta_ads',
-    icon: Target,
-    tag: 'Performance',
-    color: '#D2F23A',
-    accent: 'rgba(210,242,58,0.12)',
-    border: 'rgba(210,242,58,0.3)',
+    icon: BarChart3,
+    tag: 'Anuncios',
+    color: '#FE8FD9',
+    accent: 'rgba(254,143,217,0.14)',
+    border: 'rgba(254,143,217,0.35)',
     priceLineId: 'ads',
-    priceFrom: '$149.900/mes',
-    title: 'Campañas y Captación',
-    summary: 'Gestión avanzada de publicidad paga en Meta Ads y Google Ads, enfocada exclusivamente en retorno de inversión y escala.',
+    title: 'NEXA Anuncios',
+    summary: 'Campañas en Instagram y Facebook para conseguir consultas y ventas, con la inversión bajo control y todo explicado por escrito.',
     includes: [
-      'Configuración de cuentas, píxeles y conversiones',
-      'Segmentación de audiencias y armado de campañas',
-      'Diseño de creativos publicitarios (imagen y video)',
-      'Optimización semanal de presupuesto y pujas',
-      'Dashboard de resultados en tiempo real (leads, CPL, ROAS)',
+      'Configuración de píxel y eventos de conversión',
+      'Propuesta de campaña con públicos y anuncios, aprobada en tu portal',
+      'Anuncios nuevos todos los meses',
+      'Optimización semanal',
+      'Informe mensual por escrito',
     ],
-    how: 'Configuramos el tracking, lanzamos campañas de testeo, identificamos los anuncios y audiencias ganadoras y escalamos presupuesto hacia lo que mejor convierte.',
-    outcome: 'Leads y ventas medibles, con costo de adquisición controlado desde el primer mes de campaña.',
-    idealFor: 'negocios que buscan demanda constante y previsible',
-    timeframe: 'Campañas activas en 5-7 días hábiles',
+    how: 'Te proponemos la campaña según tu plan de 90 días. Cuando la aprobás, la lanzamos desde tu cuenta publicitaria, la optimizamos cada semana y te contamos por escrito qué funcionó y qué cambiamos.',
+    outcome: 'Consultas y ventas medibles, con un presupuesto que decidís vos. Los resultados dependen de tu mercado y tu oferta: no los garantizamos.',
+    idealFor: 'negocios que quieren demanda constante',
+    timeframe: 'Propuesta de campaña a los 7 días hábiles del formulario completo',
   },
   {
-    value: 'nexa_recover',
-    icon: RefreshCw,
-    tag: 'Premium Feature',
-    color: '#D2F23A',
-    accent: 'rgba(210,242,58,0.12)',
-    border: 'rgba(210,242,58,0.3)',
-    priceLineId: 'recover',
-    priceFrom: '$149.900/mes',
-    title: 'NEXA Recover',
-    summary: 'Estrategias de customer experience y reactivación de clientes inactivos, leads perdidos y ventas que quedaron en el camino.',
+    value: 'nexa_integral',
+    icon: Layers,
+    tag: 'Integral',
+    color: '#B89BFF',
+    accent: 'rgba(184,155,255,0.12)',
+    border: 'rgba(184,155,255,0.3)',
+    priceLineId: 'integral',
+    title: 'NEXA Integral',
+    summary: 'Contenido, anuncios y estrategia trabajando juntos: el mismo mensaje en tus redes y en tus campañas, con un solo informe.',
     includes: [
-      'Segmentación de tu base de datos (inactivos, leads fríos, ventas perdidas)',
-      'Secuencias automatizadas de reactivación por WhatsApp y Email',
-      'Ofertas y guiones de recontacto personalizados',
-      'Bots comerciales inteligentes de primer contacto',
-      'Reporte de oportunidades recuperadas',
+      'Todo NEXA Contenido y NEXA Anuncios en un solo abono',
+      'Calendario y campañas alineados al mismo plan',
+      'Un solo informe mensual',
+      'Ajuste trimestral del plan de 90 días',
+      'Ahorro frente a contratar los servicios por separado',
     ],
-    how: 'Analizamos tu base de datos existente, la segmentamos por potencial de recompra y activamos secuencias automáticas para reabrir la conversación comercial.',
-    outcome: 'Facturación adicional sin invertir en nueva pauta publicitaria, aprovechando contactos que ya conocen tu marca.',
-    idealFor: 'negocios con base de clientes o leads acumulada sin explotar',
-    timeframe: 'Primeras reactivaciones dentro de los 30 días',
+    how: 'Un mismo plan de 90 días ordena el contenido y las campañas. Lo que funciona en los anuncios alimenta el contenido, y al revés. Aprobás todo desde un solo portal.',
+    outcome: 'Una marca coherente en todos sus canales y un único lugar para ver qué se hizo y qué sigue.',
+    idealFor: 'negocios que quieren delegar todo su marketing digital',
+    timeframe: 'Plan y primeras entregas a los 7 días hábiles del formulario completo',
   },
   {
-    value: 'crm_seguimiento',
-    icon: Users,
-    tag: 'Tecnología',
+    value: 'orden_digital',
+    icon: Target,
+    tag: 'Proyecto',
     color: '#835CE6',
     accent: 'rgba(131,92,230,0.12)',
     border: 'rgba(131,92,230,0.3)',
-    priceLineId: 'crm',
-    priceFrom: '$149.900/mes',
-    title: 'CRM y Seguimiento',
-    summary: 'Sistemas inteligentes para organizar el seguimiento comercial, para que ningún lead se pierda entre chats y planillas.',
+    priceLineId: 'proyectos',
+    title: 'Diagnóstico y Orden Digital',
+    summary: 'Una auditoría completa de cómo se ve tu marca online, con un plan de 90 días y una lista de mejoras lista para aplicar. Pago único, sin abono.',
     includes: [
-      'Implementación de CRM (NEXA OS o el que ya uses)',
-      'Automatización de seguimiento por WhatsApp y Email',
-      'Embudos de venta configurados por etapa',
-      'Capacitación del equipo comercial',
-      'Alertas automáticas de leads sin seguimiento',
+      'Diagnóstico de marca, competencia y público',
+      'Plan de 90 días y propuesta de valor',
+      'Auditoría de tu web, Google Business y hasta 3 redes',
+      'Lista de mejoras ordenada por prioridad',
+      'Textos de perfiles y biografías corregidos',
     ],
-    how: 'Mapeamos tu proceso de ventas actual, lo digitalizamos en el CRM y automatizamos los recordatorios y mensajes para que ningún lead se enfríe por falta de respuesta.',
-    outcome: 'Mayor tasa de conversión de leads a clientes y visibilidad total del embudo comercial en un solo lugar.',
-    idealFor: 'equipos que hoy gestionan leads por WhatsApp o planillas',
-    timeframe: 'CRM operativo en 1-2 semanas',
+    how: 'Completás el formulario guiado y nos das acceso de lectura a tus perfiles. Revisamos todo lo que un cliente ve de tu marca y te entregamos el informe en tu portal.',
+    outcome: 'Saber exactamente qué arreglar primero y tener los textos listos para hacerlo.',
+    idealFor: 'marcas con presencia digital desordenada o desactualizada',
+    timeframe: 'Entrega en 10 días hábiles',
   },
 ];
 
-/* ─── Data: líneas de producto con precio fijo ───
-   Marketing & Estrategia y CRM y Seguimiento comparten estructura de precios
-   con las líneas más afines conceptualmente (Ads y Recover respectivamente),
-   con beneficios redactados para su propio alcance. ─── */
 /*
  * Los precios y los planes YA NO viven acá. Están en lib/servicePlans.mjs, que
  * es la única fuente: la misma que usa el servidor para saber cuánto cobrar.
@@ -198,38 +144,50 @@ const PRICING_LINES = SERVICE_LINES;
  */
 
 const STEPS = [
-  { num: '01', title: 'Diagnóstico Estratégico', desc: 'Analizamos el estado actual de tu marca, tu competencia y tus canales activos.', output: 'Entregable: informe con oportunidades priorizadas.' },
-  { num: '02', title: 'Diseño del Plan', desc: 'Trazamos la hoja de ruta, el servicio (o combinación) más adecuado y las metas por trimestre.', output: 'Entregable: plan de acción con cronograma y objetivos.' },
-  { num: '03', title: 'Ejecución y Despliegue', desc: 'Implementamos campañas, contenido, CRM o automatizaciones según el servicio contratado.', output: 'Entregable: canales y sistemas activos, funcionando.' },
-  { num: '04', title: 'Medición y Optimización', desc: 'Monitoreamos resultados día a día y ajustamos la estrategia con datos reales, no supuestos.', output: 'Entregable: reporte periódico de resultados.' },
+  { num: '01', title: 'Formulario guiado', desc: 'Nos contás tu marca una sola vez: colores, tipografía, logo, referencias y objetivos. Nadie te va a pedir lo mismo dos veces.', output: 'En lugar de una reunión de arranque.' },
+  { num: '02', title: 'Plan aprobado', desc: 'Te entregamos el diagnóstico y el plan de 90 días en tu portal. Lo aprobás o pedís cambios con un clic.', output: 'Entregable: plan de 90 días por escrito.' },
+  { num: '03', title: 'Entregas con revisión', desc: 'Calendarios, piezas y campañas pasan una revisión de calidad antes de llegarte. Nada se publica sin tu OK.', output: 'Entregable: piezas y campañas aprobadas.' },
+  { num: '04', title: 'Informe mensual', desc: 'Cada mes recibís por escrito qué se hizo, qué funcionó, qué sigue y qué necesitamos de vos.', output: 'Entregable: informe mensual en tu portal.' },
 ];
 
 const FAQS = [
   {
     q: '¿Cómo arranco a trabajar con NEXA?',
-    a: 'Elegís el plan que más se ajusta a lo que necesitás y pagás directo con Mercado Pago o transferencia bancaria. Si todavía tenés dudas, también podés pedir un diagnóstico gratis sin compromiso antes de pagar, o escribirnos por WhatsApp.',
+    a: 'Elegís el plan y pagás con Mercado Pago o transferencia. Te llega por mail el formulario guiado para cargar tu marca; con eso arrancamos y en 7 días hábiles tenés tu plan de 90 días en el portal.',
   },
   {
-    q: '¿Necesito agendar una llamada antes de contratar?',
-    a: 'No es un requisito. Toda la información de qué incluye cada servicio, cómo trabajamos y qué resultado podés esperar está en esta página. Si con eso te alcanza, podés avanzar directo desde el formulario.',
+    q: '¿Hacen reuniones?',
+    a: 'No hacemos reuniones periódicas. Todo queda por escrito en tu portal: aprobás cada entrega, seguís el avance y recibís un informe mensual. Si en algún momento querés hablar, podés sumar una sesión estratégica por videollamada de 45 minutos.',
   },
   {
-    q: '¿Cómo se define la inversión de cada servicio?',
-    a: 'Los seis servicios tienen planes con precio fijo y público, sin cotizaciones a medida: los ves completos en la sección "Planes y precios" de esta página, cada uno con 3 niveles (Start, Growth y Scale) según el alcance que necesites.',
+    q: '¿Qué es la Puesta en marcha?',
+    a: `Es el trabajo inicial de cualquier abono: diagnóstico, plan de 90 días, guía visual básica y alta en tu portal. Se paga una sola vez (${priceLabel(SETUP_FEE.amount)}) junto con el primer mes. Desde el segundo mes pagás solo el abono.`,
   },
   {
-    q: '¿Los planes son mensuales?',
-    a: 'NEXA Recover, NEXA Social y NEXA Ads se facturan mensualmente, mes a mes. NEXA Web es distinto: es un pago único, pagás una vez y el sitio queda terminado y es tuyo.',
+    q: '¿La publicidad está incluida?',
+    a: 'No. Nuestros precios son honorarios de gestión. La inversión en publicidad la pagás vos directo a Meta, con tu tarjeta, y decidís cuánto invertir.',
+  },
+  {
+    q: '¿Hay permanencia mínima?',
+    a: 'Sí, 3 meses en los abonos: es el tiempo mínimo para que el plan de 90 días dé resultados. Después seguís mes a mes y podés darlo de baja con 15 días de aviso.',
   },
   {
     q: '¿Qué medios de pago aceptan?',
-    a: 'Aceptamos tarjeta de crédito y débito a través de Mercado Pago, y transferencia bancaria. Pagando por transferencia tenés un 10% de descuento automático en cualquier plan. En los planes mensuales, el primer pago corresponde al mes 1; la renovación de los meses siguientes se coordina directamente con vos.',
+    a: 'Tarjeta de crédito o débito por Mercado Pago, y transferencia bancaria con 10% de descuento. Antes de cada vencimiento te mandamos el link de pago por mail.',
   },
   {
-    q: '¿Puedo combinar más de un servicio?',
-    a: 'Sí. Muchos clientes combinan Social + Ads + Recover para cubrir todo el embudo. Podés arrancar por el que más te urge ahora y sumar otros más adelante.',
+    q: '¿Cuánto tardan en responder?',
+    a: 'Respondemos consultas en 1 día hábil y aplicamos cambios en 2 días hábiles. Cada pieza y cada calendario incluyen 1 ronda de cambios.',
   },
 ];
+
+/* "Desde $199.900/mes": el plan más barato de la línea, leído de servicePlans. */
+function precioDesde(lineId) {
+  const line = SERVICE_LINES.find((l) => l.id === lineId);
+  if (!line) return '';
+  const min = line.tiers.reduce((a, b) => (b.amount < a.amount ? b : a));
+  return `${planPriceLabel(min)}${line.billingType === 'mensual' ? '/mes' : ''}`;
+}
 
 const SERVICE_TO_LINE = SERVICES.reduce((acc, s) => {
   acc[s.value] = s.priceLineId;
@@ -270,7 +228,7 @@ function ServiciosContent() {
             <motion.span variants={fadeUp} className="section-tag">Áreas de expertise</motion.span>
             <motion.h1 variants={fadeUp} className="section-title">Qué hacemos por tu <span className="text-gradient">negocio.</span></motion.h1>
             <motion.p variants={fadeUp} className="section-subtitle" style={{ margin: '0 auto 28px' }}>
-              Seis soluciones pensadas para posicionar tu marca, ordenar el seguimiento comercial y facturar más — con el detalle necesario para que decidas sin necesitar una llamada previa.
+              Contenido, anuncios y estrategia con alcance claro, precio público y todo el seguimiento por escrito en tu portal. Sin reuniones que coordinar.
             </motion.p>
             {/* Se eliminaron los chips de "confianza" (+20 marcas asesoradas,
                 3x ROI promedio, +6 años de experiencia): datos inventados. */}
@@ -346,7 +304,7 @@ function ServiciosContent() {
                     <div className="svc-footer">
                       <div className="svc-price">
                         <span className="svc-price-label">Desde</span>
-                        <span className="svc-price-value" style={{ color: s.color }}>{s.priceFrom}</span>
+                        <span className="svc-price-value" style={{ color: s.color }}>{precioDesde(s.priceLineId)}</span>
                       </div>
                       <div className="svc-cta-row">
                         <button type="button" onClick={() => goToPlans(s.priceLineId)} className="btn btn-lima btn-sm">
@@ -364,10 +322,10 @@ function ServiciosContent() {
 
             <motion.div className="pricing-note" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
               <div>
-                <h4>Los 6 servicios tienen precio fijo y público</h4>
-                <p>Sin cotizaciones a medida: mirá los planes completos de cada servicio más abajo, con 3 niveles para elegir según el alcance que necesites.</p>
+                <h4>Precios públicos y alcances cerrados</h4>
+                <p>Cada plan dice qué incluye y qué no. Los abonos arrancan con la Puesta en marcha ({priceLabel(SETUP_FEE.amount)}, única vez).</p>
               </div>
-              <button type="button" onClick={() => goToPlans('marketing')} className="btn btn-primary btn-sm">
+              <button type="button" onClick={() => goToPlans('social')} className="btn btn-primary btn-sm">
                 Ver planes y precios <ArrowRight size={15} />
               </button>
             </motion.div>
@@ -381,7 +339,7 @@ function ServiciosContent() {
               <motion.span variants={fadeUp} className="section-tag">Precios transparentes</motion.span>
               <motion.h2 variants={fadeUp} className="section-title">Planes y precios</motion.h2>
               <motion.p variants={fadeUp} className="section-subtitle" style={{ margin: '0 auto' }}>
-                Elegí la línea de producto y el plan que más se ajuste a tu etapa. Sin letra chica.
+                Elegí el servicio y el plan que más se ajuste a tu etapa. Cada plan dice qué incluye y qué no.
               </motion.p>
             </motion.div>
 
@@ -417,9 +375,11 @@ function ServiciosContent() {
                   <p className="pricing-fees-notice">
                     <Info size={15} />
                     <span>
-                      Los precios son <strong>honorarios de gestión</strong>: cubren nuestro trabajo.
-                      La <strong>inversión publicitaria en Meta y Google va aparte</strong> y la pagás vos,
-                      directamente a cada plataforma.
+                      Los precios son <strong>honorarios de gestión</strong> y no incluyen IVA.
+                      La <strong>inversión en publicidad va aparte</strong> y la pagás vos, directo a Meta.
+                      {line.billingType === 'mensual' && (
+                        <> El primer mes suma la <strong>Puesta en marcha ({priceLabel(SETUP_FEE.amount)}, única vez)</strong>.</>
+                      )}
                     </span>
                   </p>
 
@@ -450,6 +410,11 @@ function ServiciosContent() {
                             {priceText}
                             <span>{tier.suffix === 'pago único' ? 'pago único' : tier.suffix}</span>
                           </div>
+                          {tier.separateAmount && (
+                            <div className="pricing-card-includes" style={{ color: line.color }}>
+                              Por separado: {priceLabel(tier.separateAmount)}/mes. Ahorrás {priceLabel(tier.separateAmount - tier.amount)}.
+                            </div>
+                          )}
                           {tier.includesPrevious && (
                             <div className="pricing-card-includes" style={{ color: line.color }}>Todo lo de {tier.includesPrevious}, más:</div>
                           )}
@@ -469,7 +434,7 @@ function ServiciosContent() {
                               <MessageCircle size={14} /> WhatsApp
                             </a>
                             <Link href={`/contacto?servicio=${line.slug}&plan=${encodeURIComponent(`${tier.name} — ${lineTitle} (${planPriceText})`)}`} style={{ textAlign: 'center', fontSize: '0.76rem', color: 'var(--text-muted)' }}>
-                              ¿Dudas? Pedí tu diagnóstico gratis
+                              ¿Dudas? Escribinos
                             </Link>
                           </div>
                         </div>
@@ -477,11 +442,79 @@ function ServiciosContent() {
                     })}
                   </div>
 
+                  {line.notIncludedLine && <p className="pricing-footnote">{line.notIncludedLine}</p>}
                   {line.footnote && <p className="pricing-footnote">{line.footnote}</p>}
                 </motion.div>
               );
             })()}
           </div>
+        </section>
+
+        {/* ══════ PUESTA EN MARCHA · ADICIONALES · CONDICIONES · PRÓXIMAMENTE ══════ */}
+        <section style={{ padding: 'clamp(56px, 7vw, 88px) 0' }}>
+          <div className="container" style={{ maxWidth: 1080 }}>
+            <div className="svc-extra-grid">
+              <div className="svc-extra-card">
+                <span className="svc-extra-tag">Única vez · {priceLabel(SETUP_FEE.amount)}</span>
+                <h3>{SETUP_FEE.name}</h3>
+                <p className="svc-extra-sub">El arranque de cualquier abono. Se paga junto con el primer mes.</p>
+                <ul className="svc-includes">
+                  {SETUP_FEE.features.map((f) => (
+                    <li key={f}><CheckCircle2 size={15} style={{ color: '#835CE6' }} /><span>{f}</span></li>
+                  ))}
+                </ul>
+                <p className="svc-extra-note">{SETUP_FEE.note}</p>
+              </div>
+
+              <div className="svc-extra-card">
+                <span className="svc-extra-tag">Se suman a cualquier plan</span>
+                <h3>Adicionales</h3>
+                <ul className="svc-extra-list">
+                  {ADDONS.map((a) => (
+                    <li key={a.name}><span>{a.name}</span><strong>{priceLabel(a.amount)}{a.suffix || ''}</strong></li>
+                  ))}
+                </ul>
+                <a href={waHref('servicios_adicionales', 'Hola NEXA! Quiero sumar un adicional a mi plan.')} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ marginTop: 14 }}>
+                  <MessageCircle size={15} /> Pedir un adicional
+                </a>
+              </div>
+
+              <div className="svc-extra-card">
+                <span className="svc-extra-tag">Para todos los servicios</span>
+                <h3>Cómo trabajamos</h3>
+                <ul className="svc-includes">
+                  {CONDITIONS.map((c) => (
+                    <li key={c}><Clock size={15} style={{ color: '#835CE6' }} /><span>{c}</span></li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="svc-extra-card">
+                <span className="svc-extra-tag">Próximamente</span>
+                <h3>En desarrollo</h3>
+                <p className="svc-extra-sub">Todavía no los vendemos. Si te interesan, avisanos y te escribimos cuando estén listos.</p>
+                <ul className="svc-extra-list">
+                  {COMING_SOON.map((c) => (
+                    <li key={c.id}><span><strong>{c.name}</strong> — {c.desc}</span></li>
+                  ))}
+                </ul>
+                <Link href="/contacto?servicio=proximamente" className="btn btn-primary btn-sm" style={{ marginTop: 14 }}>
+                  Quiero que me avisen <ArrowRight size={15} />
+                </Link>
+              </div>
+            </div>
+          </div>
+          <style jsx>{`
+            .svc-extra-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+            .svc-extra-card { background: #fff; border: 1px solid rgba(13,14,21,0.08); border-radius: 22px; padding: 26px; display: flex; flex-direction: column; gap: 10px; }
+            .svc-extra-card h3 { font-size: 1.25rem; font-weight: 800; margin: 0; }
+            .svc-extra-tag { align-self: flex-start; font-size: 0.72rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: #835CE6; background: rgba(131,92,230,0.1); border-radius: 100px; padding: 5px 12px; }
+            .svc-extra-sub, .svc-extra-note { font-size: 0.86rem; color: var(--text-muted); margin: 0; }
+            .svc-extra-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.88rem; }
+            .svc-extra-list li { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed rgba(13,14,21,0.08); padding-bottom: 8px; }
+            .svc-extra-list strong { white-space: nowrap; }
+            @media (max-width: 760px) { .svc-extra-grid { grid-template-columns: 1fr; } }
+          `}</style>
         </section>
 
         {/* Se eliminó la sección de testimonios ("Lo que dicen nuestros
@@ -558,7 +591,7 @@ function ServiciosContent() {
           <motion.div className="container" style={{ textAlign: 'center' }} initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <h2 className="section-title text-white" style={{ marginBottom: 12 }}>¿Listo para avanzar?</h2>
             <p className="section-subtitle text-white-50" style={{ margin: '0 auto 32px' }}>
-              Elegí un servicio, completá el formulario o escribinos directo. Sin compromiso, respuesta en menos de 24 horas.
+              Elegí un plan o escribinos. Respondemos en 1 día hábil.
             </p>
             <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
               <Link href="/contacto" className="btn btn-lima" style={{ fontSize: '1rem' }}>
