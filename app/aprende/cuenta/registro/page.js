@@ -68,7 +68,7 @@ function RegisterForm() {
             </div>
             <div className="aprende-field">
               <label htmlFor="password">Contraseña</label>
-              <input id="password" type="password" required minLength={6} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+              <input id="password" type="password" required minLength={8} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
             </div>
             <button type="submit" className="btn btn-primary" style={{ justifyContent: 'center' }} disabled={loading}>
               <UserPlus size={16} /> {loading ? 'Creando cuenta…' : 'Crear cuenta'}
