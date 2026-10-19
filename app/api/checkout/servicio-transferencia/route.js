@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { checkoutTotal } from '@/lib/servicePlans.mjs';
 import { applyTransferDiscount } from '@/lib/pricing';
 import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails, renewalPlanId } from '@/lib/serviceCheckout';
 import { saveLead } from '@/lib/crm';
@@ -29,12 +30,13 @@ export async function POST(request) {
   }
 
   const { name, email, phone, company } = contacto;
-  const discountedTotal = applyTransferDiscount(plan.amount);
   const reference = generateServiceReference();
   // Renovación pedida desde el link de un mail de cobranza. La transferencia
   // no se puede verificar sola, así que acá solo queda anotado: cuando Lu ve
   // el ingreso, aprieta "Marcar renovado" en el CRM.
   const renueva = renewalPlanId(body);
+  // Primer mes de un abono = abono + Puesta en marcha; renovación = solo el abono.
+  const discountedTotal = applyTransferDiscount(checkoutTotal(plan, { renueva: Boolean(renueva) }));
 
   try {
     await saveLead({
