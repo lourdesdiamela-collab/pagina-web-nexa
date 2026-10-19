@@ -23,7 +23,7 @@ function ContactFormSection() {
   const [status, setStatus] = useState(null);
 
   // Prefill del servicio y el plan elegido cuando llega desde un CTA de /servicios
-  // (?servicio=slug&plan=Growth%20—%20NEXA%20Social%20($219.900/mes))
+  // (?servicio=slug&plan=Crecimiento%20—%20NEXA%20Contenido%20($359.900/mes))
   useEffect(() => {
     const servicio = searchParams.get('servicio');
     const plan = searchParams.get('plan');
@@ -140,13 +140,12 @@ function ContactFormSection() {
                     <label htmlFor="contacto-service">Servicio de interés *</label>
                     <select id="contacto-service" value={formData.service} onChange={e => setFormData({...formData, service: e.target.value})} required disabled={loading}>
                       <option value="" disabled>Seleccioná una opción...</option>
-                      <option value="nexa_web">NEXA Web (sitio web)</option>
-                      <option value="marketing_integral">Marketing & Estrategia Integral</option>
-                      <option value="redes_sociales">Redes Sociales y Contenido (NEXA Social)</option>
-                      <option value="meta_ads">Campañas Meta / Google Ads (NEXA Ads)</option>
-                      <option value="crm_seguimiento">CRM y Seguimiento Comercial</option>
-                      <option value="orden_digital">Orden Digital y Estructura de Marca</option>
-                      <option value="nexa_recover">NEXA Recover</option>
+                      <option value="redes_sociales">NEXA Contenido (redes sociales)</option>
+                      <option value="meta_ads">NEXA Anuncios (Meta Ads)</option>
+                      <option value="nexa_integral">NEXA Integral (contenido + anuncios)</option>
+                      <option value="orden_digital">Diagnóstico y Orden Digital</option>
+                      <option value="proximamente">Próximamente: Recover, CRM, Google Ads o Web</option>
+                      <option value="otro">Otra consulta</option>
                     </select>
                   </div>
                   <div className="form-field">
