@@ -83,6 +83,8 @@ export async function POST(request) {
           planId: payment.metadata.plan_id,
           planLabel: payment.metadata.plan_label,
           monto: payment.transaction_amount,
+          // Abono mensual sin la Puesta en marcha: es lo que se renueva cada mes.
+          montoMensual: Number(payment.metadata.monto_mensual) || null,
           nombre: payment.metadata.name,
           email: payment.metadata.email,
           telefono: payment.metadata.phone,

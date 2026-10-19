@@ -8,7 +8,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import TransferReservationTimer from '@/components/aprende/TransferReservationTimer';
 import { formatPrice } from '@/lib/products.mjs';
-import { getServicePlan } from '@/lib/servicePlans.mjs';
+import { getServicePlan, checkoutTotal, SETUP_FEE } from '@/lib/servicePlans.mjs';
 import { waHref } from '@/lib/whatsapp';
 
 // Los links de WhatsApp pasan por /wa para registrar el origen (ver lib/whatsapp.js).
@@ -59,7 +59,7 @@ function ServicioCheckoutContent() {
 
   const servicio = plan?.lineSlug || '';
   const planLabel = plan?.planLabel || '';
-  const amount = plan?.amount || 0;
+  const monthly = plan?.amount || 0;
   const billing = plan?.billing === 'unico' ? 'unico' : 'mensual';
 
   /*
@@ -72,9 +72,13 @@ function ServicioCheckoutContent() {
   const renueva = /^[a-z0-9]{20,40}$/i.test(renuevaParam) ? renuevaParam : '';
   const emailParam = (searchParams.get('email') || '').trim().slice(0, 200);
 
+  // Primer mes de un abono = abono + Puesta en marcha; renovación o pago único = solo el plan.
+  const setupFee = plan && !renueva ? plan.setupFee || 0 : 0;
+  const amount = checkoutTotal(plan, { renueva: Boolean(renueva) });
+
   const billingText = billing === 'unico'
     ? 'Pago único'
-    : renueva ? 'Renovación — próximo mes (plan mensual)' : 'Primer pago — mes 1 (plan mensual)';
+    : renueva ? 'Renovación — próximo mes del abono' : 'Primer mes del abono + Puesta en marcha (única vez)';
   const estimatedTransferTotal = Math.round(amount * 0.9);
 
   const [form, setForm] = useState({ name: '', email: emailParam, phone: '', company: '' });
@@ -223,9 +227,15 @@ function ServicioCheckoutContent() {
             <div className="aprende-checkout-summary">
               <h3>Resumen de tu pedido</h3>
               <div className="aprende-cart-summary-row">
-                <span>{planLabel}</span>
-                <span>{formatPrice(amount)}</span>
+                <span>{planLabel}{billing === 'mensual' ? ' — mes 1' : ''}</span>
+                <span>{formatPrice(monthly)}</span>
               </div>
+              {setupFee > 0 && (
+                <div className="aprende-cart-summary-row">
+                  <span>{SETUP_FEE.name} (única vez)</span>
+                  <span>{formatPrice(setupFee)}</span>
+                </div>
+              )}
               <div className="aprende-cart-summary-total">
                 <span>Total</span>
                 <span>{formatPrice(amount)}</span>
@@ -235,7 +245,7 @@ function ServicioCheckoutContent() {
                 <p className="aprende-cart-hint">
                   {renueva
                     ? 'Este pago renueva tu plan por un mes más. Pagando con Mercado Pago la renovación se registra sola apenas se acredita.'
-                    : 'Este pago corresponde al primer mes. La renovación de los meses siguientes la coordinamos directamente con vos.'}
+                    : `Desde el segundo mes pagás solo el abono (${formatPrice(monthly)}). Te mandamos el link de pago por mail antes de cada vencimiento. Permanencia mínima: 3 meses.`}
                 </p>
               )}
 
@@ -243,8 +253,8 @@ function ServicioCheckoutContent() {
                 <Info size={15} />
                 <span>
                   Este importe son <strong>honorarios de gestión</strong>: cubren nuestro trabajo.
-                  La <strong>inversión publicitaria en Meta y Google va aparte</strong> y la pagás vos,
-                  directamente a cada plataforma.
+                  La <strong>inversión en publicidad va aparte</strong> y la pagás vos,
+                  directo a Meta.
                 </span>
               </div>
 
