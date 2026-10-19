@@ -3,15 +3,32 @@ import { saveLead, markLeadSynced } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 import { sendMail } from '@/lib/mailer';
 import { COOKIE_LAST, COOKIE_FIRST, readAttributionCookie, describeAttribution } from '@/lib/attribution';
+import { escapar, texto, EMAIL_VALIDO, permitidoPorIp } from '@/lib/seguridad';
 
 export async function POST(request) {
   try {
-    const body = await request.json();
+    if (!permitidoPorIp(request, 'contacto', { maximo: 5 })) {
+      return NextResponse.json({ error: 'Recibimos muchos envíos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
+    }
+
+    const crudo = await request.json();
+    // Campos recortados: nadie puede mandar textos gigantes.
+    const body = {
+      name: texto(crudo?.name, 120),
+      email: texto(crudo?.email, 200),
+      company: texto(crudo?.company, 160),
+      phone: texto(crudo?.phone, 60),
+      service: texto(crudo?.service, 160),
+      challenge: texto(crudo?.challenge, 3000),
+    };
     const required = ['name', 'email', 'phone', 'service'];
     const missing = required.filter((field) => !String(body[field] || '').trim());
 
     if (missing.length > 0) {
       return NextResponse.json({ error: 'Faltan campos obligatorios.' }, { status: 400 });
+    }
+    if (!EMAIL_VALIDO.test(body.email)) {
+      return NextResponse.json({ error: 'Email inválido.' }, { status: 400 });
     }
 
     // Campaña de origen (herramienta #8): sale de las cookies que guarda
@@ -92,6 +109,9 @@ export async function POST(request) {
       console.error('Error en notifyEvent:', notifyErr);
     }
 
+    // Versiones escapadas para meter en el HTML de los mails.
+    const e = Object.fromEntries(Object.entries(body).map(([k, v]) => [k, escapar(v)]));
+
     // 4. Envío de correos (sendMail nunca tira: si GMAIL_USER/GMAIL_APP_PASSWORD
     //    no están configuradas, loguea y sigue — ver lib/mailer.js).
 
@@ -103,12 +123,12 @@ export async function POST(request) {
       html: `
         <h2>Nueva consulta desde la web</h2>
         <table cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
-          <tr><td><strong>Nombre</strong></td><td>${body.name}</td></tr>
-          <tr><td><strong>Empresa</strong></td><td>${body.company || 'No especificado'}</td></tr>
-          <tr><td><strong>Email</strong></td><td>${body.email}</td></tr>
-          <tr><td><strong>Teléfono</strong></td><td>${body.phone || '—'}</td></tr>
-          <tr><td><strong>Servicio</strong></td><td>${body.service}</td></tr>
-          <tr><td><strong>Detalles del diagnóstico</strong></td><td>${body.challenge || '—'}</td></tr>
+          <tr><td><strong>Nombre</strong></td><td>${e.name}</td></tr>
+          <tr><td><strong>Empresa</strong></td><td>${e.company || 'No especificado'}</td></tr>
+          <tr><td><strong>Email</strong></td><td>${e.email}</td></tr>
+          <tr><td><strong>Teléfono</strong></td><td>${e.phone || '—'}</td></tr>
+          <tr><td><strong>Servicio</strong></td><td>${e.service}</td></tr>
+          <tr><td><strong>Detalles del diagnóstico</strong></td><td>${e.challenge || '—'}</td></tr>
           <tr><td><strong>Estado de Sincronización CRM</strong></td><td>${crmSuccess ? 'Exitosa (leads)' : 'Fallida / Pendiente de carga manual'}</td></tr>
         </table>
       `,
@@ -120,10 +140,10 @@ export async function POST(request) {
       fromName: 'NEXA',
       subject: '¡Recibimos tu solicitud de diagnóstico! — NEXA',
       html: `
-        <p>Hola ${body.name},</p>
+        <p>Hola ${e.name},</p>
         <p>Gracias por ponerte en contacto con NEXA. Recibimos tus datos para la solicitud de diagnóstico técnico.</p>
         <p>
-          <strong>Servicio seleccionado:</strong> ${body.service}${body.company ? `<br/><strong>Negocio:</strong> ${body.company}` : ''}
+          <strong>Servicio seleccionado:</strong> ${e.service}${body.company ? `<br/><strong>Negocio:</strong> ${e.company}` : ''}
         </p>
         <p>Un consultor de nuestro equipo analizará la información y se contactará con vos para coordinar el paso siguiente.</p>
         <p>— El equipo de NEXA</p>
