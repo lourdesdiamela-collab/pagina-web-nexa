@@ -35,34 +35,34 @@ const scaleIn = {
 /* ─── Data ─── */
 const SERVICES = [
   {
-    icon: Cpu,
-    title: 'Seguimiento de Clientes con IA',
-    desc: 'Ordenamos tus contactos y leads en un sistema simple, con asistentes de Inteligencia Artificial que responden y hacen seguimiento para que ninguna venta se enfríe.',
-    tag: 'CRM',
-    tagColor: '#6D4AD6',
-    accent: 'rgba(184,155,255,0.12)',
-    border: 'rgba(184,155,255,0.25)',
-    slug: 'crm_seguimiento',
+    icon: Database,
+    title: 'Contenido para tus redes',
+    desc: 'Calendario, piezas e historias con tu marca, que aprobás desde tu portal antes de que se publiquen. Informe mensual por escrito.',
+    tag: 'Contenido',
+    tagColor: '#835CE6',
+    accent: 'rgba(234,161,251,0.08)',
+    border: 'rgba(234,161,251,0.2)',
+    slug: 'redes_sociales',
   },
   {
     icon: TrendingUp,
-    title: 'Publicidad que Convierte',
-    desc: 'Creamos y optimizamos campañas de Instagram, Facebook y Google Ads enfocadas en un solo objetivo: traerte clientes reales, no solo clics.',
-    tag: 'Performance',
+    title: 'Anuncios que traen consultas',
+    desc: 'Campañas en Instagram y Facebook con la inversión bajo control, optimización semanal y todo explicado por escrito.',
+    tag: 'Anuncios',
     tagColor: '#C026D3',
     accent: 'rgba(210,242,58,0.08)',
     border: 'rgba(210,242,58,0.2)',
     slug: 'meta_ads',
   },
   {
-    icon: Database,
-    title: 'Automatización de Marketing',
-    desc: 'Ponemos tu marketing en piloto automático: reportes, mensajes de seguimiento y tareas repetitivas resueltos solos, para que tu equipo se enfoque en vender.',
-    tag: 'Eficiencia',
-    tagColor: '#835CE6',
-    accent: 'rgba(234,161,251,0.08)',
-    border: 'rgba(234,161,251,0.2)',
-    slug: 'nexa_recover',
+    icon: Cpu,
+    title: 'Todo junto, un solo informe',
+    desc: 'NEXA Integral une contenido, anuncios y estrategia con el mismo mensaje, un mismo plan y un solo informe mensual.',
+    tag: 'Integral',
+    tagColor: '#6D4AD6',
+    accent: 'rgba(184,155,255,0.12)',
+    border: 'rgba(184,155,255,0.25)',
+    slug: 'nexa_integral',
   },
 ];
 
@@ -87,25 +87,25 @@ const CHANNEL_FEATURES = [
   'Estrategia multicanal integrada',
   'Contenido y campañas optimizados con Inteligencia Artificial',
   'Optimización continua basada en datos reales',
-  'Reportes semanales 100% transparentes',
+  'Informe mensual por escrito en tu portal',
 ];
 
 const FAQS = [
   {
     question: '¿Qué diferencia a NEXA de una agencia de marketing tradicional?',
-    answer: 'Sí, somos una agencia de marketing — pero no nos quedamos en lo estético. Sumamos Inteligencia Artificial a la gestión de redes, la publicidad y el seguimiento de tus clientes, para que cada campaña se traduzca en ventas medibles y no solo en likes.',
+    answer: 'Sí, somos una agencia de marketing — pero no nos quedamos en lo estético. No hacemos reuniones que coordinar: todo queda por escrito en tu portal. Aprobás cada entrega, seguís el avance y recibís un informe mensual con qué se hizo, qué funcionó y qué sigue.',
   },
   {
     question: '¿Cómo funciona la integración con nuestro negocio?',
-    answer: 'Arrancamos con un diagnóstico de tu marca, tus redes y tu forma actual de conseguir clientes. Con eso armamos el plan de marketing, las campañas y el sistema de seguimiento comercial que necesitás, y capacitamos a tu equipo para usarlo. Todo queda centralizado en un solo lugar.',
+    answer: 'Después del pago te llega un formulario guiado para contarnos tu marca: colores, tipografía, logo, referencias y objetivos. Con eso armamos el diagnóstico y el plan de 90 días, que aprobás en tu portal. Desde ahí, todas las entregas pasan por el mismo lugar.',
   },
   {
-    question: '¿Qué es NEXA Recover y cuándo veo resultados?',
-    answer: 'NEXA Recover es nuestro servicio para reactivar clientes inactivos y leads que quedaron sin cerrar en tu base de contactos, con mensajes automatizados de seguimiento. Los resultados suelen verse en los primeros 30 días.',
+    question: '¿Qué es NEXA Recover?',
+    answer: 'Es el servicio que estamos desarrollando para reactivar clientes inactivos y consultas que quedaron sin respuesta, con mensajes de seguimiento por WhatsApp. Todavía no está a la venta: si te interesa, dejanos tus datos y te avisamos cuando esté listo.',
   },
   {
     question: '¿Necesito saber de tecnología para trabajar con NEXA?',
-    answer: 'Para nada. Nosotros nos encargamos de todo: conectamos tu WhatsApp, tus redes y tu sistema de seguimiento de clientes sin que tengas que ocuparte de ningún detalle técnico.',
+    answer: 'No. Solo completás el formulario guiado y nos das acceso a tus redes y a tu cuenta publicitaria; te explicamos cómo paso a paso. Del resto nos ocupamos nosotros.',
   },
 ];
 
@@ -132,7 +132,7 @@ function useMouseGradient() {
 export default function HomePage() {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    service: 'Redes Sociales y Contenido',
+    service: 'Contenido para redes',
     companyName: '',
     website: '',
     goals: 'Ordenar mi Marketing',
@@ -177,7 +177,7 @@ export default function HomePage() {
       if (!response.ok) throw new Error(payload.error || 'No se pudo enviar');
       setStatus('ok');
       track('generate_lead', { form_id: 'home_diagnostico', service: formData.service });
-      setFormData({ service: 'Redes Sociales y Contenido', companyName: '', website: '', goals: 'Ordenar mi Marketing', contactName: '', contactEmail: '', contactPhone: '' });
+      setFormData({ service: 'Contenido para redes', companyName: '', website: '', goals: 'Ordenar mi Marketing', contactName: '', contactEmail: '', contactPhone: '' });
       setStep(1);
     } catch (err) {
       console.error(err); setStatus('error');
@@ -399,14 +399,14 @@ export default function HomePage() {
               whileInView="show"
               viewport={{ once: true, margin: '-60px' }}
             >
-              <motion.span variants={fadeUp} className="section-tag-recover">Premium Feature</motion.span>
+              <motion.span variants={fadeUp} className="section-tag-recover">Próximamente</motion.span>
               <motion.h2 variants={fadeUp} className="recover-title">NEXA Recover</motion.h2>
               <motion.p variants={fadeUp} className="recover-subtitle">
                 &ldquo;Recuperamos oportunidades que ya existen dentro de tu negocio.&rdquo;
               </motion.p>
               <motion.p variants={fadeUp} className="recover-desc">
-                Antes de gastar más en publicidad, explotamos el oro oculto en tu base de datos actual.
-                Implementamos secuencias de reactivación y bots comerciales inteligentes para recuperar facturación estancada.
+                Antes de gastar más en publicidad, aprovechá los contactos que ya tenés.
+                Estamos desarrollando secuencias de reactivación por WhatsApp para recuperar clientes inactivos y consultas sin respuesta.
               </motion.p>
               <motion.a
                 variants={fadeUp}
@@ -415,7 +415,7 @@ export default function HomePage() {
                 className="btn-lima-cta"
                 whileHover={{ scale: 1.04, boxShadow: '0 16px 40px rgba(210,242,58,0.4)' }}
               >
-                Recuperar Base de Datos
+                Quiero que me avisen
                 <ArrowRight size={18} />
               </motion.a>
             </motion.div>
@@ -558,7 +558,7 @@ export default function HomePage() {
                       >
                         <h3>¿Qué solución necesitás prioritariamente?</h3>
                         <div className="options-grid">
-                          {['Redes Sociales y Contenido', 'Publicidad y Ads', 'Recuperar Clientes Inactivos', 'Plan de Marketing Completo'].map((srv) => (
+                          {['Contenido para redes', 'Anuncios en Meta', 'Contenido + anuncios (Integral)', 'Diagnóstico y Orden Digital'].map((srv) => (
                             <motion.button
                               key={srv}
                               type="button"
