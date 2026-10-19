@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { checkoutTotal } from '@/lib/servicePlans.mjs';
 import { isMpConfigured, createPreference } from '@/lib/mercadopago';
 import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails, renewalPlanId } from '@/lib/serviceCheckout';
 import { saveLead } from '@/lib/crm';
@@ -51,10 +52,11 @@ export async function POST(request) {
   }
 
   const { name, email, phone, company } = contacto;
-  const amount = plan.amount;
   // Si viene del link de un mail de cobranza, es la renovación de un plan que
   // ya existe en el CRM (ver renewalPlanId en lib/serviceCheckout.js).
   const renueva = renewalPlanId(body);
+  // Primer mes de un abono = abono + Puesta en marcha; renovación = solo el abono.
+  const amount = checkoutTotal(plan, { renueva: Boolean(renueva) });
   const reference = generateServiceReference();
 
   try {
@@ -127,6 +129,7 @@ export async function POST(request) {
         plan_id: plan.planId,
         plan_label: plan.planLabel,
         billing: plan.billing,
+        monto_mensual: plan.amount,
         name,
         email,
         phone,
