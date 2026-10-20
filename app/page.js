@@ -42,6 +42,7 @@ const SERVICES = [
     accent: 'rgba(184,155,255,0.12)',
     border: 'rgba(184,155,255,0.25)',
     slug: 'crm_seguimiento',
+    points: ['Asistentes de IA que responden consultas', 'Seguimiento automático de cada lead', 'Todos tus contactos en un solo lugar'],
   },
   {
     icon: TrendingUp,
@@ -52,6 +53,7 @@ const SERVICES = [
     accent: 'rgba(210,242,58,0.08)',
     border: 'rgba(210,242,58,0.2)',
     slug: 'meta_ads',
+    points: ['Instagram, Facebook y Google Ads', 'Optimización continua de campañas', 'Foco en clientes reales, no en clics'],
   },
   {
     icon: Database,
@@ -62,6 +64,7 @@ const SERVICES = [
     accent: 'rgba(234,161,251,0.08)',
     border: 'rgba(234,161,251,0.2)',
     slug: 'nexa_recover',
+    points: ['Reportes y mensajes automáticos', 'Tareas repetitivas resueltas solas', 'Tu equipo enfocado en vender'],
   },
 ];
 
@@ -303,33 +306,61 @@ export default function HomePage() {
               whileInView="show"
               viewport={{ once: true, margin: '-40px' }}
             >
-              {SERVICES.map((service) => {
+              {SERVICES.map((service, i) => {
                 const Icon = service.icon;
                 return (
-                  <Link key={service.title} href={`/servicios?servicio=${service.slug}#planes`} style={{ textDecoration: 'none', display: 'block' }}>
+                  <Link
+                    key={service.title}
+                    href={`/servicios?servicio=${service.slug}#planes`}
+                    className={`svc-link ${i === 0 ? 'svc-link-featured' : ''}`}
+                  >
                     <motion.article
                       variants={scaleIn}
-                      className="service-card-premium"
-                      whileHover={{ y: -8, transition: { duration: 0.3 } }}
-                      style={{ '--card-accent': service.tagColor, '--card-glow': service.accent, cursor: 'pointer' }}
+                      className={`service-card-premium ${i === 0 ? 'is-featured' : ''}`}
+                      whileHover={{ y: -6, transition: { duration: 0.3 } }}
+                      style={{ '--card-accent': service.tagColor, '--card-glow': service.accent }}
                     >
                       <div className="svc-glow" style={{ background: `radial-gradient(circle at top right, ${service.accent}, transparent 60%)` }} />
+                      <div className="svc-top">
+                        <div className="service-icon-wrapper" style={{ background: service.accent, border: `1px solid ${service.border}` }}>
+                          <Icon size={26} color={service.tagColor} />
+                        </div>
+                        <span className="svc-number">0{i + 1}</span>
+                      </div>
                       <div className="svc-tag" style={{ color: service.tagColor, background: service.accent, border: `1px solid ${service.border}` }}>
                         {service.tag}
                       </div>
-                      <div className="service-icon-wrapper" style={{ background: service.accent, border: `1px solid ${service.border}` }}>
-                        <Icon size={26} color={service.tagColor} />
-                      </div>
-                      <h3 style={{ color: 'white' }}>{service.title}</h3>
+                      <h3>{service.title}</h3>
                       <p>{service.desc}</p>
+                      <ul className="svc-points">
+                        {service.points.map((pt) => (
+                          <li key={pt}>
+                            <CheckCircle2 size={15} color={service.tagColor} />
+                            <span>{pt}</span>
+                          </li>
+                        ))}
+                      </ul>
                       <div className="svc-learn-more" style={{ color: service.tagColor }}>
                         <span>Ver detalles y precios</span>
-                        <ChevronRight size={14} />
+                        <ArrowRight size={14} />
                       </div>
                     </motion.article>
                   </Link>
                 );
               })}
+            </motion.div>
+
+            <motion.div
+              className="services-more"
+              variants={fadeUp}
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true }}
+            >
+              <span>¿No sabés por dónde empezar?</span>
+              <Link href="/servicios" className="services-more-link">
+                Ver todos los servicios y planes <ArrowRight size={14} />
+              </Link>
             </motion.div>
           </div>
         </section>
@@ -764,15 +795,37 @@ export default function HomePage() {
 
         /* ── SERVICES ── */
         .services-section { padding: 100px 0; }
-        .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .service-card-premium { position: relative; overflow: hidden; padding: 36px 32px; background: var(--bg-white); border: 1px solid var(--border-light); border-radius: 28px; cursor: default; transition: border-color 0.3s, box-shadow 0.3s; box-shadow: 0 4px 20px rgba(131,92,230,0.06); }
-        .service-card-premium:hover { border-color: var(--lilac); box-shadow: 0 20px 48px rgba(131,92,230,0.14); }
-        .svc-glow { position: absolute; top: 0; right: 0; width: 200px; height: 200px; pointer-events: none; }
-        .svc-tag { display: inline-flex; padding: 5px 14px; border-radius: 999px; font-size: 0.73rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 20px; }
-        .service-icon-wrapper { width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
-        .service-card-premium h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.02em; color: var(--text-dark); }
-        .service-card-premium p { font-size: 0.9rem; color: var(--text-body); line-height: 1.7; margin-bottom: 20px; }
-        .svc-learn-more { display: flex; align-items: center; gap: 6px; font-size: 0.82rem; font-weight: 700; }
+        .services-grid { display: grid; grid-template-columns: 1.15fr 1fr; grid-template-rows: auto auto; gap: 24px; }
+        .svc-link { display: block; text-decoration: none; color: inherit; }
+        .svc-link-featured { grid-row: span 2; }
+        .svc-link > article { height: 100%; }
+        .service-card-premium { position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 32px; background: var(--bg-white); border: 1px solid var(--border-light); border-radius: 28px; cursor: pointer; transition: border-color 0.3s, box-shadow 0.3s; box-shadow: 0 4px 20px rgba(131,92,230,0.06); }
+        .service-card-premium:hover { border-color: var(--card-accent); box-shadow: 0 20px 48px rgba(131,92,230,0.14); }
+        .svc-glow { position: absolute; top: 0; right: 0; width: 240px; height: 240px; pointer-events: none; }
+        .svc-top { position: relative; display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .svc-number { font-size: 2.4rem; font-weight: 900; letter-spacing: -0.04em; line-height: 1; color: rgba(18,20,29,0.08); }
+        .svc-tag { align-self: flex-start; display: inline-flex; padding: 5px 14px; border-radius: 999px; font-size: 0.73rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+        .service-card-premium:not(.is-featured) .svc-tag { color: var(--text-dark) !important; }
+        .service-icon-wrapper { width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; }
+        .service-card-premium h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.02em; color: var(--text-dark); }
+        .service-card-premium p { font-size: 0.93rem; color: var(--text-body); line-height: 1.7; margin-bottom: 18px; }
+        .svc-points { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 24px; padding: 0; }
+        .svc-points li { display: flex; align-items: flex-start; gap: 9px; font-size: 0.88rem; color: var(--text-body); line-height: 1.5; }
+        .svc-points svg { flex-shrink: 0; margin-top: 2px; }
+        .service-card-premium:not(.is-featured) .svc-points svg { color: var(--lilac-deep); stroke: var(--lilac-deep); }
+        .service-card-premium:not(.is-featured) .svc-learn-more { color: var(--lilac-deep) !important; }
+        .service-card-premium.is-featured { background: var(--gradient-dark); border-color: rgba(255,255,255,0.08); padding: 44px 40px; box-shadow: 0 24px 60px rgba(13,14,21,0.28); }
+        .service-card-premium.is-featured:hover { border-color: var(--card-accent); box-shadow: 0 28px 70px rgba(131,92,230,0.28); }
+        .service-card-premium.is-featured h3 { color: #fff; font-size: 1.75rem; }
+        .service-card-premium.is-featured p { color: rgba(255,255,255,0.72); font-size: 1rem; }
+        .service-card-premium.is-featured .svc-points li { color: rgba(255,255,255,0.82); font-size: 0.95rem; }
+        .service-card-premium.is-featured .svc-number { color: rgba(255,255,255,0.12); font-size: 3.2rem; }
+        .service-card-premium.is-featured .svc-points { margin-bottom: auto; padding-bottom: 28px; }
+        .svc-learn-more { display: inline-flex; align-items: center; gap: 6px; margin-top: auto; font-size: 0.85rem; font-weight: 800; transition: gap 0.25s; }
+        .service-card-premium:hover .svc-learn-more { gap: 10px; }
+        .services-more { display: flex; align-items: center; justify-content: center; gap: 14px; flex-wrap: wrap; margin-top: 40px; color: var(--text-body); font-size: 0.95rem; }
+        .services-more-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 999px; background: var(--text-dark); color: #fff; font-weight: 700; font-size: 0.88rem; text-decoration: none; transition: transform 0.25s, background 0.25s; }
+        .services-more-link:hover { background: var(--lilac-deep); transform: translateY(-2px); }
 
         /* ── CHANNELS ── */
         .channels-section { padding: 100px 0; }
@@ -857,7 +910,7 @@ export default function HomePage() {
 
         /* ── RESPONSIVE ── */
         @media (max-width: 1024px) {
-          .services-grid { grid-template-columns: repeat(2, 1fr); }
+          .services-grid { grid-template-columns: 1fr; } .svc-link-featured { grid-row: auto; }
           .channels-grid { grid-template-columns: 1fr; gap: 48px; }
           .contact-wrapper { grid-template-columns: 1fr; }
         }
