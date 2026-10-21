@@ -78,12 +78,15 @@ export default function Navbar() {
           <div className="nav-cta-group">
             {/*
               Botón de Arrepentimiento en la primera pantalla: en Argentina la
-              Resolución 424/2020 exige que esté en un lugar destacado y de
+              Disposición 954/2025 exige que esté (junto con el de Baja de servicio) en un lugar destacado y de
               fácil visualización, no escondido en el pie. Por eso va también
               acá, visible sin hacer scroll.
             */}
             <Link href="/arrepentimiento" className="nav-arrepentimiento">
               <RotateCcw size={13} /> Arrepentimiento
+            </Link>
+            <Link href="/baja" className="nav-arrepentimiento">
+              Baja
             </Link>
             <Link href={accountHref} className="nav-portal">
               <UserRound size={14} /> {accountLabel}
@@ -130,6 +133,9 @@ export default function Navbar() {
             })}
             <Link href="/arrepentimiento" className="mobile-menu-link">
               Botón de Arrepentimiento
+            </Link>
+            <Link href="/baja" className="mobile-menu-link">
+              Botón de Baja de servicio
             </Link>
             <div className="mobile-menu-divider" />
             <Link href={accountHref} className="mobile-menu-link mobile-menu-link-accent">
