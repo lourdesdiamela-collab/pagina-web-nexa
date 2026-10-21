@@ -37,11 +37,16 @@ export async function POST(request) {
     return NextResponse.json({ error: `Faltan datos: ${errores.join(', ')}.` }, { status: 400 });
   }
 
+  // Botón de Baja de servicio (Disposición 954/2025): mismo circuito que el
+  // arrepentimiento, marcado en la identificación para que en el CRM se vea qué es.
+  const esBaja = body?.tipo === 'baja';
+  const tipoTexto = esBaja ? 'baja de servicio' : 'arrepentimiento';
+
   const datos = {
     nombre: texto(body.nombre, 120),
     email: texto(body.email, 200),
     telefono: texto(body.telefono, 60) || null,
-    identificacionCompra: texto(body.identificacionCompra, 300),
+    identificacionCompra: (esBaja ? 'BAJA DE SERVICIO — ' : '') + texto(body.identificacionCompra, 280),
     motivo: texto(body.motivo, 2000) || null,
   };
   // Versiones escapadas para meter en el HTML de los mails.
@@ -62,10 +67,10 @@ export async function POST(request) {
   await sendMail({
     to: datos.email,
     fromName: 'NEXA',
-    subject: `Recibimos tu solicitud de arrepentimiento — #${caso.numero}`,
+    subject: `Recibimos tu solicitud de ${tipoTexto} — #${caso.numero}`,
     html: `
       <p>Hola ${e.nombre},</p>
-      <p>Recibimos tu solicitud de arrepentimiento el ${fechaTexto} (hora Argentina). Tu número de trámite es <strong>${caso.numero}</strong> — guardalo para hacer cualquier consulta sobre el estado de tu pedido.</p>
+      <p>Recibimos tu solicitud de ${tipoTexto} el ${fechaTexto} (hora Argentina). Tu número de trámite es <strong>${caso.numero}</strong> — guardalo para hacer cualquier consulta sobre el estado de tu pedido.</p>
       <p><strong>Compra o contratación identificada:</strong> ${e.identificacionCompra}</p>
       ${e.motivo ? `<p><strong>Motivo indicado:</strong> ${e.motivo}</p>` : ''}
       <p>Vamos a procesar tu pedido y contactarte si necesitamos algún dato adicional.</p>
@@ -78,9 +83,9 @@ export async function POST(request) {
   await sendMail({
     to: CONTACT_EMAIL,
     fromName: 'NEXA Web',
-    subject: `Nueva solicitud de arrepentimiento — #${caso.numero}`,
+    subject: `Nueva solicitud de ${tipoTexto} — #${caso.numero}`,
     html: `
-      <h2>Nueva solicitud de arrepentimiento</h2>
+      <h2>Nueva solicitud de ${tipoTexto}</h2>
       <table cellpadding="8" style="border-collapse:collapse;font-family:sans-serif;font-size:14px;">
         <tr><td><strong>N° de trámite</strong></td><td>${caso.numero}</td></tr>
         <tr><td><strong>Fecha</strong></td><td>${fechaTexto}</td></tr>
