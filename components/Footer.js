@@ -75,7 +75,7 @@ export default function Footer() {
         {/* Divider + Bottom */}
         <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
           <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.82rem' }}>
-            © {new Date().getFullYear()} NEXA. Todos los derechos reservados.
+            © {new Date().getFullYear()} NEXA. Todos los derechos reservados. Atención: {TITULAR.horario}.
           </span>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {SOCIALS.map((s) => (
