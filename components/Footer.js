@@ -15,14 +15,16 @@ const NAV_LINKS = [
 /*
  * Links legales obligatorios. El Botón de Arrepentimiento, además de estar
  * acá, tiene que estar visible en la primera pantalla del sitio: en Argentina
- * la Resolución 424/2020 de Secretaría de Comercio Interior exige que esté
+ * la Disposición 954/2025 (que reemplazó a la Resolución 424/2020) exige que esté
  * "en un lugar destacado y de fácil visualización" de la home. Por eso vive
  * también en components/ArrepentimientoBanner.js, montado en el layout raíz.
  */
 const LEGAL_LINKS = [
   { href: '/terminos', label: 'Términos y Condiciones' },
   { href: '/privacidad', label: 'Política de Privacidad' },
+  { href: '/contratos', label: 'Contratos de servicio' },
   { href: '/arrepentimiento', label: 'Botón de Arrepentimiento' },
+  { href: '/baja', label: 'Botón de Baja de servicio' },
 ];
 
 const SOCIALS = [
