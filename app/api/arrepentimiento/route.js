@@ -5,7 +5,7 @@ import { sincronizarArrepentimiento } from '@/lib/crmSync';
 import { sendMail } from '@/lib/mailer';
 import { escapar, texto, EMAIL_VALIDO, permitidoPorIp } from '@/lib/seguridad';
 
-const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'hola@nexaarg.com';
+const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'nexagrowtharg@gmail.com';
 
 function validar(body) {
   const errores = [];
