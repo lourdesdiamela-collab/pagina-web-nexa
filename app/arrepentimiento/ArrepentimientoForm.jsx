@@ -5,7 +5,13 @@ import { Send, CheckCircle2 } from 'lucide-react';
 
 const CAMPOS_INICIALES = { nombre: '', email: '', telefono: '', identificacionCompra: '', motivo: '' };
 
-export default function ArrepentimientoForm() {
+/*
+ * El mismo formulario sirve para el Botón de Arrepentimiento y para el Botón
+ * de Baja de servicio (Disposición 954/2025): cambia el texto y el `tipo` que
+ * se manda a /api/arrepentimiento.
+ */
+export default function ArrepentimientoForm({ tipo = 'arrepentimiento' }) {
+  const esBaja = tipo === 'baja';
   const [formData, setFormData] = useState(CAMPOS_INICIALES);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState(null); // null | { tipo: 'success', numero } | { tipo: 'error', mensaje }
@@ -18,7 +24,7 @@ export default function ArrepentimientoForm() {
       const res = await fetch('/api/arrepentimiento', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, tipo }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
@@ -39,7 +45,7 @@ export default function ArrepentimientoForm() {
       <div style={{ background: 'rgba(210,242,58,0.12)', border: '1px solid rgba(210,242,58,0.3)', borderRadius: 16, padding: 28, textAlign: 'center' }}>
         <CheckCircle2 size={32} style={{ color: '#8a9a0f', marginBottom: 8 }} />
         <p style={{ fontWeight: 700, fontSize: '1.05rem', color: '#5c6b00', marginBottom: 6 }}>
-          Solicitud recibida — trámite N° {status.numero}
+          {esBaja ? 'Pedido de baja recibido' : 'Solicitud recibida'} — trámite N° {status.numero}
         </p>
         <p style={{ color: 'var(--text-body)', fontSize: '0.9rem' }}>
           Te mandamos la constancia por email con este número. Guardalo para cualquier consulta sobre el estado de tu pedido.
@@ -79,11 +85,11 @@ export default function ArrepentimientoForm() {
       </div>
 
       <div className="form-field">
-        <label htmlFor="arr-identificacion">Identificación de la compra o contratación *</label>
+        <label htmlFor="arr-identificacion">{esBaja ? 'Servicio que querés dar de baja *' : 'Identificación de la compra o contratación *'}</label>
         <input
           id="arr-identificacion"
           type="text"
-          placeholder="Número de pedido/referencia (ej: SRV-ABC123) o una descripción de qué compraste y cuándo"
+          placeholder={esBaja ? 'Ej: NEXA Contenido Crecimiento — empresa o marca' : 'Número de pedido/referencia (ej: SRV-ABC123) o una descripción de qué compraste y cuándo'}
           value={formData.identificacionCompra}
           onChange={(e) => setFormData({ ...formData, identificacionCompra: e.target.value })}
           required
@@ -93,12 +99,12 @@ export default function ArrepentimientoForm() {
 
       <div className="form-field">
         <label htmlFor="arr-motivo">Motivo (opcional)</label>
-        <textarea id="arr-motivo" placeholder="Contanos por qué te querés arrepentir de la compra..." value={formData.motivo} onChange={(e) => setFormData({ ...formData, motivo: e.target.value })} disabled={loading} />
+        <textarea id="arr-motivo" placeholder={esBaja ? 'Si querés, contanos por qué te das de baja...' : 'Contanos por qué te querés arrepentir de la compra...'} value={formData.motivo} onChange={(e) => setFormData({ ...formData, motivo: e.target.value })} disabled={loading} />
       </div>
 
       <button type="submit" className="btn-submit" disabled={loading} style={{ opacity: loading ? 0.65 : 1 }}>
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-          <Send size={16} /> {loading ? 'Enviando solicitud...' : 'Enviar solicitud de arrepentimiento'}
+          <Send size={16} /> {loading ? 'Enviando solicitud...' : esBaja ? 'Enviar pedido de baja' : 'Enviar solicitud de arrepentimiento'}
         </span>
       </button>
       <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: 12 }}>

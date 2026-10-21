@@ -6,15 +6,11 @@ import Footer from '@/components/Footer';
  * Andamiaje compartido de las páginas legales (/terminos, /privacidad,
  * /arrepentimiento).
  *
- * IMPORTANTE: el texto legal lo escribe Lu (o su asesoría legal). Acá no hay
- * ni debe haber texto legal redactado por nadie más. Mientras una página no
- * tenga su contenido definitivo, se usa <LegalEnPreparacion /> -- un aviso
- * breve y neutro para el visitante, sin ningún detalle interno ni de
- * implementación. Nunca mostrar acá instrucciones internas del equipo.
- *
- * Para completar una página: abrir el archivo app/<ruta>/page.js y reemplazar
- * el bloque <LegalEnPreparacion /> por el texto, usando <h2> para los
- * títulos de sección y <p> para los párrafos.
+ * Los textos de /terminos, /privacidad y /contratos/* viven en
+ * lib/textosLegales.mjs y lib/contratos.mjs (pedido de Lu, octubre 2026) y se
+ * muestran con <LegalSecciones />. Conviene que los revise un abogado. Si una
+ * página nueva todavía no tiene texto, usar <LegalEnPreparacion /> -- un
+ * aviso breve y neutro, sin detalles internos.
  */
 export default function LegalPage({ title, intro, children }) {
   return (
