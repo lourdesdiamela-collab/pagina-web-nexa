@@ -3,6 +3,8 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NexaLogo } from './NexaLogo';
+import { TITULAR } from '@/lib/legal.mjs';
+import { waHref } from '@/lib/whatsapp';
 
 const NAV_LINKS = [
   { href: '/servicios', label: 'Servicios' },
@@ -81,8 +83,11 @@ export default function Footer() {
                 {s.label}
               </a>
             ))}
-            <a href="mailto:hola@nexaarg.com" style={{ borderRadius: 999, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.7)', padding: '6px 14px', fontSize: '0.82rem' }}>
-              hola@nexaarg.com
+            <a href={`mailto:${TITULAR.email}`} style={{ borderRadius: 999, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.7)', padding: '6px 14px', fontSize: '0.82rem' }}>
+              {TITULAR.email}
+            </a>
+            <a href={waHref('footer')} style={{ borderRadius: 999, border: '1px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.04)', color: 'rgba(255,255,255,0.7)', padding: '6px 14px', fontSize: '0.82rem' }}>
+              WhatsApp {TITULAR.telefono}
             </a>
           </div>
         </div>
