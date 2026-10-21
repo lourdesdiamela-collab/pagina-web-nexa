@@ -686,6 +686,8 @@ p { color: var(--text-body); line-height: 1.7; }
 .legal-body p { margin-bottom: 14px; }
 .legal-body ul { margin: 0 0 14px 20px; list-style: disc; }
 .legal-body li { margin-bottom: 6px; }
+.legal-body a { color: var(--lilac-deep); text-decoration: underline; }
+.legal-body .legal-version { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 8px; }
 
 .legal-en-preparacion p {
   margin: 0 0 10px;
