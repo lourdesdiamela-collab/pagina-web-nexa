@@ -117,7 +117,7 @@ export async function POST(request) {
 
     // Notificación interna a NEXA
     await sendMail({
-      to: process.env.CONTACT_EMAIL || 'hola@nexaarg.com',
+      to: process.env.CONTACT_EMAIL || 'nexagrowtharg@gmail.com',
       fromName: 'NEXA Web',
       subject: `Nueva consulta de ${body.name}${body.company ? ' - ' + body.company : ''}`,
       html: `
