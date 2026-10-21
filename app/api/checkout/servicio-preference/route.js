@@ -30,7 +30,7 @@ export async function POST(request) {
 
   // La aceptación de los T&C se valida en el servidor: que el botón esté
   // deshabilitado en el navegador no impide llamar a esta API a mano.
-  const { error: termsError, data: termsAcceptance } = buildTermsAcceptance(body, request);
+  const { error: termsError, data: termsAcceptance } = buildTermsAcceptance(body, request, { lineSlug: plan.lineSlug });
   if (termsError) {
     return NextResponse.json({ error: termsError }, { status: 400 });
   }
