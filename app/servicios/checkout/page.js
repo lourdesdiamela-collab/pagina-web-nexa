@@ -9,6 +9,7 @@ import Footer from '@/components/Footer';
 import TransferReservationTimer from '@/components/aprende/TransferReservationTimer';
 import { formatPrice } from '@/lib/products.mjs';
 import { getServicePlan, checkoutTotal, SETUP_FEE } from '@/lib/servicePlans.mjs';
+import { contratoDeLinea } from '@/lib/contratos.mjs';
 import { waHref } from '@/lib/whatsapp';
 
 // Los links de WhatsApp pasan por /wa para registrar el origen (ver lib/whatsapp.js).
@@ -58,6 +59,8 @@ function ServicioCheckoutContent() {
   const plan = getServicePlan(planId);
 
   const servicio = plan?.lineSlug || '';
+  // Contrato del servicio que se acepta en el checkout (ver lib/contratos.mjs).
+  const contrato = plan ? contratoDeLinea(plan.lineSlug) : null;
   const planLabel = plan?.planLabel || '';
   const monthly = plan?.amount || 0;
   const billing = plan?.billing === 'unico' ? 'unico' : 'mensual';
@@ -319,10 +322,15 @@ function ServicioCheckoutContent() {
                     onChange={(e) => setAcceptedTerms(e.target.checked)}
                   />
                   <span>
-                    Leí y acepto los{' '}
+                    Leí y acepto el{' '}
+                    <Link href={`/contratos/${contrato?.slug || ''}`} target="_blank" rel="noopener noreferrer">
+                      {contrato ? `Contrato de ${contrato.nombre}` : 'Contrato de servicio'}
+                    </Link>
+                    , los{' '}
                     <Link href="/terminos" target="_blank" rel="noopener noreferrer">Términos y Condiciones</Link>
                     {' '}y la{' '}
                     <Link href="/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad</Link>.
+                    {' '}Te mandamos una copia por mail.
                   </span>
                 </label>
 
