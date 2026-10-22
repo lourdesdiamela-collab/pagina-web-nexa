@@ -1,7 +1,9 @@
 import { listArticles } from '@/lib/articles';
 import { listProducts, CATEGORIES } from '@/lib/products.mjs';
 
-const SITE_URL = 'https://nexagrowth.com.ar';
+// Dominio final (nexagrowth.com.ar redirige con 308 a www): las URLs del
+// sitemap tienen que ser las canonicas, sin redireccion de por medio.
+const SITE_URL = 'https://www.nexagrowth.com.ar';
 
 // Paginas de negocio, indexables. Las transaccionales (checkout, carrito,
 // login, registro, admin) quedan afuera a proposito: ya estan en noindex.
