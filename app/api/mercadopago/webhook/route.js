@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { getPayment, verifyWebhookSignature } from '@/lib/mercadopago';
-import { approveOrder, rejectOrder } from '@/lib/orders';
+import { approveOrder, rejectOrder, pagoCoincideConPedido, ESTADOS_APROBABLES_MP } from '@/lib/orders';
+import { primeraVez, DIA } from '@/lib/rateLimit';
 import { sendServicePaymentApprovedEmails } from '@/lib/serviceCheckout';
 import { altaAutomaticaPorPago } from '@/lib/crmSync';
 
@@ -37,7 +38,7 @@ export async function POST(request) {
     });
 
     if (signatureCheck === 'invalid') {
-      console.warn('[mp-webhook] Firma inválida — notificación descartada.');
+      console.warn('[mp-webhook] Firma inválida (o falta MP_WEBHOOK_SECRET en producción) — notificación descartada.');
       return NextResponse.json({ received: true });
     }
     if (signatureCheck === 'skipped') {
@@ -54,6 +55,17 @@ export async function POST(request) {
     // app/api/checkout/servicio-preference/route.js).
     if (payment.metadata?.kind === 'servicio' && payment.status === 'approved') {
       const reference = payment.metadata.reference || orderId;
+
+      // Idempotencia: Mercado Pago repite avisos del mismo pago. Si este pago
+      // ya se procesó (queda anotado en Lead.mpPaymentId, o en el registro de
+      // deduplicación de lib/rateLimit.js), no se vuelven a mandar los mails
+      // ni a llamar al CRM.
+      const yaProcesado = await prisma.lead
+        .findFirst({ where: { mpPaymentId: String(payment.id) }, select: { id: true } })
+        .catch(() => null);
+      if (yaProcesado || !(await primeraVez('mp-servicio', String(payment.id), 120 * DIA))) {
+        return NextResponse.json({ received: true });
+      }
 
       try {
         await sendServicePaymentApprovedEmails({
@@ -120,12 +132,22 @@ export async function POST(request) {
     }
 
     const order = await prisma.order.findUnique({ where: { id: orderId } });
-    if (!order || order.status !== 'PENDING') {
+    // REJECTED también se procesa: en Mercado Pago un pago rechazado se puede
+    // reintentar dentro de la misma preferencia y terminar aprobado.
+    if (!order || !ESTADOS_APROBABLES_MP.includes(order.status)) {
       return NextResponse.json({ received: true });
     }
 
     if (payment.status === 'approved') {
-      await approveOrder(orderId, { mpPaymentId: String(payment.id), payerEmail: payment.payer?.email });
+      if (!pagoCoincideConPedido(payment, order)) {
+        console.error(
+          `[mp-webhook] El pago ${payment.id} (${payment.transaction_amount} ${payment.currency_id}) no coincide con el ` +
+          `pedido ${orderId} (${order.total} ARS). No se aprueba: revisar a mano.`,
+        );
+        return NextResponse.json({ received: true });
+      }
+      // Atómico: si la página de "pago aprobado" ya lo aprobó, no hace nada.
+      await approveOrder(orderId, { mpPaymentId: String(payment.id), payerEmail: payment.payer?.email, desde: ESTADOS_APROBABLES_MP });
     } else if (payment.status === 'rejected' || payment.status === 'cancelled') {
       await rejectOrder(orderId, { mpPaymentId: String(payment.id) });
     }
