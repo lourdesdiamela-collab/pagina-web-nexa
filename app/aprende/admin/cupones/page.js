@@ -1,7 +1,10 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
 import { saveCoupon, deleteCoupon } from '@/lib/adminActions';
 
 export default async function AdminCouponsPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   const coupons = await prisma.coupon.findMany({ orderBy: { createdAt: 'desc' } });
 
   return (
