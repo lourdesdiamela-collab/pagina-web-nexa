@@ -1,3 +1,4 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
 import { formatPrice } from '@/lib/products.mjs';
 import { resyncLeadToCrm } from '@/lib/adminActions';
@@ -19,6 +20,8 @@ const SOURCE_LABEL = {
 export const dynamic = 'force-dynamic';
 
 export default async function AdminLeadsPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   let leads = [];
   let errorBase = null;
 
