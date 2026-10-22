@@ -2,9 +2,14 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/db';
 import { permitidoPorIp } from '@/lib/seguridad';
+import { limitar, ipCliente, HORA } from '@/lib/rateLimit';
 
 export async function POST(request) {
   if (!permitidoPorIp(request, 'registro', { maximo: 10 })) {
+    return NextResponse.json({ error: 'Demasiados intentos. Probá de nuevo en unos minutos.' }, { status: 429 });
+  }
+  // Segunda capa, compartida entre instancias (ver lib/rateLimit.js).
+  if (!(await limitar('registro', ipCliente(request), { maximo: 10, ventanaMs: HORA }))) {
     return NextResponse.json({ error: 'Demasiados intentos. Probá de nuevo en unos minutos.' }, { status: 429 });
   }
   try {
