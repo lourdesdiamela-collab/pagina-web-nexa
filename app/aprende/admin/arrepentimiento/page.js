@@ -1,3 +1,4 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
 import { resyncArrepentimientoToCrm } from '@/lib/adminActions';
 
@@ -14,6 +15,8 @@ import { resyncArrepentimientoToCrm } from '@/lib/adminActions';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminArrepentimientoPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   let casos = [];
   let errorBase = null;
 
