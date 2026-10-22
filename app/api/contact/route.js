@@ -4,10 +4,16 @@ import { notifyEvent } from '@/lib/notifications';
 import { sendMail } from '@/lib/mailer';
 import { COOKIE_LAST, COOKIE_FIRST, readAttributionCookie, describeAttribution } from '@/lib/attribution';
 import { escapar, texto, EMAIL_VALIDO, permitidoPorIp } from '@/lib/seguridad';
+import { limitar, ipCliente, MINUTO, HORA } from '@/lib/rateLimit';
 
 export async function POST(request) {
   try {
     if (!permitidoPorIp(request, 'contacto', { maximo: 5 })) {
+      return NextResponse.json({ error: 'Recibimos muchos envíos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
+    }
+
+    // Segunda capa, compartida entre instancias (ver lib/rateLimit.js).
+    if (!(await limitar('contacto', ipCliente(request), { maximo: 5, ventanaMs: 10 * MINUTO }))) {
       return NextResponse.json({ error: 'Recibimos muchos envíos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
     }
 
@@ -29,6 +35,11 @@ export async function POST(request) {
     }
     if (!EMAIL_VALIDO.test(body.email)) {
       return NextResponse.json({ error: 'Email inválido.' }, { status: 400 });
+    }
+    // El mail de confirmación va a la dirección que escribió el visitante:
+    // no más de 3 por hora a una misma dirección.
+    if (!(await limitar('contacto-destino', body.email.toLowerCase(), { maximo: 3, ventanaMs: HORA }))) {
+      return NextResponse.json({ error: 'Recibimos muchos envíos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
     }
 
     // Campaña de origen (herramienta #8): sale de las cookies que guarda
