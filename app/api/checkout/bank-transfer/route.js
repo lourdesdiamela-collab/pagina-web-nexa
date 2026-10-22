@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { resolveCartFromDb, applyCoupon, createPendingOrder } from '@/lib/orders';
+import { resolveCartFromDb, applyCoupon, createPendingOrder, normalizarItems } from '@/lib/orders';
+import { limitar, ipCliente, MINUTO, HORA } from '@/lib/rateLimit';
 import { applyTransferDiscount } from '@/lib/pricing';
 import { buildTermsAcceptance } from '@/lib/terms';
 
@@ -12,8 +13,16 @@ import { buildTermsAcceptance } from '@/lib/terms';
 // de compra confirmada (misma lógica que Mercado Pago vía approveOrder).
 export async function POST(request) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json({ error: 'Necesitás iniciar sesión para comprar.' }, { status: 401 });
+  }
+
+  // Cada pedido crea un registro y manda un mail: tope por cuenta y por IP
+  // (compartido entre instancias, ver lib/rateLimit.js).
+  const okUsuario = await limitar('pedido-usuario', session.user.id, { maximo: 10, ventanaMs: HORA });
+  const okIp = await limitar('pedido-ip', ipCliente(request), { maximo: 10, ventanaMs: 10 * MINUTO });
+  if (!okUsuario || !okIp) {
+    return NextResponse.json({ error: 'Recibimos muchos pedidos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
   }
 
   const body = await request.json().catch(() => ({}));
@@ -25,7 +34,8 @@ export async function POST(request) {
     return NextResponse.json({ error: termsError }, { status: 400 });
   }
 
-  const items = Array.isArray(body.items) ? body.items.filter((i) => i?.slug && i?.qty > 0) : [];
+  // Cantidad siempre 1, sin repetidos y con tope (ver normalizarItems).
+  const items = normalizarItems(body.items);
   if (items.length === 0) {
     return NextResponse.json({ error: 'El carrito está vacío.' }, { status: 400 });
   }
@@ -35,7 +45,11 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Ninguno de los productos del carrito existe.' }, { status: 400 });
   }
 
-  const couponCode = String(body.couponCode || '').trim();
+  const couponCode = String(body.couponCode || '').trim().slice(0, 60);
+  // Los cupones no se pueden probar por fuerza bruta: tope de intentos por cuenta.
+  if (couponCode && !(await limitar('cupon', session.user.id, { maximo: 15, ventanaMs: HORA }))) {
+    return NextResponse.json({ error: 'Demasiados intentos con cupones. Probá de nuevo más tarde.' }, { status: 429 });
+  }
   const { total: afterCoupon, coupon, error: couponError } = await applyCoupon(couponCode, totals.total);
   if (couponCode && couponError) {
     return NextResponse.json({ error: couponError }, { status: 400 });
