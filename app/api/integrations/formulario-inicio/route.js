@@ -1,6 +1,24 @@
 import { NextResponse } from 'next/server';
 import { verifyCrmSecret } from '@/lib/crmAuth';
 import { sendMail } from '@/lib/mailer';
+import { escapar, emailUnico, texto, hostDelCrmPermitido } from '@/lib/seguridad';
+
+function crmBaseUrl() {
+  return (process.env.NEXT_PUBLIC_CRM_URL || 'https://crm.nexagrowth.com.ar').replace(/\/+$/, '');
+}
+
+// El link del formulario lo genera el CRM: solo se acepta https y del dominio
+// del CRM (si el secreto se filtrara, nadie podría usar este endpoint para
+// mandar mails de NEXA con links a otro sitio).
+function linkDelCrm(valor) {
+  try {
+    const url = new URL(String(valor || ''));
+    if (url.protocol !== 'https:' || !hostDelCrmPermitido(url.host)) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
 
 /**
  * POST /api/integrations/formulario-inicio
@@ -26,14 +44,16 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Body inválido.' }, { status: 400 });
   }
 
-  const to = String(body?.to || '').trim();
-  const nombre = String(body?.nombre || '').trim();
-  const link = String(body?.link || '').trim();
-  const validezDias = Number(body?.validezDias) || 30;
+  // Un solo destinatario con formato válido (ver emailUnico en lib/seguridad.js).
+  const to = emailUnico(body?.to) || '';
+  const nombre = escapar(texto(body?.nombre, 120));
+  const linkValido = linkDelCrm(body?.link);
+  const validezDias = Math.min(365, Math.max(1, Math.round(Number(body?.validezDias) || 30)));
 
-  if (!to || !link) {
-    return NextResponse.json({ error: 'Faltan datos: to y link son obligatorios.' }, { status: 400 });
+  if (!to || !linkValido) {
+    return NextResponse.json({ error: 'Faltan datos: to (email válido) y link (del CRM) son obligatorios.' }, { status: 400 });
   }
+  const link = escapar(linkValido);
 
   const resultado = await sendMail({
     to,
