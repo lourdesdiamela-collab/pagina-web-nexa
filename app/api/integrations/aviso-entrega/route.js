@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyCrmSecret } from '@/lib/crmAuth';
 import { sendMail } from '@/lib/mailer';
+import { escapar, emailUnico, hostDelCrmPermitido } from '@/lib/seguridad';
 
 /**
  * POST /api/integrations/aviso-entrega
@@ -13,12 +14,17 @@ import { sendMail } from '@/lib/mailer';
  * Body: { to, nombre, titulo, link, recordatorio?: boolean }
  */
 
-function escapar(texto) {
-  return String(texto || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+// El botón del mail solo puede llevar al CRM (portal de clientes): aunque el
+// pedido venga autenticado, si el secreto se filtrara nadie podría usar este
+// endpoint para mandar mails de NEXA con links a cualquier sitio.
+function linkDelCrm(valor) {
+  try {
+    const url = new URL(String(valor || ''));
+    if (url.protocol !== 'https:' || !hostDelCrmPermitido(url.host)) return null;
+    return url.toString();
+  } catch {
+    return null;
+  }
 }
 
 function crmBaseUrl() {
@@ -38,15 +44,15 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Body inválido.' }, { status: 400 });
   }
 
-  const to = String(body?.to || '').trim();
+  // Un solo destinatario con formato válido (ver emailUnico en lib/seguridad.js).
+  const to = emailUnico(body?.to) || '';
   const nombre = escapar(String(body?.nombre || '').trim().slice(0, 120));
   const titulo = escapar(String(body?.titulo || 'una entrega nueva').trim().slice(0, 200));
   const recordatorio = body?.recordatorio === true;
-  const linkCrudo = String(body?.link || '').trim();
-  const link = /^https:\/\//.test(linkCrudo) ? escapar(linkCrudo) : `${crmBaseUrl()}/portal/entregas`;
+  const link = escapar(linkDelCrm(body?.link) || `${crmBaseUrl()}/portal/entregas`);
 
   if (!to) {
-    return NextResponse.json({ error: 'Falta el destinatario (to).' }, { status: 400 });
+    return NextResponse.json({ error: 'Falta el destinatario (to) o no es un email válido.' }, { status: 400 });
   }
 
   const asunto = recordatorio
