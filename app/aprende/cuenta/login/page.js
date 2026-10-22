@@ -7,11 +7,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { LogIn } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import { safeCallback } from '@/lib/callbackUrl';
 
 function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl') || '/aprende/mis-recursos';
+  // Solo rutas del propio sitio (ver lib/callbackUrl.js).
+  const callbackUrl = safeCallback(searchParams.get('callbackUrl'));
   const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
