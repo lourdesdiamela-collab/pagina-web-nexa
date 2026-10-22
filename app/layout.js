@@ -1,4 +1,6 @@
 import localFont from 'next/font/local';
+import { headers } from 'next/headers';
+import { jsonLdSeguro } from '@/lib/seguridad';
 import AuthProvider from '@/components/aprende/AuthProvider';
 import TrackingScripts from '@/components/TrackingScripts';
 import AgenteVentas from '@/components/AgenteVentas';
@@ -72,13 +74,19 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  // Nonce de la Content-Security-Policy, generado por middleware.js en cada
+  // pedido. Next lo aplica solo a sus propios scripts; los de medición
+  // (TrackingScripts) lo reciben por prop. Los bloques JSON-LD no lo
+  // necesitan: son datos, el navegador no los ejecuta.
+  const nonce = headers().get('x-nonce') || undefined;
+
   return (
     <html lang="es" className={plusJakartaSans.variable}>
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
+            __html: jsonLdSeguro({
               "@context": "https://schema.org",
               "@type": "Organization",
               "name": "NEXA",
@@ -95,7 +103,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <AuthProvider>{children}</AuthProvider>
-        <TrackingScripts />
+        <TrackingScripts nonce={nonce} />
         <AgenteVentas />
       </body>
     </html>
