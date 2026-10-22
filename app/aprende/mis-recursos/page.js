@@ -24,7 +24,7 @@ const STATUS_LABEL = {
 
 export default async function MisRecursosPage() {
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  if (!session?.user?.id) {
     redirect('/aprende/cuenta/login?callbackUrl=/aprende/mis-recursos');
   }
 
