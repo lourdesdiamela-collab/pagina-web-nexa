@@ -5,6 +5,7 @@ import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails
 import { saveLead } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 import { buildTermsAcceptance } from '@/lib/terms';
+import { limitar, ipCliente, MINUTO, HORA } from '@/lib/rateLimit';
 
 // Pedido "voy a pagar por transferencia bancaria" para un plan de servicio,
 // con el mismo 10% OFF que ya se usa en el checkout de Aprende
@@ -15,6 +16,12 @@ import { buildTermsAcceptance } from '@/lib/terms';
 // El precio NO viene del cliente: se resuelve contra lib/servicePlans.mjs a
 // partir del identificador de plan (ver resolveServiceCheckout).
 export async function POST(request) {
+  // Límite por IP (compartido entre instancias, ver lib/rateLimit.js): cada
+  // pedido manda dos mails desde la cuenta de NEXA y guarda un lead.
+  if (!(await limitar('servicio-checkout', ipCliente(request), { maximo: 5, ventanaMs: 10 * MINUTO }))) {
+    return NextResponse.json({ error: 'Recibimos muchos pedidos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
+  }
+
   const body = await request.json().catch(() => ({}));
 
   const { error: validationError, plan, contacto } = resolveServiceCheckout(body);
@@ -30,11 +37,17 @@ export async function POST(request) {
   }
 
   const { name, email, phone, company } = contacto;
+
+  // Y por dirección de destino: nadie puede usar el checkout para llenarle la
+  // casilla de mails de NEXA a una misma persona.
+  if (!(await limitar('servicio-checkout-destino', email, { maximo: 3, ventanaMs: HORA }))) {
+    return NextResponse.json({ error: 'Recibimos muchos pedidos seguidos para este email. Probá de nuevo más tarde.' }, { status: 429 });
+  }
   const reference = generateServiceReference();
   // Renovación pedida desde el link de un mail de cobranza. La transferencia
   // no se puede verificar sola, así que acá solo queda anotado: cuando Lu ve
   // el ingreso, aprieta "Marcar renovado" en el CRM.
-  const renueva = renewalPlanId(body);
+  const renueva = renewalPlanId(body, plan.planId);
   // Primer mes de un abono = abono + Puesta en marcha; renovación = solo el abono.
   const discountedTotal = applyTransferDiscount(checkoutTotal(plan, { renueva: Boolean(renueva) }));
 
