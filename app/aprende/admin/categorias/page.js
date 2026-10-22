@@ -1,7 +1,10 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
 import { saveCategory, deleteCategory } from '@/lib/adminActions';
 
 export default async function AdminCategoriesPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   const categories = await prisma.category.findMany({
     orderBy: { sortOrder: 'asc' },
     include: { _count: { select: { products: true } } },
