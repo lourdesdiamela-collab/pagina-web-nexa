@@ -1,3 +1,4 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import Link from 'next/link';
 import { Plus, Pencil, FileCheck2, FileX2 } from 'lucide-react';
 import { prisma } from '@/lib/db';
@@ -5,6 +6,8 @@ import { formatPrice } from '@/lib/products.mjs';
 import { deleteProduct } from '@/lib/adminActions';
 
 export default async function AdminProductsPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   const products = await prisma.product.findMany({
     include: { category: true },
     orderBy: { createdAt: 'desc' },
