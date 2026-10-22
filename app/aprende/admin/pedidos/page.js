@@ -1,3 +1,4 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
 import { formatPrice } from '@/lib/products.mjs';
 import { updateOrderStatus } from '@/lib/adminActions';
@@ -12,6 +13,8 @@ const STATUS_LABEL = {
 };
 
 export default async function AdminOrdersPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   const orders = await prisma.order.findMany({
     orderBy: { createdAt: 'desc' },
     include: { user: { select: { name: true, email: true } }, items: true },
