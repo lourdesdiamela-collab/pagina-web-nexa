@@ -12,6 +12,7 @@ import StarRating from '@/components/aprende/StarRating';
 import ReviewList from '@/components/aprende/ReviewList';
 import { formatPrice } from '@/lib/products.mjs';
 import { getProductBySlug, getRelatedProducts } from '@/lib/catalogQueries';
+import { jsonLdSeguro } from '@/lib/seguridad';
 
 export async function generateMetadata({ params }) {
   const product = await getProductBySlug(params.slug);
@@ -70,7 +71,7 @@ export default async function ProductDetailPage({ params }) {
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdSeguro(jsonLd) }} />
       <Navbar />
       <main style={{ paddingTop: 'clamp(88px, 10vw, 116px)', background: 'var(--bg-main)', minHeight: '100vh' }}>
         <div className="container" style={{ paddingBottom: 80 }}>

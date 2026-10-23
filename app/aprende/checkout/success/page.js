@@ -8,13 +8,13 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { formatPrice } from '@/lib/products.mjs';
 import { isMpConfigured, getPayment } from '@/lib/mercadopago';
-import { approveOrder, rejectOrder } from '@/lib/orders';
+import { approveOrder, rejectOrder, pagoCoincideConPedido, ESTADOS_APROBABLES_MP } from '@/lib/orders';
 
 export const metadata = { title: 'Compra confirmada | NEXA Aprende' };
 
 export default async function CheckoutSuccessPage({ searchParams }) {
   const session = await getServerSession(authOptions);
-  if (!session?.user) redirect('/aprende/cuenta/login');
+  if (!session?.user?.id) redirect('/aprende/cuenta/login');
 
   const orderId = searchParams.external_reference || searchParams.order_id;
   if (!orderId) redirect('/aprende');
@@ -40,9 +40,16 @@ export default async function CheckoutSuccessPage({ searchParams }) {
           `(external_reference: ${payment.external_reference}). No se aprueba nada.`,
         );
       } else if (payment.status === 'approved') {
-        order = await approveOrder(order.id, { mpPaymentId: String(payment.id), payerEmail: payment.payer?.email });
+        if (!pagoCoincideConPedido(payment, order)) {
+          console.error(`[checkout/success] El pago ${payment.id} no coincide en monto/moneda con el pedido ${order.id}. No se aprueba.`);
+        } else {
+          // approveOrder es atómico: si el webhook ya lo aprobó, devuelve null
+          // y se vuelve a leer el pedido.
+          order = (await approveOrder(order.id, { mpPaymentId: String(payment.id), payerEmail: payment.payer?.email, desde: ESTADOS_APROBABLES_MP }))
+            || (await prisma.order.findUnique({ where: { id: order.id }, include: { items: true } }));
+        }
       } else if (payment.status === 'rejected') {
-        order = await rejectOrder(order.id, { mpPaymentId: String(payment.id) });
+        order = (await rejectOrder(order.id, { mpPaymentId: String(payment.id) })) || order;
       }
     } catch (error) {
       console.error('Error verificando pago en success page:', error);

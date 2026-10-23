@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { WHATSAPP_NUMBER } from '@/lib/whatsapp';
 import { COOKIE_LAST, COOKIE_FIRST, readAttributionCookie } from '@/lib/attribution';
+import { limitar, ipCliente, HORA } from '@/lib/rateLimit';
 
 /*
  * /wa — puerta de entrada a WhatsApp (herramienta #8).
@@ -57,7 +58,13 @@ export async function GET(request) {
 
   let mensaje = text;
 
-  if (!BOT_UA.test(userAgent)) {
+  // Tope de clics registrados por IP: esta ruta escribe en la base sin login,
+  // así que sin tope se podía llenar la tabla con pedidos en cadena. Pasado el
+  // tope se abre WhatsApp igual, solo que sin registrar el clic ni el código.
+  const registrar = !BOT_UA.test(userAgent)
+    && (await limitar('wa-clic', ipCliente(request), { maximo: 15, ventanaMs: HORA }));
+
+  if (registrar) {
     const last = readAttributionCookie(request.cookies.get(COOKIE_LAST)?.value);
     const first = readAttributionCookie(request.cookies.get(COOKIE_FIRST)?.value);
     const ref = nuevoCodigo();

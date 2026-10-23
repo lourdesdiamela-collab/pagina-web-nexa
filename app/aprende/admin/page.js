@@ -1,8 +1,11 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import Link from 'next/link';
 import { prisma } from '@/lib/db';
 import { formatPrice } from '@/lib/products.mjs';
 
 export default async function AdminDashboardPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   const [orderCount, approvedOrders, userCount, productCount, reviewCount, recentOrders] = await Promise.all([
     prisma.order.count(),
     prisma.order.findMany({ where: { status: 'APPROVED' }, select: { total: true } }),

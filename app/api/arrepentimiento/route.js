@@ -4,6 +4,7 @@ import { generarYCrearCaso } from '@/lib/arrepentimiento';
 import { sincronizarArrepentimiento } from '@/lib/crmSync';
 import { sendMail } from '@/lib/mailer';
 import { escapar, texto, EMAIL_VALIDO, permitidoPorIp } from '@/lib/seguridad';
+import { limitar, ipCliente, MINUTO } from '@/lib/rateLimit';
 
 const CONTACT_EMAIL = process.env.CONTACT_EMAIL || 'nexagrowtharg@gmail.com';
 
@@ -22,6 +23,11 @@ function validar(body) {
 
 export async function POST(request) {
   if (!permitidoPorIp(request, 'arrepentimiento', { maximo: 5 })) {
+    return NextResponse.json({ error: 'Recibimos muchos envíos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
+  }
+
+  // Segunda capa, compartida entre instancias (ver lib/rateLimit.js).
+  if (!(await limitar('arrepentimiento', ipCliente(request), { maximo: 5, ventanaMs: 10 * MINUTO }))) {
     return NextResponse.json({ error: 'Recibimos muchos envíos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
   }
 

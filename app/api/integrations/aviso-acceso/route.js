@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyCrmSecret } from '@/lib/crmAuth';
 import { sendMail } from '@/lib/mailer';
+import { escapar, emailUnico } from '@/lib/seguridad';
 
 /**
  * POST /api/integrations/aviso-acceso
@@ -12,14 +13,6 @@ import { sendMail } from '@/lib/mailer';
  *
  * Body: { to, nombre, etiquetaAcceso, dias: 3 | 7 }
  */
-
-function escapar(texto) {
-  return String(texto || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
 
 function crmBaseUrl() {
   return (process.env.NEXT_PUBLIC_CRM_URL || 'https://crm.nexagrowth.com.ar').replace(/\/+$/, '');
@@ -38,13 +31,14 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Body inválido.' }, { status: 400 });
   }
 
-  const to = String(body?.to || '').trim();
+  // Un solo destinatario con formato válido (ver emailUnico en lib/seguridad.js).
+  const to = emailUnico(body?.to) || '';
   const nombre = escapar(String(body?.nombre || '').trim().slice(0, 120));
   const acceso = escapar(String(body?.etiquetaAcceso || 'un acceso pendiente').trim().slice(0, 200));
   const dias = Number(body?.dias) === 7 ? 7 : 3;
 
   if (!to) {
-    return NextResponse.json({ error: 'Falta el destinatario (to).' }, { status: 400 });
+    return NextResponse.json({ error: 'Falta el destinatario (to) o no es un email válido.' }, { status: 400 });
   }
 
   const portal = `${crmBaseUrl()}/portal/accesos`;

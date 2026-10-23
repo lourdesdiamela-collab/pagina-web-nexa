@@ -5,6 +5,7 @@ import { generateServiceReference, resolveServiceCheckout, sendServiceLeadEmails
 import { saveLead } from '@/lib/crm';
 import { notifyEvent } from '@/lib/notifications';
 import { buildTermsAcceptance } from '@/lib/terms';
+import { limitar, ipCliente, MINUTO, HORA } from '@/lib/rateLimit';
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
@@ -21,6 +22,12 @@ function siteUrl() {
 //
 // Para planes mensuales, este pago es solo el primer mes.
 export async function POST(request) {
+  // Límite por IP (compartido entre instancias, ver lib/rateLimit.js): cada
+  // pedido manda dos mails desde la cuenta de NEXA y guarda un lead.
+  if (!(await limitar('servicio-checkout', ipCliente(request), { maximo: 5, ventanaMs: 10 * MINUTO }))) {
+    return NextResponse.json({ error: 'Recibimos muchos pedidos seguidos. Probá de nuevo en unos minutos.' }, { status: 429 });
+  }
+
   const body = await request.json().catch(() => ({}));
 
   const { error: validationError, plan, contacto } = resolveServiceCheckout(body);
@@ -52,9 +59,15 @@ export async function POST(request) {
   }
 
   const { name, email, phone, company } = contacto;
+
+  // Y por dirección de destino: nadie puede usar el checkout para llenarle la
+  // casilla de mails de NEXA a una misma persona.
+  if (!(await limitar('servicio-checkout-destino', email, { maximo: 3, ventanaMs: HORA }))) {
+    return NextResponse.json({ error: 'Recibimos muchos pedidos seguidos para este email. Probá de nuevo más tarde.' }, { status: 429 });
+  }
   // Si viene del link de un mail de cobranza, es la renovación de un plan que
   // ya existe en el CRM (ver renewalPlanId en lib/serviceCheckout.js).
-  const renueva = renewalPlanId(body);
+  const renueva = renewalPlanId(body, plan.planId);
   // Primer mes de un abono = abono + Puesta en marcha; renovación = solo el abono.
   const amount = checkoutTotal(plan, { renueva: Boolean(renueva) });
   const reference = generateServiceReference();

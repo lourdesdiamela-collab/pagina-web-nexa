@@ -1,7 +1,10 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
 import { toggleReviewApproval, deleteReview } from '@/lib/adminActions';
 
 export default async function AdminReviewsPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   const reviews = await prisma.review.findMany({
     orderBy: { createdAt: 'desc' },
     include: { product: { select: { title: true } } },

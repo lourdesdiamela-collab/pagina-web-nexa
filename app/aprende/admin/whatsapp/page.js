@@ -1,3 +1,4 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
 
 /*
@@ -36,6 +37,8 @@ function origen(c) {
 }
 
 export default async function AdminWhatsAppPage() {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   let clicks = [];
   let resumen = [];
   let errorBase = null;

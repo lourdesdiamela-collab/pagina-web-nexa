@@ -1,10 +1,10 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
 import { toggleUserRole } from '@/lib/adminActions';
 
 export default async function AdminUsersPage() {
-  const session = await getServerSession(authOptions);
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  const session = await requireAdminPage();
   const users = await prisma.user.findMany({
     orderBy: { createdAt: 'desc' },
     include: { _count: { select: { orders: true } } },

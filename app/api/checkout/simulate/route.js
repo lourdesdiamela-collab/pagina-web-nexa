@@ -29,7 +29,7 @@ export async function POST(request) {
   }
 
   const session = await getServerSession(authOptions);
-  if (!session?.user) {
+  if (!session?.user?.id) {
     return NextResponse.json({ error: 'Necesitás iniciar sesión.' }, { status: 401 });
   }
 

@@ -1,8 +1,11 @@
+import { requireAdminPage } from '@/lib/adminAuth';
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/db';
 import ProductForm from '../ProductForm';
 
 export default async function EditProductPage({ params }) {
+  // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
+  await requireAdminPage();
   const [product, categories] = await Promise.all([
     prisma.product.findUnique({ where: { id: params.id } }),
     prisma.category.findMany({ orderBy: { sortOrder: 'asc' } }),

@@ -4,6 +4,7 @@ import { enviarLeadAlCrm } from '@/lib/crmSync';
 import { notifyEvent } from '@/lib/notifications';
 import { COOKIE_LAST, COOKIE_FIRST, readAttributionCookie, describeAttribution } from '@/lib/attribution';
 import { salesAgentEnabled, limpiarHistorial, llamarClaude } from '@/lib/salesAgent';
+import { limitar, ipCliente, MINUTO, HORA, DIA } from '@/lib/rateLimit';
 
 /*
  * /api/agente-ventas — el chat comercial del sitio (ver lib/salesAgent.js).
@@ -26,6 +27,9 @@ const usoPorIp = new Map();
 
 function permitido(ip) {
   const ahora = Date.now();
+  if (usoPorIp.size > 5000) {
+    for (const [k, v] of usoPorIp) if (ahora - v.desde > VENTANA_MS) usoPorIp.delete(k);
+  }
   const previo = usoPorIp.get(ip);
   if (!previo || ahora - previo.desde > VENTANA_MS) {
     usoPorIp.set(ip, { desde: ahora, cantidad: 1 });
@@ -46,7 +50,18 @@ function textoDe(respuesta) {
     .trim();
 }
 
+// Topes durables (compartidos entre instancias, ver lib/rateLimit.js):
+// por IP, uno global por día para acotar el gasto total de la API, y el
+// registro de leads una vez por hora por IP (que nadie use el chat para
+// llenar el CRM de datos inventados).
+const MAX_POR_IP_DURABLE = 20;
+const MAX_GLOBAL_POR_DIA = 3000;
+
 async function registrarLead(input, request) {
+  if (!(await limitar('agente-lead', ipCliente(request), { maximo: 1, ventanaMs: HORA }))) {
+    return { ok: false, error: 'Ya registramos tus datos hace un rato. El equipo te va a contactar.' };
+  }
+
   const nombre = String(input?.nombre || '').trim().slice(0, 200);
   const email = String(input?.email || '').trim().slice(0, 200);
   if (!nombre || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -107,9 +122,18 @@ export async function POST(request) {
     return NextResponse.json({ error: 'El chat no está disponible.' }, { status: 503 });
   }
 
-  const ip = (request.headers.get('x-forwarded-for') || '').split(',')[0].trim() || 'desconocida';
+  const ip = ipCliente(request);
+  const respuestaLimite = { reply: 'Recibimos muchos mensajes seguidos. Probá de nuevo en unos minutos o escribinos por WhatsApp: /wa?from=agente_ventas_limite' };
+  // Primera capa en memoria (barata), después las durables.
   if (!permitido(ip)) {
-    return NextResponse.json({ reply: 'Recibimos muchos mensajes seguidos. Probá de nuevo en unos minutos o escribinos por WhatsApp: /wa?from=agente_ventas_limite' });
+    return NextResponse.json(respuestaLimite);
+  }
+  if (!(await limitar('agente-ip', ip, { maximo: MAX_POR_IP_DURABLE, ventanaMs: 10 * MINUTO }))) {
+    return NextResponse.json(respuestaLimite);
+  }
+  if (!(await limitar('agente-global', 'todos', { maximo: MAX_GLOBAL_POR_DIA, ventanaMs: DIA }))) {
+    console.error('[agente-ventas] Se alcanzó el tope global diario de mensajes.');
+    return NextResponse.json({ reply: 'Ahora no puedo responder. Escribinos por WhatsApp y te contestamos enseguida: /wa?from=agente_ventas_limite' });
   }
 
   const body = await request.json().catch(() => ({}));

@@ -1,0 +1,431 @@
+'use client';
+
+import { useState, useEffect, Suspense } from 'react';
+import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
+import { ArrowLeft, ShieldCheck, Zap, CreditCard, Landmark, Copy, Check, TimerReset, MessageCircle, Info } from 'lucide-react';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import TransferReservationTimer from '@/components/aprende/TransferReservationTimer';
+import { formatPrice } from '@/lib/products.mjs';
+import { getServicePlan, checkoutTotal, SETUP_FEE } from '@/lib/servicePlans.mjs';
+import { contratoDeLinea } from '@/lib/contratos.mjs';
+import { waHref } from '@/lib/whatsapp';
+
+// Los links de WhatsApp pasan por /wa para registrar el origen (ver lib/whatsapp.js).
+
+function CopyField({ label, value }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      /* si el navegador bloquea el clipboard, el usuario igual puede seleccionar el texto */
+    }
+  }
+
+  return (
+    <div className="aprende-transfer-row">
+      <span>{label}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <strong>{value}</strong>
+        <button type="button" className="aprende-copy-btn" onClick={handleCopy}>
+          {copied ? <Check size={12} /> : <Copy size={12} />} {copied ? 'Copiado' : 'Copiar'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+const TRANSFER_CBU = '0170132240000011323248';
+const TRANSFER_ALIAS = 'FUROR.ATUN.INCLINABA';
+const TRANSFER_TITULAR = 'Alarcón Lourdes';
+
+function ServicioCheckoutContent({ renovacion }) {
+  const searchParams = useSearchParams();
+
+  /*
+   * El precio NO viene por la URL. Del link solo llega el identificador del
+   * plan (ej: 'ads-scale') y el precio se lee de lib/servicePlans.mjs, la misma
+   * lista que usa el servidor para cobrar. Editar la URL no cambia el monto.
+   *
+   * Si el identificador no existe, getServicePlan devuelve null y la página
+   * muestra "No encontramos el plan" en vez de un checkout con precio inventado.
+   */
+  const planId = searchParams.get('plan') || '';
+  const plan = getServicePlan(planId);
+
+  const servicio = plan?.lineSlug || '';
+  // Contrato del servicio que se acepta en el checkout (ver lib/contratos.mjs).
+  const contrato = plan ? contratoDeLinea(plan.lineSlug) : null;
+  const planLabel = plan?.planLabel || '';
+  const monthly = plan?.amount || 0;
+  const billing = plan?.billing === 'unico' ? 'unico' : 'mensual';
+
+  /*
+   * Renovación (herramienta #9): los mails de cobranza del CRM traen
+   * `&renueva=<id del plan>&renuevaExp=...&renuevaSig=...&email=<email>`.
+   * La firma la verifica el SERVIDOR (page.js, con lib/renovacion.js) y acá
+   * llega solo si es válida para este plan. Si no llega, se muestra y se cobra
+   * el primer pago completo, con la Puesta en marcha: es exactamente lo que
+   * va a cobrar la API, que vuelve a verificar la firma.
+   */
+  const renueva = renovacion?.renueva || '';
+  const emailParam = (searchParams.get('email') || '').trim().slice(0, 200);
+
+  // Primer mes de un abono = abono + Puesta en marcha; renovación o pago único = solo el plan.
+  const setupFee = plan && !renueva ? plan.setupFee || 0 : 0;
+  const amount = checkoutTotal(plan, { renueva: Boolean(renueva) });
+
+  const billingText = billing === 'unico'
+    ? 'Pago único'
+    : renueva ? 'Renovación — próximo mes del abono' : 'Primer mes del abono + Puesta en marcha (única vez)';
+  const estimatedTransferTotal = Math.round(amount * 0.9);
+
+  const [form, setForm] = useState({ name: '', email: emailParam, phone: '', company: '' });
+  const [paymentMethod, setPaymentMethod] = useState(null); // 'mercadopago' | 'transfer'
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [devMessage, setDevMessage] = useState('');
+  const [transferOrder, setTransferOrder] = useState(null); // { reference, total }
+
+  // Medios de pago realmente disponibles (ver /api/checkout/payment-methods).
+  // Default seguro: hasta que responda el servidor, se asume que no hay pago
+  // con tarjeta, así no se ofrece un botón que va a fallar.
+  const [methods, setMethods] = useState({ mercadopago: false, loaded: false });
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/checkout/payment-methods')
+      .then((res) => res.json())
+      .then((data) => {
+        if (!cancelled) setMethods({ mercadopago: Boolean(data.mercadopago), loaded: true });
+      })
+      .catch(() => {
+        if (!cancelled) setMethods((prev) => ({ ...prev, loaded: true }));
+      });
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
+    if (methods.loaded && !methods.mercadopago && paymentMethod === null) {
+      setPaymentMethod('transfer');
+    }
+  }, [methods.loaded, methods.mercadopago, paymentMethod]);
+
+  // Aceptación de Términos y Condiciones: obligatoria para poder contratar.
+  // El servidor la vuelve a validar (ver lib/terms.js).
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+
+  const missingPlan = !plan;
+  const formValid = form.name.trim() && form.email.trim() && form.phone.trim();
+
+  function updateField(field, value) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
+
+  /*
+   * Al servidor se le manda el identificador del plan, NO el monto. El precio
+   * lo resuelve él contra lib/servicePlans.mjs. Si acá mandáramos el importe,
+   * volveríamos al problema de que el cliente elige cuánto paga.
+   */
+  function buildPayload() {
+    return {
+      ...form,
+      plan: planId,
+      ...(renovacion ? { renueva: renovacion.renueva, renuevaExp: renovacion.renuevaExp, renuevaSig: renovacion.renuevaSig } : {}),
+      acceptedTerms,
+    };
+  }
+
+  async function handlePayMercadoPago() {
+    setError('');
+    setDevMessage('');
+    setLoading(true);
+    try {
+      const res = await fetch('/api/checkout/servicio-preference', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildPayload()),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'No pudimos iniciar el pago.');
+        setLoading(false);
+        return;
+      }
+      if (data.mpConfigured && data.initPoint) {
+        window.location.href = data.initPoint;
+        return;
+      }
+      setDevMessage(data.message || 'Mercado Pago todavía no está activo. Probá con transferencia bancaria.');
+      setLoading(false);
+    } catch {
+      setError('No pudimos iniciar el pago. Intentá de nuevo.');
+      setLoading(false);
+    }
+  }
+
+  async function handleConfirmTransfer() {
+    setError('');
+    setLoading(true);
+    try {
+      const res = await fetch('/api/checkout/servicio-transferencia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(buildPayload()),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || 'No pudimos registrar tu pedido.');
+        setLoading(false);
+        return;
+      }
+      setTransferOrder({ reference: data.reference, total: data.total });
+      setLoading(false);
+    } catch {
+      setError('No pudimos registrar tu pedido. Intentá de nuevo.');
+      setLoading(false);
+    }
+  }
+
+  const waText = `Hola NEXA! Quiero contratar el plan ${planLabel}. ¿Cómo seguimos con el pago?`;
+
+  return (
+    <>
+      <Navbar />
+      <main style={{ paddingTop: 'clamp(88px, 10vw, 116px)', background: 'var(--bg-main)', minHeight: '100vh' }}>
+        <div className="container" style={{ paddingBottom: 80, maxWidth: 720 }}>
+          <Link href="/servicios" className="aprende-back-link">
+            <ArrowLeft size={14} /> Volver a servicios
+          </Link>
+
+          <div className="section-header" style={{ textAlign: 'left', marginBottom: 20 }}>
+            <span className="section-tag">Checkout</span>
+            <h1 className="section-title" style={{ marginBottom: 0 }}>Contratar servicio</h1>
+          </div>
+
+          {missingPlan ? (
+            <div className="aprende-cart-empty">
+              <p>No encontramos el plan que buscás. Volvé a Servicios y elegí un plan.</p>
+              <Link href="/servicios" className="btn btn-primary">Ver planes y precios</Link>
+            </div>
+          ) : transferOrder ? (
+            <div className="aprende-checkout-summary">
+              <div className="aprende-form-success" style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                <ShieldCheck size={18} style={{ flexShrink: 0, marginTop: 2 }} />
+                <span>
+                  ¡Pedido #{transferOrder.reference.slice(-8)} registrado! Te enviamos un email de confirmación.
+                  Hacé la transferencia por <strong>{formatPrice(transferOrder.total)}</strong> con los datos de arriba —
+                  en breve verificamos el ingreso y nos contactamos para coordinar el arranque.
+                </span>
+              </div>
+              <a href={waHref('checkout', waText)} target="_blank" rel="noopener noreferrer" className="btn-wa" style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}>
+                <MessageCircle size={16} /> Avisar por WhatsApp que ya transferí
+              </a>
+            </div>
+          ) : (
+            <div className="aprende-checkout-summary">
+              <h3>Resumen de tu pedido</h3>
+              <div className="aprende-cart-summary-row">
+                <span>{planLabel}{billing === 'mensual' ? ' — mes 1' : ''}</span>
+                <span>{formatPrice(monthly)}</span>
+              </div>
+              {setupFee > 0 && (
+                <div className="aprende-cart-summary-row">
+                  <span>{SETUP_FEE.name} (única vez)</span>
+                  <span>{formatPrice(setupFee)}</span>
+                </div>
+              )}
+              <div className="aprende-cart-summary-total">
+                <span>Total</span>
+                <span>{formatPrice(amount)}</span>
+              </div>
+              <p className="aprende-cart-hint" style={{ marginTop: 8 }}>{billingText}</p>
+              {billing === 'mensual' && (
+                <p className="aprende-cart-hint">
+                  {renueva
+                    ? 'Este pago renueva tu plan por un mes más. Pagando con Mercado Pago la renovación se registra sola apenas se acredita.'
+                    : `Desde el segundo mes pagás solo el abono (${formatPrice(monthly)}). Te mandamos el link de pago por mail antes de cada vencimiento. Permanencia mínima: 3 meses.`}
+                </p>
+              )}
+
+              <div className="pricing-fees-notice" style={{ marginTop: 16, marginBottom: 0 }}>
+                <Info size={15} />
+                <span>
+                  Este importe son <strong>honorarios de gestión</strong>: cubren nuestro trabajo.
+                  La <strong>inversión en publicidad va aparte</strong> y la pagás vos,
+                  directo a Meta.
+                </span>
+              </div>
+
+              <div style={{ marginTop: 20 }}>
+                <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+                  <div className="aprende-field">
+                    <label htmlFor="name">Nombre y Apellido *</label>
+                    <input id="name" value={form.name} onChange={(e) => updateField('name', e.target.value)} placeholder="Ej: Juan Pérez" disabled={loading} />
+                  </div>
+                  <div className="aprende-field">
+                    <label htmlFor="phone">Teléfono / WhatsApp *</label>
+                    <input id="phone" value={form.phone} onChange={(e) => updateField('phone', e.target.value)} placeholder="+54 9 11 1234 5678" disabled={loading} />
+                  </div>
+                </div>
+                <div className="form-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+                  <div className="aprende-field">
+                    <label htmlFor="email">Email *</label>
+                    <input id="email" type="email" value={form.email} onChange={(e) => updateField('email', e.target.value)} placeholder="juan@empresa.com" disabled={loading} />
+                  </div>
+                  <div className="aprende-field">
+                    <label htmlFor="company">Empresa / Negocio (opcional)</label>
+                    <input id="company" value={form.company} onChange={(e) => updateField('company', e.target.value)} placeholder="Nombre de tu marca" disabled={loading} />
+                  </div>
+                </div>
+
+                {!formValid && (
+                  <p className="aprende-cart-hint" style={{ marginBottom: 14 }}>Completá tus datos de contacto para continuar con el pago.</p>
+                )}
+
+                <div className="aprende-payment-copy">
+                  {methods.mercadopago ? (
+                    <>
+                      Aceptamos <strong>tarjeta de crédito, débito y transferencia bancaria</strong>.
+                      Pagando por transferencia tenés <strong>10% de descuento</strong> automático sobre el total.
+                    </>
+                  ) : (
+                    <>
+                      Por el momento cobramos únicamente por <strong>transferencia bancaria</strong>,
+                      con <strong>10% de descuento</strong> sobre el total.
+                    </>
+                  )}
+                </div>
+
+                {methods.loaded && !methods.mercadopago && (
+                  <div className="aprende-payment-notice">
+                    <Info size={16} style={{ flexShrink: 0, marginTop: 2 }} />
+                    <span>
+                      <strong>El pago online con tarjeta no está disponible por el momento.</strong>{' '}
+                      Podés contratar por transferencia bancaria — te dejamos los datos acá abajo — o
+                      escribirnos por WhatsApp y coordinamos.
+                    </span>
+                  </div>
+                )}
+
+                {error && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{error}</div>}
+                {devMessage && <div className="aprende-form-error" style={{ marginBottom: 12 }}>{devMessage}</div>}
+
+                <label className="checkout-terms">
+                  <input
+                    type="checkbox"
+                    checked={acceptedTerms}
+                    onChange={(e) => setAcceptedTerms(e.target.checked)}
+                  />
+                  <span>
+                    Leí y acepto el{' '}
+                    <Link href={`/contratos/${contrato?.slug || ''}`} target="_blank" rel="noopener noreferrer">
+                      {contrato ? `Contrato de ${contrato.nombre}` : 'Contrato de servicio'}
+                    </Link>
+                    , los{' '}
+                    <Link href="/terminos" target="_blank" rel="noopener noreferrer">Términos y Condiciones</Link>
+                    {' '}y la{' '}
+                    <Link href="/privacidad" target="_blank" rel="noopener noreferrer">Política de Privacidad</Link>.
+                    {' '}Te mandamos una copia por mail.
+                  </span>
+                </label>
+
+                <div className="aprende-payment-methods">
+                  {methods.mercadopago && (
+                    <button
+                      type="button"
+                      className={`aprende-payment-option${paymentMethod === 'mercadopago' ? ' active' : ''}`}
+                      onClick={() => setPaymentMethod('mercadopago')}
+                      disabled={!formValid}
+                    >
+                      <CreditCard size={18} /> Mercado Pago — tarjeta, débito o dinero en cuenta
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    className={`aprende-payment-option${paymentMethod === 'transfer' ? ' active' : ''}`}
+                    onClick={() => setPaymentMethod('transfer')}
+                    disabled={!formValid}
+                  >
+                    <Landmark size={18} /> Transferencia bancaria — 10% OFF ({formatPrice(estimatedTransferTotal)})
+                  </button>
+                </div>
+
+                {paymentMethod === 'mercadopago' && formValid && methods.mercadopago && (
+                  <div style={{ marginTop: 16 }}>
+                    <button type="button" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={handlePayMercadoPago} disabled={loading || !acceptedTerms}>
+                      <Zap size={16} /> {loading ? 'Redirigiendo…' : 'Pagar con Mercado Pago'}
+                    </button>
+                    {!acceptedTerms && (
+                      <p className="checkout-terms-hint">Tildá la aceptación de los Términos para poder continuar.</p>
+                    )}
+                    <p className="aprende-cart-hint" style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <ShieldCheck size={14} /> Pago seguro procesado por Mercado Pago.
+                    </p>
+                  </div>
+                )}
+
+                {paymentMethod === 'transfer' && formValid && (
+                  <div className="aprende-transfer-box">
+                    <p style={{ fontSize: '0.86rem', fontWeight: 700, marginBottom: 10 }}>Transferí a esta cuenta:</p>
+                    <CopyField label="CBU" value={TRANSFER_CBU} />
+                    <CopyField label="Alias" value={TRANSFER_ALIAS} />
+                    <div className="aprende-transfer-row">
+                      <span>Titular</span>
+                      <strong>{TRANSFER_TITULAR}</strong>
+                    </div>
+                    <div className="aprende-transfer-row">
+                      <span>Monto a transferir</span>
+                      <strong>{formatPrice(estimatedTransferTotal)}</strong>
+                    </div>
+
+                    <TransferReservationTimer />
+
+                    <button
+                      type="button"
+                      className="btn btn-lima"
+                      style={{ width: '100%', justifyContent: 'center', marginTop: 16 }}
+                      onClick={handleConfirmTransfer}
+                      disabled={loading || !acceptedTerms}
+                    >
+                      <TimerReset size={16} /> {loading ? 'Registrando…' : 'Ya transferí, confirmar pedido'}
+                    </button>
+                    {!acceptedTerms && (
+                      <p className="checkout-terms-hint">Tildá la aceptación de los Términos para poder continuar.</p>
+                    )}
+                    <p className="aprende-cart-hint" style={{ marginTop: 10 }}>
+                      Al confirmar, registramos tu pedido y te enviamos un email. En breve verificamos el ingreso y nos contactamos para coordinar el arranque.
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              <div style={{ textAlign: 'center', marginTop: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <a href={waHref('checkout_transferencia', waText)} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, color: '#25D366', fontWeight: 700, fontSize: '0.9rem', justifyContent: 'center' }}>
+                  <MessageCircle size={16} /> ¿Preferís coordinar el pago por WhatsApp?
+                </a>
+                <Link href={`/contacto?servicio=${servicio}`} style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
+                  ¿Todavía tenés dudas? Pedí tu diagnóstico gratis sin pagar
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
+      </main>
+      <Footer />
+    </>
+  );
+}
+
+export default function ServicioCheckoutClient({ renovacion = null }) {
+  return (
+    <Suspense fallback={null}>
+      <ServicioCheckoutContent renovacion={renovacion} />
+    </Suspense>
+  );
+}

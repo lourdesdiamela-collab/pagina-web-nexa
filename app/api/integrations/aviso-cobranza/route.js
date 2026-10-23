@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { verifyCrmSecret } from '@/lib/crmAuth';
 import { sendMail } from '@/lib/mailer';
+import { escapar, emailUnico, texto } from '@/lib/seguridad';
 
 /**
  * POST /api/integrations/aviso-cobranza
@@ -33,7 +34,7 @@ function linkDePagoValido(valor) {
       // NEXT_PUBLIC_SITE_URL mal cargada: se sigue con los dominios fijos.
     }
     if (url.protocol !== 'https:' || !propios.has(url.host) || url.pathname !== '/servicios/checkout') return null;
-    return url.toString().replace(/"/g, '%22');
+    return escapar(url.toString());
   } catch {
     return null;
   }
@@ -57,16 +58,18 @@ export async function POST(request) {
     return NextResponse.json({ error: 'Body inválido.' }, { status: 400 });
   }
 
-  const to = String(body?.to || '').trim();
-  const nombre = String(body?.nombre || '').trim();
+  // Un solo destinatario con formato válido (ver emailUnico en lib/seguridad.js).
+  const to = emailUnico(body?.to) || '';
+  // Todo lo que entra al HTML del mail va escapado.
+  const nombre = escapar(texto(body?.nombre, 120));
   const tipo = body?.tipo === 'vencido' ? 'vencido' : 'recordatorio';
-  const servicio = String(body?.servicio || 'tu servicio con NEXA').trim();
+  const servicio = escapar(texto(body?.servicio, 160) || 'tu servicio con NEXA');
   const monto = Number(body?.monto) || 0;
-  const fechaVenc = String(body?.fechaVenc || '').trim();
+  const fechaVenc = escapar(texto(body?.fechaVenc, 40));
   const linkPago = linkDePagoValido(body?.linkPago);
 
   if (!to) {
-    return NextResponse.json({ error: 'Falta el destinatario (to).' }, { status: 400 });
+    return NextResponse.json({ error: 'Falta el destinatario (to) o no es un email válido.' }, { status: 400 });
   }
 
   const montoTexto = monto > 0
