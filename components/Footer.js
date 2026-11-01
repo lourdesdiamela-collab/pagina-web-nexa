@@ -12,6 +12,8 @@ const NAV_LINKS = [
   { href: '/aprende', label: 'Aprende' },
   { href: '/blog', label: 'Blog' },
   { href: '/contacto', label: 'Contacto' },
+  { href: '/aprende/cuenta/login', label: 'Ingresar a Aprende' },
+  { href: 'https://crm.nexagrowth.com.ar', label: 'Portal de Clientes' },
 ];
 
 /*
