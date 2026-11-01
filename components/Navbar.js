@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, UserRound, Briefcase, X, RotateCcw } from 'lucide-react';
+import { Menu, UserRound, Briefcase, X } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
 const LINKS = [
@@ -76,28 +76,7 @@ export default function Navbar() {
             })}
           </div>
           <div className="nav-cta-group">
-            {/*
-              Botón de Arrepentimiento en la primera pantalla: en Argentina la
-              Disposición 954/2025 exige que esté (junto con el de Baja de servicio) en un lugar destacado y de
-              fácil visualización, no escondido en el pie. Por eso va también
-              acá, visible sin hacer scroll.
-            */}
-            <Link href="/arrepentimiento" className="nav-arrepentimiento">
-              <RotateCcw size={13} /> Arrepentimiento
-            </Link>
-            <Link href="/baja" className="nav-arrepentimiento">
-              Baja
-            </Link>
-            <Link href={accountHref} className="nav-portal">
-              <UserRound size={14} /> {accountLabel}
-            </Link>
-            <Link
-              href="https://crm.nexagrowth.com.ar"
-              className="nav-portal nav-portal-crm"
-              title="Acceso exclusivo para clientes de NEXA con servicios activos"
-            >
-              <Briefcase size={13} /> Portal de Clientes
-            </Link>
+            {/* Arrepentimiento, Baja, Ingresar a Aprende y Portal de Clientes se movieron al pie (Footer.js) por pedido de Lu. */}
           </div>
         </nav>
 
