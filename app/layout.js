@@ -38,7 +38,7 @@ export const dynamic = 'force-dynamic';
 export const metadata = {
   title: 'NEXA | Marketing Digital, Redes Sociales y Publicidad con IA',
   description: 'Agencia de marketing digital: gestión de redes sociales, campañas de publicidad y automatización con IA para conseguir más clientes y vender más.',
-  metadataBase: new URL('https://nexagrowth.com.ar'),
+  metadataBase: new URL('https://www.nexagrowth.com.ar'),
   alternates: {
     canonical: '/',
   },
@@ -48,7 +48,7 @@ export const metadata = {
   openGraph: {
     title: 'NEXA | Marketing Digital, Redes Sociales y Publicidad con IA',
     description: 'Agencia de marketing digital: gestión de redes sociales, campañas de publicidad y automatización con IA para conseguir más clientes y vender más.',
-    url: 'https://nexagrowth.com.ar',
+    url: 'https://www.nexagrowth.com.ar',
     siteName: 'NEXA',
     locale: 'es_AR',
     type: 'website',
@@ -88,14 +88,20 @@ export default function RootLayout({ children }) {
           dangerouslySetInnerHTML={{
             __html: jsonLdSeguro({
               "@context": "https://schema.org",
-              "@type": "Organization",
+              "@type": ["Organization", "ProfessionalService"],
               "name": "NEXA",
-              "url": "https://nexagrowth.com.ar",
-              "logo": "https://nexagrowth.com.ar/favicon.svg",
+              "url": "https://www.nexagrowth.com.ar",
+              "email": "nexagrowtharg@gmail.com",
+              "telephone": "+5491124527402",
+              "areaServed": { "@type": "Country", "name": "Argentina" },
+              "knowsAbout": ["Marketing digital", "Gestión de redes sociales", "Publicidad en Meta Ads y Google Ads", "CRM y automatización con IA"],
+              "openingHoursSpecification": { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "09:00", "closes": "18:00" },
+              "logo": "https://www.nexagrowth.com.ar/favicon.svg",
               "description": "Agencia de marketing digital especializada en redes sociales, publicidad y automatización con IA aplicada al crecimiento de marcas.",
               "sameAs": [
                 "https://www.linkedin.com/company/nexagrowth",
-                "https://www.instagram.com/nexagrowth.ar"
+                "https://www.instagram.com/nexagrowth.ar",
+                "https://www.instagram.com/somosnexa.ar"
               ]
             }),
           }}
