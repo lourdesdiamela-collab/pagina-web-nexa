@@ -13,7 +13,7 @@ export const metadata = {
   openGraph: {
     title: 'NEXA Aprende | Guías y Recursos Descargables de Marketing',
     description: 'Guías, plantillas y recursos descargables sobre marketing digital, redes sociales, publicidad y ventas para aplicar en tu negocio.',
-    url: 'https://nexagrowth.com.ar/aprende',
+    url: 'https://www.nexagrowth.com.ar/aprende',
   },
 };
 
