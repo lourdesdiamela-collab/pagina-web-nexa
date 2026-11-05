@@ -12,6 +12,7 @@ const LINKS = [
   { href: '/', label: 'Inicio' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/casos', label: 'Enfoque' },
+  { href: '/soluciones-ia', label: 'Kits IA' },
   { href: '/aprende', label: 'Aprende' },
   { href: '/contacto', label: 'Contacto' },
 ];
