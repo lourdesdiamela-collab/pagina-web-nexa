@@ -99,7 +99,7 @@ export default function RootLayout({ children }) {
               "logo": "https://www.nexagrowth.com.ar/favicon.svg",
               "description": "Agencia de marketing digital especializada en redes sociales, publicidad y automatización con IA aplicada al crecimiento de marcas.",
               "sameAs": [
-                "https://www.linkedin.com/company/nexagrowth",
+                "https://www.linkedin.com/company/nexagrowtharg",
                 "https://www.instagram.com/nexagrowth.ar",
                 "https://www.instagram.com/somosnexa.ar"
               ]
