@@ -12,13 +12,13 @@ const LINKS = [
   { href: '/', label: 'Inicio' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/casos', label: 'Enfoque' },
-  { href: '/soluciones-ia', label: 'Kits IA' },
   { href: '/aprende', label: 'Aprende' },
   { href: '/contacto', label: 'Contacto' },
 ];
 
 function isLinkActive(pathname, href) {
   if (href === '/') return pathname === '/';
+  if (href === '/aprende' && pathname?.startsWith('/soluciones-ia')) return true;
   return pathname === href || pathname?.startsWith(`${href}/`);
 }
 
