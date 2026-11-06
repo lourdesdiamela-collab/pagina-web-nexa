@@ -7,6 +7,7 @@ import {
   Percent, Library, PackageCheck, Sparkles,
 } from 'lucide-react';
 import Navbar from '@/components/Navbar';
+import AprendeTabs from '@/components/AprendeTabs';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
 import ProductExplorer from '@/components/aprende/ProductExplorer';
@@ -66,6 +67,7 @@ export default function AprendeHomeClient({ categories, categoryCounts, featured
     <>
       <Navbar />
       <main style={{ background: 'var(--bg-main)' }}>
+        <AprendeTabs active="recursos" />
         {/* ── HERO ── */}
         <section className="aprende-hero">
           <div className="container">
