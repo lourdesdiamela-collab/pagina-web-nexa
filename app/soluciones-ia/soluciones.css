@@ -2,7 +2,7 @@
    SOLUCIONES CON IA (/soluciones-ia)
    ══════════════════════════════════════ */
 .ki-main { background: var(--bg-main); }
-.ki-hero { padding: clamp(120px, 14vw, 170px) 0 90px; background: radial-gradient(ellipse at 20% 0%, rgba(184,155,255,.28), transparent 55%), radial-gradient(ellipse at 90% 20%, rgba(254,143,217,.18), transparent 50%); text-align: center; }
+.ki-hero { padding: clamp(40px, 5vw, 64px) 0 90px; background: radial-gradient(ellipse at 20% 0%, rgba(184,155,255,.28), transparent 55%), radial-gradient(ellipse at 90% 20%, rgba(254,143,217,.18), transparent 50%); text-align: center; }
 .ki-hero-inner { max-width: 900px; }
 .ki-badge { display: inline-flex; align-items: center; gap: 10px; padding: 8px 18px; border-radius: 100px; background: #fff; border: 1px solid var(--border-light); font-size: .8rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--lilac-deep); margin-bottom: 24px; }
 .ki-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--lima); box-shadow: 0 0 0 4px rgba(210,242,58,.35); }
@@ -67,3 +67,6 @@
   .ki-card-foot { flex-direction: column; align-items: stretch; }
   .ki-card-foot .btn { width: 100%; }
 }
+
+.ki-chip-soon { background: var(--bg-soft); color: var(--text-muted); }
+.ki-price { color: var(--lilac-deep); font-size: 1.05rem; }

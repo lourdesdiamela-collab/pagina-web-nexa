@@ -1,18 +1,19 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import AprendeTabs from '@/components/AprendeTabs';
 import { waHref } from '@/lib/whatsapp';
 import './soluciones.css';
 
 export const metadata = {
-  title: 'Soluciones con IA para pymes y emprendedores | Kits en video — NEXA',
+  title: 'Soluciones con IA para pymes y emprendedores | Mini capacitaciones — NEXA',
   description:
-    'Kits en video con plantillas y flujos listos para resolver problemas reales de tu negocio con IA: WhatsApp que vende, contenido de un mes en una tarde, anuncios sin tirar plata y más. Preventa abierta.',
+    'Mini capacitaciones en video con plantillas y flujos listos para resolver problemas reales de tu negocio con IA: WhatsApp e Instagram que venden, contenido con IA, anuncios y más. Primera capacitación en preventa: $49.999.',
   alternates: { canonical: '/soluciones-ia' },
   openGraph: {
     title: 'Soluciones con IA para pymes y emprendedores — NEXA',
     description:
-      'Kits en video con plantillas y flujos listos para aplicar IA a problemas reales de tu negocio. Preventa abierta.',
+      'Mini capacitaciones en video con plantillas y flujos listos para aplicar IA a problemas reales de tu negocio. Preventa abierta.',
     url: 'https://www.nexagrowth.com.ar/soluciones-ia',
     siteName: 'NEXA',
     locale: 'es_AR',
@@ -21,89 +22,90 @@ export const metadata = {
 };
 
 /*
- * Los kits están en PREVENTA: se graban con feedback de quienes reservan.
- * Los precios NO se muestran hasta que Lu los confirme: cuando estén
- * definidos, completar `precio` en cada kit (ej. 'USD 29') y el precio
- * aparece solo en la tarjeta.
+ * Capacitación 1 en PREVENTA ($49.999). Las demás figuran como "próximamente"
+ * y se abren según la demanda que muestre la preventa.
+ * Cobro: por ahora se coordina por WhatsApp (se pasan los datos de pago al reservar).
  */
 const KITS = [
   {
     id: 'whatsapp',
     emoji: '💬',
-    titulo: 'WhatsApp que vende',
-    problema: 'Te escriben por WhatsApp e Instagram y tardás horas en responder: se enfrían las consultas.',
-    incluye: ['Guiones y respuestas para las 15 consultas más comunes', 'Flujo de seguimiento paso a paso', 'Cómo usar IA para responder rápido sin sonar a robot'],
-    formato: 'Video + plantillas',
-    precio: null,
-  },
-  {
-    id: 'marca-ia',
-    emoji: '🎯',
-    titulo: 'Tu marca en ChatGPT',
-    problema: 'Usás IA pero todo te sale genérico y suena igual al de la competencia.',
-    incluye: ['Cómo cargarle la voz, el público y el contexto de tu negocio', 'Plantillas de instrucciones para posts, mails y fichas de producto', 'Checklist para revisar antes de publicar'],
-    formato: 'Video + plantillas',
-    precio: null,
-  },
-  {
-    id: 'medir-ia',
-    emoji: '📊',
-    titulo: 'Medí si la IA te rinde',
-    problema: 'Pagás herramientas de IA y no sabés si te ahorran tiempo o plata.',
-    incluye: ['Planilla para medir horas ahorradas y resultados', 'Qué indicadores mirar según tu rubro', 'Cómo decidir qué herramienta conservar y cuál descartar'],
-    formato: 'Video + planilla',
-    precio: null,
+    estado: 'preventa',
+    titulo: 'WhatsApp e Instagram que venden',
+    problema: 'Te escriben por WhatsApp e Instagram, tardás en responder y las consultas se enfrían.',
+    incluye: [
+      '7 módulos en video (unos 100 minutos) para armar tu sistema de atención y seguimiento',
+      'Banco de 25 respuestas y 6 guiones de seguimiento listos para adaptar',
+      'Cómo usar la IA como ayudante para redactar y revisar tus respuestas',
+      'Planilla de leads para medir cuántas consultas se vuelven ventas',
+    ],
+    formato: 'Video + plantillas + planilla',
+    precio: '$49.999',
   },
   {
     id: 'contenido',
     emoji: '🗓️',
-    titulo: 'Contenido de un mes en una tarde',
+    estado: 'proximamente',
+    titulo: 'Contenido de un mes con IA',
     problema: 'Publicar todos los días te come el tiempo y no tenés equipo.',
-    incluye: ['Método para planificar un mes de contenido', 'Guiones e ideas con IA adaptados a tu rubro', 'Calendario editable'],
-    formato: 'Video + calendario',
+    incluye: ['Voz de marca y calendario de un mes', 'Guiones e ideas con IA para tu rubro', 'Plantillas y checklist de revisión'],
+    formato: 'Video + plantillas',
     precio: null,
   },
   {
     id: 'ads',
     emoji: '🚀',
-    titulo: 'Anuncios sin tirar plata',
-    problema: 'Invertís en Meta o Google y no sabés qué está funcionando.',
-    incluye: ['Estructura de campaña simple para arrancar', 'Textos y variantes creados con IA', 'Revisión semanal en 20 minutos'],
+    estado: 'proximamente',
+    titulo: 'Anuncios en Meta y Google sin tirar plata',
+    problema: 'Invertís en publicidad y no sabés qué está funcionando.',
+    incluye: ['Estructura de campaña simple para arrancar', 'Textos y variantes con IA', 'Revisión semanal en 20 minutos'],
     formato: 'Video + checklist',
     precio: null,
   },
   {
-    id: 'politica-ia',
-    emoji: '🛡️',
-    titulo: 'Reglas de IA para tu equipo',
-    problema: 'Tu equipo ya usa IA con datos de clientes y no hay reglas claras.',
-    incluye: ['Modelo de política de uso listo para adaptar', 'Qué datos nunca cargar en una IA', 'Guía de implementación en una reunión'],
-    formato: 'Video + documento',
+    id: 'ordena-ia',
+    emoji: '📊',
+    estado: 'proximamente',
+    titulo: 'Ordená la IA en tu negocio',
+    problema: 'Pagás herramientas de IA sin saber si rinden, y tu equipo las usa sin reglas.',
+    incluye: ['Planilla para medir ahorro y resultados', 'Política de uso lista para adaptar', 'Qué datos nunca cargar en una IA'],
+    formato: 'Video + planilla + documento',
+    precio: null,
+  },
+  {
+    id: 'seo-ia',
+    emoji: '🔎',
+    estado: 'proximamente',
+    titulo: 'Que las IA te recomienden',
+    problema: 'Ahora la gente le pregunta a una IA en vez de buscar en Google, y tu negocio no aparece.',
+    incluye: ['Cómo responden los asistentes de IA', 'Contenido que suelen citar', 'Auditoría guiada de tu web'],
+    formato: 'Video + checklist',
     precio: null,
   },
 ];
 
 const PASOS = [
-  { n: '01', t: 'Reservás tu lugar', d: 'Elegís el kit que más te duele y lo reservás por WhatsApp. Sin pagar de más antes de tiempo.' },
-  { n: '02', t: 'Lo armamos con vos', d: 'Grabamos los kits priorizando los problemas que más piden quienes reservan.' },
+  { n: '01', t: 'Reservás tu lugar', d: 'Reservás tu lugar por WhatsApp y te pasamos los datos de pago.' },
+  { n: '02', t: 'Lo armamos con vos', d: 'Terminamos la capacitación con feedback de quienes reservan y te confirmamos la fecha de entrega.' },
   { n: '03', t: 'Aplicás en una tarde', d: 'Recibís el video corto y los archivos listos para copiar, pegar y usar en tu negocio.' },
 ];
 
 const FAQ = [
   { q: '¿Necesito saber de IA o de marketing?', a: 'No. Están pensados para dueños de pymes y emprendedores que no tienen tiempo ni equipo técnico. Se explica con ejemplos de negocios reales y archivos para usar tal cual.' },
-  { q: '¿Cuándo se entregan los kits?', a: 'Están en preventa: se producen en función de la demanda. Al reservar te confirmamos por WhatsApp la fecha estimada de entrega del kit que elegiste.' },
-  { q: '¿Cuánto cuestan?', a: 'Te pasamos el precio de preventa al reservar, sin compromiso de compra hasta que lo confirmes.' },
+  { q: '¿Cuándo se entrega?', a: 'La primera capacitación está en preventa: al reservar te confirmamos por WhatsApp la fecha de entrega. Las demás se abren según la demanda.' },
+  { q: '¿Cuánto cuestan?', a: 'La primera capacitación sale $49.999 (pago único). Las próximas se anuncian al abrirlas, y quienes pidan que les avisemos se enteran primero.' },
   { q: '¿Y si prefiero que lo hagan por mí?', a: 'También lo hacemos: NEXA ofrece servicios de marketing, automatización y publicidad. Podés consultarlo desde la página de servicios o por WhatsApp.' },
-  { q: '¿Qué pasa con mis datos?', a: 'Solo usamos tu contacto para avisarte del kit que reservaste. Podés pedir la baja en cualquier momento.' },
+  { q: '¿Qué pasa con mis datos?', a: 'Solo usamos tu contacto para avisarte de la capacitación que reservaste. Podés pedir la baja en cualquier momento.' },
 ];
 
 export default function SolucionesIAPage() {
-  const reservarGeneral = waHref('kits_ia_hero', 'Hola NEXA! Quiero reservar un kit de soluciones con IA para mi negocio.');
+  const reservarGeneral = waHref('kits_ia_hero', 'Hola NEXA! Quiero reservar mi lugar en una capacitación de IA para mi negocio.');
 
   return (
     <>
       <Navbar />
       <main className="ki-main">
+        <AprendeTabs active="capacitaciones" />
         {/* HERO */}
         <section className="ki-hero">
           <div className="container ki-hero-inner">
@@ -112,14 +114,14 @@ export default function SolucionesIAPage() {
               IA aplicada a <span className="text-gradient">problemas reales</span> de tu negocio
             </h1>
             <p className="ki-lead">
-              Kits cortos en video con plantillas y flujos listos para usar. Para pymes y emprendedores que quieren resultados,
+              Mini capacitaciones en video con plantillas y flujos listos para usar. Para pymes y emprendedores que quieren resultados,
               no teoría ni cursos de 40 horas.
             </p>
             <div className="ki-cta-row">
-              <a href={reservarGeneral} className="btn btn-lima" rel="noopener">Reservar mi kit</a>
-              <a href="#kits" className="btn btn-outline">Ver los kits</a>
+              <a href={reservarGeneral} className="btn btn-lima" rel="noopener">Reservar mi lugar</a>
+              <a href="#kits" className="btn btn-outline">Ver las capacitaciones</a>
             </div>
-            <p className="ki-note">Sin pago anticipado: reservás y te confirmamos precio y fecha por WhatsApp.</p>
+            <p className="ki-note">Primera capacitación en preventa: reservás tu lugar por WhatsApp y te pasamos los datos de pago y la fecha de entrega.</p>
           </div>
         </section>
 
@@ -153,16 +155,16 @@ export default function SolucionesIAPage() {
         <section className="ki-sec" id="kits">
           <div className="container">
             <div className="section-header">
-              <span className="section-tag">Kits de resultado</span>
-              <h2 className="section-title">Elegí el problema que más te duele</h2>
-              <p className="section-subtitle">Cada kit resuelve una sola cosa y se aplica en una tarde. Reservá el que necesitás.</p>
+              <span className="section-tag">Mini capacitaciones</span>
+              <h2 className="section-title">Una capacitación por cada problema</h2>
+              <p className="section-subtitle">Cada una resuelve una sola cosa y se aplica en una tarde. La primera ya está en preventa; las demás se abren según la demanda.</p>
             </div>
             <div className="ki-grid">
               {KITS.map((k) => (
                 <article key={k.id} className="ki-card">
                   <div className="ki-card-top">
                     <span className="ki-emoji" aria-hidden="true">{k.emoji}</span>
-                    <span className="ki-chip">Preventa</span>
+                    <span className={`ki-chip ${k.estado === 'preventa' ? '' : 'ki-chip-soon'}`}>{k.estado === 'preventa' ? 'Preventa' : 'Próximamente'}</span>
                   </div>
                   <h3>{k.titulo}</h3>
                   <p className="ki-problema">{k.problema}</p>
@@ -170,13 +172,18 @@ export default function SolucionesIAPage() {
                     {k.incluye.map((i) => (<li key={i}>{i}</li>))}
                   </ul>
                   <div className="ki-card-foot">
-                    <span className="ki-format">{k.formato}{k.precio ? ` · ${k.precio}` : ''}</span>
+                    <span className="ki-format">{k.formato}{k.precio ? <strong className="ki-price"> · {k.precio}</strong> : null}</span>
                     <a
-                      href={waHref(`kits_ia_${k.id}`, `Hola NEXA! Quiero reservar el kit "${k.titulo}".`)}
-                      className="btn btn-primary btn-sm"
+                      href={waHref(
+                        `kits_ia_${k.id}`,
+                        k.estado === 'preventa'
+                          ? `Hola NEXA! Quiero reservar mi lugar en la capacitación "${k.titulo}" (${k.precio}).`
+                          : `Hola NEXA! Quiero que me avisen cuando salga la capacitación "${k.titulo}".`
+                      )}
+                      className={`btn btn-sm ${k.estado === 'preventa' ? 'btn-primary' : 'btn-outline'}`}
                       rel="noopener"
                     >
-                      Reservar este kit
+                      {k.estado === 'preventa' ? 'Reservar mi lugar' : 'Avisarme cuando salga'}
                     </a>
                   </div>
                 </article>
@@ -233,7 +240,7 @@ export default function SolucionesIAPage() {
             <span className="section-tag">Quiénes lo hacen</span>
             <h2 className="section-title">Una agencia que lo aplica todos los días</h2>
             <p className="section-subtitle">
-              NEXA es una agencia de marketing y automatización con IA de Argentina. Los kits salen de lo que hacemos para nuestros clientes,
+              NEXA es una agencia de marketing y automatización con IA de Argentina. Las capacitaciones salen de lo que hacemos para nuestros clientes,
               y solo mostramos casos con autorización.
             </p>
             <div className="ki-cta-row">
@@ -265,8 +272,8 @@ export default function SolucionesIAPage() {
         <section className="ki-final">
           <div className="container ki-center">
             <h2 className="ki-white ki-final-title">¿Cuál es el problema que querés resolver primero?</h2>
-            <p className="ki-final-sub">Contanos y te decimos qué kit te conviene. Sin compromiso.</p>
-            <a href={waHref('kits_ia_final', 'Hola NEXA! Quiero saber qué kit de IA me conviene para mi negocio.')} className="btn btn-lima" rel="noopener">
+            <p className="ki-final-sub">Contanos y te decimos qué capacitación te conviene. Sin compromiso.</p>
+            <a href={waHref('kits_ia_final', 'Hola NEXA! Quiero saber qué capacitación de IA me conviene para mi negocio.')} className="btn btn-lima" rel="noopener">
               Hablar por WhatsApp
             </a>
           </div>
