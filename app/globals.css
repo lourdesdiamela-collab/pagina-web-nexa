@@ -1995,3 +1995,13 @@ p { color: var(--text-body); line-height: 1.7; }
   .aprende-admin-sidebar .brand { display: none; }
   .aprende-admin-table-wrap { font-size: 0.8rem; }
 }
+
+/* Aprende: selector entre guías y capacitaciones */
+.aprende-tabs { padding-top: clamp(88px, 10vw, 112px); background: var(--bg-main); }
+.aprende-tabs-inner { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+.aprende-tab { display: flex; flex-direction: column; gap: 2px; padding: 12px 22px; border-radius: 16px; border: 1px solid var(--border-light); background: #fff; text-decoration: none; color: var(--text-main); min-width: 220px; transition: border-color .2s, box-shadow .2s; }
+.aprende-tab strong { font-size: .98rem; }
+.aprende-tab span { font-size: .8rem; color: var(--text-muted); }
+.aprende-tab:hover { border-color: var(--lilac-deep); }
+.aprende-tab.is-active { border-color: var(--lilac-deep); box-shadow: 0 0 0 3px rgba(106,63,208,.14); }
+@media (max-width: 560px) { .aprende-tab { flex: 1 1 100%; } }
