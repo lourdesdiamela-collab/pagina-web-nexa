@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import AprendeTabs from '@/components/AprendeTabs';
 import { waHref } from '@/lib/whatsapp';
 import './soluciones.css';
 
@@ -105,7 +104,6 @@ export default function SolucionesIAPage() {
     <>
       <Navbar />
       <main className="ki-main">
-        <AprendeTabs active="capacitaciones" />
         {/* HERO */}
         <section className="ki-hero">
           <div className="container ki-hero-inner">
