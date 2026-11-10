@@ -2,6 +2,7 @@ import { CartProvider } from '@/components/aprende/CartContext';
 import CartButton from '@/components/aprende/CartButton';
 
 export const metadata = {
+  robots: { index: false, follow: false },
   title: 'NEXA Aprende | Biblioteca premium de recursos digitales',
   description: 'Guías, packs y plantillas descargables sobre IA, Instagram, WhatsApp Business, marketing, ventas, desarrollo web, SEO, Excel/Power BI, finanzas y productividad.',
   alternates: {
