@@ -10,9 +10,7 @@ import {
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import WhatsAppFloat from '@/components/WhatsAppFloat';
-import { MarketingBadges } from '@/components/ui/marketing-badges';
 import { track } from '@/lib/track';
-import HomeCarousel from '@/components/HomeCarousel';
 
 /* ─── Animation Variants ─── */
 const fadeUp = {
@@ -43,6 +41,7 @@ const SERVICES = [
     accent: 'rgba(234,161,251,0.08)',
     border: 'rgba(234,161,251,0.2)',
     slug: 'redes_sociales',
+    img: '/img/servicio-contenido.jpg',
   },
   {
     icon: TrendingUp,
@@ -53,6 +52,7 @@ const SERVICES = [
     accent: 'rgba(210,242,58,0.08)',
     border: 'rgba(210,242,58,0.2)',
     slug: 'meta_ads',
+    img: '/img/servicio-anuncios.jpg',
   },
   {
     icon: Cpu,
@@ -63,6 +63,7 @@ const SERVICES = [
     accent: 'rgba(184,155,255,0.12)',
     border: 'rgba(184,155,255,0.25)',
     slug: 'nexa_integral',
+    img: '/img/servicio-integral.jpg',
   },
 ];
 
@@ -291,7 +292,17 @@ export default function HomePage() {
         </section>
 
         {/* ══════ CARRUSEL ILUSTRATIVO ══════ */}
-        <HomeCarousel />
+        <div className="nx-marquee" aria-hidden="true">
+          <div className="nx-marquee-track">
+            {[0, 1].map((k) => (
+              <div key={k} className="nx-marquee-set">
+                {['Redes sociales', 'Anuncios en Meta', 'Google Ads', 'Automatización con IA', 'Estrategia', 'Informes claros'].map((t) => (
+                  <span key={t}>{t}<b>✦</b></span>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Se eliminó la tira de logos "Marcas que ya crecieron con NEXA"
             (Ciudad Moto, Corven Motos, Roca Viviendas, Casa Diez, Estética
@@ -336,7 +347,7 @@ export default function HomePage() {
                       whileHover={{ y: -8, transition: { duration: 0.3 } }}
                       style={{ '--card-accent': service.tagColor, '--card-glow': service.accent, cursor: 'pointer' }}
                     >
-                      <div className="svc-glow" style={{ background: `radial-gradient(circle at top right, ${service.accent}, transparent 60%)` }} />
+                      <img className="svc-img" src={service.img} alt={service.title} loading="lazy" />
                       <div className="svc-tag" style={{ color: service.tagColor, background: service.accent, border: `1px solid ${service.border}` }}>
                         {service.tag}
                       </div>
@@ -357,62 +368,49 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ══════ CHANNELS ══════ */}
-        <section id="canales" className="channels-section">
+        {/* ══════ CÓMO TRABAJAMOS ══════ */}
+        <section id="como-trabajamos" className="nx-steps">
           <div className="container">
-            <div className="channels-grid">
-              <motion.div
-                className="channels-text"
-                variants={stagger}
-                initial="hidden"
-                whileInView="show"
-                viewport={{ once: true, margin: '-60px' }}
-              >
-                <motion.div variants={fadeUp} className="channels-tag">
-                  <Megaphone size={14} />
-                  <span>Marketing 360°</span>
+            <motion.div className="section-header" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
+              <motion.span variants={fadeUp} className="section-tag nx-tag-dark">Cómo trabajamos</motion.span>
+              <motion.h2 variants={fadeUp} className="section-title nx-title-light">Simple, en tres pasos</motion.h2>
+            </motion.div>
+            <motion.div className="nx-steps-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }}>
+              {[
+                { n: '01', t: 'Diagnóstico', d: 'Miramos tu marca, tus redes y tu competencia. Sin cargo y sin compromiso.' },
+                { n: '02', t: 'Plan y ejecución', d: 'Armamos el calendario, las piezas y las campañas. Vos aprobás todo desde tu portal.' },
+                { n: '03', t: 'Medimos y mejoramos', d: 'Cada mes recibís un informe por escrito, claro, con lo que funcionó y qué sigue.' },
+              ].map((st) => (
+                <motion.div key={st.n} variants={scaleIn} className="nx-step">
+                  <span className="nx-step-n">{st.n}</span>
+                  <h3>{st.t}</h3>
+                  <p>{st.d}</p>
                 </motion.div>
-                <motion.h2 variants={fadeUp} className="channels-title">
-                  Dominamos cada canal para{' '}
-                  <span className="text-highlight">maximizar tu alcance</span>
-                </motion.h2>
-                <motion.p variants={fadeUp} className="channels-desc">
-                  Desde SEO hasta redes sociales, email marketing y publicidad paga.
-                  Nuestra agencia cubre todos los frentes para que ninguna oportunidad de crecimiento se escape.
-                </motion.p>
-                <motion.ul variants={staggerFast} className="channels-list">
-                  {CHANNEL_FEATURES.map((item) => (
-                    <motion.li key={item} variants={fadeUp} className="channels-list-item">
-                      <CheckCircle2 size={15} color="#835CE6" />
-                      <span>{item}</span>
-                    </motion.li>
-                  ))}
-                </motion.ul>
-                <motion.a
-                  variants={fadeUp}
-                  href="#contacto"
-                  className="btn-lima-cta"
-                  style={{ marginTop: '2rem', display: 'inline-flex', alignItems: 'center', gap: 8 }}
-                  whileHover={{ scale: 1.04, boxShadow: '0 16px 40px rgba(210,242,58,0.4)' }}
-                  whileTap={{ scale: 0.97 }}
-                >
-                  Armar mi estrategia
-                  <ArrowRight size={16} />
-                </motion.a>
-              </motion.div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
 
-              <motion.div
-                className="channels-badges-wrap"
-                initial={{ opacity: 0, scale: 0.92 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true, margin: '-60px' }}
-                transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              >
-                <div className="channels-badges-bg" />
-                <MarketingBadges />
-                <p className="channels-hint">Interactuá con los canales</p>
-              </motion.div>
-            </div>
+        {/* ══════ QUIÉNES SOMOS ══════ */}
+        <section id="quienes-somos" className="nx-about">
+          <div className="container nx-about-grid">
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
+              <motion.span variants={fadeUp} className="section-tag">Quiénes somos</motion.span>
+              <motion.h2 variants={fadeUp} className="nx-about-title">
+                Desde 2019 acompañamos a pymes y emprendedores a{' '}
+                <span className="text-highlight">lograr lo que se propusieron</span>
+              </motion.h2>
+              <motion.p variants={fadeUp} className="nx-about-text">
+                Empezamos con una idea simple: que cualquier negocio, sin importar su tamaño, tenga el orden y las herramientas de una empresa grande, sin la complejidad ni los costos.
+              </motion.p>
+              <motion.p variants={fadeUp} className="nx-about-text">
+                Trabajamos codo a codo con pymes y emprendedores para ordenar su marketing, hacer crecer sus redes y su publicidad, y medir qué funciona de verdad. Usamos la inteligencia artificial para ir más rápido, pero las decisiones las toma una persona que conoce tu negocio.
+              </motion.p>
+              <motion.p variants={fadeUp} className="nx-about-text nx-about-strong">Tu objetivo es el nuestro.</motion.p>
+            </motion.div>
+            <motion.div className="nx-about-visual" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+              <video className="nx-about-video" src="/nexa-quienes-somos.mp4" poster="/nexa-quienes-somos-poster.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="NEXA: quiénes somos. Desde 2019 acompañamos a pymes y emprendedores a lograr lo que se propusieron." />
+            </motion.div>
           </div>
         </section>
 
@@ -447,27 +445,6 @@ export default function HomePage() {
               </motion.a>
             </motion.div>
 
-            <motion.div
-              className="recover-grid-visual"
-              variants={stagger}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true, margin: '-40px' }}
-            >
-              {RECOVER_ITEMS.map((item) => (
-                <motion.div
-                  key={item.title}
-                  variants={scaleIn}
-                  className="recover-card-premium"
-                  whileHover={{ y: -6, borderColor: `${item.color}40` }}
-                  style={{ '--item-color': item.color }}
-                >
-                  <div className="recover-card-dot" style={{ background: item.color, boxShadow: `0 0 12px ${item.color}60` }} />
-                  <h4>{item.title}</h4>
-                  <p>{item.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
           </div>
         </section>
 
