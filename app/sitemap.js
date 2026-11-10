@@ -11,7 +11,6 @@ const STATIC_ROUTES = [
   { path: '', changeFrequency: 'weekly', priority: 1 },
   { path: '/servicios', changeFrequency: 'weekly', priority: 0.9 },
   { path: '/casos', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/aprende', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/soluciones-ia', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/blog', changeFrequency: 'weekly', priority: 0.7 },
   { path: '/contacto', changeFrequency: 'monthly', priority: 0.6 },
@@ -48,5 +47,8 @@ export default function sitemap() {
     priority: 0.5,
   }));
 
-  return [...staticEntries, ...articleEntries, ...categoryEntries, ...productEntries];
+  // Aprende queda oculto por ahora: sus URLs no se publican en el sitemap.
+  void categoryEntries;
+  void productEntries;
+  return [...staticEntries, ...articleEntries];
 }

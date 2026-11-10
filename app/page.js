@@ -231,16 +231,16 @@ export default function HomePage() {
             >
               <motion.div variants={fadeUp} className="hero-badge">
                 <Sparkles size={14} />
-                <span>Marketing Digital con Inteligencia Artificial</span>
+                <span>Agencia digital con IA para pymes y emprendedores</span>
               </motion.div>
 
               <motion.h1 variants={fadeUp} className="hero-title">
-                Transformamos tus redes, tu publicidad y tu seguimiento de clientes en{' '}
-                <span className="text-highlight">crecimiento medible.</span>
+                Ordenamos tu marketing y lo{' '}
+                <span className="text-highlight">medimos en ventas</span>
               </motion.h1>
 
               <motion.p variants={fadeUp} className="hero-subtitle">
-                Gestionamos tus redes sociales, tus campañas de publicidad y el seguimiento de tus clientes con Inteligencia Artificial aplicada al marketing, para convertir seguidores en ventas reales.
+                Gestionamos tus redes, tu publicidad en Meta y Google Ads y el seguimiento de tus clientes. Usamos la IA como herramienta y siempre decide una persona.
               </motion.p>
 
               <motion.div variants={fadeUp} className="hero-actions">
@@ -250,20 +250,24 @@ export default function HomePage() {
                   whileHover={{ scale: 1.04, boxShadow: '0 16px 40px rgba(210,242,58,0.45)' }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Iniciar Diagnóstico
+                  Pedí tu diagnóstico gratis
                   <ArrowRight size={18} />
                 </motion.a>
                 <motion.a
                   href="#servicios"
                   className="btn-outline-dark"
-                  whileHover={{ borderColor: 'rgba(184,155,255,0.6)', background: 'rgba(184,155,255,0.08)' }}
+                  whileHover={{ borderColor: 'rgba(131,92,230,0.8)', background: 'rgba(184,155,255,0.12)' }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Ver soluciones
+                  Ver servicios
                 </motion.a>
               </motion.div>
+              <motion.p variants={fadeUp} className="hero-microcopy">
+                Sin cargo y sin compromiso. Te respondemos en menos de 24 hs.
+              </motion.p>
+            </motion.div>
 
-              <motion.div variants={fadeUp} className="hero-video-wrap">
+            <motion.div className="hero-video-wrap" initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}>
                 <video
                   className="hero-video"
                   src="/hero-servicios.mp4"
@@ -276,11 +280,6 @@ export default function HomePage() {
                   aria-label="NEXA: redes sociales, publicidad en Meta y Google Ads, automatización con IA y estrategia"
                 />
               </motion.div>
-
-              {/* Se eliminaron los chips de métricas del hero ("+20 Marcas
-                  activas", "3x ROI Promedio", "+275% en ventas"): eran cifras
-                  inventadas. No reponer sin datos reales. */}
-            </motion.div>
 
             {/* Se eliminó el panel de dashboard del hero: mostraba métricas
                 fabricadas ("+127% rendimiento mensual", "248 leads",
@@ -759,14 +758,14 @@ export default function HomePage() {
         }
 
         /* ── HERO ── */
-        .hero-section { padding: 160px 0 100px; position: relative; overflow: hidden; }
+        .hero-section { padding: 140px 0 90px; position: relative; overflow: hidden; }
         .hero-mouse-gradient {
           position: absolute; inset: 0; pointer-events: none; z-index: 0;
           transition: background 0.1s ease;
         }
-        .hero-video-wrap { margin: 56px auto 0; max-width: 960px; width: 100%; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px rgba(131,92,230,0.22); border: 1px solid rgba(131,92,230,0.15); background: #FAF8FC; line-height: 0; }
+        .hero-video-wrap { margin: 0; max-width: 680px; width: 100%; justify-self: end; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px rgba(131,92,230,0.22); border: 1px solid rgba(131,92,230,0.15); background: #FAF8FC; line-height: 0; }
         .hero-video { width: 100%; height: auto; aspect-ratio: 16 / 9; display: block; }
-        @media (max-width: 640px) { .hero-video-wrap { margin-top: 36px; border-radius: 16px; } }
+
         .hero-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(90px); }
         .hero-orb-1 { width: 700px; height: 700px; top: -200px; left: -150px; background: radial-gradient(circle, rgba(124,58,237,0.18), transparent 70%); animation: orbDrift1 12s ease-in-out infinite; }
         .hero-orb-2 { width: 450px; height: 450px; top: 40%; right: -100px; background: radial-gradient(circle, rgba(210,242,58,0.08), transparent 70%); animation: orbDrift2 15s ease-in-out infinite; }
@@ -777,17 +776,26 @@ export default function HomePage() {
 
         /* El hero pasó a una sola columna centrada al sacarse el panel de
            métricas fabricadas que ocupaba la columna derecha. */
-        .hero-container { display: flex; justify-content: center; position: relative; z-index: 1; }
-        .hero-content { max-width: 760px; text-align: center; }
+        .hero-container { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 56px; align-items: center; position: relative; z-index: 1; }
+        .hero-content { max-width: 640px; text-align: left; }
         .hero-subtitle-center { margin-left: auto; margin-right: auto; }
         .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(184,155,255,0.12); border: 1px solid rgba(184,155,255,0.3); border-radius: 999px; color: var(--lilac-deep); font-weight: 700; font-size: 0.82rem; margin-bottom: 24px; }
-        .hero-title { font-size: clamp(2.4rem, 5vw, 4.2rem); line-height: 1.04; font-weight: 900; letter-spacing: -0.04em; color: var(--text-dark); margin-bottom: 20px; }
-        .text-highlight { background: linear-gradient(135deg, #B89BFF, #EAA1FB, #FE8FD9); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline; }
-        .hero-subtitle { color: var(--text-body); font-size: 1.15rem; line-height: 1.7; margin: 0 auto 32px; max-width: 620px; }
-        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+        .hero-title { font-size: clamp(2.3rem, 4.4vw, 3.9rem); line-height: 1.06; font-weight: 900; letter-spacing: -0.04em; color: var(--text-dark); margin-bottom: 20px; }
+        .text-highlight { background: linear-gradient(135deg, #6D3FD9, #A24BD8 55%, #D4409F); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline; }
+        .hero-subtitle { color: var(--text-body); font-size: 1.15rem; line-height: 1.65; margin: 0 0 32px; max-width: 560px; }
+        .hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: flex-start; }
+        .hero-microcopy { margin-top: 16px; font-size: 0.88rem; color: var(--text-muted); }
+        @media (max-width: 960px) {
+          .hero-container { grid-template-columns: 1fr; gap: 36px; }
+          .hero-content { max-width: 680px; margin: 0 auto; text-align: center; }
+          .hero-subtitle { margin-left: auto; margin-right: auto; }
+          .hero-actions { justify-content: center; }
+          .hero-video-wrap { justify-self: center; }
+        }
+        @media (max-width: 640px) { .hero-video-wrap { border-radius: 16px; } .hero-section { padding: 120px 0 70px; } }
         /* ── BUTTONS ── */
         .btn-lima-cta { display: inline-flex; align-items: center; gap: 8px; padding: 15px 30px; background: #D2F23A; color: #0A0B10; font-weight: 800; font-size: 0.93rem; border-radius: 100px; text-transform: uppercase; letter-spacing: 0.04em; transition: all 0.3s; text-decoration: none; }
-        .btn-outline-dark { display: inline-flex; align-items: center; gap: 8px; padding: 15px 28px; border: 1px solid var(--border-light); background: rgba(255,255,255,0.7); color: var(--text-dark); font-weight: 700; font-size: 0.93rem; border-radius: 100px; transition: all 0.3s; text-decoration: none; }
+        .btn-outline-dark { display: inline-flex; align-items: center; gap: 8px; padding: 15px 28px; border: 1.5px solid rgba(131,92,230,0.55); background: rgba(255,255,255,0.85); color: var(--text-dark); font-weight: 700; font-size: 0.93rem; border-radius: 100px; transition: all 0.3s; text-decoration: none; }
 
         /* ── SERVICES ── */
         .services-section { padding: 100px 0; }
