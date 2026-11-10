@@ -3,36 +3,26 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, UserRound, Briefcase, X } from 'lucide-react';
+import { Menu, Briefcase, X } from 'lucide-react';
 import { NexaLogo } from './NexaLogo';
 
 const LINKS = [
   { href: '/', label: 'Inicio' },
   { href: '/servicios', label: 'Servicios' },
   { href: '/casos', label: 'Enfoque' },
-  { href: '/aprende', label: 'Aprende' },
   { href: '/contacto', label: 'Contacto' },
 ];
 
 function isLinkActive(pathname, href) {
   if (href === '/') return pathname === '/';
-  if (href === '/aprende' && pathname?.startsWith('/soluciones-ia')) return true;
   return pathname === href || pathname?.startsWith(`${href}/`);
 }
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const accountHref = session?.user
-    ? (session.user.role === 'ADMIN' ? '/aprende/admin' : '/aprende/mis-recursos')
-    : '/aprende/cuenta/login';
-  const accountLabel = session?.user
-    ? (session.user.role === 'ADMIN' ? 'Panel admin' : 'Mis recursos')
-    : 'Ingresar a Aprende';
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -118,9 +108,6 @@ export default function Navbar() {
               Botón de Baja de servicio
             </Link>
             <div className="mobile-menu-divider" />
-            <Link href={accountHref} className="mobile-menu-link mobile-menu-link-accent">
-              <UserRound size={16} /> {accountLabel}
-            </Link>
             <Link href="https://crm.nexagrowth.com.ar" className="mobile-menu-link mobile-menu-link-ghost">
               <Briefcase size={16} /> Portal de Clientes
               <span className="mobile-menu-link-hint">¿Ya sos cliente de NEXA? Ingresá acá</span>
