@@ -263,6 +263,20 @@ export default function HomePage() {
                 </motion.a>
               </motion.div>
 
+              <motion.div variants={fadeUp} className="hero-video-wrap">
+                <video
+                  className="hero-video"
+                  src="/hero-servicios.mp4"
+                  poster="/hero-servicios-poster.jpg"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="metadata"
+                  aria-label="NEXA: redes sociales, publicidad en Meta y Google Ads, automatización con IA y estrategia"
+                />
+              </motion.div>
+
               {/* Se eliminaron los chips de métricas del hero ("+20 Marcas
                   activas", "3x ROI Promedio", "+275% en ventas"): eran cifras
                   inventadas. No reponer sin datos reales. */}
@@ -750,6 +764,9 @@ export default function HomePage() {
           position: absolute; inset: 0; pointer-events: none; z-index: 0;
           transition: background 0.1s ease;
         }
+        .hero-video-wrap { margin: 56px auto 0; max-width: 960px; width: 100%; border-radius: 24px; overflow: hidden; box-shadow: 0 30px 80px rgba(131,92,230,0.22); border: 1px solid rgba(131,92,230,0.15); background: #FAF8FC; line-height: 0; }
+        .hero-video { width: 100%; height: auto; aspect-ratio: 16 / 9; display: block; }
+        @media (max-width: 640px) { .hero-video-wrap { margin-top: 36px; border-radius: 16px; } }
         .hero-orb { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(90px); }
         .hero-orb-1 { width: 700px; height: 700px; top: -200px; left: -150px; background: radial-gradient(circle, rgba(124,58,237,0.18), transparent 70%); animation: orbDrift1 12s ease-in-out infinite; }
         .hero-orb-2 { width: 450px; height: 450px; top: 40%; right: -100px; background: radial-gradient(circle, rgba(210,242,58,0.08), transparent 70%); animation: orbDrift2 15s ease-in-out infinite; }
