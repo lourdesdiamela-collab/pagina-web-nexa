@@ -70,3 +70,28 @@
 
 .ki-chip-soon { background: var(--bg-soft); color: var(--text-muted); }
 .ki-price { color: var(--lilac-deep); font-size: 1.05rem; }
+
+.ki-pills { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin:0 auto 30px; padding:0; list-style:none; }
+.ki-pills li { background:#fff; border:1px solid var(--border-light); border-radius:100px; padding:10px 18px; font-weight:700; font-size:.95rem; color:var(--text-dark); }
+.ki-what { display:grid; grid-template-columns:repeat(3,1fr); gap:22px; }
+.ki-what-card { background:#fff; border:1px solid var(--border-light); border-radius:28px; padding:32px 28px; }
+.ki-what-emoji { display:grid; place-items:center; width:56px; height:56px; border-radius:18px; background:var(--gradient-accent); font-size:1.7rem; margin-bottom:18px; }
+.ki-what-card h3 { font-size:1.3rem; margin-bottom:8px; }
+.ki-feature { display:grid; grid-template-columns:1.1fr 1fr; gap:0; background:linear-gradient(145deg,#1b1038,#3b1578); border-radius:32px; overflow:hidden; color:#fff; box-shadow:0 30px 70px rgba(109,63,217,.25); }
+.ki-feature-main { padding:40px; }
+.ki-feature-main h3 { color:#fff; font-size:clamp(1.6rem,3vw,2.2rem); margin:14px 0 14px; letter-spacing:-.03em; }
+.ki-feature-main .ki-problema { color:rgba(255,255,255,.82); }
+.ki-feature-main .ki-chip { background:var(--lima); }
+.ki-feature-price { font-size:3rem; font-weight:800; letter-spacing:-.04em; color:var(--lima); margin:18px 0 22px; line-height:1; }
+.ki-feature-price small { font-size:1rem; font-weight:600; color:rgba(255,255,255,.7); letter-spacing:0; }
+.ki-feature-incl { padding:40px; background:rgba(255,255,255,.07); }
+.ki-feature-incl h4 { font-size:1.05rem; font-weight:800; margin-bottom:16px; color:#fff; text-transform:uppercase; letter-spacing:.08em; }
+.ki-feature-incl .ki-list li { color:rgba(255,255,255,.9); }
+.ki-next-title { font-size:1.2rem; margin:44px 0 18px; }
+.ki-grid-4 { grid-template-columns:repeat(4,1fr); gap:18px; }
+.ki-card-compact { padding:24px; }
+.ki-card-compact h3 { font-size:1.1rem; }
+.ki-card-compact .ki-problema { font-size:.9rem; flex:1; }
+.ki-notify { font-weight:800; font-size:.9rem; color:var(--lilac-deep); margin-top:6px; }
+@media (max-width:980px){ .ki-what{grid-template-columns:1fr} .ki-feature{grid-template-columns:1fr} .ki-grid-4{grid-template-columns:repeat(2,1fr)} }
+@media (max-width:640px){ .ki-feature-main,.ki-feature-incl{padding:28px 22px} .ki-grid-4{grid-template-columns:1fr} }

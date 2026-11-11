@@ -5,7 +5,7 @@ import { waHref } from '@/lib/whatsapp';
 import './soluciones.css';
 
 export const metadata = {
-  title: 'Soluciones con IA para pymes y emprendedores | Mini capacitaciones — NEXA',
+  title: 'Kits IA para pymes y emprendedores | Mini capacitaciones — NEXA',
   description:
     'Mini capacitaciones en video con plantillas y flujos listos para resolver problemas reales de tu negocio con IA: WhatsApp e Instagram que venden, contenido con IA, anuncios y más. Primera capacitación en preventa: $49.999.',
   alternates: { canonical: '/soluciones-ia' },
@@ -83,6 +83,12 @@ const KITS = [
   },
 ];
 
+const QUE_ES = [
+  { e: '🎬', t: 'Un video corto', d: 'Te explica el paso a paso, con ejemplos de negocios reales y sin teoría de más.' },
+  { e: '📋', t: 'Plantillas listas', d: 'Textos, guiones y planillas para copiar, pegar y adaptar a tu marca.' },
+  { e: '🎯', t: 'Un solo problema', d: 'Cada kit resuelve una cosa concreta, por ejemplo responder rápido por WhatsApp.' },
+];
+
 const PASOS = [
   { n: '01', t: 'Reservás tu lugar', d: 'Reservás tu lugar por WhatsApp y te pasamos los datos de pago.' },
   { n: '02', t: 'Lo armamos con vos', d: 'Terminamos la capacitación con feedback de quienes reservan y te confirmamos la fecha de entrega.' },
@@ -107,45 +113,43 @@ export default function SolucionesIAPage() {
         {/* HERO */}
         <section className="ki-hero">
           <div className="container ki-hero-inner">
-            <span className="ki-badge"><span className="ki-dot" /> Preventa abierta</span>
+            <span className="ki-badge"><span className="ki-dot" /> Kits IA de NEXA · Preventa abierta</span>
             <h1 className="ki-h1">
-              IA aplicada a <span className="text-gradient">problemas reales</span> de tu negocio
+              Usá IA en tu negocio, <span className="text-gradient">paso a paso</span>
             </h1>
             <p className="ki-lead">
-              Mini capacitaciones en video con plantillas y flujos listos para usar. Para pymes y emprendedores que quieren resultados,
-              no teoría ni cursos de 40 horas.
+              Un Kit IA es una mini capacitación en video con plantillas listas para copiar y pegar.
+              Cada kit resuelve un solo problema y lo aplicás en una tarde.
             </p>
+            <ul className="ki-pills">
+              <li>🎬 Video corto</li>
+              <li>📋 Plantillas listas</li>
+              <li>⚡ Se aplica en una tarde</li>
+            </ul>
             <div className="ki-cta-row">
               <a href={reservarGeneral} className="btn btn-lima" rel="noopener">Reservar mi lugar</a>
-              <a href="#kits" className="btn btn-outline">Ver las capacitaciones</a>
+              <a href="#kits" className="btn btn-outline">Ver los kits</a>
             </div>
-            <p className="ki-note">Primera capacitación en preventa: reservás tu lugar por WhatsApp y te pasamos los datos de pago y la fecha de entrega.</p>
+            <p className="ki-note">Reservás por WhatsApp y te pasamos los datos de pago y la fecha de entrega.</p>
           </div>
         </section>
 
-        {/* DATOS */}
+        {/* QUÉ ES UN KIT */}
         <section className="ki-sec ki-sec-soft">
           <div className="container">
             <div className="section-header">
-              <span className="section-tag">El problema es de aplicación</span>
-              <h2 className="section-title">Todos usan IA. Pocos la usan bien.</h2>
-              <p className="section-subtitle">
-                Según una encuesta nacional a 402 pymes argentinas (nadIA, CEPE Di Tella y Fundar; relevada entre noviembre y diciembre de 2025),
-                la herramienta ya llegó. Lo que falta es saber aplicarla y medirla.
-              </p>
+              <span className="section-tag">Qué es un Kit IA</span>
+              <h2 className="section-title">Todo lo que necesitás para resolver una cosa</h2>
             </div>
-            <div className="ki-stats">
-              <div className="ki-stat"><strong>41,6%</strong><span>de las pymes ya usa al menos una herramienta de IA</span></div>
-              <div className="ki-stat"><strong>57,4%</strong><span>no mide formalmente el impacto que le genera</span></div>
-              <div className="ki-stat"><strong>46,2%</strong><span>declara falta de experiencia y conocimiento como barrera</span></div>
-              <div className="ki-stat"><strong>72,5%</strong><span>de las usuarias no tiene política de uso de IA</span></div>
+            <div className="ki-what">
+              {QUE_ES.map((q) => (
+                <div key={q.t} className="ki-what-card">
+                  <span className="ki-what-emoji" aria-hidden="true">{q.e}</span>
+                  <h3>{q.t}</h3>
+                  <p>{q.d}</p>
+                </div>
+              ))}
             </div>
-            <p className="ki-source">
-              Fuente:{' '}
-              <a href="https://www.perfil.com/noticias/economia/cuatro-de-cada-diez-pymes-argentinas-ya-usan-ia-pero-pocas-miden-su-impacto-a40.phtml" target="_blank" rel="noopener noreferrer">
-                Perfil, 29/04/2026
-              </a>
-            </p>
           </div>
         </section>
 
@@ -153,37 +157,50 @@ export default function SolucionesIAPage() {
         <section className="ki-sec" id="kits">
           <div className="container">
             <div className="section-header">
-              <span className="section-tag">Mini capacitaciones</span>
-              <h2 className="section-title">Una capacitación por cada problema</h2>
-              <p className="section-subtitle">Cada una resuelve una sola cosa y se aplica en una tarde. La primera ya está en preventa; las demás se abren según la demanda.</p>
+              <span className="section-tag">Los kits</span>
+              <h2 className="section-title">Arrancá con el primero</h2>
+              <p className="section-subtitle">Ya está en preventa. Los demás se abren según la demanda: avisanos cuál te interesa.</p>
             </div>
-            <div className="ki-grid">
-              {KITS.map((k) => (
-                <article key={k.id} className="ki-card">
+
+            <article className="ki-feature">
+              <div className="ki-feature-main">
+                <span className="ki-chip">Preventa</span>
+                <h3>{KITS[0].emoji} {KITS[0].titulo}</h3>
+                <p className="ki-problema"><strong>El problema:</strong> {KITS[0].problema}</p>
+                <div className="ki-feature-price">{KITS[0].precio}<small> pago único</small></div>
+                <a
+                  href={waHref('kits_ia_whatsapp', `Hola NEXA! Quiero reservar mi lugar en el kit "${KITS[0].titulo}" (${KITS[0].precio}).`)}
+                  className="btn btn-primary"
+                  rel="noopener"
+                >
+                  Reservar mi lugar
+                </a>
+              </div>
+              <div className="ki-feature-incl">
+                <h4>Qué incluye</h4>
+                <ul className="ki-list">
+                  {KITS[0].incluye.map((i) => (<li key={i}>{i}</li>))}
+                </ul>
+              </div>
+            </article>
+
+            <h3 className="ki-next-title">Próximos kits</h3>
+            <div className="ki-grid ki-grid-4">
+              {KITS.slice(1).map((k) => (
+                <article key={k.id} className="ki-card ki-card-compact">
                   <div className="ki-card-top">
                     <span className="ki-emoji" aria-hidden="true">{k.emoji}</span>
-                    <span className={`ki-chip ${k.estado === 'preventa' ? '' : 'ki-chip-soon'}`}>{k.estado === 'preventa' ? 'Preventa' : 'Próximamente'}</span>
+                    <span className="ki-chip ki-chip-soon">Próximamente</span>
                   </div>
                   <h3>{k.titulo}</h3>
                   <p className="ki-problema">{k.problema}</p>
-                  <ul className="ki-list">
-                    {k.incluye.map((i) => (<li key={i}>{i}</li>))}
-                  </ul>
-                  <div className="ki-card-foot">
-                    <span className="ki-format">{k.formato}{k.precio ? <strong className="ki-price"> · {k.precio}</strong> : null}</span>
-                    <a
-                      href={waHref(
-                        `kits_ia_${k.id}`,
-                        k.estado === 'preventa'
-                          ? `Hola NEXA! Quiero reservar mi lugar en la capacitación "${k.titulo}" (${k.precio}).`
-                          : `Hola NEXA! Quiero que me avisen cuando salga la capacitación "${k.titulo}".`
-                      )}
-                      className={`btn btn-sm ${k.estado === 'preventa' ? 'btn-primary' : 'btn-outline'}`}
-                      rel="noopener"
-                    >
-                      {k.estado === 'preventa' ? 'Reservar mi lugar' : 'Avisarme cuando salga'}
-                    </a>
-                  </div>
+                  <a
+                    href={waHref(`kits_ia_${k.id}`, `Hola NEXA! Quiero que me avisen cuando salga el kit "${k.titulo}".`)}
+                    className="ki-notify"
+                    rel="noopener"
+                  >
+                    Avisarme cuando salga →
+                  </a>
                 </article>
               ))}
             </div>
@@ -195,7 +212,7 @@ export default function SolucionesIAPage() {
           <div className="container">
             <div className="section-header">
               <span className="section-tag ki-tag-dark">Cómo funciona</span>
-              <h2 className="section-title ki-white">Simple, y sin vueltas</h2>
+              <h2 className="section-title ki-white">Cómo conseguís tu kit</h2>
             </div>
             <div className="ki-steps">
               {PASOS.map((p) => (
@@ -232,6 +249,32 @@ export default function SolucionesIAPage() {
           </div>
         </section>
 
+        {/* DATOS */}
+        <section className="ki-sec ki-sec-soft">
+          <div className="container">
+            <div className="section-header">
+              <span className="section-tag">El problema es de aplicación</span>
+              <h2 className="section-title">Todos usan IA. Pocos la usan bien.</h2>
+              <p className="section-subtitle">
+                Según una encuesta nacional a 402 pymes argentinas (nadIA, CEPE Di Tella y Fundar; relevada entre noviembre y diciembre de 2025),
+                la herramienta ya llegó. Lo que falta es saber aplicarla y medirla.
+              </p>
+            </div>
+            <div className="ki-stats">
+              <div className="ki-stat"><strong>41,6%</strong><span>de las pymes ya usa al menos una herramienta de IA</span></div>
+              <div className="ki-stat"><strong>57,4%</strong><span>no mide formalmente el impacto que le genera</span></div>
+              <div className="ki-stat"><strong>46,2%</strong><span>declara falta de experiencia y conocimiento como barrera</span></div>
+              <div className="ki-stat"><strong>72,5%</strong><span>de las usuarias no tiene política de uso de IA</span></div>
+            </div>
+            <p className="ki-source">
+              Fuente:{' '}
+              <a href="https://www.perfil.com/noticias/economia/cuatro-de-cada-diez-pymes-argentinas-ya-usan-ia-pero-pocas-miden-su-impacto-a40.phtml" target="_blank" rel="noopener noreferrer">
+                Perfil, 29/04/2026
+              </a>
+            </p>
+          </div>
+        </section>
+
         {/* QUIÉN LO HACE */}
         <section className="ki-sec ki-sec-soft">
           <div className="container ki-center">
@@ -243,7 +286,6 @@ export default function SolucionesIAPage() {
             </p>
             <div className="ki-cta-row">
               <Link href="/servicios" className="btn btn-outline">Ver servicios</Link>
-              <Link href="/aprende" className="btn btn-outline">Biblioteca de guías</Link>
             </div>
           </div>
         </section>
