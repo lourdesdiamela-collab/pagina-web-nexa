@@ -43,7 +43,12 @@ export const metadata = {
     canonical: '/',
   },
   icons: {
-    icon: '/favicon.svg',
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-512.png', type: 'image/png', sizes: '512x512' },
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
   openGraph: {
     title: 'NEXA | Marketing Digital, Redes Sociales y Publicidad con IA',
