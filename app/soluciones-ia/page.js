@@ -24,13 +24,13 @@ export const metadata = {
 /*
  * Capacitación 1 en PREVENTA ($49.999). Las demás figuran como "próximamente"
  * y se abren según la demanda que muestre la preventa.
- * Cobro: por ahora se coordina por WhatsApp (se pasan los datos de pago y se envía el kit por mail al acreditarse).
+ * Cobro: Mercado Pago desde /soluciones-ia/comprar; el kit llega por mail al acreditarse el pago.
  */
 const KITS = [
   {
     id: 'whatsapp',
     emoji: '💬',
-    estado: 'preventa',
+    estado: 'disponible',
     titulo: 'WhatsApp e Instagram que venden',
     problema: 'Te escriben por WhatsApp e Instagram, tardás en responder y las consultas se enfrían.',
     incluye: [
@@ -92,23 +92,44 @@ const QUE_ES = [
 ];
 
 const PASOS = [
-  { n: '01', t: 'Pedís tu kit', d: 'Nos escribís por WhatsApp y te pasamos los datos de pago.' },
-  { n: '02', t: 'Pagás y lo recibís', d: 'Cuando se acredita el pago, te enviamos el kit a tu mail con todo lo que necesitás para empezar.' },
-  { n: '03', t: 'Aplicás en una tarde', d: 'Recibís el video corto y los archivos listos para copiar, pegar y usar en tu negocio.' },
+  { n: '01', t: 'Comprás online', d: 'Completás tu nombre y tu mail, aceptás los términos y pagás con Mercado Pago. No hace falta crear cuenta.' },
+  { n: '02', t: 'Te llega por mail', d: 'Apenas se acredita el pago, te enviamos un botón para abrir y descargar tu kit. También lo ves en pantalla al terminar de pagar.' },
+  { n: '03', t: 'Aplicás en una tarde', d: 'Abrís la guía, mirás el video corto y copiás las plantillas para usarlas en tu negocio.' },
 ];
 
 const FAQ = [
-  { q: '¿Necesito saber de IA o de marketing?', a: 'No. Están pensados para dueños de pymes y emprendedores que no tienen tiempo ni equipo técnico. Se explica con ejemplos de negocios reales y archivos para usar tal cual.' },
-  { q: '¿Cuándo se entrega?', a: 'El primer kit ya está listo: cuando se acredita el pago, te lo enviamos por mail. Los demás se abren según la demanda.' },
-  { q: '¿Cuánto cuestan?', a: 'La primera capacitación sale $49.999 (pago único). Las próximas se anuncian al abrirlas, y quienes pidan que les avisemos se enteran primero.' },
-  { q: '¿Y si prefiero que lo hagan por mí?', a: 'También lo hacemos: NEXA ofrece servicios de marketing, automatización y publicidad. Podés consultarlo desde la página de servicios o por WhatsApp.' },
-  { q: '¿Qué pasa con mis datos?', a: 'Solo usamos tu contacto para avisarte del kit que pediste. Podés pedir la baja en cualquier momento.' },
+  { q: '¿Qué incluye el Kit 1?', a: 'Una guía interactiva paso a paso (se abre en el navegador), la misma guía en PDF para descargar, un video de bienvenida de unos 6 minutos, 25 respuestas y 6 guiones de seguimiento para WhatsApp e Instagram, y una planilla para medir cuántas consultas se vuelven ventas.' },
+  { q: '¿Cómo pago?', a: 'Con Mercado Pago, con tarjeta de crédito, débito u otros medios que te ofrezca al pagar. Tus datos de pago los maneja Mercado Pago: nosotros nunca los vemos. No necesitás crear una cuenta en nuestro sitio.' },
+  { q: '¿Cuándo y cómo lo recibo?', a: 'En el momento en que se acredita el pago te llega un mail con un botón para abrir y descargar el kit. Al terminar de pagar también lo ves en pantalla. Si en unos minutos no te llegó, revisá spam o promociones; si sigue sin aparecer, escribinos por WhatsApp con el mail que usaste.' },
+  { q: '¿Necesito saber de IA o de marketing?', a: 'No. Está pensado para dueños de pymes y emprendedores sin tiempo ni equipo técnico. Se explica con ejemplos de negocios reales y archivos para usar tal cual.' },
+  { q: '¿Qué necesito para usarlo?', a: 'Un celular o una computadora, tu WhatsApp (mejor si es WhatsApp Business) o tu Instagram, y alguna herramienta de IA de chat; hay opciones gratuitas. Para la planilla de leads alcanza con tu navegador.' },
+  { q: '¿Por cuánto tiempo puedo acceder?', a: 'El enlace de tu mail funciona durante 60 días. En ese tiempo podés abrirlo online y descargar la guía, el PDF y el video; una vez descargados, son tuyos. Si el enlace venció o lo perdiste, escribinos con el mail de tu compra y te mandamos uno nuevo.' },
+  { q: '¿Me garantizan más ventas?', a: 'No. Te damos un método, textos y una planilla para ordenar tu atención. Los resultados dependen de tu negocio y de cómo lo apliques. Nadie puede prometerte un número de ventas.' },
+  { q: '¿Puedo arrepentirme de la compra?', a: 'Sí. Podés revocar la compra dentro de los 10 días corridos desde que la hiciste, desde la página de arrepentimiento. Si ya descargaste el contenido para uso permanente, puede aplicar una excepción legal, y lo analizamos juntos. Si tuviste un problema para acceder o recibirlo, escribinos y lo resolvemos.' },
+  { q: '¿Puedo compartirlo o revenderlo?', a: 'Es para tu uso personal o el de tu negocio. No se puede revender ni compartir públicamente, ni completo ni en partes.' },
+  { q: '¿Cuándo salen los otros kits?', a: 'Se abren según la demanda. Si alguno te interesa, tocá "Avisarme cuando salga" y te escribimos cuando esté listo.' },
+  { q: '¿Y si prefiero que lo hagan por mí?', a: 'También lo hacemos: NEXA ofrece servicios de marketing, automatización y publicidad. Podés verlos en la página de servicios o consultarnos por WhatsApp.' },
+  { q: '¿Qué pasa con mis datos?', a: 'Usamos tu nombre y tu mail solo para entregarte el kit y avisarte de novedades que pidas. Las herramientas del kit, como la planilla, guardan lo que cargues en tu propio dispositivo. Podés pedir la baja cuando quieras.' },
 ];
 
 export default function SolucionesIAPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: FAQ.map((f) => ({
+              '@type': 'Question',
+              name: f.q,
+              acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
       <Navbar />
       <main className="ki-main">
         {/* HERO */}
@@ -131,7 +152,7 @@ export default function SolucionesIAPage() {
               <a href="/soluciones-ia/comprar" className="btn btn-lima">Comprar el Kit 1</a>
               <a href="#kits" className="btn btn-outline">Ver los kits</a>
             </div>
-            <p className="ki-note">Pagás con Mercado Pago y te llega el kit por mail. Sin crear cuenta.</p>
+            <p className="ki-note">Pagás con Mercado Pago y el kit te llega por mail al instante. Sin crear cuenta.</p>
             <img className="ki-cover" src="/img/kit-ia-portada.jpg" alt="Kit IA de NEXA: WhatsApp e Instagram que venden. 25 respuestas, 6 guiones de seguimiento y planilla de leads." width="1600" height="900" />
           </div>
         </section>
@@ -274,7 +295,7 @@ export default function SolucionesIAPage() {
         </section>
 
         {/* QUIÉN LO HACE */}
-        <section className="ki-sec ki-sec-soft">
+        <section className="ki-sec">
           <div className="container ki-center">
             <span className="section-tag">Quiénes lo hacen</span>
             <h2 className="section-title">Una agencia que lo aplica todos los días</h2>
@@ -293,7 +314,8 @@ export default function SolucionesIAPage() {
           <div className="container ki-faq-wrap">
             <div className="section-header">
               <span className="section-tag">Preguntas frecuentes</span>
-              <h2 className="section-title">Antes de empezar</h2>
+              <h2 className="section-title">Todo sobre los Kits IA</h2>
+              <p className="section-subtitle">Compra, entrega, acceso y devoluciones, en pocas líneas.</p>
             </div>
             <div className="ki-faq">
               {FAQ.map((f) => (
