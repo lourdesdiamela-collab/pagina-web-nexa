@@ -93,20 +93,32 @@ const CHANNEL_FEATURES = [
 
 const FAQS = [
   {
-    question: '¿Qué diferencia a NEXA de una agencia de marketing tradicional?',
-    answer: 'Sí, somos una agencia de marketing — pero no nos quedamos en lo estético. No hacemos reuniones que coordinar: todo queda por escrito en tu portal. Aprobás cada entrega, seguís el avance y recibís un informe mensual con qué se hizo, qué funcionó y qué sigue.',
+    question: '¿En qué se diferencia NEXA de otras agencias?',
+    answer: 'Somos una agencia de marketing, pero trabajamos de forma ordenada: todo queda por escrito en tu portal. Aprobás cada entrega antes de que se publique, seguís el avance y recibís un informe mensual con qué se hizo, qué funcionó y qué sigue. Sin reuniones eternas.',
   },
   {
-    question: '¿Cómo funciona la integración con nuestro negocio?',
-    answer: 'Después del pago te llega un formulario guiado para contarnos tu marca: colores, tipografía, logo, referencias y objetivos. Con eso armamos el diagnóstico y el plan de 90 días, que aprobás en tu portal. Desde ahí, todas las entregas pasan por el mismo lugar.',
+    question: '¿Cómo arranco a trabajar con NEXA?',
+    answer: 'Elegís un plan en la página de servicios y pagás. Después te llega un formulario guiado para contarnos de tu marca: colores, logo, referencias y objetivos. Con eso armamos el diagnóstico y tu plan de 90 días, que aprobás en el portal.',
+  },
+  {
+    question: '¿Necesito saber de tecnología?',
+    answer: 'No. Completás el formulario y nos das acceso a tus redes y a tu cuenta publicitaria; te explicamos cómo, paso a paso. De lo demás nos ocupamos nosotros.',
+  },
+  {
+    question: '¿La inversión en publicidad está incluida?',
+    answer: 'No. Nuestros precios son honorarios de gestión. La inversión en anuncios la pagás vos directo a Meta y decidís cuánto invertir.',
+  },
+  {
+    question: '¿Qué son los Kits IA?',
+    answer: 'Son mini capacitaciones para hacer vos mismo lo que necesitás: una guía paso a paso, un video corto y plantillas listas para usar. El primero, WhatsApp e Instagram que venden, ya está disponible y se compra online. Mirá todos los detalles en la página de Kits IA.',
   },
   {
     question: '¿Qué es NEXA Recover?',
-    answer: 'Es el servicio que estamos desarrollando para reactivar clientes inactivos y consultas que quedaron sin respuesta, con mensajes de seguimiento por WhatsApp. Todavía no está a la venta: si te interesa, dejanos tus datos y te avisamos cuando esté listo.',
+    answer: 'Es un servicio que estamos desarrollando para reactivar clientes inactivos y consultas sin respuesta, con mensajes de seguimiento por WhatsApp. Todavía no está a la venta: si te interesa, dejanos tus datos y te avisamos cuando esté listo.',
   },
   {
-    question: '¿Necesito saber de tecnología para trabajar con NEXA?',
-    answer: 'No. Solo completás el formulario guiado y nos das acceso a tus redes y a tu cuenta publicitaria; te explicamos cómo paso a paso. Del resto nos ocupamos nosotros.',
+    question: '¿Cómo puedo pagar?',
+    answer: 'Con tarjeta de crédito o débito por Mercado Pago. En los servicios también podés pagar por transferencia bancaria con 10% de descuento.',
   },
 ];
 
@@ -364,6 +376,33 @@ export default function HomePage() {
                   </Link>
                 );
               })}
+            </motion.div>
+          </div>
+        </section>
+
+        {/* ══════ KITS IA ══════ */}
+        <section id="kits-ia" className="home-kits">
+          <div className="container home-kits-grid">
+            <motion.div variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-60px' }}>
+              <motion.span variants={fadeUp} className="section-tag">Kits IA · Ya disponible</motion.span>
+              <motion.h2 variants={fadeUp} className="section-title">¿Preferís hacerlo vos? Empezá con un Kit IA</motion.h2>
+              <motion.p variants={fadeUp} className="section-subtitle" style={{ textAlign: 'left', margin: '0 0 20px' }}>
+                Una guía paso a paso, un video corto y plantillas para copiar y pegar. El primer kit te ayuda a responder rápido por WhatsApp e Instagram y a no perder consultas.
+              </motion.p>
+              <motion.ul variants={fadeUp} className="home-kits-list">
+                <li>25 respuestas y 6 guiones de seguimiento</li>
+                <li>Guía interactiva, PDF y video de bienvenida</li>
+                <li>Pagás con Mercado Pago y te llega por mail</li>
+              </motion.ul>
+              <motion.div variants={fadeUp} className="home-kits-cta">
+                <Link href="/soluciones-ia/comprar" className="btn-lima-cta">Comprar el Kit 1 · $49.999</Link>
+                <Link href="/soluciones-ia" className="btn-outline-dark">Ver los Kits IA</Link>
+              </motion.div>
+            </motion.div>
+            <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+              <Link href="/soluciones-ia" aria-label="Ver los Kits IA">
+                <img className="home-kits-img" src="/img/kit-ia-portada.jpg" alt="Kit IA de NEXA: WhatsApp e Instagram que venden. 25 respuestas, 6 guiones de seguimiento y planilla de leads." width="1600" height="900" loading="lazy" />
+              </Link>
             </motion.div>
           </div>
         </section>
@@ -731,6 +770,16 @@ export default function HomePage() {
       <Footer />
 
       <style dangerouslySetInnerHTML={{ __html: `
+        .home-kits { padding: 96px 0; background: #fff; }
+        .home-kits-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 56px; align-items: center; }
+        .home-kits .section-title { text-align: left; }
+        .home-kits-list { list-style: none; padding: 0; margin: 0 0 28px; display: grid; gap: 10px; }
+        .home-kits-list li { position: relative; padding-left: 28px; color: var(--text-dark); font-weight: 600; }
+        .home-kits-list li::before { content: '✓'; position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; background: #D2F23A; color: #12141D; font-size: 12px; font-weight: 900; display: flex; align-items: center; justify-content: center; }
+        .home-kits-cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+        .home-kits-img { display: block; width: 100%; height: auto; border-radius: 24px; box-shadow: 0 30px 70px rgba(109,63,217,.25); }
+        @media (max-width: 900px) { .home-kits { padding: 64px 0; } .home-kits-grid { grid-template-columns: 1fr; gap: 32px; } }
+
         .landing-main {
           background-color: var(--bg-main);
           color: var(--text-dark);
