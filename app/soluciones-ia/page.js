@@ -106,7 +106,6 @@ const FAQ = [
 ];
 
 export default function SolucionesIAPage() {
-  const reservarGeneral = waHref('kits_ia_hero', 'Hola NEXA! Quiero comprar un Kit IA para mi negocio.');
 
   return (
     <>
@@ -129,10 +128,10 @@ export default function SolucionesIAPage() {
               <li>⚡ Se aplica en una tarde</li>
             </ul>
             <div className="ki-cta-row">
-              <a href={reservarGeneral} className="btn btn-lima" rel="noopener">Quiero este kit</a>
+              <a href="/soluciones-ia/comprar" className="btn btn-lima">Comprar el Kit 1</a>
               <a href="#kits" className="btn btn-outline">Ver los kits</a>
             </div>
-            <p className="ki-note">Nos escribís por WhatsApp, te pasamos los datos de pago y te enviamos el kit por mail.</p>
+            <p className="ki-note">Pagás con Mercado Pago y te llega el kit por mail. Sin crear cuenta.</p>
             <img className="ki-cover" src="/img/kit-ia-portada.jpg" alt="Kit IA de NEXA: WhatsApp e Instagram que venden. 25 respuestas, 6 guiones de seguimiento y planilla de leads." width="1600" height="900" />
           </div>
         </section>
@@ -171,12 +170,8 @@ export default function SolucionesIAPage() {
                 <h3>{KITS[0].emoji} {KITS[0].titulo}</h3>
                 <p className="ki-problema"><strong>El problema:</strong> {KITS[0].problema}</p>
                 <div className="ki-feature-price">{KITS[0].precio}<small> pago único</small></div>
-                <a
-                  href={waHref('kits_ia_whatsapp', `Hola NEXA! Quiero comprar el kit "${KITS[0].titulo}" (${KITS[0].precio}).`)}
-                  className="btn btn-primary"
-                  rel="noopener"
-                >
-                  Quiero este kit
+                <a href="/soluciones-ia/comprar" className="btn btn-primary">
+                  Comprar ahora
                 </a>
               </div>
               <div className="ki-feature-incl">
@@ -188,8 +183,8 @@ export default function SolucionesIAPage() {
             </article>
 
             <h3 className="ki-next-title">Próximos kits</h3>
-            <div className="ki-grid ki-grid-2">
-              {KITS.slice(1, 3).map((k) => (
+            <div className="ki-grid ki-grid-4">
+              {KITS.slice(1).map((k) => (
                 <article key={k.id} className="ki-card ki-card-compact">
                   <div className="ki-card-top">
                     <span className="ki-emoji" aria-hidden="true">{k.emoji}</span>
