@@ -10,6 +10,10 @@ const nextConfig = {
       { protocol: 'https', hostname: 'images.unsplash.com' },
     ],
   },
+  // La página "Enfoque" se unificó con Quiénes somos.
+  async redirects() {
+    return [{ source: '/casos', destination: '/quienes-somos', permanent: true }];
+  },
   async headers() {
     return [
       {
