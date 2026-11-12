@@ -3,6 +3,11 @@ const nextConfig = {
   distDir: 'dist',
   // No anunciar con qué está hecho el sitio (header X-Powered-By).
   poweredByHeader: false,
+  // Los archivos de los kits (kits-privados/) se leen en tiempo de ejecución:
+  // hay que incluirlos en la función que los entrega.
+  experimental: {
+    outputFileTracingIncludes: { '/api/kits/archivo': ['./kits-privados/**/*'] },
+  },
   // Nunca publicar los mapas del código fuente en producción.
   productionBrowserSourceMaps: false,
   images: {
