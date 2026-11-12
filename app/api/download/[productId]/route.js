@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { getFile } from '@/lib/storage';
 import { limitar, DIA } from '@/lib/rateLimit';
+import { esClaveTemporal } from '@/lib/kitsCuenta';
 
 // Descargas por usuario y por producto en 24 horas. Alcanza de sobra para un
 // comprador real y frena que una cuenta compartida se use para repartir el
@@ -28,6 +29,11 @@ export async function GET(request, { params }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     return error('Necesitás iniciar sesión.', 401);
+  }
+
+  const yo = await prisma.user.findUnique({ where: { id: session.user.id }, select: { passwordHash: true } });
+  if (yo && esClaveTemporal(yo.passwordHash)) {
+    return error('Primero elegí tu contraseña propia en /aprende/cuenta/cambiar-clave.', 403);
   }
 
   const productId = String(params?.productId || '');
