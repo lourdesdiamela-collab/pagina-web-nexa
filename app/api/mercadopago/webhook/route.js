@@ -5,6 +5,7 @@ import { approveOrder, rejectOrder, pagoCoincideConPedido, ESTADOS_APROBABLES_MP
 import { primeraVez, DIA } from '@/lib/rateLimit';
 import { sendServicePaymentApprovedEmails } from '@/lib/serviceCheckout';
 import { altaAutomaticaPorPago } from '@/lib/crmSync';
+import { entregarKitComprado } from '@/lib/kitsEntrega';
 
 // Mercado Pago llama a esta URL (notification_url) cuando cambia el estado
 // de un pago. Puede mandar los datos como query params (?type=payment&data.id=)
@@ -48,6 +49,15 @@ export async function POST(request) {
     const payment = await getPayment(paymentId);
     const orderId = payment.external_reference;
     if (!orderId) return NextResponse.json({ received: true });
+
+    // Compra de un Kit IA (sin cuenta ni Order: el pedido viaja en la metadata).
+    // Al aprobarse se manda el mail con el enlace de descarga (lib/kitsEntrega.js).
+    if (payment.metadata?.kind === 'kit') {
+      if (payment.status === 'approved') {
+        await entregarKitComprado(payment);
+      }
+      return NextResponse.json({ received: true });
+    }
 
     // Pago de un plan de servicio (Marketing/Social/Ads/Recover/CRM/Web):
     // no tiene Order en la base como Aprende, así que la referencia y los
