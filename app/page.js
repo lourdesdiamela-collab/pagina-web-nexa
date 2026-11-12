@@ -251,7 +251,7 @@ export default function HomePage() {
                   whileHover={{ scale: 1.04, boxShadow: '0 16px 40px rgba(210,242,58,0.45)' }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  Pedí tu diagnóstico gratis
+                  Contanos tu proyecto
                   <ArrowRight size={18} />
                 </motion.a>
                 <motion.a
@@ -264,7 +264,7 @@ export default function HomePage() {
                 </motion.a>
               </motion.div>
               <motion.p variants={fadeUp} className="hero-microcopy">
-                Sin cargo y sin compromiso. Te respondemos en menos de 24 hs.
+                Escribinos y te respondemos en menos de 24 hs.
               </motion.p>
             </motion.div>
 
@@ -377,7 +377,7 @@ export default function HomePage() {
             </motion.div>
             <motion.div className="nx-steps-grid" variants={stagger} initial="hidden" whileInView="show" viewport={{ once: true, margin: '-40px' }}>
               {[
-                { n: '01', t: 'Diagnóstico', d: 'Miramos tu marca, tus redes y tu competencia. Sin cargo y sin compromiso.' },
+                { n: '01', t: 'Diagnóstico', d: 'Miramos tu marca, tus redes y tu competencia para definir por dónde empezar.' },
                 { n: '02', t: 'Plan y ejecución', d: 'Armamos el calendario, las piezas y las campañas. Vos aprobás todo desde tu portal.' },
                 { n: '03', t: 'Medimos y mejoramos', d: 'Cada mes recibís un informe por escrito, claro, con lo que funcionó y qué sigue.' },
               ].map((st) => (
@@ -469,7 +469,7 @@ export default function HomePage() {
             >
               <motion.div variants={fadeUp} className="contact-pretitle-tag">
                 <Sparkles size={14} />
-                Consultoría gratuita · Sin compromiso
+                Hablemos de tu negocio
               </motion.div>
               <motion.h2 variants={fadeUp} className="contact-pretitle-h2">
                 Diseñemos tu<br />
@@ -491,9 +491,9 @@ export default function HomePage() {
               >
                 <div className="benefit-list">
                   {[
-                    'Diagnóstico de marketing y redes sin cargo',
+                    'Diagnóstico de tu marketing y tus redes',
                     'Análisis de tu competencia y tu marca',
-                    'Plan de acción personalizado, sin compromiso',
+                    'Plan de acción personalizado',
                   ].map((b, i) => (
                     <motion.div
                       key={b}
