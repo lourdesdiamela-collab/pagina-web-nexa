@@ -10,6 +10,7 @@ import Footer from '@/components/Footer';
 import KitDescargas from '@/components/KitDescargas';
 import { kitPorTitulo } from '@/lib/kits.mjs';
 import { crearTokenKit } from '@/lib/kitsAcceso';
+import { esClaveTemporal } from '@/lib/kitsCuenta';
 
 export const metadata = { title: 'Mis Recursos | NEXA Aprende' };
 
@@ -25,14 +26,27 @@ const STATUS_LABEL = {
   CANCELLED: 'Cancelado',
 };
 
-export default async function MisRecursosPage() {
+export default async function MisRecursosPage({ searchParams }) {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
     redirect('/aprende/cuenta/login?callbackUrl=/aprende/mis-recursos');
   }
 
+  // La administradora puede ver el panel de un comprador (solo lectura): ?ver=email
+  let viendo = null;
+  const ver = String(searchParams?.ver || '').trim().toLowerCase();
+  if (ver && session.user.role === 'ADMIN') {
+    viendo = await prisma.user.findUnique({ where: { email: ver }, select: { id: true, name: true, email: true } });
+  }
+
+  if (!viendo) {
+    const yo = await prisma.user.findUnique({ where: { id: session.user.id }, select: { passwordHash: true } });
+    if (yo && esClaveTemporal(yo.passwordHash)) redirect('/aprende/cuenta/cambiar-clave');
+  }
+  const duenio = viendo || { id: session.user.id, name: session.user.name };
+
   const orders = await prisma.order.findMany({
-    where: { userId: session.user.id },
+    where: { userId: duenio.id },
     include: { items: { include: { product: true } } },
     orderBy: { createdAt: 'desc' },
   });
@@ -46,9 +60,14 @@ export default async function MisRecursosPage() {
       <Navbar />
       <main style={{ paddingTop: 'clamp(88px, 10vw, 116px)', background: 'var(--bg-main)', minHeight: '100vh' }}>
         <div className="container" style={{ paddingBottom: 80, maxWidth: 820 }}>
+          {viendo && (
+            <div style={{ padding: '12px 16px', marginBottom: 16, borderRadius: 12, background: '#FFF7D6', border: '1px solid #E8D77A', color: '#12141D' }}>
+              Modo administradora: estás viendo el panel de <strong>{viendo.email}</strong> (solo lectura).
+            </div>
+          )}
           <h1 style={{ fontSize: '1.6rem', marginBottom: 4 }}>Mis recursos</h1>
           <p style={{ color: 'var(--text-body)', marginBottom: 28 }}>
-            Hola {session.user.name} — {approvedProductCount > 0
+            Hola {duenio.name} — {approvedProductCount > 0
               ? `tenés ${approvedProductCount} recurso${approvedProductCount > 1 ? 's' : ''} disponible${approvedProductCount > 1 ? 's' : ''} para descargar.`
               : 'todavía no tenés compras aprobadas.'}
           </p>
