@@ -407,6 +407,9 @@ export default function HomePage() {
                 Trabajamos codo a codo con pymes y emprendedores para ordenar su marketing, hacer crecer sus redes y su publicidad, y medir qué funciona de verdad. Usamos la inteligencia artificial para ir más rápido, pero las decisiones las toma una persona que conoce tu negocio.
               </motion.p>
               <motion.p variants={fadeUp} className="nx-about-text nx-about-strong">Tu objetivo es el nuestro.</motion.p>
+              <motion.div variants={fadeUp}>
+                <Link href="/quienes-somos" className="btn-outline-dark" style={{ display: 'inline-flex', marginTop: 8 }}>Conocé más sobre NEXA</Link>
+              </motion.div>
             </motion.div>
             <motion.div className="nx-about-visual" initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
               <video className="nx-about-video" src="/nexa-quienes-somos.mp4" poster="/nexa-quienes-somos-poster.jpg" autoPlay muted loop playsInline preload="metadata" aria-label="NEXA: quiénes somos. Desde 2019 acompañamos a pymes y emprendedores a lograr lo que se propusieron." />

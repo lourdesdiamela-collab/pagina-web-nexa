@@ -10,6 +10,7 @@ const SITE_URL = 'https://www.nexagrowth.com.ar';
 const STATIC_ROUTES = [
   { path: '', changeFrequency: 'weekly', priority: 1 },
   { path: '/servicios', changeFrequency: 'weekly', priority: 0.9 },
+  { path: '/quienes-somos', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/casos', changeFrequency: 'monthly', priority: 0.7 },
   { path: '/soluciones-ia', changeFrequency: 'weekly', priority: 0.8 },
   { path: '/blog', changeFrequency: 'weekly', priority: 0.7 },
