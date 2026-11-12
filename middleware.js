@@ -15,11 +15,10 @@ import { getToken } from 'next-auth/jwt';
  *    porque el chequeo del layout se podía saltear con un pedido "RSC"
  *    armado a mano.
  *
- * 3. Content-Security-Policy, por ahora SOLO EN MODO REPORTE
- *    (Content-Security-Policy-Report-Only): el navegador avisa en la consola
- *    lo que bloquearía, pero no bloquea nada. Cuando se confirme durante unos
- *    días que no aparece ningún aviso legítimo (GTM, Píxel de Meta), se cambia
- *    el nombre del header a Content-Security-Policy para que se aplique.
+ * 3. Content-Security-Policy, ACTIVA (ya no es solo reporte). Se confirmó
+ *    que las páginas principales no mostraban avisos de bloqueo legítimos
+ *    (GTM, Píxel de Meta). Si algún día una herramienta nueva deja de
+ *    cargar, hay que sumar su dominio a politicaDeContenido().
  */
 
 // Mantener en sincronía con AI_TRAINING_BOTS de app/robots.js.
@@ -99,10 +98,10 @@ export async function middleware(request) {
   // app/layout.js lo lee de x-nonce para los scripts de medición.
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
-  requestHeaders.set('Content-Security-Policy-Report-Only', politica);
+  requestHeaders.set('Content-Security-Policy', politica);
 
   const response = NextResponse.next({ request: { headers: requestHeaders } });
-  response.headers.set('Content-Security-Policy-Report-Only', politica);
+  response.headers.set('Content-Security-Policy', politica);
   return response;
 }
 
