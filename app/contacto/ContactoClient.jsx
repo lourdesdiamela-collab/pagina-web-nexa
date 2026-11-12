@@ -11,9 +11,9 @@ import { waHref } from '@/lib/whatsapp';
 import { track } from '@/lib/track';
 
 const BENEFITS = [
-  'Diagnóstico de marketing y redes sin cargo',
+  'Diagnóstico de tu marketing y tus redes',
   'Análisis de tu competencia y tu marca',
-  'Plan de acción personalizado, sin compromiso',
+  'Plan de acción personalizado',
 ];
 
 function ContactFormSection() {
@@ -154,7 +154,7 @@ function ContactFormSection() {
                   </div>
                   <button type="submit" className="btn-submit" disabled={loading} style={{ opacity: loading ? 0.65 : 1 }}>
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                      <Send size={16} /> {loading ? 'Enviando solicitud...' : 'Quiero mi diagnóstico gratis'}
+                      <Send size={16} /> {loading ? 'Enviando solicitud...' : 'Enviar consulta'}
                     </span>
                   </button>
                   <p style={{ fontSize: '0.74rem', color: 'var(--text-muted)', textAlign: 'center', marginTop: 12 }}>
