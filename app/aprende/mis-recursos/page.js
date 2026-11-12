@@ -7,6 +7,9 @@ import { prisma } from '@/lib/db';
 import { formatPrice } from '@/lib/products.mjs';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import KitDescargas from '@/components/KitDescargas';
+import { kitPorTitulo } from '@/lib/kits.mjs';
+import { crearTokenKit } from '@/lib/kitsAcceso';
 
 export const metadata = { title: 'Mis Recursos | NEXA Aprende' };
 
@@ -72,7 +75,17 @@ export default async function MisRecursosPage() {
                       {STATUS_LABEL[order.status] || order.status}
                     </span>
                   </div>
-                  {order.items.map((item) => (
+                  {order.items.map((item) => {
+                    const kit = !item.productId ? kitPorTitulo(item.title) : null;
+                    if (kit && order.status === 'APPROVED') {
+                      return (
+                        <div key={item.id} style={{ padding: '12px 0 4px' }}>
+                          <p style={{ margin: '0 0 12px', fontWeight: 700, color: '#12141D' }}>Kit IA: {item.title}</p>
+                          <KitDescargas kit={kit} token={crearTokenKit({ referencia: order.id, kit: kit.slug, dias: 2 })} />
+                        </div>
+                      );
+                    }
+                    return (
                     <div key={item.id} className="aprende-resource-item">
                       <span className="aprende-resource-item-title">{item.title} × {item.qty}</span>
                       {order.status === 'APPROVED' ? (
@@ -91,7 +104,8 @@ export default async function MisRecursosPage() {
                         </span>
                       )}
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               ))}
             </div>
