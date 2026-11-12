@@ -476,8 +476,8 @@ export default function HomePage() {
                 <span className="text-highlight">Próximo Paso.</span>
               </motion.h2>
               <motion.p variants={fadeUp} className="contact-pretitle-sub">
-                Completá el diagnóstico rápido. En menos de 24hs un estratega de NEXA te contacta
-                con un análisis personalizado de tu negocio.
+                Completá el formulario. En menos de 24hs un estratega de NEXA te contacta
+                para conversar sobre tu proyecto.
               </motion.p>
             </motion.div>
 
