@@ -410,7 +410,7 @@ function ServicioCheckoutContent({ renovacion }) {
                   <MessageCircle size={16} /> ¿Preferís coordinar el pago por WhatsApp?
                 </a>
                 <Link href={`/contacto?servicio=${servicio}`} style={{ fontSize: '0.82rem', color: 'var(--text-muted)' }}>
-                  ¿Todavía tenés dudas? Pedí tu diagnóstico gratis sin pagar
+                  ¿Todavía tenés dudas? Escribinos tu consulta
                 </Link>
               </div>
             </div>
