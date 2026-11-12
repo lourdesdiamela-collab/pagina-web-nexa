@@ -26,7 +26,7 @@ const CREENCIAS = [
 ];
 
 const PASOS = [
-  { n: '01', t: 'Diagnóstico', d: 'Miramos tu marca, tus redes y tu competencia. Sin cargo y sin compromiso.' },
+  { n: '01', t: 'Diagnóstico', d: 'Miramos tu marca, tus redes y tu competencia para definir por dónde empezar.' },
   { n: '02', t: 'Plan y ejecución', d: 'Armamos el calendario, las piezas y las campañas. Vos aprobás todo desde tu portal.' },
   { n: '03', t: 'Medimos y mejoramos', d: 'Cada mes, un informe por escrito con lo que funcionó y qué sigue.' },
 ];
@@ -48,7 +48,7 @@ export default function QuienesSomosPage() {
                 Empezamos con una idea simple: que cualquier negocio, sin importar su tamaño, tenga el orden y las herramientas de una empresa grande, sin la complejidad ni los costos.
               </p>
               <div className="qs-cta-row">
-                <Link href="/contacto" className="btn btn-lima">Pedí tu diagnóstico gratis</Link>
+                <Link href="/contacto" className="btn btn-lima">Contanos tu proyecto</Link>
                 <Link href="/servicios" className="btn btn-outline">Ver servicios</Link>
               </div>
             </div>
@@ -118,8 +118,8 @@ export default function QuienesSomosPage() {
         <section className="qs-final">
           <div className="container qs-center">
             <h2 className="qs-white qs-final-title">¿Empezamos por ordenar tu marketing?</h2>
-            <p className="qs-final-sub">Contanos de tu negocio y te respondemos en menos de 24 hs. Sin cargo y sin compromiso.</p>
-            <Link href="/contacto" className="btn btn-lima">Pedí tu diagnóstico gratis</Link>
+            <p className="qs-final-sub">Contanos de tu negocio y te respondemos en menos de 24 hs.</p>
+            <Link href="/contacto" className="btn btn-lima">Contanos tu proyecto</Link>
           </div>
         </section>
       </main>
