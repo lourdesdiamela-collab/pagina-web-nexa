@@ -54,6 +54,12 @@ export default async function KitGraciasPage({ searchParams }) {
                 </p>
               </div>
               <KitDescargas kit={r.kit} token={r.token} />
+              <div style={{ ...estiloTarjeta, marginTop: 18, padding: 18 }}>
+                <p style={{ margin: 0, color: '#12141D', lineHeight: 1.6 }}>
+                  <strong>También te creamos una cuenta</strong> con tu mail. Revisá tu correo: ahí está el enlace para elegir tu contraseña. Después entrás desde{' '}
+                  <Link href="/aprende/cuenta/login?callbackUrl=%2Faprende%2Fmis-recursos" style={{ color: '#6B3FD4', fontWeight: 700 }}>Mis recursos</Link> y tus kits quedan guardados ahí.
+                </p>
+              </div>
               <p style={{ marginTop: 16, color: '#505466', fontSize: '0.95rem' }}>
                 Enlace para guardar: <a href={urlDescargaKit(r.token)} style={{ color: '#6B3FD4', wordBreak: 'break-all' }}>{urlDescargaKit(r.token)}</a>
               </p>
