@@ -89,9 +89,12 @@
 .ki-feature-incl .ki-list li { color:rgba(255,255,255,.9); }
 .ki-next-title { font-size:1.2rem; margin:44px 0 18px; }
 .ki-grid-4 { grid-template-columns:repeat(4,1fr); gap:18px; }
+.ki-grid-2 { grid-template-columns:repeat(2,1fr); gap:18px; }
 .ki-card-compact { padding:24px; }
 .ki-card-compact h3 { font-size:1.1rem; }
 .ki-card-compact .ki-problema { font-size:.9rem; flex:1; }
 .ki-notify { font-weight:800; font-size:.9rem; color:var(--lilac-deep); margin-top:6px; }
 @media (max-width:980px){ .ki-what{grid-template-columns:1fr} .ki-feature{grid-template-columns:1fr} .ki-grid-4{grid-template-columns:repeat(2,1fr)} }
-@media (max-width:640px){ .ki-feature-main,.ki-feature-incl{padding:28px 22px} .ki-grid-4{grid-template-columns:1fr} }
+@media (max-width:640px){ .ki-grid-2{grid-template-columns:1fr} .ki-feature-main,.ki-feature-incl{padding:28px 22px} .ki-grid-4{grid-template-columns:1fr} }
+
+.ki-cover{display:block;width:100%;max-width:980px;height:auto;margin:36px auto 0;border-radius:28px;box-shadow:0 30px 70px rgba(109,63,217,.3)}
