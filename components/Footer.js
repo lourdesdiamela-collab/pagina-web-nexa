@@ -8,6 +8,8 @@ import { waHref } from '@/lib/whatsapp';
 
 const NAV_LINKS = [
   { href: '/servicios', label: 'Servicios' },
+  { href: '/quienes-somos', label: 'Quiénes somos' },
+  { href: '/soluciones-ia', label: 'Kits IA' },
   { href: '/casos', label: 'Enfoque' },
   { href: '/blog', label: 'Blog' },
   { href: '/contacto', label: 'Contacto' },

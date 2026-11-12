@@ -10,6 +10,8 @@ import { NexaLogo } from './NexaLogo';
 const LINKS = [
   { href: '/', label: 'Inicio' },
   { href: '/servicios', label: 'Servicios' },
+  { href: '/quienes-somos', label: 'Quiénes somos' },
+  { href: '/soluciones-ia', label: 'Kits IA' },
   { href: '/casos', label: 'Enfoque' },
   { href: '/contacto', label: 'Contacto' },
 ];
