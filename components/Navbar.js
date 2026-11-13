@@ -68,7 +68,16 @@ export default function Navbar() {
             })}
           </div>
           <div className="nav-cta-group">
-            {/* Arrepentimiento, Baja, Ingresar a Aprende y Portal de Clientes se movieron al pie (Footer.js) por pedido de Lu. */}
+            {/* Arrepentimiento, Baja e Ingresar a Aprende están en el pie (Footer.js). Arriba va solo el acceso al Portal NEXA. */}
+            <a
+              href="https://crm.nexagrowth.com.ar"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="nav-portal-link"
+              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 999, border: '1.5px solid #6B3FD4', color: '#4B1FB0', background: '#FFFFFF', fontWeight: 700, fontSize: '0.95rem', whiteSpace: 'nowrap' }}
+            >
+              <Briefcase size={16} /> Portal NEXA
+            </a>
           </div>
         </nav>
 
@@ -110,7 +119,7 @@ export default function Navbar() {
             </Link>
             <div className="mobile-menu-divider" />
             <Link href="https://crm.nexagrowth.com.ar" className="mobile-menu-link mobile-menu-link-ghost">
-              <Briefcase size={16} /> Portal de Clientes
+              <Briefcase size={16} /> Portal NEXA
               <span className="mobile-menu-link-hint">¿Ya sos cliente de NEXA? Ingresá acá</span>
             </Link>
           </motion.div>
