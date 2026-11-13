@@ -55,9 +55,9 @@ const KITS = [
       'Guía paso a paso para definir la voz de tu marca y armar el calendario de un mes',
       'Guiones e ideas con IA adaptados a tu rubro',
       'Plantillas para copiar y pegar y checklist de revisión antes de publicar',
-      'Guía interactiva en el navegador y la misma guía en PDF',
+      'Video de bienvenida, guía interactiva en el navegador y la misma guía en PDF',
     ],
-    formato: 'Guía interactiva + PDF + plantillas',
+    formato: 'Video + guía interactiva + PDF + plantillas',
     precio: '$49.999',
   },
   {
@@ -71,9 +71,9 @@ const KITS = [
       'Estructura de campaña simple para arrancar en Meta y Google',
       'Textos y variantes de anuncios con IA',
       'Revisión semanal en 20 minutos para saber qué sigue y qué se corta',
-      'Guía interactiva en el navegador y la misma guía en PDF',
+      'Video de bienvenida, guía interactiva en el navegador y la misma guía en PDF',
     ],
-    formato: 'Guía interactiva + PDF + checklist',
+    formato: 'Video + guía interactiva + PDF + checklist',
     precio: '$49.999',
   },
   {
@@ -111,7 +111,7 @@ const PASOS = [
 ];
 
 const FAQ = [
-  { q: '¿Qué incluyen los kits de Contenido y de Anuncios?', a: 'Cada uno trae una guía interactiva paso a paso (se abre en el navegador) y la misma guía en PDF para descargar, con plantillas para copiar y pegar y checklists. Todavía no incluyen video.' },
+  { q: '¿Qué incluyen los kits de Contenido y de Anuncios?', a: 'Cada uno trae un video de bienvenida, una guía interactiva paso a paso (se abre en el navegador, con herramientas para completar) y la misma guía en PDF para descargar, con plantillas para copiar y pegar, checklists e ilustraciones.' },
   { q: '¿Qué incluye el Kit 1?', a: 'Una guía interactiva paso a paso (se abre en el navegador), la misma guía en PDF para descargar, un video de bienvenida de unos 6 minutos, 25 respuestas y 6 guiones de seguimiento para WhatsApp e Instagram, y una planilla para medir cuántas consultas se vuelven ventas.' },
   { q: '¿Cómo pago?', a: 'Con Mercado Pago, con tarjeta de crédito, débito u otros medios que te ofrezca al pagar. Tus datos de pago los maneja Mercado Pago: nosotros nunca los vemos. No necesitás crear una cuenta en nuestro sitio.' },
   { q: '¿Cuándo y cómo lo recibo?', a: 'En el momento en que se acredita el pago te llega un mail con un botón para abrir y descargar el kit. Al terminar de pagar también lo ves en pantalla. Si en unos minutos no te llegó, revisá spam o promociones; si sigue sin aparecer, escribinos por WhatsApp con el mail que usaste.' },
