@@ -7,7 +7,7 @@ import './soluciones.css';
 export const metadata = {
   title: 'Kits IA para pymes y emprendedores | Mini capacitaciones — NEXA',
   description:
-    'Mini capacitaciones en video con plantillas y flujos listos para resolver problemas reales de tu negocio con IA: WhatsApp e Instagram que venden, contenido con IA, anuncios y más. Primer kit disponible: $49.999.',
+    'Mini capacitaciones en video con plantillas y flujos listos para resolver problemas reales de tu negocio con IA: WhatsApp e Instagram que venden, contenido con IA, anuncios y más. Kits disponibles a $49.999 c/u.',
   alternates: { canonical: '/soluciones-ia' },
   openGraph: {
     title: 'Soluciones con IA para pymes y emprendedores — NEXA',
@@ -29,6 +29,7 @@ export const metadata = {
 const KITS = [
   {
     id: 'whatsapp',
+    slug: 'whatsapp-instagram',
     emoji: '💬',
     estado: 'disponible',
     titulo: 'WhatsApp e Instagram que venden',
@@ -45,23 +46,35 @@ const KITS = [
   },
   {
     id: 'contenido',
+    slug: 'contenido',
     emoji: '🗓️',
-    estado: 'proximamente',
+    estado: 'disponible',
     titulo: 'Contenido de un mes con IA',
     problema: 'Publicar todos los días te come el tiempo y no tenés equipo.',
-    incluye: ['Voz de marca y calendario de un mes', 'Guiones e ideas con IA para tu rubro', 'Plantillas y checklist de revisión'],
-    formato: 'Video + plantillas',
-    precio: null,
+    incluye: [
+      'Guía paso a paso para definir la voz de tu marca y armar el calendario de un mes',
+      'Guiones e ideas con IA adaptados a tu rubro',
+      'Plantillas para copiar y pegar y checklist de revisión antes de publicar',
+      'Guía interactiva en el navegador y la misma guía en PDF',
+    ],
+    formato: 'Guía interactiva + PDF + plantillas',
+    precio: '$49.999',
   },
   {
     id: 'ads',
+    slug: 'anuncios',
     emoji: '🚀',
-    estado: 'proximamente',
+    estado: 'disponible',
     titulo: 'Anuncios en Meta y Google sin tirar plata',
     problema: 'Invertís en publicidad y no sabés qué está funcionando.',
-    incluye: ['Estructura de campaña simple para arrancar', 'Textos y variantes con IA', 'Revisión semanal en 20 minutos'],
-    formato: 'Video + checklist',
-    precio: null,
+    incluye: [
+      'Estructura de campaña simple para arrancar en Meta y Google',
+      'Textos y variantes de anuncios con IA',
+      'Revisión semanal en 20 minutos para saber qué sigue y qué se corta',
+      'Guía interactiva en el navegador y la misma guía en PDF',
+    ],
+    formato: 'Guía interactiva + PDF + checklist',
+    precio: '$49.999',
   },
   {
     id: 'ordena-ia',
@@ -98,6 +111,7 @@ const PASOS = [
 ];
 
 const FAQ = [
+  { q: '¿Qué incluyen los kits de Contenido y de Anuncios?', a: 'Cada uno trae una guía interactiva paso a paso (se abre en el navegador) y la misma guía en PDF para descargar, con plantillas para copiar y pegar y checklists. Todavía no incluyen video.' },
   { q: '¿Qué incluye el Kit 1?', a: 'Una guía interactiva paso a paso (se abre en el navegador), la misma guía en PDF para descargar, un video de bienvenida de unos 6 minutos, 25 respuestas y 6 guiones de seguimiento para WhatsApp e Instagram, y una planilla para medir cuántas consultas se vuelven ventas.' },
   { q: '¿Cómo pago?', a: 'Con Mercado Pago, con tarjeta de crédito, débito u otros medios que te ofrezca al pagar. Tus datos de pago los maneja Mercado Pago: nosotros nunca los vemos. No necesitás crear una cuenta en nuestro sitio.' },
   { q: '¿Cuándo y cómo lo recibo?', a: 'En el momento en que se acredita el pago te llega un mail con un botón para abrir y descargar el kit. Al terminar de pagar también lo ves en pantalla. Si en unos minutos no te llegó, revisá spam o promociones; si sigue sin aparecer, escribinos por WhatsApp con el mail que usaste.' },
@@ -140,17 +154,17 @@ export default function SolucionesIAPage() {
               Usá IA en tu negocio, <span className="text-gradient">paso a paso</span>
             </h1>
             <p className="ki-lead">
-              Un Kit IA es una mini capacitación con guía paso a paso, un video explicativo y plantillas listas para copiar y pegar.
+              Un Kit IA es una mini capacitación con guía paso a paso y plantillas listas para copiar y pegar.
               Cada kit resuelve un solo problema y lo aplicás en una tarde.
             </p>
             <ul className="ki-pills">
-              <li>🎬 Guía y video corto</li>
+              <li>🎬 Guía interactiva y PDF</li>
               <li>📋 Plantillas listas</li>
               <li>⚡ Se aplica en una tarde</li>
             </ul>
             <div className="ki-cta-row">
-              <a href="/soluciones-ia/comprar" className="btn btn-lima">Comprar el Kit 1</a>
-              <a href="#kits" className="btn btn-outline">Ver los kits</a>
+              <a href="#kits" className="btn btn-lima">Elegir mi kit</a>
+              <a href="/soluciones-ia/comprar" className="btn btn-outline">Comprar el Kit 1</a>
             </div>
             <p className="ki-note">Pagás con Mercado Pago y el kit te llega por mail al instante. Sin crear cuenta.</p>
             <img className="ki-cover" src="/img/kit-ia-portada.jpg" alt="Kit IA de NEXA: WhatsApp e Instagram que venden. 25 respuestas, 6 guiones de seguimiento y planilla de leads." width="1600" height="900" />
@@ -181,31 +195,33 @@ export default function SolucionesIAPage() {
           <div className="container">
             <div className="section-header">
               <span className="section-tag">Los kits</span>
-              <h2 className="section-title">Arrancá con el primero</h2>
-              <p className="section-subtitle">Ya está listo. Los demás se abren según la demanda: avisanos cuál te interesa.</p>
+              <h2 className="section-title">Elegí tu kit</h2>
+              <p className="section-subtitle">Hay tres kits listos. Los demás se abren según la demanda: avisanos cuál te interesa.</p>
             </div>
 
-            <article className="ki-feature">
+            {KITS.filter((k) => k.estado === 'disponible').map((k) => (
+            <article key={k.id} className="ki-feature" style={{ marginBottom: 24 }}>
               <div className="ki-feature-main">
                 <span className="ki-chip">Disponible</span>
-                <h3>{KITS[0].emoji} {KITS[0].titulo}</h3>
-                <p className="ki-problema"><strong>El problema:</strong> {KITS[0].problema}</p>
-                <div className="ki-feature-price">{KITS[0].precio}<small> pago único</small></div>
-                <a href="/soluciones-ia/comprar" className="btn btn-primary">
+                <h3>{k.emoji} {k.titulo}</h3>
+                <p className="ki-problema"><strong>El problema:</strong> {k.problema}</p>
+                <div className="ki-feature-price">{k.precio}<small> pago único</small></div>
+                <a href={`/soluciones-ia/comprar?kit=${k.slug}`} className="btn btn-primary">
                   Comprar ahora
                 </a>
               </div>
               <div className="ki-feature-incl">
                 <h4>Qué incluye</h4>
                 <ul className="ki-list">
-                  {KITS[0].incluye.map((i) => (<li key={i}>{i}</li>))}
+                  {k.incluye.map((i) => (<li key={i}>{i}</li>))}
                 </ul>
               </div>
             </article>
+            ))}
 
             <h3 className="ki-next-title">Próximos kits</h3>
             <div className="ki-grid ki-grid-4">
-              {KITS.slice(1).map((k) => (
+              {KITS.filter((k) => k.estado !== 'disponible').map((k) => (
                 <article key={k.id} className="ki-card ki-card-compact">
                   <div className="ki-card-top">
                     <span className="ki-emoji" aria-hidden="true">{k.emoji}</span>
