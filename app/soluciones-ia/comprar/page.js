@@ -2,19 +2,19 @@ import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CompraKitClient from './CompraKitClient';
-import { KITS, formatoPrecio } from '@/lib/kits.mjs';
+import { kitPorSlug, formatoPrecio } from '@/lib/kits.mjs';
 import { isMpConfigured } from '@/lib/mercadopago';
 import { waHref } from '@/lib/whatsapp';
 
 export const metadata = {
   title: 'Comprar Kit IA | NEXA',
-  description: 'Comprá el Kit IA de WhatsApp e Instagram con Mercado Pago y recibilo por mail al instante.',
+  description: 'Comprá tu Kit IA con Mercado Pago y recibilo por mail al instante.',
   robots: { index: false, follow: true },
 };
 export const dynamic = 'force-dynamic';
 
 export default function ComprarKitPage({ searchParams }) {
-  const kit = KITS['whatsapp-instagram'];
+  const kit = kitPorSlug(String(searchParams?.kit || '')) || kitPorSlug('whatsapp-instagram');
   const mpListo = isMpConfigured();
   const falloPago = searchParams?.pago === 'fallo';
 
