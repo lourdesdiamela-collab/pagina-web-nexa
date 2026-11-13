@@ -387,15 +387,15 @@ export default function HomePage() {
               <motion.span variants={fadeUp} className="section-tag">Kits IA · Ya disponible</motion.span>
               <motion.h2 variants={fadeUp} className="section-title">¿Preferís hacerlo vos? Empezá con un Kit IA</motion.h2>
               <motion.p variants={fadeUp} className="section-subtitle" style={{ textAlign: 'left', margin: '0 0 20px' }}>
-                Una guía paso a paso, un video corto y plantillas para copiar y pegar. El primer kit te ayuda a responder rápido por WhatsApp e Instagram y a no perder consultas.
+                Una guía paso a paso, un video corto y plantillas para copiar y pegar. Hay tres: responder rápido por WhatsApp e Instagram, armar el contenido de un mes y hacer anuncios en Meta y Google sin tirar plata.
               </motion.p>
               <motion.ul variants={fadeUp} className="home-kits-list">
-                <li>25 respuestas y 6 guiones de seguimiento</li>
-                <li>Guía interactiva, PDF y video de bienvenida</li>
+                <li>Tres kits: WhatsApp e Instagram, contenido de un mes y anuncios</li>
+                <li>Guía interactiva y PDF con plantillas listas</li>
                 <li>Pagás con Mercado Pago y te llega por mail</li>
               </motion.ul>
               <motion.div variants={fadeUp} className="home-kits-cta">
-                <Link href="/soluciones-ia/comprar" className="btn-lima-cta">Comprar el Kit 1 · $49.999</Link>
+                <Link href="/soluciones-ia#kits" className="btn-lima-cta">Elegir mi kit · $49.999</Link>
                 <Link href="/soluciones-ia" className="btn-outline-dark">Ver los Kits IA</Link>
               </motion.div>
             </motion.div>
