@@ -30,7 +30,7 @@ export default async function DescargarKitPage({ params }) {
               <div style={{ ...estiloTarjeta, marginTop: 24, background: '#F3EEF8', boxShadow: 'none' }}>
                 <p style={{ margin: 0, fontWeight: 700, color: '#12141D' }}>Por dónde empezar</p>
                 <p style={{ margin: '6px 0 0', color: '#3A3E50', lineHeight: 1.6 }}>
-                  Mirá el video de bienvenida y abrí la guía interactiva. Empezá por la parte 1 y andá en orden: cada parte tiene textos listos para copiar.
+                  {kit.inicio}
                 </p>
               </div>
               <p style={{ marginTop: 20, color: '#505466', fontSize: '0.95rem', lineHeight: 1.6 }}>
