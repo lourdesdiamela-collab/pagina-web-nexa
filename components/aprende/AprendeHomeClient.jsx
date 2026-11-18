@@ -142,7 +142,9 @@ export default function AprendeHomeClient({ categories, categoryCounts, featured
         <ProductRow tag="Recién llegados" title="Nuevos" subtitle="Las últimas guías incorporadas a NEXA Aprende." products={newArrivals} />
 
         {/* ── OFERTAS ── */}
-        <ProductRow tag="Por tiempo limitado" title="Ofertas" subtitle="Recursos con descuento directo sobre el precio de lista." products={deals} tint />
+        {deals?.length > 0 && (
+          <ProductRow tag="Promociones" title="Ofertas" subtitle="Recursos con descuento." products={deals} tint />
+        )}
 
         {/* ── BANNER 3x2 PROMOS ── */}
         <section className="section-sm">
