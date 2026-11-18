@@ -22,8 +22,8 @@ export const metadata = {
 };
 
 /*
- * Capacitación 1 en PREVENTA ($49.999). Las demás figuran como "próximamente"
- * y se abren según la demanda que muestre la preventa.
+ * Kits 1, 2 y 3 a la venta ($49.999 c/u). Los demás figuran como "próximamente"
+ * y se abren según la demanda.
  * Cobro: Mercado Pago desde /soluciones-ia/comprar; el kit llega por mail al acreditarse el pago.
  */
 const KITS = [
@@ -35,8 +35,8 @@ const KITS = [
     titulo: 'WhatsApp e Instagram que venden',
     problema: 'Te escriben por WhatsApp e Instagram, tardás en responder y las consultas se enfrían.',
     incluye: [
-      'Guía paso a paso en 7 partes para armar tu sistema de atención y seguimiento',
-      'Video explicativo de unos 6 minutos para empezar con el pie derecho',
+      'Guía interactiva paso a paso y la misma guía en PDF para armar tu sistema de atención y seguimiento',
+      'Video de bienvenida de unos 2 minutos para empezar con el pie derecho',
       'Banco de 25 respuestas y 6 guiones de seguimiento listos para adaptar',
       'Cómo usar la IA como ayudante para redactar y revisar tus respuestas',
       'Planilla de leads para medir cuántas consultas se vuelven ventas',
@@ -112,7 +112,7 @@ const PASOS = [
 
 const FAQ = [
   { q: '¿Qué incluyen los kits de Contenido y de Anuncios?', a: 'Cada uno trae un video de bienvenida, una guía interactiva paso a paso (se abre en el navegador, con herramientas para completar) y la misma guía en PDF para descargar, con plantillas para copiar y pegar, checklists e ilustraciones.' },
-  { q: '¿Qué incluye el Kit 1?', a: 'Una guía interactiva paso a paso (se abre en el navegador), la misma guía en PDF para descargar, un video de bienvenida de unos 6 minutos, 25 respuestas y 6 guiones de seguimiento para WhatsApp e Instagram, y una planilla para medir cuántas consultas se vuelven ventas.' },
+  { q: '¿Qué incluye el Kit 1?', a: 'Una guía interactiva paso a paso (se abre en el navegador), la misma guía en PDF para descargar, un video de bienvenida de unos 2 minutos, 25 respuestas y 6 guiones de seguimiento para WhatsApp e Instagram, y una planilla para medir cuántas consultas se vuelven ventas.' },
   { q: '¿Cómo pago?', a: 'Con Mercado Pago, con tarjeta de crédito, débito u otros medios que te ofrezca al pagar. Tus datos de pago los maneja Mercado Pago: nosotros nunca los vemos. No necesitás crear una cuenta en nuestro sitio.' },
   { q: '¿Cuándo y cómo lo recibo?', a: 'En el momento en que se acredita el pago te llega un mail con un botón para abrir y descargar el kit. Al terminar de pagar también lo ves en pantalla. Si en unos minutos no te llegó, revisá spam o promociones; si sigue sin aparecer, escribinos por WhatsApp con el mail que usaste.' },
   { q: '¿Necesito saber de IA o de marketing?', a: 'No. Está pensado para dueños de pymes y emprendedores sin tiempo ni equipo técnico. Se explica con ejemplos de negocios reales y archivos para usar tal cual.' },
