@@ -70,7 +70,7 @@ export default async function AprendeHomePage() {
       featured={datos.featured}
       bestSellers={datos.bestSellers}
       newArrivals={datos.newArrivals}
-      deals={datos.deals}
+      deals={[]}
       totalProducts={datos.allProducts.length}
     />
   );
