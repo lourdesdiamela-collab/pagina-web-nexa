@@ -1,6 +1,6 @@
 import { requireAdminPage } from '@/lib/adminAuth';
 import { prisma } from '@/lib/db';
-import { toggleReviewApproval, deleteReview } from '@/lib/adminActions';
+import { toggleReviewApproval, deleteReview, deleteFakeReviews } from '@/lib/adminActions';
 
 export default async function AdminReviewsPage() {
   // Chequeo propio de la página: el del layout no alcanza (ver lib/adminAuth.js).
@@ -15,6 +15,10 @@ export default async function AdminReviewsPage() {
     <>
       <h1>Reseñas</h1>
       <p className="admin-subtitle">{reviews.length} reseñas (últimas 200). Las no aprobadas no se muestran en la tienda ni cuentan para el rating.</p>
+
+      <form action={deleteFakeReviews} style={{ margin: '0 0 16px' }}>
+        <button type="submit" className="aprende-btn-mini danger">Borrar reseñas inventadas (las del seed viejo)</button>
+      </form>
 
       <div className="aprende-admin-card">
         <div className="aprende-admin-table-wrap">
