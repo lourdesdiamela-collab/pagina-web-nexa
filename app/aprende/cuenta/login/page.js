@@ -56,6 +56,9 @@ function LoginForm() {
               <LogIn size={16} /> {loading ? 'Ingresando…' : 'Ingresar'}
             </button>
           </form>
+          <div className="aprende-auth-switch" style={{ marginBottom: 8 }}>
+            <Link href="/aprende/cuenta/olvide">¿Olvidaste tu contraseña?</Link>
+          </div>
           <div className="aprende-auth-switch">
             ¿No tenés cuenta? <Link href="/aprende/cuenta/registro">Creá una gratis</Link>
           </div>
