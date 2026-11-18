@@ -12,7 +12,7 @@ const NAV_LINKS = [
   { href: '/soluciones-ia', label: 'Kits IA' },
   { href: '/blog', label: 'Blog' },
   { href: '/contacto', label: 'Contacto' },
-  { href: 'https://crm.nexagrowth.com.ar', label: 'Portal de Clientes' },
+  { href: '/aprende/cuenta/login', label: 'Ingresar a mis kits' },
 ];
 
 /*
@@ -48,7 +48,7 @@ export default function Footer() {
               <NexaLogo size={32} color="white" />
             </Link>
             <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.88rem', marginTop: 12, maxWidth: 280, lineHeight: 1.6 }}>
-              Marketing, CRM y crecimiento operacional para marcas que quieren escalar.
+              Growth Marketing con IA para pymes y emprendedores: estrategia, contenido y anuncios que traen clientes.
             </p>
           </div>
 
@@ -59,7 +59,7 @@ export default function Footer() {
               </Link>
             ))}
             <a href="https://crm.nexagrowth.com.ar" target="_blank" rel="noopener noreferrer" style={{ color: '#D2F23A', fontWeight: 700, fontSize: '0.9rem' }}>
-              Portal NEXA OS
+              Portal NEXA
             </a>
           </nav>
         </div>
