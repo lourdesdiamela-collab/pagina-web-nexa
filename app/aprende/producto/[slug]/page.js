@@ -131,7 +131,7 @@ export default async function ProductDetailPage({ params }) {
             <div className="section-header" style={{ textAlign: 'left', marginBottom: 24 }}>
               <span className="section-tag">Reseñas</span>
               <h2 className="section-title" style={{ fontSize: '1.8rem', marginBottom: 0 }}>
-                Lo que dicen quienes ya lo compraron
+                Reseñas de compradores
               </h2>
             </div>
             <ReviewList reviews={product.reviews} />
