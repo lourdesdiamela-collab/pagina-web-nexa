@@ -99,15 +99,31 @@ export default function RootLayout({ children }) {
               "email": "nexagrowtharg@gmail.com",
               "telephone": "+5491124527402",
               "areaServed": { "@type": "Country", "name": "Argentina" },
-              "knowsAbout": ["Marketing digital", "Gestión de redes sociales", "Publicidad en Meta Ads y Google Ads", "CRM y automatización con IA"],
+              "knowsAbout": ["Marketing digital", "Gestión de redes sociales", "Publicidad en Meta Ads y Google Ads", "CRM y automatización con IA", "Inteligencia artificial aplicada a pymes", "WhatsApp Business para ventas"],
               "openingHoursSpecification": { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "09:00", "closes": "18:00" },
-              "logo": "https://www.nexagrowth.com.ar/favicon.svg",
+              "logo": "https://www.nexagrowth.com.ar/icon-512.png",
+              "foundingDate": "2019",
+              "address": { "@type": "PostalAddress", "addressLocality": "Buenos Aires", "addressCountry": "AR" },
+              "contactPoint": { "@type": "ContactPoint", "contactType": "customer service", "email": "nexagrowtharg@gmail.com", "telephone": "+5491124527402", "availableLanguage": "es" },
               "description": "Agencia de marketing digital especializada en redes sociales, publicidad y automatización con IA aplicada al crecimiento de marcas.",
               "sameAs": [
                 "https://www.linkedin.com/company/nexagrowtharg",
                 "https://www.instagram.com/nexagrowth.ar",
                 "https://www.instagram.com/somosnexa.ar"
               ]
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: jsonLdSeguro({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "NEXA",
+              "alternateName": ["NEXA Growth", "NexaGrowth"],
+              "url": "https://www.nexagrowth.com.ar",
+              "inLanguage": "es-AR",
             }),
           }}
         />

@@ -2,9 +2,11 @@
  * robots.txt del sitio (reemplaza a public/robots.txt).
  *
  * Política con los robots de IA:
- *   - Robots que juntan contenido para ENTRENAR modelos: bloqueados en todo
- *     el sitio. Además middleware.js les responde 403 (robots.txt es solo un
- *     pedido; el 403 lo hace cumplir para los que se identifican).
+ *   - Robots que juntan contenido para ENTRENAR modelos (GEO, nov 2026):
+ *     pueden leer las páginas públicas de marketing (inicio, servicios,
+ *     quiénes somos, soluciones IA, blog) para que las IA conozcan a NEXA.
+ *     NO pueden entrar a Aprende, a los kits ni a la compra: middleware.js
+ *     les responde 403 en esas rutas.
  *   - Robots de BÚSQUEDA con IA (ChatGPT, Claude, Perplexity...): pueden ver
  *     las páginas comerciales, para que NEXA aparezca en esas respuestas,
  *     pero no el catálogo de Aprende (productos y categorías).
@@ -42,7 +44,7 @@ const RUTAS_PRIVADAS = [
 export default function robots() {
   return {
     rules: [
-      { userAgent: AI_TRAINING_BOTS, disallow: '/' },
+      { userAgent: AI_TRAINING_BOTS, allow: ['/', '/llms.txt'], disallow: ['/aprende/', '/kits/', '/soluciones-ia/comprar', ...RUTAS_PRIVADAS] },
       { userAgent: AI_SEARCH_BOTS, allow: '/', disallow: ['/aprende/producto/', '/aprende/categoria/', ...RUTAS_PRIVADAS] },
       { userAgent: '*', allow: '/', disallow: RUTAS_PRIVADAS },
     ],
