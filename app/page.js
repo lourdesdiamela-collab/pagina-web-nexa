@@ -401,7 +401,7 @@ export default function HomePage() {
             </motion.div>
             <motion.div initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
               <Link href="/soluciones-ia" aria-label="Ver los Kits IA">
-                <img className="home-kits-img" src="/img/kit-ia-portada.jpg" alt="Kit IA de NEXA: WhatsApp e Instagram que venden. 25 respuestas, 6 guiones de seguimiento y planilla de leads." width="1600" height="900" loading="lazy" />
+                <img className="home-kits-img" src="/img/kit-ia-portada.jpg" alt="Kits IA de NEXA: WhatsApp e Instagram que venden, Contenido de un mes con IA y Anuncios en Meta y Google sin tirar plata. $49.999 cada uno." width="1600" height="900" loading="lazy" />
               </Link>
             </motion.div>
           </div>
