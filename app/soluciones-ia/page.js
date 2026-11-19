@@ -14,7 +14,7 @@ export const metadata = {
     description:
       'Guías paso a paso con plantillas y herramientas listas para aplicar IA a problemas reales de tu negocio. Entrega inmediata por mail.',
     url: 'https://www.nexagrowth.com.ar/soluciones-ia',
-    images: [{ url: '/img/kit-ia-portada.jpg', width: 1600, height: 900, alt: 'Kit IA de NEXA: WhatsApp e Instagram que venden' }],
+    images: [{ url: '/img/kit-ia-portada.jpg', width: 1600, height: 900, alt: 'Kits IA de NEXA' }],
     siteName: 'NEXA',
     locale: 'es_AR',
     type: 'website',
@@ -35,11 +35,11 @@ const KITS = [
     titulo: 'WhatsApp e Instagram que venden',
     problema: 'Te escriben por WhatsApp e Instagram, tardás en responder y las consultas se enfrían.',
     incluye: [
-      'Guía interactiva paso a paso y la misma guía en PDF para armar tu sistema de atención y seguimiento',
-      'Video de bienvenida de unos 2 minutos para empezar con el pie derecho',
-      'Banco de 25 respuestas y 6 guiones de seguimiento listos para adaptar',
+      'Guía interactiva de 15 partes y la misma guía en PDF para armar tu sistema de atención y seguimiento',
+      'Más de 90 respuestas y mensajes listos: precios, objeciones, cobros, envíos, posventa y reclamos',
+      '6 guiones de seguimiento que no molestan y respuestas por rubro (indumentaria, gastronomía, belleza, servicios y más)',
       'Cómo usar la IA como ayudante para redactar y revisar tus respuestas',
-      'Planilla de leads para medir cuántas consultas se vuelven ventas',
+      'Planilla de leads para medir cuántas consultas se vuelven ventas, y video de bienvenida',
     ],
     formato: 'Guía + video + plantillas + planilla',
     precio: '$49.999',
@@ -52,9 +52,10 @@ const KITS = [
     titulo: 'Contenido de un mes con IA',
     problema: 'Publicar todos los días te come el tiempo y no tenés equipo.',
     incluye: [
-      'Guía paso a paso para definir la voz de tu marca y armar el calendario de un mes',
-      'Guiones e ideas con IA adaptados a tu rubro',
-      'Plantillas para copiar y pegar y checklist de revisión antes de publicar',
+      '17 partes: voz de marca, 5 pilares, calendario de 30 días y plan para los próximos 90 días',
+      '12 guiones de reels sin mostrar la cara, 20 ganchos y estructuras de carrusel',
+      'Más de 100 textos y plantillas, banco de 60 ideas y fechas comerciales de Argentina',
+      '15 pedidos listos para la IA, checklist de revisión y registro semanal',
       'Video de bienvenida, guía interactiva en el navegador y la misma guía en PDF',
     ],
     formato: 'Video + guía interactiva + PDF + plantillas',
@@ -68,9 +69,10 @@ const KITS = [
     titulo: 'Anuncios en Meta y Google sin tirar plata',
     problema: 'Invertís en publicidad y no sabés qué está funcionando.',
     incluye: [
-      'Estructura de campaña simple para arrancar en Meta y Google',
-      'Textos y variantes de anuncios con IA',
-      'Revisión semanal en 20 minutos para saber qué sigue y qué se corta',
+      '15 partes: cuánto podés pagar por cada cliente (con calculadora), campaña en Meta paso a paso y Google',
+      'Audiencias, creativos, presupuesto y píxel explicados simple',
+      'Más de 45 textos y fórmulas de anuncio, y ejemplos de campaña por rubro',
+      'Revisión semanal en 20 minutos y plan de 14 días para lanzar',
       'Video de bienvenida, guía interactiva en el navegador y la misma guía en PDF',
     ],
     formato: 'Video + guía interactiva + PDF + checklist',
@@ -112,7 +114,7 @@ const PASOS = [
 
 const FAQ = [
   { q: '¿Qué incluyen los kits de Contenido y de Anuncios?', a: 'Cada uno trae un video de bienvenida, una guía interactiva paso a paso (se abre en el navegador, con herramientas para completar) y la misma guía en PDF para descargar, con plantillas para copiar y pegar, checklists e ilustraciones.' },
-  { q: '¿Qué incluye el Kit 1?', a: 'Una guía interactiva paso a paso (se abre en el navegador), la misma guía en PDF para descargar, un video de bienvenida de unos 2 minutos, 25 respuestas y 6 guiones de seguimiento para WhatsApp e Instagram, y una planilla para medir cuántas consultas se vuelven ventas.' },
+  { q: '¿Qué incluye el Kit 1?', a: 'Una guía interactiva paso a paso (se abre en el navegador), la misma guía en PDF para descargar, un video de bienvenida de unos 2 minutos, más de 90 respuestas y mensajes listos, 6 guiones de seguimiento para WhatsApp e Instagram, y una planilla para medir cuántas consultas se vuelven ventas.' },
   { q: '¿Cómo pago?', a: 'Con Mercado Pago, con tarjeta de crédito, débito u otros medios que te ofrezca al pagar. Tus datos de pago los maneja Mercado Pago: nosotros nunca los vemos. No necesitás crear una cuenta en nuestro sitio.' },
   { q: '¿Cuándo y cómo lo recibo?', a: 'En el momento en que se acredita el pago te llega un mail con un botón para abrir y descargar el kit. Al terminar de pagar también lo ves en pantalla. Si en unos minutos no te llegó, revisá spam o promociones; si sigue sin aparecer, escribinos por WhatsApp con el mail que usaste.' },
   { q: '¿Necesito saber de IA o de marketing?', a: 'No. Está pensado para dueños de pymes y emprendedores sin tiempo ni equipo técnico. Se explica con ejemplos de negocios reales y archivos para usar tal cual.' },
@@ -201,7 +203,7 @@ export default function SolucionesIAPage() {
               <a href="/soluciones-ia/comprar" className="btn btn-outline">Comprar el Kit 1</a>
             </div>
             <p className="ki-note">Pagás con Mercado Pago y el kit te llega por mail al instante. Sin crear cuenta.</p>
-            <img className="ki-cover" src="/img/kit-ia-portada.jpg" alt="Kit IA de NEXA: WhatsApp e Instagram que venden. 25 respuestas, 6 guiones de seguimiento y planilla de leads." width="1600" height="900" />
+            <img className="ki-cover" src="/img/kit-ia-portada.jpg" alt="Kits IA de NEXA: WhatsApp e Instagram que venden, Contenido de un mes con IA y Anuncios en Meta y Google sin tirar plata. $49.999 cada uno." width="1600" height="900" />
           </div>
         </section>
 
