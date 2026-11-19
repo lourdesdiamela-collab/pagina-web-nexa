@@ -4,7 +4,8 @@ import { getToken } from 'next-auth/jwt';
 /*
  * Middleware del sitio. Hace tres cosas, en este orden:
  *
- * 1. Robots de IA que juntan contenido para ENTRENAR modelos: 403. Es la
+ * 1. Robots de IA que juntan contenido para ENTRENAR modelos: 403 solo en
+ *    Aprende, los kits, la compra y la API (lo pago o privado). Es la
  *    parte que se puede hacer cumplir de lo que pide app/robots.js (los
  *    robots de búsqueda con IA, Google, Bing y los previsualizadores de links
  *    de WhatsApp/Facebook/LinkedIn/X NO están en esta lista). /robots.txt
@@ -68,7 +69,9 @@ export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
   // 1. Robots de entrenamiento de IA.
-  if (pathname !== '/robots.txt' && AI_TRAINING_UA.test(request.headers.get('user-agent') || '')) {
+  // Solo en lo pago o privado: las páginas públicas sí las pueden leer (GEO).
+  const rutaProtegida = /^\/(aprende|kits|api|wa|soluciones-ia\/comprar|servicios\/checkout)(\/|$)/.test(pathname);
+  if (rutaProtegida && AI_TRAINING_UA.test(request.headers.get('user-agent') || '')) {
     return new NextResponse('Forbidden', {
       status: 403,
       headers: { 'Content-Type': 'text/plain; charset=utf-8', 'X-Robots-Tag': 'noindex' },
