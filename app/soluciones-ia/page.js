@@ -7,12 +7,12 @@ import './soluciones.css';
 export const metadata = {
   title: 'Kits IA para pymes y emprendedores | Mini capacitaciones — NEXA',
   description:
-    'Mini capacitaciones en video con plantillas y flujos listos para resolver problemas reales de tu negocio con IA: WhatsApp e Instagram que venden, contenido con IA, anuncios y más. Kits disponibles a $49.999 c/u.',
+    'Guías paso a paso con plantillas y herramientas listas para usar IA en tu negocio: WhatsApp e Instagram que venden, contenido de un mes y anuncios en Meta y Google. $49.999 cada kit, pago único con Mercado Pago y entrega inmediata por mail.',
   alternates: { canonical: '/soluciones-ia' },
   openGraph: {
     title: 'Soluciones con IA para pymes y emprendedores — NEXA',
     description:
-      'Mini capacitaciones en video con plantillas y flujos listos para aplicar IA a problemas reales de tu negocio. Ya disponible.',
+      'Guías paso a paso con plantillas y herramientas listas para aplicar IA a problemas reales de tu negocio. Entrega inmediata por mail.',
     url: 'https://www.nexagrowth.com.ar/soluciones-ia',
     images: [{ url: '/img/kit-ia-portada.jpg', width: 1600, height: 900, alt: 'Kit IA de NEXA: WhatsApp e Instagram que venden' }],
     siteName: 'NEXA',
@@ -140,6 +140,40 @@ export default function SolucionesIAPage() {
               '@type': 'Question',
               name: f.q,
               acceptedAnswer: { '@type': 'Answer', text: f.a },
+            })),
+          }).replace(/</g, '\\u003c'),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: 'Kits IA de NEXA',
+            itemListElement: [
+              ['whatsapp-instagram', 'Kit IA: WhatsApp e Instagram que venden', 'Guía paso a paso con más de 90 respuestas y mensajes listos, seguimiento sin molestar y planilla para medir ventas, con la IA como ayudante.'],
+              ['contenido', 'Kit IA: Contenido de un mes con IA', 'Calendario de 30 días, guiones de reels, ganchos y más de 100 textos y plantillas para publicar con tu voz de marca.'],
+              ['anuncios', 'Kit IA: Anuncios en Meta y Google sin tirar plata', 'Cuánto pagar por cada cliente, campaña en Meta paso a paso, textos de anuncio y plan de 14 días para lanzar.'],
+            ].map(([slug, name, description], i) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              item: {
+                '@type': 'Product',
+                name,
+                description,
+                brand: { '@type': 'Brand', name: 'NEXA' },
+                url: `https://www.nexagrowth.com.ar/soluciones-ia/comprar?kit=${slug}`,
+                image: 'https://www.nexagrowth.com.ar/img/kit-ia-portada.jpg',
+                offers: {
+                  '@type': 'Offer',
+                  price: '49999',
+                  priceCurrency: 'ARS',
+                  availability: 'https://schema.org/InStock',
+                  url: `https://www.nexagrowth.com.ar/soluciones-ia/comprar?kit=${slug}`,
+                  seller: { '@type': 'Organization', name: 'NEXA' },
+                },
+              },
             })),
           }).replace(/</g, '\\u003c'),
         }}
